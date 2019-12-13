@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Intersections</class>
+ <widget class="QDialog" name="Intersections">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>545</width>
+    <height>687</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Intersections</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>531</width>
+     <height>671</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="16" column="0">
+     <widget class="QLabel" name="intersection_cone_text_label">
+      <property name="text">
+       <string>Intersection plane n, cone c</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="n_proj_text_label">
+      <property name="text">
+       <string>n</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QLabel" name="n1n2_label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="18" column="1">
+     <widget class="QLineEdit" name="cone_entry"/>
+    </item>
+    <item row="22" column="1">
+     <widget class="QLineEdit" name="cone_angle_entry"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="n1_text_label">
+      <property name="text">
+       <string>n1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QLineEdit" name="angle_proj_entry"/>
+    </item>
+    <item row="17" column="0">
+     <widget class="QLabel" name="n_cone_text_label">
+      <property name="text">
+       <string>n</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="intersection_text_label">
+      <property name="text">
+       <string>Intersection plane n1 and n2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="23" column="0">
+     <widget class="QPushButton" name="pushButton_intersection_cone">
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QCheckBox" name="checkBox">
+      <property name="text">
+       <string>directions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="23" column="1">
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="text">
+       <string>directions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <widget class="QLabel" name="intersection_proj_text_label">
+      <property name="text">
+       <string>Intersection projected direction, plane n</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="angle_text_label">
+      <property name="text">
+       <string>angle</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="n2_text_label">
+      <property name="text">
+       <string>n2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="22" column="0">
+     <widget class="QLabel" name="inclinaison_text">
+      <property name="text">
+       <string>inclination angle</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="n1_entry"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="n2_entry"/>
+    </item>
+    <item row="18" column="0">
+     <widget class="QLabel" name="cone_intersection_text_label">
+      <property name="text">
+       <string>c</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="pushButton_intersections_plans">
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0">
+     <widget class="QPushButton" name="pushButton_intersection_proj">
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="1">
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="text">
+       <string>directions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="0" colspan="2">
+     <widget class="QLabel" name="n_proj_label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="n_proj_entry"/>
+    </item>
+    <item row="17" column="1">
+     <widget class="QLineEdit" name="n_cone_entry"/>
+    </item>
+    <item row="24" column="0" colspan="2">
+     <widget class="QLabel" name="cone_plane_label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>pushButton_intersections_plans</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>angle_proj_entry</tabstop>
+  <tabstop>pushButton_intersection_proj</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>cone_angle_entry</tabstop>
+  <tabstop>pushButton_intersection_cone</tabstop>
+  <tabstop>checkBox_3</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

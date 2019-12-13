@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Schmid</class>
+ <widget class="QDialog" name="Schmid">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>343</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Schmid Factor</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>318</width>
+     <height>298</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="6" column="0" colspan="3">
+     <widget class="QTextEdit" name="schmid_text"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="b_label">
+      <property name="text">
+       <string>b</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="T_label">
+      <property name="text">
+       <string>T</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="b_entry"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="T_entry"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="n_entry"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="n_label">
+      <property name="text">
+       <string>n</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="schmid_factor_label">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>b_entry</tabstop>
+  <tabstop>n_entry</tabstop>
+  <tabstop>T_entry</tabstop>
+  <tabstop>schmid_text</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

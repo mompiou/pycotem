@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>hkl_uvw</class>
+ <widget class="QDialog" name="hkl_uvw">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>341</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>hkl-uvw</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>281</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="6" column="0">
+     <widget class="QPushButton" name="pushButton_to_hkl">
+      <property name="text">
+       <string>To hkl</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="hkl_text_label">
+      <property name="text">
+       <string>hkl</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="hkl_label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLineEdit" name="uvw_entry"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="uvw_text_label">
+      <property name="text">
+       <string>uvw</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_to_uvw">
+      <property name="text">
+       <string>To uvw</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="uvw_label">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="hkl_entry"/>
+    </item>
+   </layout>
+  </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>uvw_entry</zorder>
+ </widget>
+ <tabstops>
+  <tabstop>hkl_entry</tabstop>
+  <tabstop>pushButton_to_uvw</tabstop>
+  <tabstop>uvw_entry</tabstop>
+  <tabstop>pushButton_to_hkl</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

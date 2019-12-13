@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Crystal</class>
+ <widget class="QMainWindow" name="Crystal">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1222</width>
+    <height>796</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Crystal</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_11">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="mplvl"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="maximumSize">
+       <size>
+        <width>400</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Crystal Parameters</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="alphabetagamma_label">
+            <property name="text">
+             <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="alphabetagamma_entry"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="abc_entry"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="abc_label">
+            <property name="text">
+             <string>a,b,c</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="changeStruct_button">
+            <property name="text">
+             <string>Change structure</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Layers</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Layers numbers</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Plane</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="layers_entry"/>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="plane_entry"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="size_entry"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Size</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Marker size</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="markers_entry"/>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="square_box">
+            <property name="text">
+             <string>Square/circle</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="labels_box">
+            <property name="text">
+             <string>Atom positions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QCheckBox" name="atoms_box">
+            <property name="text">
+             <string>Atom type</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QPushButton" name="calculate_button">
+            <property name="text">
+             <string>Calculate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QPushButton" name="draw_button">
+            <property name="text">
+             <string>Draw</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Dichromatic</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Precision</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="dsc_box">
+            <property name="text">
+             <string>enable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string> angle</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="angle_entry"/>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="coincidence_box">
+            <property name="text">
+             <string>coincidence</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="layers_box">
+            <property name="text">
+             <string>layers</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="precision_entry"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1222</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSave">
+    <property name="title">
+     <string>Save</string>
+    </property>
+    <addaction name="actionSave_figure"/>
+   </widget>
+   <widget class="QMenu" name="menuStructure">
+    <property name="title">
+     <string>Structure</string>
+    </property>
+   </widget>
+   <addaction name="menuSave"/>
+   <addaction name="menuStructure"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSave_figure">
+   <property name="text">
+    <string>Save figure</string>
+   </property>
+  </action>
+  <action name="actionCalculate_Schmid_factor">
+   <property name="text">
+    <string>calculate Schmid factor</string>
+   </property>
+  </action>
+  <action name="actionCalculate_angle">
+   <property name="text">
+    <string>Calculate angle</string>
+   </property>
+  </action>
+  <action name="actionCalculate_xyz">
+   <property name="text">
+    <string>calculate xyz directions</string>
+   </property>
+  </action>
+  <action name="actionCalculate_apparent_width">
+   <property name="text">
+    <string>Calculate apparent width</string>
+   </property>
+  </action>
+  <action name="actionPlanes">
+   <property name="text">
+    <string>planes</string>
+   </property>
+  </action>
+  <action name="actionProj_directions">
+   <property name="text">
+    <string>proj. directions</string>
+   </property>
+  </action>
+  <action name="actionPlane_cone">
+   <property name="text">
+    <string>plane-cone</string>
+   </property>
+  </action>
+  <action name="actionCalculate_intersections">
+   <property name="text">
+    <string>Calculate intersections</string>
+   </property>
+  </action>
+  <action name="actionHkl_uvw">
+   <property name="text">
+    <string>hkl &lt;&gt; uvw</string>
+   </property>
+  </action>
+  <action name="actionPlot_Kikuchi_lines">
+   <property name="text">
+    <string>plot Kikuchi lines or diffraction pattern</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>abc_entry</tabstop>
+  <tabstop>alphabetagamma_entry</tabstop>
+  <tabstop>plane_entry</tabstop>
+  <tabstop>size_entry</tabstop>
+  <tabstop>layers_entry</tabstop>
+  <tabstop>changeStruct_button</tabstop>
+  <tabstop>calculate_button</tabstop>
+  <tabstop>draw_button</tabstop>
+  <tabstop>markers_entry</tabstop>
+  <tabstop>square_box</tabstop>
+  <tabstop>labels_box</tabstop>
+  <tabstop>atoms_box</tabstop>
+  <tabstop>dsc_box</tabstop>
+  <tabstop>angle_entry</tabstop>
+  <tabstop>coincidence_box</tabstop>
+  <tabstop>layers_box</tabstop>
+  <tabstop>precision_entry</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>plot()</slot>
+ </slots>
+</ui>

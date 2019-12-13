@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Diffraction</class>
+ <widget class="QMainWindow" name="Diffraction">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>782</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Diffraction pattern</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="mplvl"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="maximumSize">
+       <size>
+        <width>350</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="12" column="2">
+        <widget class="QCheckBox" name="alpha_signBox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="5">
+        <widget class="QPushButton" name="Button_reset">
+         <property name="text">
+          <string>Reset points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="Calib_label">
+         <property name="text">
+          <string>Calibrations</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0" colspan="2">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Data&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="alpha_label_2">
+         <property name="text">
+          <string>α (°)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="5" colspan="4">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;g vectors&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="alpha_label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;α,β,γ&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="abc_label">
+         <property name="text">
+          <string>a,b,c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5" colspan="4">
+        <widget class="QLineEdit" name="n_entry"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="indice_label">
+         <property name="text">
+          <string>Max Indices</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="6" colspan="5">
+        <widget class="QPushButton" name="orientation_button">
+         <property name="text">
+          <string>Get orientation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QLabel" name="space_group_label">
+         <property name="text">
+          <string>Space group</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="5">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Tilt angles/AC&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="0" colspan="11">
+        <widget class="QListWidget" name="euler_listbox"/>
+       </item>
+       <item row="7" column="6" colspan="5">
+        <widget class="QPushButton" name="Button_reset_all">
+         <property name="text">
+          <string>Reset all</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0" colspan="11">
+        <widget class="QListWidget" name="diff_spot_Listbox"/>
+       </item>
+       <item row="0" column="5" colspan="6">
+        <widget class="QLineEdit" name="abc_entry"/>
+       </item>
+       <item row="12" column="5">
+        <widget class="QLineEdit" name="tilt_b_entry"/>
+       </item>
+       <item row="6" column="0" colspan="6">
+        <widget class="QLabel" name="tilt_axis_angle_label">
+         <property name="text">
+          <string>Diffraction-α tilt angle</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="5">
+        <widget class="QListWidget" name="ListBox_d_2"/>
+       </item>
+       <item row="8" column="0" colspan="5">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dist., inclination&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QLineEdit" name="tilt_a_entry"/>
+       </item>
+       <item row="10" column="0" colspan="6">
+        <widget class="QPushButton" name="distance_button">
+         <property name="text">
+          <string>Find diffraction spots</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="4" colspan="7">
+        <widget class="QComboBox" name="SpaceGroup_box"/>
+       </item>
+       <item row="2" column="5" colspan="4">
+        <widget class="QLineEdit" name="indice_entry"/>
+       </item>
+       <item row="9" column="5" colspan="6">
+        <widget class="QListWidget" name="ListBox_theo"/>
+       </item>
+       <item row="12" column="3">
+        <widget class="QLabel" name="beta_label">
+         <property name="text">
+          <string>β (°)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="6">
+        <widget class="QCheckBox" name="beta_signBox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="6" colspan="3">
+        <widget class="QLineEdit" name="tilt_axis_angle_entry"/>
+       </item>
+       <item row="17" column="0" colspan="3">
+        <widget class="QPushButton" name="add_spot_button">
+         <property name="text">
+          <string>Add data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="5">
+        <widget class="QLabel" name="n_label">
+         <property name="text">
+          <string>Number of spots</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4" colspan="7">
+        <widget class="QComboBox" name="Calib_box"/>
+       </item>
+       <item row="1" column="5" colspan="6">
+        <widget class="QLineEdit" name="alphabetagamma_entry"/>
+       </item>
+       <item row="12" column="7">
+        <widget class="QLabel" name="z_label">
+         <property name="text">
+          <string>z (°)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="8">
+        <widget class="QLineEdit" name="tilt_z_entry"/>
+       </item>
+       <item row="12" column="9">
+        <widget class="QCheckBox" name="theta_signBox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="3" colspan="3">
+        <widget class="QPushButton" name="remove_spot_button">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+      <zorder>abc_label</zorder>
+      <zorder>indice_label</zorder>
+      <zorder>n_label</zorder>
+      <zorder>space_group_label</zorder>
+      <zorder>Calib_label</zorder>
+      <zorder>Button_reset</zorder>
+      <zorder>label</zorder>
+      <zorder>distance_button</zorder>
+      <zorder>label_3</zorder>
+      <zorder>diff_spot_Listbox</zorder>
+      <zorder>add_spot_button</zorder>
+      <zorder>ListBox_d_2</zorder>
+      <zorder>euler_listbox</zorder>
+      <zorder>alpha_label_2</zorder>
+      <zorder>tilt_a_entry</zorder>
+      <zorder>alpha_signBox</zorder>
+      <zorder>label_4</zorder>
+      <zorder>tilt_b_entry</zorder>
+      <zorder>beta_signBox</zorder>
+      <zorder>remove_spot_button</zorder>
+      <zorder>orientation_button</zorder>
+      <zorder>SpaceGroup_box</zorder>
+      <zorder>Calib_box</zorder>
+      <zorder>n_entry</zorder>
+      <zorder>indice_entry</zorder>
+      <zorder>tilt_axis_angle_entry</zorder>
+      <zorder>tilt_axis_angle_label</zorder>
+      <zorder>ListBox_theo</zorder>
+      <zorder>alpha_label</zorder>
+      <zorder>alphabetagamma_entry</zorder>
+      <zorder>abc_entry</zorder>
+      <zorder>Button_reset_all</zorder>
+      <zorder>label_2</zorder>
+      <zorder>beta_label</zorder>
+      <zorder>z_label</zorder>
+      <zorder>tilt_z_entry</zorder>
+      <zorder>theta_signBox</zorder>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSave">
+    <property name="title">
+     <string>Open</string>
+    </property>
+    <addaction name="actionSave_figure"/>
+   </widget>
+   <widget class="QMenu" name="menuStructure">
+    <property name="title">
+     <string>Structure</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuSpectrum">
+    <property name="title">
+     <string>Spectrum</string>
+    </property>
+    <addaction name="actionCalculate_spectrum"/>
+   </widget>
+   <addaction name="menuSave"/>
+   <addaction name="menuStructure"/>
+   <addaction name="menuSpectrum"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSave_figure">
+   <property name="text">
+    <string>Open image</string>
+   </property>
+  </action>
+  <action name="actionCalculate_Schmid_factor">
+   <property name="text">
+    <string>calculate Schmid factor</string>
+   </property>
+  </action>
+  <action name="actionCalculate_spectrum">
+   <property name="text">
+    <string>Plot spectrum</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>Button_reset</tabstop>
+  <tabstop>ListBox_d_2</tabstop>
+  <tabstop>distance_button</tabstop>
+  <tabstop>tilt_a_entry</tabstop>
+  <tabstop>alpha_signBox</tabstop>
+  <tabstop>diff_spot_Listbox</tabstop>
+  <tabstop>add_spot_button</tabstop>
+  <tabstop>euler_listbox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>plot()</slot>
+ </slots>
+</ui>

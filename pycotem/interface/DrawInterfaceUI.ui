@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Draw_plane_directions</class>
+ <widget class="QDialog" name="Draw_plane_directions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>399</width>
+    <height>234</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Draw planes-directions</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>391</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="2">
+     <widget class="QCheckBox" name="dir_checkBox">
+      <property name="text">
+       <string>dir.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QCheckBox" name="surf_checkBox">
+      <property name="text">
+       <string>surf.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="plane_label">
+      <property name="text">
+       <string>Plane/Direction</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="surface_entry"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="plane_entry"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="surface_label">
+      <property name="text">
+       <string>Surface norm.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="thickness_entry"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="thickness_label">
+      <property name="text">
+       <string>Thickness (nm)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="3">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QCheckBox" name="label_checkBox">
+      <property name="text">
+       <string>label</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>thickness_entry</tabstop>
+  <tabstop>surface_entry</tabstop>
+  <tabstop>plane_entry</tabstop>
+  <tabstop>surf_checkBox</tabstop>
+  <tabstop>dir_checkBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Interface</class>
+ <widget class="QMainWindow" name="Interface">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>755</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>interface determination</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_7">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="mplvl"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="maximumSize">
+       <size>
+        <width>400</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="37" column="0" colspan="3">
+        <widget class="QPushButton" name="Button_reset">
+         <property name="text">
+          <string>Reset points</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="alphabetagamma_label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;α, β, γ&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="abc_label">
+         <property name="text">
+          <string>a,b,c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="2" colspan="2">
+        <widget class="QLineEdit" name="magnification_entry"/>
+       </item>
+       <item row="26" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Measure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Microscope&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="3">
+        <widget class="QPushButton" name="remove_condition_button">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+       <item row="28" column="0" colspan="5">
+        <widget class="QListWidget" name="conditions_Listbox">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="z_label">
+         <property name="text">
+          <string>z (°)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="2" colspan="2">
+        <widget class="QLineEdit" name="tilt_y_entry"/>
+       </item>
+       <item row="27" column="0" colspan="3">
+        <widget class="QPushButton" name="add_condition_button">
+         <property name="text">
+          <string>Add data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="2" colspan="2">
+        <widget class="QLineEdit" name="tilt_z_entry"/>
+       </item>
+       <item row="15" column="3">
+        <widget class="QRadioButton" name="double_button">
+         <property name="text">
+          <string>double (α,β)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="3" colspan="2">
+        <widget class="QLineEdit" name="image_angle_entry"/>
+       </item>
+       <item row="0" column="2" colspan="3">
+        <widget class="QLineEdit" name="abc_entry"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="euler_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Euler angles&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0" colspan="3">
+        <widget class="QLabel" name="image_angle_label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Image-α tilt angle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="3">
+        <widget class="QLineEdit" name="alphabetagamma_entry"/>
+       </item>
+       <item row="8" column="2" colspan="3">
+        <widget class="QComboBox" name="micro_box"/>
+       </item>
+       <item row="24" column="0">
+        <widget class="QLabel" name="pxtonm_label">
+         <property name="text">
+          <string>Magnification</string>
+         </property>
+        </widget>
+       </item>
+       <item row="37" column="3">
+        <widget class="QPushButton" name="reset_view_button">
+         <property name="text">
+          <string>Reset view</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="4">
+        <widget class="QRadioButton" name="tilt_rot_button">
+         <property name="text">
+          <string>tilt rot (α,z)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="beta_label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;β (°)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="5">
+        <widget class="QCheckBox" name="crystal_checkBox">
+         <property name="text">
+          <string>Use lattice coordinates</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="3">
+        <widget class="QLineEdit" name="euler_entry"/>
+       </item>
+       <item row="39" column="0" colspan="5">
+        <widget class="QPushButton" name="normal_button">
+         <property name="text">
+          <string>Get normal/direction</string>
+         </property>
+        </widget>
+       </item>
+       <item row="40" column="0" colspan="5">
+        <widget class="QListWidget" name="euler_Listbox">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="4">
+        <widget class="QCheckBox" name="theta_signBox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QRadioButton" name="single_button">
+         <property name="text">
+          <string>single (α)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="4">
+        <widget class="QCheckBox" name="alpha_signBox">
+         <property name="text">
+          <string>AC</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="4">
+        <widget class="QCheckBox" name="beta_signBox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2" colspan="2">
+        <widget class="QLineEdit" name="tilt_x_entry"/>
+       </item>
+       <item row="19" column="0">
+        <widget class="QLabel" name="alpha_label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;α (°)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="2" colspan="2">
+        <widget class="QCheckBox" name="direction_button">
+         <property name="text">
+          <string>direction</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSave">
+    <property name="title">
+     <string>Open</string>
+    </property>
+    <addaction name="actionSave_figure"/>
+   </widget>
+   <widget class="QMenu" name="menuStructure">
+    <property name="title">
+     <string>Structure</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuDraw">
+    <property name="title">
+     <string>Draw</string>
+    </property>
+    <addaction name="actionDirections_planes"/>
+   </widget>
+   <addaction name="menuSave"/>
+   <addaction name="menuStructure"/>
+   <addaction name="menuDraw"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSave_figure">
+   <property name="text">
+    <string>Open image</string>
+   </property>
+  </action>
+  <action name="actionCalculate_Schmid_factor">
+   <property name="text">
+    <string>calculate Schmid factor</string>
+   </property>
+  </action>
+  <action name="actionCalculate_spectrum">
+   <property name="text">
+    <string>Plot spectrum</string>
+   </property>
+  </action>
+  <action name="actionDirections_planes">
+   <property name="text">
+    <string>directions/planes</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>abc_entry</tabstop>
+  <tabstop>alphabetagamma_entry</tabstop>
+  <tabstop>euler_entry</tabstop>
+  <tabstop>crystal_checkBox</tabstop>
+  <tabstop>micro_box</tabstop>
+  <tabstop>image_angle_entry</tabstop>
+  <tabstop>single_button</tabstop>
+  <tabstop>double_button</tabstop>
+  <tabstop>tilt_rot_button</tabstop>
+  <tabstop>tilt_y_entry</tabstop>
+  <tabstop>alpha_signBox</tabstop>
+  <tabstop>tilt_x_entry</tabstop>
+  <tabstop>beta_signBox</tabstop>
+  <tabstop>tilt_z_entry</tabstop>
+  <tabstop>theta_signBox</tabstop>
+  <tabstop>magnification_entry</tabstop>
+  <tabstop>direction_button</tabstop>
+  <tabstop>add_condition_button</tabstop>
+  <tabstop>remove_condition_button</tabstop>
+  <tabstop>conditions_Listbox</tabstop>
+  <tabstop>Button_reset</tabstop>
+  <tabstop>reset_view_button</tabstop>
+  <tabstop>normal_button</tabstop>
+  <tabstop>euler_Listbox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>plot()</slot>
+ </slots>
+</ui>

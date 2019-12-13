@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Kikuchi</class>
+ <widget class="QDialog" name="Kikuchi">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>830</width>
+    <height>818</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Kikuchi lines / Diffraction pattern</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>811</width>
+     <height>801</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="5">
+     <widget class="QLabel" name="error_label">
+      <property name="text">
+       <string>Excitation error (nm-1)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="kikuchi_radioButton">
+      <property name="text">
+       <string>Kikuchi</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="9">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QRadioButton" name="diff_radioButton">
+      <property name="text">
+       <string>Diffraction</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLabel" name="t_label">
+      <property name="text">
+       <string>Thickness (nm)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="E_label">
+      <property name="text">
+       <string>E (kV)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLineEdit" name="t_entry"/>
+    </item>
+    <item row="0" column="0" colspan="9">
+     <widget class="QWidget" name="mplwindow" native="true">
+      <widget class="QWidget" name="gridLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>801</width>
+         <height>661</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="mplvl"/>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLabel" name="angle_label">
+      <property name="text">
+       <string>Aperture angle</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5">
+     <widget class="QLabel" name="spot_size_label">
+      <property name="text">
+       <string>Spot size</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
+     <widget class="QLineEdit" name="angle_entry"/>
+    </item>
+    <item row="1" column="6">
+     <widget class="QLineEdit" name="spot_size_entry"/>
+    </item>
+    <item row="1" column="7" colspan="2">
+     <widget class="QCheckBox" name="label_checkBox">
+      <property name="text">
+       <string>labels</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QLineEdit" name="error_entry"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="indices_label">
+      <property name="text">
+       <string>Max indices</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLineEdit" name="indices_entry"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="E_entry"/>
+    </item>
+    <item row="3" column="7" rowspan="2" colspan="2">
+     <widget class="QPushButton" name="Diff_button">
+      <property name="text">
+       <string>Diff calc.</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>E_entry</tabstop>
+  <tabstop>angle_entry</tabstop>
+  <tabstop>spot_size_entry</tabstop>
+  <tabstop>label_checkBox</tabstop>
+  <tabstop>diff_radioButton</tabstop>
+  <tabstop>indices_entry</tabstop>
+  <tabstop>t_entry</tabstop>
+  <tabstop>error_entry</tabstop>
+  <tabstop>Diff_button</tabstop>
+  <tabstop>kikuchi_radioButton</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
