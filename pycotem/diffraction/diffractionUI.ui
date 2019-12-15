@@ -323,13 +323,28 @@
   </action>
  </widget>
  <tabstops>
+  <tabstop>abc_entry</tabstop>
+  <tabstop>alphabetagamma_entry</tabstop>
+  <tabstop>indice_entry</tabstop>
+  <tabstop>n_entry</tabstop>
+  <tabstop>SpaceGroup_box</tabstop>
+  <tabstop>Calib_box</tabstop>
+  <tabstop>tilt_axis_angle_entry</tabstop>
   <tabstop>Button_reset</tabstop>
+  <tabstop>Button_reset_all</tabstop>
   <tabstop>ListBox_d_2</tabstop>
+  <tabstop>ListBox_theo</tabstop>
   <tabstop>distance_button</tabstop>
   <tabstop>tilt_a_entry</tabstop>
   <tabstop>alpha_signBox</tabstop>
+  <tabstop>tilt_b_entry</tabstop>
+  <tabstop>beta_signBox</tabstop>
+  <tabstop>tilt_z_entry</tabstop>
+  <tabstop>theta_signBox</tabstop>
   <tabstop>diff_spot_Listbox</tabstop>
   <tabstop>add_spot_button</tabstop>
+  <tabstop>remove_spot_button</tabstop>
+  <tabstop>orientation_button</tabstop>
   <tabstop>euler_listbox</tabstop>
  </tabstops>
  <resources/>

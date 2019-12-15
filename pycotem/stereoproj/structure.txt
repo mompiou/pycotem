@@ -1,5 +1,4 @@
-Aluminium 4.0496 4.0496 4.0496 90 90 90 Fm-3m,Al
-Fer(bcc) 2.8665 2.8665 2.8665 90 90 90 Im-3m,Fe
+Iron(bcc) 2.8665 2.8665 2.8665 90 90 90 Im-3m,Fe
 Zirconium 3.232 3.232 5.147 90 90 120 P63/mmc,Mg
 Silicium 5.4309 5.4309 5.4309 90 90 90 Fd-3m,Si
 Berylium 2.2858 2.2858 3.5843 90 90 120 P63/mmc,Mg

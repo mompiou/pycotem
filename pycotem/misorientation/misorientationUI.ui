@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="settings">
        <attribute name="title">
@@ -853,28 +853,54 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>tilt_angle_entry</tabstop>
   <tabstop>image_angle_entry</tabstop>
+  <tabstop>real_space_checkBox</tabstop>
+  <tabstop>uvw_button</tabstop>
+  <tabstop>wulff_button</tabstop>
+  <tabstop>size_var</tabstop>
+  <tabstop>text_size_entry</tabstop>
+  <tabstop>reset_view_button</tabstop>
   <tabstop>structure_box</tabstop>
   <tabstop>abc_entry</tabstop>
   <tabstop>alphabetagamma_entry</tabstop>
   <tabstop>e_entry</tabstop>
+  <tabstop>hexa_button</tabstop>
+  <tabstop>color_trace_bleu</tabstop>
+  <tabstop>color_trace_vert</tabstop>
+  <tabstop>color_trace_rouge</tabstop>
+  <tabstop>style_box</tabstop>
   <tabstop>dm_button</tabstop>
+  <tabstop>d_entry</tabstop>
+  <tabstop>dp_button</tabstop>
   <tabstop>structure2_box</tabstop>
   <tabstop>abc_entry_2</tabstop>
   <tabstop>alphabetagamma_entry_2</tabstop>
   <tabstop>e_entry_2</tabstop>
+  <tabstop>hexa_button_2</tabstop>
+  <tabstop>color_trace_bleu_2</tabstop>
+  <tabstop>color_trace_vert_2</tabstop>
+  <tabstop>color_trace_rouge_2</tabstop>
+  <tabstop>style_box_2</tabstop>
+  <tabstop>dm_button_2</tabstop>
+  <tabstop>d_entry_2</tabstop>
+  <tabstop>dp_button_2</tabstop>
+  <tabstop>crystal1_radioButton</tabstop>
+  <tabstop>crystal2_radioButton</tabstop>
   <tabstop>lock_checkButton</tabstop>
-  <tabstop>alpha_signBox</tabstop>
   <tabstop>angle_alpha_buttonm</tabstop>
   <tabstop>angle_alpha_entry</tabstop>
+  <tabstop>alpha_signBox</tabstop>
   <tabstop>angle_alpha_buttonp</tabstop>
-  <tabstop>beta_signBox</tabstop>
   <tabstop>angle_beta_buttonm</tabstop>
   <tabstop>angle_beta_entry</tabstop>
+  <tabstop>beta_signBox</tabstop>
   <tabstop>angle_beta_buttonp</tabstop>
-  <tabstop>theta_signBox</tabstop>
   <tabstop>angle_z_buttonm</tabstop>
   <tabstop>angle_z_entry</tabstop>
+  <tabstop>theta_signBox</tabstop>
   <tabstop>angle_z_buttonp</tabstop>
+  <tabstop>rot_gm_button</tabstop>
+  <tabstop>rot_g_entry</tabstop>
+  <tabstop>rot_gp_button</tabstop>
   <tabstop>pole_entry</tabstop>
   <tabstop>addpole_button</tabstop>
   <tabstop>undo_addpole_button</tabstop>
@@ -885,7 +911,13 @@
   <tabstop>trace_plan_sym_button</tabstop>
   <tabstop>undo_trace_plan_sym_button</tabstop>
   <tabstop>phi1phiphi2_entry</tabstop>
+  <tabstop>phi1phiphi2_2_entry</tabstop>
   <tabstop>button_trace2</tabstop>
+  <tabstop>misorientation_button</tabstop>
+  <tabstop>clear_misorientation_button</tabstop>
+  <tabstop>numbers_checkBox</tabstop>
+  <tabstop>axis_checkBox</tabstop>
+  <tabstop>misorientation_list</tabstop>
  </tabstops>
  <resources/>
  <connections/>

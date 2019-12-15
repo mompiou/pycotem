@@ -1,0 +1,27 @@
+Test examples
+==============
+
+## Test kikuchi:
+
+Use the kikuchi-iron-bcc.png file to determine orientation from bands. 
+
+- Crystal: Iron(bcc)
+
+- Calibration: cm20feg 200keV 38.5
+
+## Test diffraction
+
+Use the png files in diffraction folder
+
+- Crystal: Aluminium
+
+- Calibration:  JEOL2010-insitu-new 180 100 2
+
+- Tilt angle alpha (only) indicated in the file names (-2, -26.6, -34.8, 1.8, 21.5)
+
+## Test interface
+
+- Crystal: Aluminium
+
+-Setup: JEOL, single tilt alpha, magnification: 80 (80k). Euler angles: -132.815,54.217,-48.336
+

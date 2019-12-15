@@ -305,12 +305,23 @@
  </widget>
  <tabstops>
   <tabstop>abc_entry</tabstop>
+  <tabstop>alphabetagamma_entry</tabstop>
+  <tabstop>indice_entry</tabstop>
+  <tabstop>space_group_Box</tabstop>
+  <tabstop>brightness_slider</tabstop>
+  <tabstop>Calib_box</tabstop>
   <tabstop>Button_reset</tabstop>
   <tabstop>reset_view_button</tabstop>
+  <tabstop>ListBox_d_2</tabstop>
+  <tabstop>ListBox_theo</tabstop>
   <tabstop>Button_addband</tabstop>
   <tabstop>Button_remove_band</tabstop>
   <tabstop>Button_add_center</tabstop>
   <tabstop>Button_remove_center</tabstop>
+  <tabstop>centerLine</tabstop>
+  <tabstop>Button_run</tabstop>
+  <tabstop>Button_orientation</tabstop>
+  <tabstop>orientation_result</tabstop>
  </tabstops>
  <resources/>
  <connections/>
