@@ -17,7 +17,7 @@ repo_url: 'https://github.com/mompiou/pycotem'
    
 copyright: 'Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/envelope.png"  ></A>'
 
-edit_uri: "https://github.com/mompiou/pycotem/doc"
+edit_uri: "https://github.com/mompiou/pycotem/tree/master/doc/docs"
 
 pages:
    - Home: 'index.md'
