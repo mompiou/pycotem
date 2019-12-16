@@ -1,0 +1,72 @@
+site_name: pycotem
+theme:
+  name: 'material'
+  custom_dir: 'theme'
+  langage: 'en'
+  logo: 'images/logo.png'
+  favicon: 'images/favicon.png'
+  palette:
+    primary: 'deep purple'
+    accent: 'deep purple'
+  feature:
+    tabs: false
+  font:
+    text: 'Asap'
+repo_name: 'mompiou/pycotem'
+repo_url: 'https://github.com/mompiou/pycotem'
+   
+copyright: 'Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/envelope.png"  ></A>'
+
+edit_uri: "https://github.com/mompiou/pycotem/doc"
+
+pages:
+   - Home: 'index.md'
+      
+   - Getting started: 'started.md'
+      
+   - Kikuchi: 'kikuchi.md'
+
+   - Diffraction: 'diffraction.md'
+
+   - StereoProj: 'stereoproj.md'
+   
+   - Interface: 'interface.md'
+   
+   - Misorientation: 'misorientation.md'
+   
+   - Crystal: 'crystal.md'
+   
+   - About: 'contribute.md'
+     
+markdown_extensions:
+  - admonition
+  - footnotes
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+
+extra_css:
+  - 'stylesheets/extra.css'
+
+
+
