@@ -581,7 +581,7 @@ def rot_z_m():
         A = np.dot(np.linalg.inv(M_lock), np.array([0, 0, 1]))
         AxeZ = np.dot(M, A)
 
-    thz = s_z * np.float(ui.angle_z_entry.text())
+    thz = -s_z * np.float(ui.angle_z_entry.text())
     M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     trace()
     euler_label()
@@ -599,7 +599,7 @@ def rot_z_p():
         A = np.dot(np.linalg.inv(M_lock), np.array([0, 0, 1]))
         AxeZ = np.dot(M, A)
 
-    thz = -s_z * np.float(ui.angle_z_entry.text())
+    thz = s_z * np.float(ui.angle_z_entry.text())
     M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     trace()
     euler_label()
