@@ -363,7 +363,7 @@ def getFileName():
 
 def image_save():
     filename = QtGui.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    pixmap = QtGui.QPixmap.grabWidget(canvas, 55, 49, 710, 710)
+    pixmap = QtGui.QPixmap.grabWidget(canvas)
     pixmap.save(str(filename) + ".png")
 
 
