@@ -505,34 +505,35 @@ def lock():
 
 def rot_alpha_p():
     global angle_alpha, M, a, trP, trC, s_a
-
+    tilt_axes()
     tha = s_a * np.float(ui.angle_alpha_entry.text())
     t_ang = -ang_work_space()
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
-    angle_alpha = angle_alpha + np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha + s_a*np.float(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
     return angle_alpha, M
 
 
 def rot_alpha_m():
     global angle_alpha, M, a, trP, trC, s_a
-
+    tilt_axes()
     tha = -s_a * np.float(ui.angle_alpha_entry.text())
     t_ang = -ang_work_space()
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
-    angle_alpha = angle_alpha - np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha - s_a*np.float(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
     return angle_alpha, M
 
 
 def rot_beta_m():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_b
+    tilt_axes()
     t_ang = -ang_work_space()
     t_a_x = np.dot(Rot(t_ang, 0, 0, 1), np.array([1, 0, 0]))
 
@@ -546,13 +547,14 @@ def rot_beta_m():
     M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     trace()
     euler_label()
-    angle_beta = angle_beta - np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta - s_b*np.float(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
     return angle_beta, M
 
 
 def rot_beta_p():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_b
+    tilt_axes()
     t_ang = -ang_work_space()
     t_a_x = np.dot(Rot(t_ang, 0, 0, 1), np.array([1, 0, 0]))
     if var_lock == 0:
@@ -565,32 +567,14 @@ def rot_beta_p():
     M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     trace()
     euler_label()
-    angle_beta = angle_beta + np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta + s_b*np.float(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
     return angle_beta, M
 
 
 def rot_z_m():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_z
-
-    if var_lock == 0:
-        AxeZ = np.array([0, 0, 1])
-    else:
-        A = np.dot(np.linalg.inv(M_lock), np.array([0, 0, 1]))
-        AxeZ = np.dot(M, A)
-
-    thz = -s_z * np.float(ui.angle_z_entry.text())
-    M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
-    trace()
-    euler_label()
-    angle_z = angle_z - np.float(ui.angle_z_entry.text())
-    ui.angle_z_label_2.setText(str(angle_z))
-    return angle_z, M
-
-
-def rot_z_p():
-    global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_z
-
+    tilt_axes()
     if var_lock == 0:
         AxeZ = np.array([0, 0, 1])
     else:
@@ -601,7 +585,25 @@ def rot_z_p():
     M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     trace()
     euler_label()
-    angle_z = angle_z + np.float(ui.angle_z_entry.text())
+    angle_z = angle_z - s_z*np.float(ui.angle_z_entry.text())
+    ui.angle_z_label_2.setText(str(angle_z))
+    return angle_z, M
+
+
+def rot_z_p():
+    global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_z
+    tilt_axes()
+    if var_lock == 0:
+        AxeZ = np.array([0, 0, 1])
+    else:
+        A = np.dot(np.linalg.inv(M_lock), np.array([0, 0, 1]))
+        AxeZ = np.dot(M, A)
+
+    thz = -s_z * np.float(ui.angle_z_entry.text())
+    M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
+    trace()
+    euler_label()
+    angle_z = angle_z + s_z*np.float(ui.angle_z_entry.text())
     ui.angle_z_label_2.setText(str(angle_z))
     return angle_z, M
 
@@ -1446,7 +1448,7 @@ def tilt_axes():
     if ui.beta_signBox.isChecked():
         s_b = -1
     if ui.theta_signBox.isChecked():
-        s_b = -1
+        s_z = -1
     return s_a, s_b, s_z
 
 ####################
@@ -1985,12 +1987,12 @@ def schmid():
  #
  # Save stereo as png
  #
- # "
+ # ######################################
 
 
 def image_save():
     filename = QtGui.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    pixmap = QtGui.QPixmap.grabWidget(canvas, 55, 49, 710, 710)
+    pixmap = QtGui.QPixmap.grabWidget(canvas)
     pixmap.save(str(filename) + ".png")
 
 

@@ -274,7 +274,7 @@
           <item row="2" column="0" colspan="3">
            <widget class="QLabel" name="lab_euler2">
             <property name="text">
-             <string>Phi 1, Phi, Phi2</string>
+             <string>φ 1 , Φ , φ2</string>
             </property>
            </widget>
           </item>

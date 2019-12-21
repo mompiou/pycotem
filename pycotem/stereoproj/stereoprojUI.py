@@ -503,7 +503,7 @@ class Ui_StereoProj(object):
         self.button_trace.setText(_translate("StereoProj", "PLOT", None))
         self.rot_gp_button.setText(_translate("StereoProj", "+", None))
         self.groupBox_5.setTitle(_translate("StereoProj", "Euler Angles", None))
-        self.lab_euler2.setText(_translate("StereoProj", "Phi 1, Phi, Phi2", None))
+        self.lab_euler2.setText(_translate("StereoProj", "φ 1 , Φ , φ2", None))
         self.button_trace2.setText(_translate("StereoProj", "PLOT", None))
         self.lab_coord.setText(_translate("StereoProj", "Tilt, Inclination", None))
         self.groupBox_9.setTitle(_translate("StereoProj", "Layout", None))
