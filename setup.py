@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md')) as f:
 setup(
     name = 'pycotem',
     packages=find_packages(exclude=("doc","test")),
-    version = '1.0.1',  
+    version = '1.1.0',  
     description = 'A python package for working with crystal orientations in transmission electron microscopy',
     long_description=long_description,
     long_description_content_type="text/markdown",
