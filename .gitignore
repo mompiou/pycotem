@@ -121,6 +121,7 @@ venv.bak/
 doc/site
 doc/stylesheets
 doc/theme
+*.yml
 
 # mypy
 .mypy_cache/
