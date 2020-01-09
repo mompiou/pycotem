@@ -63,6 +63,12 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>X_text</tabstop>
+  <tabstop>Y_text</tabstop>
+  <tabstop>Z_text</tabstop>
+  <tabstop>xyz_button</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

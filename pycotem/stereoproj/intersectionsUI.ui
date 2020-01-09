@@ -190,11 +190,16 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>n1_entry</tabstop>
+  <tabstop>n2_entry</tabstop>
   <tabstop>pushButton_intersections_plans</tabstop>
   <tabstop>checkBox</tabstop>
+  <tabstop>n_proj_entry</tabstop>
   <tabstop>angle_proj_entry</tabstop>
   <tabstop>pushButton_intersection_proj</tabstop>
   <tabstop>checkBox_2</tabstop>
+  <tabstop>n_cone_entry</tabstop>
+  <tabstop>cone_entry</tabstop>
   <tabstop>cone_angle_entry</tabstop>
   <tabstop>pushButton_intersection_cone</tabstop>
   <tabstop>checkBox_3</tabstop>

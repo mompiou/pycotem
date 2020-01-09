@@ -119,11 +119,16 @@ class Ui_Intersections(object):
 
         self.retranslateUi(Intersections)
         QtCore.QMetaObject.connectSlotsByName(Intersections)
+        Intersections.setTabOrder(self.n1_entry, self.n2_entry)
+        Intersections.setTabOrder(self.n2_entry, self.pushButton_intersections_plans)
         Intersections.setTabOrder(self.pushButton_intersections_plans, self.checkBox)
-        Intersections.setTabOrder(self.checkBox, self.angle_proj_entry)
+        Intersections.setTabOrder(self.checkBox, self.n_proj_entry)
+        Intersections.setTabOrder(self.n_proj_entry, self.angle_proj_entry)
         Intersections.setTabOrder(self.angle_proj_entry, self.pushButton_intersection_proj)
         Intersections.setTabOrder(self.pushButton_intersection_proj, self.checkBox_2)
-        Intersections.setTabOrder(self.checkBox_2, self.cone_angle_entry)
+        Intersections.setTabOrder(self.checkBox_2, self.n_cone_entry)
+        Intersections.setTabOrder(self.n_cone_entry, self.cone_entry)
+        Intersections.setTabOrder(self.cone_entry, self.cone_angle_entry)
         Intersections.setTabOrder(self.cone_angle_entry, self.pushButton_intersection_cone)
         Intersections.setTabOrder(self.pushButton_intersection_cone, self.checkBox_3)
 

@@ -80,7 +80,13 @@ class Ui_Width(object):
 
         self.retranslateUi(Width)
         QtCore.QMetaObject.connectSlotsByName(Width)
-        Width.setTabOrder(self.thickness_checkBox, self.buttonBox)
+        Width.setTabOrder(self.plane_entry, self.trace_radio_button)
+        Width.setTabOrder(self.trace_radio_button, self.foil_surface)
+        Width.setTabOrder(self.foil_surface, self.surface_box)
+        Width.setTabOrder(self.surface_box, self.thickness)
+        Width.setTabOrder(self.thickness, self.thickness_checkBox)
+        Width.setTabOrder(self.thickness_checkBox, self.clear_button)
+        Width.setTabOrder(self.clear_button, self.buttonBox)
 
     def retranslateUi(self, Width):
         Width.setWindowTitle(_translate("Width", "Apparent Width", None))

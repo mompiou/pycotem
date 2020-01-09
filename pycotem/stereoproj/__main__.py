@@ -47,9 +47,9 @@ def GCD(a, b, rtol=1e-05, atol=1e-08):
     return a
 
 
-# "
+# ############################
 # Projection
-####################################################################
+##############################
 
 def proj(x, y, z):
 
@@ -101,11 +101,10 @@ def proj_gnomonic(x, y, z):
 #    return np.array([x,y],float)
 
 
-###################################################################
+############################################
 # Rotation Euler
 #
-###########################################################
-#######
+###########################################
 
 def rotation(phi1, phi, phi2):
     phi1 = phi1 * np.pi / 180
@@ -512,7 +511,7 @@ def rot_alpha_p():
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
-    angle_alpha = angle_alpha + s_a*np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha + s_a * np.float(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
     return angle_alpha, M
 
@@ -526,7 +525,7 @@ def rot_alpha_m():
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
-    angle_alpha = angle_alpha - s_a*np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha - s_a * np.float(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
     return angle_alpha, M
 
@@ -547,7 +546,7 @@ def rot_beta_m():
     M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     trace()
     euler_label()
-    angle_beta = angle_beta - s_b*np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta - s_b * np.float(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
     return angle_beta, M
 
@@ -567,7 +566,7 @@ def rot_beta_p():
     M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     trace()
     euler_label()
-    angle_beta = angle_beta + s_b*np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta + s_b * np.float(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
     return angle_beta, M
 
@@ -585,7 +584,7 @@ def rot_z_m():
     M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     trace()
     euler_label()
-    angle_z = angle_z - s_z*np.float(ui.angle_z_entry.text())
+    angle_z = angle_z - s_z * np.float(ui.angle_z_entry.text())
     ui.angle_z_label_2.setText(str(angle_z))
     return angle_z, M
 
@@ -603,7 +602,7 @@ def rot_z_p():
     M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     trace()
     euler_label()
-    angle_z = angle_z + s_z*np.float(ui.angle_z_entry.text())
+    angle_z = angle_z + s_z * np.float(ui.angle_z_entry.text())
     ui.angle_z_label_2.setText(str(angle_z))
     return angle_z, M
 
@@ -777,9 +776,9 @@ def addpole_sym():
     pole2 = np.float(pole_entry[1])
     pole3 = np.float(pole_entry[2])
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float(abc[0]) * 1e-10
+    b = np.float(abc[1]) * 1e-10
+    c = np.float(abc[2]) * 1e-10
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     alpha = np.float(alphabetagamma[0]) * np.pi / 180
     beta = np.float(alphabetagamma[1]) * np.pi / 180
@@ -859,9 +858,9 @@ def undo_sym():
     pole2 = np.float(pole_entry[1])
     pole3 = np.float(pole_entry[2])
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float(abc[0]) * 1e-10
+    b = np.float(abc[1]) * 1e-10
+    c = np.float(abc[2]) * 1e-10
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     alpha = np.float(alphabetagamma[0]) * np.pi / 180
     beta = np.float(alphabetagamma[1]) * np.pi / 180
@@ -1497,8 +1496,14 @@ def text_label(A, B):
     Ab = A[1]
     Ac = A[2]
     if B[3] == 1 & var_hexa() == 1:
-        Aa = (2 * A[0] - A[1]) / 3
-        Ab = (2 * A[1] - A[0]) / 3
+        Aa = (2 * A[0] - A[1])
+        Ab = (2 * A[1] - A[0])
+        Ac = 3 * A[2]
+        m = reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
+        if np.abs(m) > 1e-3:
+            Aa = Aa / m
+            Ab = Ab / m
+            Ac = Ac / m
 
     if np.sign(Aa) < 0:
         s0 = r'$\overline{' + str(np.abs(int(Aa))) + '}$'
@@ -1523,7 +1528,6 @@ def text_label(A, B):
         s = '[' + s + ']'
     return s
 
- #######################################################################
 #######################################################################
 #
 # Main
@@ -1582,11 +1586,11 @@ def trace():
     a.axis([minx, maxx, miny, maxy])
     wulff()
 
- ####################################
- #
- # Initial plot from a given diffraction
- #
- ####################################
+####################################
+#
+# Initial plot from a given diffraction
+#
+####################################
 
 
 def princ():
@@ -1628,7 +1632,7 @@ def princ():
         normal = np.array([-d[2], 0, d[0]])
         ang = np.arccos(np.dot(d, np.array([0, 1, 0])) / np.linalg.norm(d))
 
-    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
+    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
 
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape))
@@ -1808,7 +1812,7 @@ def structure(item):
 
 
 def angle():
-    global Dstar
+    global Dstar, D
     n1 = ui_angle.n1_entry.text().split(",")
     c100 = np.float(n1[0])
     c110 = np.float(n1[1])
@@ -1819,9 +1823,13 @@ def angle():
     c220 = np.float(n2[2])
     c1 = np.array([c100, c110, c120])
     c2 = np.array([c200, c210, c220])
-    if ui.uvw_button.isChecked == True:
-        c1c = np.dot(Dstar, c1)
-        c2c = np.dot(Dstar, c2)
+    if ui.hexa_button.isChecked():
+        if ui.uvw_button.isChecked():
+            c1 = np.array([2 * c100 + c110, 2 * c110 + c100, c120])
+            c2 = np.array([2 * c200 + c210, 2 * c210 + c200, c220])
+    if ui.uvw_button.isChecked():
+        c1c = np.dot(D, c1)
+        c2c = np.dot(D, c2)
     else:
         c1c = np.dot(Dstar, c1)
         c2c = np.dot(Dstar, c2)
@@ -1983,11 +1991,11 @@ def schmid():
     for k in range(0, np.shape(P)[0]):
         ui_schmid.schmid_text.append(str(np.around(P[k, 0], decimals=3)) + '| ' + str(np.int(P[k, 1])) + str(np.int(P[k, 2])) + str(np.int(P[k, 3])) + '| ' + str(np.int(P[k, 4])) + str(np.int(P[k, 5])) + str(np.int(P[k, 6])))
 
- #######################################
- #
- # Save stereo as png
- #
- # ######################################
+#######################################
+#
+# Save stereo as png
+#
+########################################
 
 
 def image_save():
@@ -2058,7 +2066,7 @@ def to_hkl():
 
 def plot_width():
     global D, Dstar, M
-#	ui_width.figure.clf()
+
     B = np.dot(np.linalg.inv(M), np.array([0, 0, 1]))
     plan = ui_width.plane_entry.text().split(",")
     n = np.array([np.float(plan[0]), np.float(plan[1]), np.float(plan[2])])
@@ -2141,12 +2149,23 @@ def intersect_norm(n1, n2, d):
     if l:
         n = np.dot(np.linalg.inv(Dr), n)
         if var_hexa() == 1:
-            na = (2 * n[0] - n[1]) / 3
-            n2a = (2 * n[1] - n[0]) / 3
+            na = (2 * n[0] - n[1])
+            n2a = (2 * n[1] - n[0])
+            n3a = 3 * n[2]
             n[0] = na
             n[1] = n2a
+            n[2] = n3a
     else:
         n = np.dot(np.linalg.inv(Dstarr), n)
+
+    m = reduce(lambda x, y: GCD(x, y), [n[0], n[1], n[2]])
+    if np.abs(m) > 1e-3:
+        n[0] = n[0] / m
+        n[1] = n[1] / m
+        n[2] = n[2] / m
+    else:
+        n = np.round(100 * n, decimals=3)
+
     return n
 
 
@@ -2156,7 +2175,7 @@ def intersections_plans():
     n2_plan = ui_inter.n2_entry.text().split(",")
     n2 = np.array([np.float(n2_plan[0]), np.float(n2_plan[1]), np.float(n2_plan[2])])
     n = intersect_norm(n1, n2, 0)
-    ui_inter.n1n2_label.setText(str(np.round(100 * n[0], decimals=3)) + ', ' + str(np.round(100 * n[1], decimals=3)) + ', ' + str(np.round(100 * n[2], decimals=3)))
+    ui_inter.n1n2_label.setText(str(np.round(n[0], decimals=3)) + ', ' + str(np.round(n[1], decimals=3)) + ', ' + str(np.round(n[2], decimals=3)))
 
 
 def intersection_dir_proj():
@@ -2166,7 +2185,7 @@ def intersection_dir_proj():
     angle = np.float(ui_inter.angle_proj_entry.text()) * np.pi / 180
     norm_xyz = np.array([np.cos(angle), -np.sin(angle), 0])
     n_intersect = intersect_norm(n, norm_xyz, 1)
-    ui_inter.n_proj_label.setText(str(np.round(100 * n_intersect[0], decimals=3)) + ', ' + str(np.round(100 * n_intersect[1], decimals=3)) + ', ' + str(np.round(100 * n_intersect[2], decimals=3)))
+    ui_inter.n_proj_label.setText(str(np.round(n_intersect[0], decimals=3)) + ', ' + str(np.round(n_intersect[1], decimals=3)) + ', ' + str(np.round(n_intersect[2], decimals=3)))
 
 
 def intersection_cone():
@@ -2197,19 +2216,39 @@ def intersection_cone():
         r1 = np.dot(np.linalg.inv(Dr), r1)
         r2 = np.dot(np.linalg.inv(Dr), r2)
         if var_hexa() == 1:
-            na = (2 * r1[0] - r1[1]) / 3
-            n2a = (2 * r1[1] - r1[0]) / 3
+            na = (2 * r1[0] - r1[1])
+            n2a = (2 * r1[1] - r1[0])
+            n3a = 3 * r1[2]
             r1[0] = na
             r1[1] = n2a
-            na2 = (2 * r2[0] - r2[1]) / 3
-            n2a2 = (2 * r2[1] - r2[0]) / 3
+            r1[2] = n3a
+            na2 = (2 * r2[0] - r2[1])
+            n2a2 = (2 * r2[1] - r2[0])
+            n2a3 = 3 * r2[2]
             r2[0] = na2
             r2[1] = n2a2
+            r2[2] = n2a3
     else:
         r1 = np.dot(np.linalg.inv(Dstarr), r1)
         r2 = np.dot(np.linalg.inv(Dstarr), r2)
 
-    ui_inter.cone_plane_label.setText(str(np.round(100 * r1[0], decimals=3)) + ',' + str(np.round(100 * r1[1], decimals=3)) + ',' + str(np.round(100 * r1[2], decimals=3)) + '\n' + str(np.round(100 * r2[0], decimals=3)) + ',' + str(np.round(100 * r2[1], decimals=3)) + ',' + str(np.round(100 * r2[2], decimals=3)))
+    m1 = reduce(lambda x, y: GCD(x, y), [r1[0], r1[1], r1[2]])
+    if np.abs(m1) > 1e-3:
+        r1[0] = r1[0] / m1
+        r1[1] = r1[1] / m1
+        r1[2] = r1[2] / m1
+    else:
+        r1 = np.round(100 * r1, decimals=1)
+
+    m2 = reduce(lambda x, y: GCD(x, y), [r2[0], r2[1], r2[2]])
+    if np.abs(m2) > 1e-3:
+        r2[0] = r2[0] / m2
+        r2[1] = r2[1] / m2
+        r2[2] = r2[2] / m2
+    else:
+        r2 = np.round(100 * r2, decimals=1)
+
+    ui_inter.cone_plane_label.setText(str(np.round(r1[0], decimals=3)) + ',' + str(np.round(r1[1], decimals=3)) + ',' + str(np.round(r1[2], decimals=3)) + '\n' + str(np.round(r2[0], decimals=3)) + ',' + str(np.round(r2[1], decimals=3)) + ',' + str(np.round(r2[2], decimals=3)))
 
 
 ###################################################

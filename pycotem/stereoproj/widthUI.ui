@@ -110,7 +110,13 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>plane_entry</tabstop>
+  <tabstop>trace_radio_button</tabstop>
+  <tabstop>foil_surface</tabstop>
+  <tabstop>surface_box</tabstop>
+  <tabstop>thickness</tabstop>
   <tabstop>thickness_checkBox</tabstop>
+  <tabstop>clear_button</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>

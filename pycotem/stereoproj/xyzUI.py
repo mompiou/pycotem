@@ -56,6 +56,9 @@ class Ui_xyz_dialog(object):
 
         self.retranslateUi(xyz_dialog)
         QtCore.QMetaObject.connectSlotsByName(xyz_dialog)
+        xyz_dialog.setTabOrder(self.X_text, self.Y_text)
+        xyz_dialog.setTabOrder(self.Y_text, self.Z_text)
+        xyz_dialog.setTabOrder(self.Z_text, self.xyz_button)
 
     def retranslateUi(self, xyz_dialog):
         xyz_dialog.setWindowTitle(_translate("xyz_dialog", "xyz directions", None))
