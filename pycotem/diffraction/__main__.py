@@ -37,24 +37,29 @@ def onrelease(event):
 
 
 def click(event):
-    global gclick, s, minx, maxx, miny, maxy
-
-    a = figure.add_subplot(111)
-    minx, maxx = a.get_xlim()
-    miny, maxy = a.get_ylim()
+    global gclick, s
     x = event.xdata
     y = event.ydata
-    r = str(np.around(x, decimals=2)) + ',' + str(np.around(y, decimals=2))
-    a.annotate(str(s), (x, y))
-    a.plot(x, y, 'b+')
-    a.axis('off')
-    a.figure.canvas.draw()
+    
     s = s + 1
     gclick = np.vstack((gclick, np.array([x, y])))
+    plot_click()	
     distance()
     return gclick, s
 
-
+def plot_click():
+    global gclick, minx, maxx, miny, maxy
+    a = figure.add_subplot(111)
+    minx, maxx = a.get_xlim()
+    miny, maxy = a.get_ylim()
+    
+    for i in range(1, gclick.shape[0]):
+    	r = str(np.around(gclick[i,0], decimals=2)) + ',' + str(np.around(gclick[i,1], decimals=2))
+    	a.annotate(str(i), (gclick[i,0],gclick[i,1]))
+    a.plot(gclick[1:,0], gclick[1:,1], 'b+')
+    a.axis('off')
+    a.figure.canvas.draw()
+    
 #########################
 #
 # Reset points
@@ -105,7 +110,7 @@ def reset():
     a.axis([minx, maxx, miny, maxy])
     a.axis('off')
     a.figure.canvas.draw()
-    gclick = np.zeros((1, 2))
+    plot_click()
     ui.ListBox_d_2.clear()
     ui.ListBox_theo.clear()
     s = 1
@@ -607,9 +612,10 @@ class Spect(QtGui.QDialog):
             if space_group == x_space[tt][0]:
                 s = tt
         rr = s + 1
-
+	print len(x_space)
         while len(x_space[rr]) == 4:
             rr = rr + 1
+            print rr
 
         for h in range(-e, e + 1):
             for k in range(-e, e + 1):
@@ -627,7 +633,7 @@ class Spect(QtGui.QDialog):
 
         for dc in range(1, di.shape[0]):
             F = 0
-            q = 2 * np.pi * 1e-10 / di[dc, 0]
+            q = 2 * np.pi  / di[dc, 0]
             for ii in range(s + 1, rr):
                 f = str(x_space[ii][0])
 
@@ -643,7 +649,7 @@ class Spect(QtGui.QDialog):
             if ff > 0.0000001:
                 ann = str(int(di[dc, 1])) + str(int(di[dc, 2])) + str(int(di[dc, 3]))
                 a2.text(di[dc, 0], ff, ann, rotation='vertical')
-                a2.bar(di[dc, 0], ff, width=bar_width, align='center')
+                a2.bar(di[dc, 0], ff, width=bar_width, align='center', color='red')
 
         plt.xlabel('Interplanar distance (nm)')
         plt.ylabel('Intensity (a.u.)')
@@ -660,7 +666,7 @@ def extinction(space_group, h, k, l):
     global x_space, G
     F = 0
     s = 0
-    q = 2 * np.pi * 1e-10 / (np.sqrt(np.dot(np.array([h, k, l]), np.dot(np.linalg.inv(G), np.array([h, k, l])))))
+    q = 2 * np.pi / (np.sqrt(np.dot(np.array([h, k, l]), np.dot(np.linalg.inv(G), np.array([h, k, l])))))
 
     for i in range(0, len(x_space)):
         if space_group == x_space[i][0]:

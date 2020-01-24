@@ -123,7 +123,7 @@
        <item row="7" column="6" colspan="5">
         <widget class="QPushButton" name="Button_reset_all">
          <property name="text">
-          <string>Reset all</string>
+          <string>Reset view</string>
          </property>
         </widget>
        </item>
@@ -199,7 +199,7 @@
        <item row="3" column="0" colspan="5">
         <widget class="QLabel" name="n_label">
          <property name="text">
-          <string>Number of spots</string>
+          <string>Diffraction order</string>
          </property>
         </widget>
        </item>

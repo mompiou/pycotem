@@ -1632,7 +1632,7 @@ def princ():
         normal = np.array([-d[2], 0, d[0]])
         ang = np.arccos(np.dot(d, np.array([0, 1, 0])) / np.linalg.norm(d))
 
-    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
+    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
 
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape))

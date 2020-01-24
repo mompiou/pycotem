@@ -218,6 +218,17 @@ The orientation can be alternatively set the following way:
 
 ![](images/stereo-diff.png)
 
+!!!info "Multiple tilting axes"
+	When considering a diffraction vector obtained after double tilt ($\alpha$ and $\beta$) or after tilt-rotation ($\alpha$, $z$), the diffraction vector should be placed on the stereographic projection taking into account the fact that the $\beta$ (or $z$) -tilt axis moves with the holder while $\alpha$-tilt is fixed.
+	For instance, if the $(1,1,1)$ diffraction vector is recorded at $(\alpha,\beta,z)=(10,-20,0)$ with an inclination of $\eta=40$, the diffraction is placed such that after rotating first by $\beta=-20$ and second by $\alpha=10$ it forms an angle $\eta=40$ with the $y$ direction on the diffraction pattern (owing that there is no rotation between the $\alpha$ tilt axis and the $y$ direction). This means that in the reference frame, the diffraction vector coordinates are, starting from $[0,1,0]$, in the direction $[x,y,z], given by: a rotation of $-\eta$ then a rotation of $-\alpha$ and finally a rotation of $-\beta$:
+	
+	$$
+	[x,y,z]^T=R_x(-\beta)R_y(-\alpha)R_z(-\eta)[0,1,0]^T
+	$$
+	
+	
+	![](images/double-tilt-rot.png)
+
 ### Plotting pole/planes
 
 Poles (or directions) can be additionally plotted. ```Add``` a pole or all the symmetric ones by pressing ```Symmetry``` after entering the indices comma separated. A ```Plane``` or all their symmetric,```Sym Plane``` can be drawn.
