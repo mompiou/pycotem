@@ -536,7 +536,7 @@ def rot_z_p():
 
 
 def rotgm():
-    global g, M, M2, Dstar, a
+    global g, M, M2, Dstar, a, D
     i_c = crystal_check()
     thg = -np.float(ui.rot_g_entry.text())
     diff = ui.pole_entry.text().split(",")
@@ -544,7 +544,12 @@ def rotgm():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    Ad = np.dot(Dstar, A)
+    if var_uvw()==1:
+        if var_hexa(i_c) == 1:
+	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+        Ad = np.dot(D, A)
+    else:
+         Ad = np.dot(Dstar, A)
     if i_c == 1:
         Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
         M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
@@ -560,7 +565,7 @@ def rotgm():
 
 
 def rotgp():
-    global g, M, M2, Dstar
+    global g, M, M2, Dstar,D
     i_c = crystal_check()
     thg = np.float(ui.rot_g_entry.text())
     diff = ui.pole_entry.text().split(",")
@@ -568,7 +573,12 @@ def rotgp():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    Ad = np.dot(Dstar, A)
+    if var_uvw()==1:
+        if var_hexa(i_c) == 1:
+	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+        Ad = np.dot(D, A)
+    else:
+         Ad = np.dot(Dstar, A)
     if i_c == 1:
         Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
         M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
@@ -646,7 +656,7 @@ def pole(pole1, pole2, pole3):
         axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 0, color_trace(i_c), 0, 1, i_c, var_hexa(i_c), var_carre(i_c)])))
     else:
         axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 1, color_trace(i_c), 0, 1, i_c, var_hexa(i_c), var_carre(i_c)])))
-        axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(i_c), 0, 1, i_c, var_hexa(), var_carre(i_c)])))
+        axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(i_c), 0, 1, i_c, var_hexa(i_c), var_carre(i_c)])))
 
     return axes, axesh, T
 
@@ -735,7 +745,7 @@ def addpole_sym():
             pole(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             pole(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             pole(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             pole(pole2, -pole3, pole1)
@@ -763,8 +773,8 @@ def addpole_sym():
             pole(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             pole(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            pole(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            pole(-pole3, pole2, pole1)
     trace()
 
 
@@ -808,7 +818,7 @@ def undo_sym():
             undo_pole(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             undo_pole(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             undo_pole(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             undo_pole(pole2, -pole3, pole1)
@@ -836,8 +846,8 @@ def undo_sym():
             undo_pole(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             undo_pole(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            undo_pole(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            undo_pole(-pole3, pole2, pole1)
     trace()
 
 
@@ -958,7 +968,7 @@ def trace_plan_sym():
             trace_plan(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             trace_plan(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             trace_plan(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             trace_plan(pole2, -pole3, pole1)
@@ -986,8 +996,8 @@ def trace_plan_sym():
             trace_plan(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             trace_plan(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            trace_plan(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            trace_plan(-pole3, pole2, pole1)
     trace()
 
 
@@ -1032,7 +1042,7 @@ def undo_trace_plan_sym():
             undo_trace_plan(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             undo_trace_plan(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             undo_trace_plan(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             undo_trace_plan(pole2, -pole3, pole1)
@@ -1060,8 +1070,8 @@ def undo_trace_plan_sym():
             undo_trace_plan(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             undo_trace_plan(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            undo_trace_plan(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            undo_trace_plan(-pole3, pole2, pole1)
     trace()
 
 
@@ -1251,10 +1261,16 @@ def text_label(A, B):
     Aa = A[0]
     Ab = A[1]
     Ac = A[2]
-
-    if B[3] == 1 and B[8] == 1:
-        Aa = (2 * A[0] - A[1]) / 3
-        Ab = (2 * A[1] - A[0]) / 3
+    i_c = crystal_check()
+    if B[3] == 1 & var_hexa(i_c) == 1:
+        Aa = (2 * A[0] - A[1])
+        Ab = (2 * A[1] - A[0])
+        Ac = 3 * A[2]
+        m = reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
+        if np.abs(m) > 1e-3:
+            Aa = Aa / m
+            Ab = Ab / m
+            Ac = Ac / m
 
     if np.sign(Aa) < 0:
         s0 = r'$\overline{' + str(np.abs(int(Aa))) + '}$'
@@ -1269,7 +1285,7 @@ def text_label(A, B):
     else:
         s2 = str(np.abs(int(Ac)))
     s = s0 + ',' + s1 + ',' + s2
-    if B[8] == 1:
+    if var_hexa(i_c) == 1:
         if np.sign(-Aa - Ab) < 0:
             s3 = r'$\overline{' + str(int(np.abs(-Aa - Ab))) + '}$'
         else:
@@ -1532,7 +1548,7 @@ def Sy(g):
         S4 = Rota(240, 0, 0, 1, g)
         S5 = Rota(300, 0, 0, 1, g)
         S6 = np.eye(3, 3)
-        S7 = Rota(180, 0, 0, 1, g)
+        S7 = Rota(180, 1, 0, 0, g)
         S8 = Rota(180, 0, 1, 0, g)
         S9 = Rota(180, 1 / 2, np.sqrt(3) / 2, 0, g)
         S10 = Rota(180, -1 / 2, np.sqrt(3) / 2, 0, g)
@@ -1558,7 +1574,7 @@ def Sy(g):
         S4 = Rota(240, 0, 0, 1, g)
         S5 = Rota(300, 0, 0, 1, g)
         S6 = np.eye(3, 3)
-        S7 = Rota(180, 0, 0, 1, g)
+        S7 = Rota(180, 1, 0, 0, g)
         S8 = Rota(180, 0, 1, 0, g)
         S9 = Rota(180, 1 / 2, np.sqrt(3) / 2, 0, g)
         S10 = Rota(180, -1 / 2, np.sqrt(3) / 2, 0, g)
@@ -1596,8 +1612,14 @@ def null(A, rcond=None):
     return Q
 
 
+def GCD(a, b, rtol=1e-05, atol=1e-08):
+    t = min(abs(a), abs(b))
+    while abs(b) > rtol * t + atol:
+        a, b = b, a % b
+    return a
+    
 def desorientation():
-    global cs, Qp, M, M2, D1, D0, S
+    global cs, Qp, M, M2, D1, D0, S, Dstar, D,D2
 
     cryststruct()
     gA = M
@@ -1615,7 +1637,9 @@ def desorientation():
 
     D0 = np.zeros((int(np.shape(S)[0] / 3), 5))
     D1 = np.zeros((int(np.shape(S)[0] / 3), 3))
+    D2 = np.zeros((int(np.shape(S)[0] / 3), 3))
     Qp = np.zeros((int(np.shape(S)[0] / 3), 2))
+    
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
         Ing = np.dot(In, np.array([0, 0, 1]))
@@ -1642,15 +1666,19 @@ def desorientation():
             D0[k, 1] = V[0, 1] / np.linalg.norm(V)
             D0[k, 2] = V[0, 2] / np.linalg.norm(V)
 
-        Ds1 = np.dot(np.linalg.inv(gB), np.array([D0[k, 0], D0[k, 1], D0[k, 2]]))
+        Ds1 = np.dot(np.linalg.inv(gA), np.array([D0[k, 0], D0[k, 1], D0[k, 2]]))
+        Ds2 = np.dot(np.linalg.inv(gB), np.array([D0[k, 0], D0[k, 1], D0[k, 2]]))
+	
+	if var_uvw()==1:
+	    Ds1=np.dot(np.linalg.inv(D)*1e-10,Ds1)
+            Ds2=np.dot(np.linalg.inv(D)*1e-10,Ds2)
+        else:	
+	    Ds1=np.dot(np.linalg.inv(Dstar)*1e10,Ds1)
+            Ds2=np.dot(np.linalg.inv(Dstar)*1e10,Ds2)
+        
+        D1[k,0:3]=100*Ds1/np.linalg.norm(Ds1)
+        D2[k,0:3]=100*Ds2/np.linalg.norm(Ds2)
 
-        F0 = Fraction(Ds1[0]).limit_denominator(10)
-        F1 = Fraction(Ds1[1]).limit_denominator(10)
-        F2 = Fraction(Ds1[2]).limit_denominator(10)
-
-        D1[k, 0] = F0.numerator * F1.denominator * F2.denominator
-        D1[k, 1] = F1.numerator * F0.denominator * F2.denominator
-        D1[k, 2] = F2.numerator * F0.denominator * F1.denominator
 
         if D0[k, 2] < 0:
             D0[k, 0] = -D0[k, 0]
@@ -1669,23 +1697,50 @@ def desorientation():
 
 
 def trace_misorientation(B):
-    global Qp, D1, D0
+    global Qp, D1, D0, D2
+    
+    i_c=crystal_check()
     ui.misorientation_list.clear()
+    sepg='('
+    sepd=')'
+    if var_uvw() == 1:
+        sepg='['
+        sepd=']'
     if Qp.shape[0] > 1:
-        ui.misorientation_list.addItem('Number, Axis, Angle' + '\n' + '-----------------')
+    	ui.misorientation_list.setRowCount(int(np.shape(S)[0] / 3))
+        ui.misorientation_list.setColumnCount(3)
         a.plot(B[:, 0] + 300, B[:, 1] + 300, 's', color='black')
         for l in range(0, int(np.shape(S)[0] / 3)):
-            if ui.axis_checkBox.isChecked():
-                saxe = str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2]))
-                a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=8)
+            if var_hexa(i_c)==1 and var_uvw()==1:
+                if ui.axis_checkBox.isChecked():
+              	    saxe = sepg+str(int( (2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2]))+sepd
+              	    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=8) 
+                
+                axe1=QtGui.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2=QtGui.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1])/3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0])/3)) + ',' + str(int(D2[l, 2])) + sepd)
+                angle=QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+                
+                
+            else:
+                if ui.axis_checkBox.isChecked():
+              	    saxe = sepg+str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2]))+sepd
+                
+                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=8)
+            
+                axe1=QtGui.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2=QtGui.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
+                angle=QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+
 
             if ui.numbers_checkBox.isChecked():
                 snum = str(int(D0[l, 4]))
                 a.annotate(snum, (B[l, 0] + 300, B[l, 1] + 300), size=10)
-
-            text2mis = str(int(D0[l, 4])) + '\t' + '[' + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + ']' + '\t ' + str(np.around(D0[l, 3], decimals=2))
-
-            ui.misorientation_list.addItem(text2mis)
+            
+             
+            ui.misorientation_list.setHorizontalHeaderLabels(['Axe 1', 'Axe 2', 'Angle'])
+            ui.misorientation_list.setItem(l,0,axe1)
+            ui.misorientation_list.setItem(l,1,axe2)
+            ui.misorientation_list.setItem(l,2,angle)
 
 
 def desorientation_clear():

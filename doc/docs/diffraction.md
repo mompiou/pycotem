@@ -149,10 +149,10 @@ The data $(h,k,l)$, the inclination angle $\eta$ and the tilt angles, can be use
 
 ## Orientation from a set of diffraction vectors
 
-If a set of at least 3 diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the holder frame $h$. Given the direction $X$ in the crystal $c$ frame:
+If a set of at least 3 linearly independent diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates $s$ (see below regarding ambiguities). Given the direction $X$ in the crystal $c$ coordinates:
 
 $$
-O_c  X = O_h  
+O_c  X = O_s  
 \begin{pmatrix} 
 1\\
 0 \\
@@ -173,14 +173,14 @@ $$
 $D^\ast$ is defined [here](stereoproj.md#setting-up-the-crystal), and: 
 
 $$ 
-O_h=\begin{pmatrix} 
+O_s=\begin{pmatrix} 
 x_1 & y_1 & z_1\\
 & ... & \\
 x_N & y_N & z_N		
 \end{pmatrix}
 $$
 
-The coordinates $x_i,y_i,z_i$ are obtained by appropriate rotation in the holder coordinates. For a double tilt holder, with no angle between the vertical direction and the $\alpha$-tilt axis, the coordinates of the diffraction vector $i$ is:
+The coordinates $x_i,y_i,z_i$ are obtained by appropriate rotation in the sample coordinates. For a double tilt holder, with no angle between the vertical direction and the $\alpha$-tilt axis, the coordinates of the diffraction vector $i$ is:
 
 $$
 \begin{pmatrix} 
@@ -202,15 +202,22 @@ $$
 The equations
 
 $$
-O_cX=O_h [1,0,0]^T \\
-O_cY=O_h [0,1,0]^T \\
-O_cZ =O_h [0,0,1]^T
+O_cX=O_s [1,0,0]^T \\
+O_cY=O_s [0,1,0]^T \\
+O_cZ =O_s [0,0,1]^T
 $$	
 
-can be solved, using the least square method, for 3, 4 or 5 inputs. 
+can be solved, using the least square method, for 2,3, 4 or 5 inputs. 
 
 !!! info "180° ambiguity"
-	Diffraction patterns that are in zone with certain zone axes can lead to 180° ambiguity. This arises when a zone axis pattern presents a 180° rotation symmetry that the crystal does not present. This is illustrated below in a cubic crystal. The diffraction vectors are $g_1$, $g_2$ and $g_3$, recorded at different tilt angles, but all of them perpendicular to $[\bar{1},1,1]$ zone axis, lead to an ambiguous orientation. It is then mandatory to record at least 3 diffraction vectors that are non-coplanar.
+	The above equations can be solved with only 2 inputs, the third being the cross product of the first two vectors. This however can only be achieved in specific cases which avoid the 180° ambiguity. 
+	
+	The situation described on the left side of the figure below is ambiguous even if the three diffraction vectors are linearly independent. In this case, the 180° rotation along $g_3$ leads two different crystal orientations.
+	On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along $(0\bar{1}1)$ is a crystal symmetry. 
+	
+	Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. 
+	
+	In ```diffraction``` ambiguous results can be detected for 2 or 3 sets of inputs. It can be reasonably considered that with 4 or 5 data sets, the ambiguity is avoided. 
 	
 	![](/images/ambiguity.png)
 	
@@ -232,6 +239,8 @@ The result box shows:
 
 ``` phi1, phi, phi2 (Euler angles), mean angular deviation, orthogonality, residual ``` 
 
+If the analysis fails the message ``` Colinear vectors or inconsistent inputs ``` appears. 2 sets of ```phi1, phi, phi2``` angles are displayed if the results are ambiguous.
+
 The Euler angles are retrieved from the $X,Y,Z$ directions:
 
 $$
@@ -252,7 +261,7 @@ where $\vec{g}_i$ is the normalized diffraction vector corresponding to the $(h_
 
 - The ``` orthogonality ``` between the $X,Y,Z$ direction is evaluated by $(X \times Y) \cdot Z$ and thus should be close to 1.
 
-- The ``` residual```, is the sum of squared residuals of the least square method for determining $Z$.
+- The ``` residual```, is the sum of squared residuals of the least square method for determining $Z$ (works only for more than 3 inputs).
 
 
 ## Spectrum

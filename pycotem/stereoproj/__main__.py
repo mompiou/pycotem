@@ -614,7 +614,7 @@ def rot_z_p():
 
 
 def rotgm():
-    global g, M, Dstar, a
+    global g, M, Dstar, a, D
 
     thg = -np.float(ui.rot_g_entry.text())
     diff = ui.diff_entry.text().split(",")
@@ -622,7 +622,12 @@ def rotgm():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    Ad = np.dot(Dstar, A)
+    if var_uvw()==1:
+        if var_hexa() == 1:
+	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+        Ad = np.dot(D, A)
+    else:
+         Ad = np.dot(Dstar, A)
     Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
     M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
     trace()
@@ -633,7 +638,7 @@ def rotgm():
 
 
 def rotgp():
-    global g, M, D
+    global g, M, Dstar, a, D
 
     thg = np.float(ui.rot_g_entry.text())
     diff = ui.diff_entry.text().split(",")
@@ -641,7 +646,12 @@ def rotgp():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    Ad = np.dot(Dstar, A)
+    if var_uvw()==1:
+        if var_hexa() == 1:
+	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+        Ad = np.dot(D, A)
+    else:
+         Ad = np.dot(Dstar, A)
     Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
     M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
     trace()
@@ -818,7 +828,7 @@ def addpole_sym():
             pole(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             pole(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             pole(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             pole(pole2, -pole3, pole1)
@@ -846,8 +856,8 @@ def addpole_sym():
             pole(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             pole(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            pole(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            pole(-pole3, pole2, pole1)
     trace()
 
 
@@ -900,7 +910,7 @@ def undo_sym():
             undo_pole(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             undo_pole(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             undo_pole(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             undo_pole(pole2, -pole3, pole1)
@@ -928,8 +938,8 @@ def undo_sym():
             undo_pole(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             undo_pole(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            undo_pole(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            undo_pole(-pole3, pole2, pole1)
     trace()
 
 
@@ -1109,7 +1119,7 @@ def trace_plan_sym():
             trace_plan(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             trace_plan(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             trace_plan(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             trace_plan(pole2, -pole3, pole1)
@@ -1137,8 +1147,8 @@ def trace_plan_sym():
             trace_plan(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             trace_plan(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            trace_plan(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            trace_plan(-pole3, pole2, pole1)
     trace()
 
 
@@ -1191,7 +1201,7 @@ def undo_trace_plan_sym():
             undo_trace_plan(-pole2, pole1, pole3)
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             undo_trace_plan(pole2, pole3, pole1)
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             undo_trace_plan(pole2, pole3, -pole1)
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             undo_trace_plan(pole2, -pole3, pole1)
@@ -1219,8 +1229,8 @@ def undo_trace_plan_sym():
             undo_trace_plan(pole3, pole2, -pole1)
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             undo_trace_plan(pole3, -pole2, pole1)
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            undo_trace_plan(pole3, pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            undo_trace_plan(-pole3, pole2, pole1)
     trace()
 
 
@@ -1922,7 +1932,7 @@ def schmid_pole(pole1, pole2, pole3):
             N = np.vstack((N, np.array([-pole2, pole1, pole3])))
         if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
             N = np.vstack((N, np.array([pole2, pole3, pole1])))
-        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
             N = np.vstack((N, np.array([pole2, pole3, -pole1])))
         if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
             N = np.vstack((N, np.array([pole2, -pole3, pole1])))
@@ -1950,8 +1960,8 @@ def schmid_pole(pole1, pole2, pole3):
             N = np.vstack((N, np.array([pole3, pole2, -pole1])))
         if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
             N = np.vstack((N, np.array([pole3, -pole2, pole1])))
-        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
-            N = np.vstack((N, np.array([pole3, pole2, pole1])))
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            N = np.vstack((N, np.array([-pole3, pole2, pole1])))
 
     return N
 
