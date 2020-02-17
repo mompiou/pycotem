@@ -95,7 +95,7 @@ Microscope_name voltage camera length binning r.d
 
 ```
 
-For ```diffraction```,  only the value $r \times d$ is necessary, the other fields are informative.  
+For ```diffraction```,  only the value $r . d$ is necessary, the other fields are informative.  
 
 ## Interface
 
@@ -124,7 +124,7 @@ Alternatively, the structure can be set by filling the $a,b,c$  and $\alpha$, $\
 
 - Set the ``` Diffraction alpha y-axis angle ``` (see [stereoproj](stereoproj.md#coordinate-systems) )
 
-- Left click on a diffraction spot. To ensure a higher precision zoom in. 
+- Left click on a diffraction spot. Zoom in to ensure a higher precision. 
 
 - Click again on a second spot corresponding to the diffraction order $n$.
 
@@ -136,7 +136,7 @@ Alternatively, the structure can be set by filling the $a,b,c$  and $\alpha$, $\
 
 - The distance $d$ (A) and the inclination angle $\eta$ are indicated in the __Dist, Inclination__ box.
 
-- Click on ``` Find diffraction spots ``` to identify the spot click. The results appear in the __g vectors__ box with the scheme
+- Click on ``` Find diffraction spots ``` to identify the spot . The results appear in the __g vectors__ box with the scheme
 ```
 
 d(A), h,k,l, Intensity(arb. units)
@@ -231,7 +231,7 @@ Thus for every diffraction patterns, the type of diffraction vector, inclination
 
 - Press ```Add data ``` . A line appears ``` alpha angle, beta angle, z angle, inclination, h,k,l ```. Data can be removed by selecting the line and by pressing ``` Remove data ```.
 
-- Repeat the above operation for at least 3 diffraction spots. Then select the data lines and press ``` Get orientation ``` 
+- Repeat the above operation for at least 2 diffraction spots. Then select the data lines and press ``` Get orientation ``` 
 
 ![](images/diff-data.png)
 
@@ -249,7 +249,7 @@ $$
 \varphi_2 = \arctan (Z_1, Z_2)
 $$
 
-The accuracy of the result can be address by several indicators: 
+The accuracy of the result can be addressed by several indicators: 
 
 - The ```mean angular``` deviation is the average angle between each diffraction vector computed from the Euler angles and the experimental values:
 

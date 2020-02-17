@@ -1261,8 +1261,8 @@ def text_label(A, B):
     Aa = A[0]
     Ab = A[1]
     Ac = A[2]
-    i_c = crystal_check()
-    if B[3] == 1 & var_hexa(i_c) == 1:
+
+    if B[3] == 1 & int(B[8]) == 1:
         Aa = (2 * A[0] - A[1])
         Ab = (2 * A[1] - A[0])
         Ac = 3 * A[2]
@@ -1285,7 +1285,7 @@ def text_label(A, B):
     else:
         s2 = str(np.abs(int(Ac)))
     s = s0 + ',' + s1 + ',' + s2
-    if var_hexa(i_c) == 1:
+    if int(B[8]) == 1:
         if np.sign(-Aa - Ab) < 0:
             s3 = r'$\overline{' + str(int(np.abs(-Aa - Ab))) + '}$'
         else:
@@ -1642,12 +1642,7 @@ def desorientation():
     
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
-        Ing = np.dot(In, np.array([0, 0, 1]))
-        In2 = np.dot(Rot(-phi2_2, Ing[0], Ing[1], Ing[2]), In)
-        Ing2 = np.dot(In2, np.array([1, 0, 0]))
-        In3 = np.dot(Rot(-phi_2, Ing2[0], Ing2[1], Ing2[2]), In2)
-        Ing3 = np.dot(In3, np.array([0, 0, 1]))
-        A = np.dot(Rot(-phi1_2, Ing3[0], Ing3[1], Ing3[2]), In3) - np.eye(3)
+        A = np.dot(np.linalg.inv(gB),In) - np.eye(3)
         V = null(A, 0.001).T
 
         if 0.5 * (np.trace(A + np.eye(3)) - 1) > 1:
@@ -1714,7 +1709,7 @@ def trace_misorientation(B):
             if var_hexa(i_c)==1 and var_uvw()==1:
                 if ui.axis_checkBox.isChecked():
               	    saxe = sepg+str(int( (2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2]))+sepd
-              	    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=8) 
+              	    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text()) 
                 
                 axe1=QtGui.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2])) + sepd)
                 axe2=QtGui.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1])/3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0])/3)) + ',' + str(int(D2[l, 2])) + sepd)
@@ -1725,7 +1720,7 @@ def trace_misorientation(B):
                 if ui.axis_checkBox.isChecked():
               	    saxe = sepg+str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2]))+sepd
                 
-                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=8)
+                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
             
                 axe1=QtGui.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
                 axe2=QtGui.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
@@ -1734,7 +1729,7 @@ def trace_misorientation(B):
 
             if ui.numbers_checkBox.isChecked():
                 snum = str(int(D0[l, 4]))
-                a.annotate(snum, (B[l, 0] + 300, B[l, 1] + 300), size=10)
+                a.annotate(snum, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
             
              
             ui.misorientation_list.setHorizontalHeaderLabels(['Axe 1', 'Axe 2', 'Angle'])

@@ -53,7 +53,7 @@ In the example below: $(\varphi_1,\phi,\varphi_2)=(-80,40,30)$
 !!! info "Rotation matrices and Euler angles "
 	The orientation is defined by a rotation matrix that links the reference frame $(x,y,z)$ to the crystal frame $(x',y',z')$ by composing the 3 rotations. In the example shown, it was considered that the rotations operate sequentially in a moving frame: they are called intrinsic. 
 	
-	This definition is however not convenient for working with rotation matrices as the rotation axis moves in the reference frame. So, we can define the Euler angles from extrinsic rotations, i.e. rotations that operate in the fixed reference frame $(x,y,z)$, in the way presented in the figure below for $(\varphi_1,\phi,\varphi_2)=(-80,40,30)$. 
+	This definition is however not convenient for working with rotation matrices as the rotation axes move in the reference frame. So, we can define the Euler angles from extrinsic rotations, i.e. rotations that operate in the fixed reference frame $(x,y,z)$, in the way presented in the figure below for $(\varphi_1,\phi,\varphi_2)=(-80,40,30)$. 
 	
 	![](images/extrinsic.png)
 	
@@ -62,7 +62,7 @@ In the example below: $(\varphi_1,\phi,\varphi_2)=(-80,40,30)$
 	$$
 	R=R_z(\varphi_1)R_x(\phi)R_z(\varphi_2)
 	$$
-	where $R_z(a)$ and $R_x(a)$ are the rotation matrices along $x$ and$z$ axis of an angle $a$.
+	where $R_z(a)$ and $R_x(a)$ are the rotation matrices along $x$ and $z$ axis of an angle $a$.
 	Inversely, knowing the rotation matrix, the Euler angles can be determined: 
 	$$
 	\varphi_1 = \arctan(R_{02}/R_{12}), \phi = \arccos(R_{22}), \varphi_2 = \arctan(R_{20}/R_{21})
@@ -92,7 +92,7 @@ When the ```Lock Axes``` box is checked, the $x$ and $z$ axes are now fixed with
 	Same conclusions hold for tilt-rotation holder.
 	
 	![](images/doubletilt.png)
-	> Left: rotation with fixed rotation axes, Right: rotation with a fixed $y$ tilt and moving $x$ tilt. Red and blue paths represent a switch in the tilt order.
+	> Top: rotation with fixed rotation axes, Bottom: rotation with a fixed $y$ tilt and moving $x$ tilt. Red and blue paths represent a switch in the tilt order.
 
 
 Crystallographic feature analyses are carried out in a TEM using both diffraction and image mode. When the electrons passing through the specimen are focused in the back focal plane of the objective lens, they form a diffraction pattern which can be magnified in the projection plane where the pattern is recorded. Conversely, an image is formed in the first image plane of the objective lens, which can also be magnified in the projected lens. To switch from image to diffraction mode, the power of the objective lens has to be modified which induces an image rotation. To enlarge the pattern or the image, the effect of intermediate and projection lenses may also introduce rotations.
@@ -220,7 +220,7 @@ The orientation can be alternatively set the following way:
 
 !!!info "Multiple tilting axes"
 	When considering a diffraction vector obtained after double tilt ($\alpha$ and $\beta$) or after tilt-rotation ($\alpha$, $z$), the diffraction vector should be placed on the stereographic projection taking into account the fact that the $\beta$ (or $z$) -tilt axis moves with the holder while $\alpha$-tilt is fixed.
-	For instance, if the $(1,1,1)$ diffraction vector is recorded at $(\alpha,\beta,z)=(10,-20,0)$ with an inclination of $\eta=40$, the diffraction is placed such that after rotating first by $\beta=-20$ and second by $\alpha=10$ it forms an angle $\eta=40$ with the $y$ direction on the diffraction pattern (owing that there is no rotation between the $\alpha$ tilt axis and the $y$ direction). This means that in the reference frame, the diffraction vector coordinates are, starting from $[0,1,0]$, in the direction $[x,y,z]$, given by: a rotation of $-\eta$ then a rotation of $-\alpha$ and finally a rotation of $-\beta$:
+	For instance, if the $(1,1,1)$ diffraction vector is recorded at $(\alpha,\beta,z)=(10,-20,0)$ with an inclination of $\eta=40$, the diffraction is placed such that after rotating first by $\beta=-20$ and second by $\alpha=10$ it forms an angle $\eta=40$ with the $y$ direction on the diffraction pattern (owing that there is no rotation between the $\alpha$ tilt axis and the $y$ direction). This means that in the sample frame, the diffraction vector coordinates are, starting from $[0,1,0]$, in the direction $[x,y,z]$, given by: a rotation of $-\eta$ then a rotation of $-\alpha$ and finally a rotation of $-\beta$:
 	
 	$$
 	[x,y,z]^T=R_x(-\beta)R_y(-\alpha)R_z(-\eta)[0,1,0]^T
@@ -268,7 +268,7 @@ For hexagonal structure, the ```hexa``` box can be selected to let the 4 indices
 	
 	Note that with the four indices notations, directions are perpendicular to plane normals (i.e. contain in a plane) if $(hkil)\cdot[uvtw]=0$ as shown for instance below
 	
-	Note that for Euler angle convention, $\langle a \rangle$ is parallel to $x$ and $\langle c \rangle$ is parallel to $z$ at $(0,0,0)$.
+	Note that for Euler angles convention, $\langle a \rangle$ is parallel to $x$ and $\langle c \rangle$ is parallel to $z$ at $(0,0,0)$.
 	
 	![](images/hexa.png)
 

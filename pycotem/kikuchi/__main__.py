@@ -146,7 +146,7 @@ def remove_center():
 
 
 def listb():
-    global Dist, Ang, G
+    global Dist, Ang, G, Dstar
     abc = ui.abc_entry.text().split(",")
     a = np.float(abc[0])
     b = np.float(abc[1])
@@ -566,7 +566,7 @@ def show_result():
     elif n == 6:
         K = testangle6(tab)
     else:
-        print('le nombre de bandes doit etre entre 3 et 6')
+        print('Numbers of bands should be between 3 and 6')
 
     K = np.asarray(K)
     U = np.zeros((np.shape(K)[0], Num - 1))
@@ -601,7 +601,7 @@ def show_result():
 
 
 def orientation():
-    global B2, K, v0, Ct, pOB, width, height, image_diff, L, v, vg, sol, Res
+    global B2, K, v0, Ct, pOB, width, height, image_diff, L, v, vg, sol, Res, Dstar
 
     Num = np.shape(B2)[0]
     ds = []
@@ -643,6 +643,9 @@ def orientation():
     g2 = K[sol, 1, 1:4]
     g3 = K[sol, 2, 1:4]
 
+    g1=np.dot(Dstar,g1)
+    g2=np.dot(Dstar,g2)
+    g3=np.dot(Dstar,g3)
     g4 = np.cross(g1, g2)
 
     gamma1 = np.arctan2(-v0[0, 1], -v0[0, 0]) * 180 / np.pi

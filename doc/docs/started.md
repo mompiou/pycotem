@@ -25,7 +25,7 @@ msiexec /i python-2.7.9.amd64.msi /qb
 
 ```
 	
-- Install numpy, pillow and matplotlib use pip:
+- Install numpy, pillow and matplotlib using pip:
 
 ```
 pip install numpy==1.13.3
@@ -34,7 +34,7 @@ pip install matplotlib==2.1.1
 
 ```
 
-- Download PyQt4 (choose amd64 and python 2.7 cp27) wheel and install (do not place the whl file in a folder with non ascii character).
+- Download PyQt4 (choose amd64 and python 2.7 cp27) wheel and install (do not place the whl file in a folder with non ascii characters).
 
 ```
 pip install PyQt4-4.11.4-cp27-cp27m-win_amd64.whl

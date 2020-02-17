@@ -19,15 +19,15 @@ copyright: 'Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/e
 
 edit_uri: "https://github.com/mompiou/pycotem/tree/master/doc/docs"
 
-pages:
+nav:
    - Home: 'index.md'
       
    - Getting started: 'started.md'
       
-   - Kikuchi: 'kikuchi.md'
-
    - Diffraction: 'diffraction.md'
-
+  
+   - Kikuchi: 'kikuchi.md'
+  
    - StereoProj: 'stereoproj.md'
    
    - Interface: 'interface.md'
@@ -35,6 +35,8 @@ pages:
    - Misorientation: 'misorientation.md'
    
    - Crystal: 'crystal.md'
+   
+   - Further ressources: 'ressources.md'
    
    - About: 'contribute.md'
      
@@ -66,7 +68,8 @@ extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
 
 extra_css:
-  - 'stylesheets/extra.css'
+  - 'extra.css'
+
 
 
 

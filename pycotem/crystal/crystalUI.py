@@ -205,7 +205,7 @@ class Ui_Crystal(object):
         self.abc_label.setText(_translate("Crystal", "a,b,c", None))
         self.changeStruct_button.setText(_translate("Crystal", "Change structure", None))
         self.groupBox_3.setTitle(_translate("Crystal", "Layers", None))
-        self.label_2.setText(_translate("Crystal", "Layers numbers", None))
+        self.label_2.setText(_translate("Crystal", "Layers numb.", None))
         self.label.setText(_translate("Crystal", "Plane", None))
         self.label_3.setText(_translate("Crystal", "Size", None))
         self.label_6.setText(_translate("Crystal", "Marker size", None))
