@@ -50,7 +50,7 @@ the $\mathrm{sgn}(i)$ here denotes that although the measure width is always pos
 
 The equation can be solved using the least square method, by varying $\mathrm{sgn}(i)$. The solution with the smallest residual is considered to be the correct one.
 
-The inputs data used are for a double tilt holder using the convention described in [stereoproj](stereo.md) derived from the position of the beam direction and apparent trace direction in the sample coordinates:
+The inputs data used are for a double tilt holder using the convention described in [stereoproj](stereoproj.md) derived from the position of the beam direction and apparent trace direction in the sample coordinates:
 
 $$
 \vec{b}_{ei}=Rx(\beta_i)Ry(\alpha_i)[0,0,1]^T \\
@@ -70,7 +70,7 @@ $$
 
 The interface is composed of  a top bar menu, a plotting area to display images and a setting/results panel.
 
-![](/images/interface-interface.png)
+![](images/interface-interface.png)
 
 
 ## Procedure
