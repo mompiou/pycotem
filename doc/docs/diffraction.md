@@ -118,7 +118,7 @@ Alternatively, the structure can be set by filling the $a,b,c$  and $\alpha$, $\
 
 ### Procedure
 
-- Open a diffraction pattern
+- Open a diffraction pattern. Make sure that the file name does not contain non-ASCII character.
 
 - Define a calibration in the ```Calibrations ``` box
 
@@ -132,7 +132,7 @@ Alternatively, the structure can be set by filling the $a,b,c$  and $\alpha$, $\
 
 - Click ``` reset view```  or ``` reset point ```  if needed
 
-![](/images/diff-proc1.png)
+![](images/diff-proc1.png)
 
 - The distance $d$ (A) and the inclination angle $\eta$ are indicated in the __Dist, Inclination__ box.
 
@@ -219,7 +219,7 @@ can be solved, using the least square method, for 2,3, 4 or 5 inputs.
 	
 	In ```diffraction``` ambiguous results can be detected for 2 or 3 sets of inputs. It can be reasonably considered that with 4 or 5 data sets, the ambiguity is avoided. 
 	
-	![](/images/ambiguity.png)
+	![](images/ambiguity.png)
 	
 Thus for every diffraction patterns, the type of diffraction vector, inclination angle, and tilt angles need to be provided. 
 

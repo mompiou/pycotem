@@ -95,7 +95,7 @@ When calibrated, the ```Magnification``` field can be filled. Note that magnific
 
 - Select the holder configuration
 
-- Open an image taken at a given $\alpha$, $\beta$, $z$ angles. Anticlockwise rotation can be indicated in the ```AC``` box.
+- Open an image taken at a given $\alpha$, $\beta$, $z$ angles. Anticlockwise rotation can be indicated in the ```AC``` box. Make sure that the file name does not contain non-ASCII character.
 
 - Select the corresponding magnification for a given microscope setting
 

@@ -4,7 +4,7 @@ theme:
   custom_dir: 'theme'
   langage: 'en'
   logo: 'images/logo.png'
-  favicon: 'images/favicon.png'
+  favicon: 'images/favicon.ico'
   palette:
     primary: 'deep purple'
     accent: 'deep purple'
