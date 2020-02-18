@@ -8,7 +8,6 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-from fractions import Fraction
 import misorientationUI
 
 
@@ -279,7 +278,6 @@ def dist_restrict(ind):
     if ind == 1:
         abc = ui.abc_entry.text().split(",")
         alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-        e = np.int(ui.e_entry.text())
         d2 = np.float(ui.d_label_var.text())
     if ind == 2:
         abc = ui.abc_entry_2.text().split(",")
@@ -544,12 +542,12 @@ def rotgm():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    if var_uvw()==1:
+    if var_uvw() == 1:
         if var_hexa(i_c) == 1:
-	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+            A = np.array([(2 * diff1 + diff2), (2 * diff2 + diff1), diff3])
         Ad = np.dot(D, A)
     else:
-         Ad = np.dot(Dstar, A)
+        Ad = np.dot(Dstar, A)
     if i_c == 1:
         Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
         M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
@@ -565,7 +563,7 @@ def rotgm():
 
 
 def rotgp():
-    global g, M, M2, Dstar,D
+    global g, M, M2, Dstar, D
     i_c = crystal_check()
     thg = np.float(ui.rot_g_entry.text())
     diff = ui.pole_entry.text().split(",")
@@ -573,12 +571,12 @@ def rotgp():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    if var_uvw()==1:
+    if var_uvw() == 1:
         if var_hexa(i_c) == 1:
-	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+            A = np.array([(2 * diff1 + diff2), (2 * diff2 + diff1), diff3])
         Ad = np.dot(D, A)
     else:
-         Ad = np.dot(Dstar, A)
+        Ad = np.dot(Dstar, A)
     if i_c == 1:
         Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
         M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
@@ -688,7 +686,7 @@ def undo_pole(pole1, pole2, pole3):
         pole1 = -pole1
         pole2 = -pole2
         pole3 = -pole3
-    
+
     ind = np.where((axes[:, 0] == pole1) & (axes[:, 1] == pole2) & (axes[:, 2] == pole3) & (axes[:, 3] == i_c) | (axes[:, 0] == -pole1) & (axes[:, 1] == -pole2) & (axes[:, 2] == -pole3) & (axes[:, 3] == i_c))
     axes = np.delete(axes, ind, 0)
     T = np.delete(T, ind, 0)
@@ -1077,7 +1075,7 @@ def undo_trace_plan_sym():
 
 def trace_plan2(B):
     global M, M2, axes, axesh, T, V, D, Dstar, a, trP
-    
+
     for h in range(0, B.shape[0]):
         pole1 = B[h, 0]
         pole2 = B[h, 1]
@@ -1310,19 +1308,16 @@ def crystal_check():
         D, Dstar, V, G = crist_mat(abc, alphabetagamma)
     return i_c
 
- #######################################################################
-#######################################################################
-#
+
+########################################################
 # Main
 #
-#####################################################################
+#######################################################
 
-
-####################################################################
-#
+########################################################
 # Refresh action on stereo
 #
-####################################################################
+#######################################################
 
 def trace():
     global T, x, y, z, axes, axesh, M, M2, trP, a, trC, s_a, s_b, s_z, Qp, D1, D0, S
@@ -1612,26 +1607,12 @@ def null(A, rcond=None):
     return Q
 
 
-def GCD(a, b, rtol=1e-05, atol=1e-08):
-    t = min(abs(a), abs(b))
-    while abs(b) > rtol * t + atol:
-        a, b = b, a % b
-    return a
-    
 def desorientation():
-    global cs, Qp, M, M2, D1, D0, S, Dstar, D,D2
+    global cs, Qp, M, M2, D1, D0, S, Dstar, D, D2
 
     cryststruct()
     gA = M
     gB = M2
-    if np.abs(M2[2, 2] - 1) < 0.0001:
-        phi_2 = 0
-        phi1_2 = 0
-        phi2_2 = np.arctan2(M2[1, 0], M2[0, 0]) * 180 / np.pi
-    else:
-        phi_2 = np.arccos(M2[2, 2]) * 180 / np.pi
-        phi2_2 = np.arctan2(M2[2, 0], M2[2, 1]) * 180 / np.pi
-        phi1_2 = np.arctan2(M2[0, 2], -M2[1, 2]) * 180 / np.pi
     k = 0
     S = Sy(gA)
 
@@ -1639,10 +1620,10 @@ def desorientation():
     D1 = np.zeros((int(np.shape(S)[0] / 3), 3))
     D2 = np.zeros((int(np.shape(S)[0] / 3), 3))
     Qp = np.zeros((int(np.shape(S)[0] / 3), 2))
-    
+
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
-        A = np.dot(np.linalg.inv(gB),In) - np.eye(3)
+        A = np.dot(np.linalg.inv(gB), In) - np.eye(3)
         V = null(A, 0.001).T
 
         if 0.5 * (np.trace(A + np.eye(3)) - 1) > 1:
@@ -1663,17 +1644,16 @@ def desorientation():
 
         Ds1 = np.dot(np.linalg.inv(gA), np.array([D0[k, 0], D0[k, 1], D0[k, 2]]))
         Ds2 = np.dot(np.linalg.inv(gB), np.array([D0[k, 0], D0[k, 1], D0[k, 2]]))
-	
-	if var_uvw()==1:
-	    Ds1=np.dot(np.linalg.inv(D)*1e-10,Ds1)
-            Ds2=np.dot(np.linalg.inv(D)*1e-10,Ds2)
-        else:	
-	    Ds1=np.dot(np.linalg.inv(Dstar)*1e10,Ds1)
-            Ds2=np.dot(np.linalg.inv(Dstar)*1e10,Ds2)
-        
-        D1[k,0:3]=100*Ds1/np.linalg.norm(Ds1)
-        D2[k,0:3]=100*Ds2/np.linalg.norm(Ds2)
 
+        if var_uvw() == 1:
+            Ds1 = np.dot(np.linalg.inv(D) * 1e-10, Ds1)
+            Ds2 = np.dot(np.linalg.inv(D) * 1e-10, Ds2)
+        else:
+            Ds1 = np.dot(np.linalg.inv(Dstar) * 1e10, Ds1)
+            Ds2 = np.dot(np.linalg.inv(Dstar) * 1e10, Ds2)
+
+        D1[k, 0:3] = 100 * Ds1 / np.linalg.norm(Ds1)
+        D2[k, 0:3] = 100 * Ds2 / np.linalg.norm(Ds2)
 
         if D0[k, 2] < 0:
             D0[k, 0] = -D0[k, 0]
@@ -1693,49 +1673,46 @@ def desorientation():
 
 def trace_misorientation(B):
     global Qp, D1, D0, D2
-    
-    i_c=crystal_check()
+
+    i_c = crystal_check()
     ui.misorientation_list.clear()
-    sepg='('
-    sepd=')'
+    sepg = '('
+    sepd = ')'
     if var_uvw() == 1:
-        sepg='['
-        sepd=']'
+        sepg = '['
+        sepd = ']'
     if Qp.shape[0] > 1:
-    	ui.misorientation_list.setRowCount(int(np.shape(S)[0] / 3))
+        ui.misorientation_list.setRowCount(int(np.shape(S)[0] / 3))
         ui.misorientation_list.setColumnCount(3)
         a.plot(B[:, 0] + 300, B[:, 1] + 300, 's', color='black')
         for l in range(0, int(np.shape(S)[0] / 3)):
-            if var_hexa(i_c)==1 and var_uvw()==1:
+            if var_hexa(i_c) == 1 and var_uvw() == 1:
                 if ui.axis_checkBox.isChecked():
-              	    saxe = sepg+str(int( (2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2]))+sepd
-              	    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text()) 
-                
-                axe1=QtGui.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1])/3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0])/3)) + ',' + str(int(D1[l, 2])) + sepd)
-                axe2=QtGui.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1])/3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0])/3)) + ',' + str(int(D2[l, 2])) + sepd)
-                angle=QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
-                
-                
+                    saxe = sepg + str(int((2 * D1[l, 0] - D1[l, 1]) / 3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0]) / 3)) + ',' + str(int(D1[l, 2])) + sepd
+                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
+
+                axe1 = QtGui.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1]) / 3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0]) / 3)) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2 = QtGui.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1]) / 3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0]) / 3)) + ',' + str(int(D2[l, 2])) + sepd)
+                angle = QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+
             else:
                 if ui.axis_checkBox.isChecked():
-              	    saxe = sepg+str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2]))+sepd
-                
-                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
-            
-                axe1=QtGui.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
-                axe2=QtGui.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
-                angle=QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+                    saxe = sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd
 
+                    a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
+
+                axe1 = QtGui.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2 = QtGui.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
+                angle = QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
 
             if ui.numbers_checkBox.isChecked():
                 snum = str(int(D0[l, 4]))
                 a.annotate(snum, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
-            
-             
+
             ui.misorientation_list.setHorizontalHeaderLabels(['Axe 1', 'Axe 2', 'Angle'])
-            ui.misorientation_list.setItem(l,0,axe1)
-            ui.misorientation_list.setItem(l,1,axe2)
-            ui.misorientation_list.setItem(l,2,angle)
+            ui.misorientation_list.setItem(l, 0, axe1)
+            ui.misorientation_list.setItem(l, 1, axe2)
+            ui.misorientation_list.setItem(l, 2, angle)
 
 
 def desorientation_clear():
@@ -1792,11 +1769,11 @@ def structure2(item):
         ui.e_entry_2.setText('1')
         ui.hexa_button_2.setChecked(False)
 
- #######################################
- #
- # Save stereo as png
- #
- ## ####################################
+#######################################
+#
+# Save stereo as png
+#
+######################################
 
 
 def image_save():

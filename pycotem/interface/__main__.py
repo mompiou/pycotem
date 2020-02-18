@@ -132,7 +132,7 @@ def add_condition():
     y1 = gclick[1, 1]
     x2 = gclick[2, 0]
     y2 = gclick[2, 1]
-    if ui.direction_button.isChecked() == False:
+    if ui.direction_button.isChecked() is False:
         x3 = gclick[3, 0]
         y3 = gclick[3, 1]
         d = np.abs((y2 - y1) * x3 - (x2 - x1) * y3 + x2 * y1 - y2 * x1) / np.sqrt((y2 - y1)**2 + (x2 - x1)**2)

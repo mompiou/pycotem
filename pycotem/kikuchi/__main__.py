@@ -23,11 +23,9 @@ from __future__ import division
 import numpy as np
 from PyQt4 import QtGui, QtCore
 import sys
-import random
 import os
 from PIL import Image
 from PIL import ImageEnhance
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
@@ -80,9 +78,8 @@ def click(event):
     a.axis('off')
     a.figure.canvas.draw()
     s = s + 1
-
     gclick = np.vstack((gclick, np.array([x, y])))
-    var_g_click = r
+
     return gclick, s
 
 
@@ -207,7 +204,6 @@ def distance(i, j, k):
     alp = np.float(alphabetagamma[0])
     bet = np.float(alphabetagamma[1])
     gam = np.float(alphabetagamma[2])
-    e = np.int(ui.indice_entry.text())
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -643,9 +639,9 @@ def orientation():
     g2 = K[sol, 1, 1:4]
     g3 = K[sol, 2, 1:4]
 
-    g1=np.dot(Dstar,g1)
-    g2=np.dot(Dstar,g2)
-    g3=np.dot(Dstar,g3)
+    g1 = np.dot(Dstar, g1)
+    g2 = np.dot(Dstar, g2)
+    g3 = np.dot(Dstar, g3)
     g4 = np.cross(g1, g2)
 
     gamma1 = np.arctan2(-v0[0, 1], -v0[0, 0]) * 180 / np.pi
@@ -859,7 +855,7 @@ if __name__ == "__main__":
 
     for i in range(counter):
         ui.Calib_box.addItem(x_calib[i][0] + ' ' + x_calib[i][1] + 'keV ' + x_calib[i][2])
-    
+
     f_scatt = open(os.path.join(os.path.dirname(__file__), 'scattering.txt'), "r")
 
     x_scatt = []
@@ -867,9 +863,8 @@ if __name__ == "__main__":
     for line in f_scatt:
         x_scatt.append(map(str, line.split()))
 
-
     f_scatt.close()
-    
+
     Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
     figure.canvas.mpl_connect('button_press_event', onpress)
     figure.canvas.mpl_connect('button_release_event', onrelease)

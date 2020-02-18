@@ -622,12 +622,12 @@ def rotgm():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    if var_uvw()==1:
+    if var_uvw() == 1:
         if var_hexa() == 1:
-	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+            A = np.array([(2 * diff1 + diff2), (2 * diff2 + diff1), diff3])
         Ad = np.dot(D, A)
     else:
-         Ad = np.dot(Dstar, A)
+        Ad = np.dot(Dstar, A)
     Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
     M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
     trace()
@@ -646,12 +646,12 @@ def rotgp():
     diff2 = np.float(diff[1])
     diff3 = np.float(diff[2])
     A = np.array([diff1, diff2, diff3])
-    if var_uvw()==1:
+    if var_uvw() == 1:
         if var_hexa() == 1:
-	        A = np.array([(2*diff1+diff2), (2*diff2+diff1), diff3])
+            A = np.array([(2 * diff1 + diff2), (2 * diff2 + diff1), diff3])
         Ad = np.dot(D, A)
     else:
-         Ad = np.dot(Dstar, A)
+        Ad = np.dot(Dstar, A)
     Ap = np.dot(M, Ad) / np.linalg.norm(np.dot(M, Ad))
     M = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M)
     trace()
