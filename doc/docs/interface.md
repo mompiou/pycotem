@@ -149,10 +149,10 @@ Drawing interface projection can be done using the ```Draw``` menu.
 
 - Press ```OK``` to plot the two apparent traces at the clicked point.
 
-![](/images/interface-draw.png)
+![](images/interface-draw.png)
 
 
 
 The same procedure can be applied to determined and draw directions. The ```direction``` box should then be checked.
 
-![](/images/interface-draw-dir.png)
+![](images/interface-draw-dir.png)

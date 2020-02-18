@@ -101,7 +101,7 @@ For ```diffraction```,  only the value $r . d$ is necessary, the other fields ar
 
 The interface is composed of  a top bar menu, a plotting area to display diffraction pattern and a setting/results panel.
 
-![](/images/diffraction-interface.png)
+![](images/diffraction-interface.png)
 
 
 ## Indexing a diffraction pattern
