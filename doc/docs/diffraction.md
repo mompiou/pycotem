@@ -136,13 +136,15 @@ Alternatively, the structure can be set by filling the $a,b,c$  and $\alpha$, $\
 
 - The distance $d$ (A) and the inclination angle $\eta$ are indicated in the __Dist, Inclination__ box.
 
+- Indicate a value in px  in the ```precision``` box. The g-vectors will be chosen within the uncertainty range $\pm$ the precision. By default, the value is 10 px.
+
 - Click on ``` Find diffraction spots ``` to identify the spot . The results appear in the __g vectors__ box with the scheme
 ```
 
-d(A), h,k,l, Intensity(arb. units)
+d(A) |  h,k,l | Intensity(arb. units) | angles
 
 ```
-The diffraction vectors shown are  within a $\pm$ 10 % range around the measured $d$.
+The angles values are explained below to determine orientation from a set of diffraction vectors.
 
 The data $(h,k,l)$, the inclination angle $\eta$ and the tilt angles, can be used to plot [stereographic projection from a diffraction vector](stereoproj.md#from-a-diffraction-vector)
 
@@ -152,7 +154,7 @@ The data $(h,k,l)$, the inclination angle $\eta$ and the tilt angles, can be use
 If a set of at least 3 linearly independent diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates $s$ (see below regarding ambiguities). Given the direction $X$ in the crystal $c$ coordinates:
 
 $$
-O_c  X = O_s  
+G_c  X = G_s  
 \begin{pmatrix} 
 1\\
 0 \\
@@ -163,23 +165,26 @@ $$
  where 
  
 $$
-O_c=D^\ast \begin{pmatrix} 
+G_c=D^\ast \begin{pmatrix} 
 h_1 & k_1 & l_1\\
 & ... & \\
 h_N & k_N & l_N		
 \end{pmatrix}
 $$
 
+ are the the g-vectors in the crystal coordinates and
 $D^\ast$ is defined [here](stereoproj.md#setting-up-the-crystal), and: 
 
 $$ 
-O_s=\begin{pmatrix} 
+G_s=\begin{pmatrix} 
 x_1 & y_1 & z_1\\
 & ... & \\
 x_N & y_N & z_N		
 \end{pmatrix}
 $$
 
+are the g-vectors in the sample coordinates.
+ 
 The coordinates $x_i,y_i,z_i$ are obtained by appropriate rotation in the sample coordinates. For a double tilt holder, with no angle between the vertical direction and the $\alpha$-tilt axis, the coordinates of the diffraction vector $i$ is:
 
 $$
@@ -202,66 +207,78 @@ $$
 The equations
 
 $$
-O_cX=O_s [1,0,0]^T \\
-O_cY=O_s [0,1,0]^T \\
-O_cZ =O_s [0,0,1]^T
+G_cX=G_s [1,0,0]^T \\
+G_cY=G_s [0,1,0]^T \\
+G_cZ =G_s [0,0,1]^T
 $$	
 
-can be solved, using the least square method, for 2,3, 4 or 5 inputs. 
+lead to:
+
+$$
+RG_c^T=G_s^T
+$$
+
+where $R$ is a Euler rotation matrix. Finding $R$ can be done with the approach proposed by Mackenzie [^mackenzie] using singular value decomposition:
+
+$$
+U,S,V^T=svd(G_c^TG_s) \\
+R=V U^T
+$$
+
+The Euler angles are retrieved from the $R$ matrix:
+
+$$
+\varphi_1 = \arctan (R_{02}, R_{12}) \\
+\phi = \arccos(R_{22}) \\
+\varphi_2 = \arctan (R_{20},R_{21})
+$$
 
 !!! info "180° ambiguity"
-	The above equations can be solved with only 2 inputs, the third being the cross product of the first two vectors. This however can only be achieved in specific cases which avoid the 180° ambiguity. 
+	When the inputs g-vectors are coplanar, the above equation can still be solved by defining an extra condition as the cross product of two other vectors. This however can only be achieved in specific cases which avoid the 180° ambiguity. 
 	
 	The situation described on the left side of the figure below is ambiguous even if the three diffraction vectors are linearly independent. In this case, the 180° rotation along $g_3$ leads two different crystal orientations.
 	On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along $(0\bar{1}1)$ is a crystal symmetry. 
 	
 	Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. 
 	
-	In ```diffraction``` ambiguous results can be detected for 2 or 3 sets of inputs. It can be reasonably considered that with 4 or 5 data sets, the ambiguity is avoided. 
+	In ```diffraction``` ambiguous results can be detected.
 	
 	![](images/ambiguity.png)
 	
-Thus for every diffraction patterns, the type of diffraction vector, inclination angle, and tilt angles need to be provided. 
+Thus for every diffraction patterns, the diffraction vector, inclination angle, and tilt angles need to be provided. 
 
-- first ``` Find diffraction spots ```
+- Fill the tilt angles fields.  Tick the box to indicate that rotation is anti-clockwise.
 
-- select both the __dist, inclination__ field and the appropriate __g vector__. Note that the $(h,k,l)$ indices can be arbitrary chosen within the list.
+- Click and ``` Find diffraction spots ```
 
-- fill the tilt angles fields.  Tick the box to indicate that rotation is anti-clockwise.
+- Select both the __dist, inclination__ field and the appropriate __g vector__. For the first condition, the indices of the g-vector can arbitrary be chosen. 
 
-- Press ```Add data ``` . A line appears ``` alpha angle, beta angle, z angle, inclination, h,k,l ```. Data can be removed by selecting the line and by pressing ``` Remove data ```.
+- Press ```Add data ```. A line appears ``` alpha angle, beta angle, z angle, inclination, h,k,l ```. Data can be removed by selecting the line and by pressing ``` Remove data ```.
 
-- Repeat the above operation for at least 2 diffraction spots. Then select the data lines and press ``` Get orientation ``` 
+- Repeat the above operations for at least 2 diffraction spots. For every conditions, the angle between the proposed g-vectors and the already chosen g-vectors are indicated. Choose the $(h,k,l)$ indices that minimize all the angles.
+
+- Then select the data lines and press ``` Get orientation ``` 
 
 ![](images/diff-data.png)
 
 The result box shows: 
 
-``` phi1, phi, phi2 (Euler angles), mean angular deviation, orthogonality, residual ``` 
+``` phi1, phi, phi2 (Euler angles), mean angular deviation, mean square angular deviation ``` 
 
-If the analysis fails the message ``` Colinear vectors or inconsistent inputs ``` appears. 2 sets of ```phi1, phi, phi2``` angles are displayed if the results are ambiguous.
+Two sets of ```phi1, phi, phi2``` angles are displayed if the results are ambiguous.
 
-The Euler angles are retrieved from the $X,Y,Z$ directions:
 
-$$
-\varphi_1 = \arctan (X_3, Y_3) \\
-\phi = \arccos(Z_3) \\
-\varphi_2 = \arctan (Z_1, Z_2)
-$$
+The accuracy of the result is given by: 
 
-The accuracy of the result can be addressed by several indicators: 
-
-- The ```mean angular``` deviation is the average angle between each diffraction vector computed from the Euler angles and the experimental values:
+- The ```mean angular  deviation```, which is the average angle between each diffraction vector computed from the Euler angles and the experimental values:
 
 $$
-\langle \theta_d \rangle = \| {\sum_i \arccos(R_{\varphi_1,\phi,\varphi_2} \vec{g}_i \cdot [x_i,y_i,z_i]^T) }\|
+\langle \theta_d \rangle = \| {\sum_i^N \arccos(R \vec{g}_i \cdot [x_i,y_i,z_i]^T) }\|/N
 $$
 
-where $\vec{g}_i$ is the normalized diffraction vector corresponding to the $(h_i,k_i,l_i)$ plane, $R_{\varphi_1,\phi,\varphi_2}$ is the rotation matrix defined [here](stereoproj.md#euler-angles).
+where $\vec{g}_i$ is the normalized diffraction vector corresponding to the $(h_i,k_i,l_i)$ plane.
 
-- The ``` orthogonality ``` between the $X,Y,Z$ direction is evaluated by $(X \times Y) \cdot Z$ and thus should be close to 1.
-
-- The ``` residual```, is the sum of squared residuals of the least square method for determining $Z$ (works only for more than 3 inputs).
+- In the approach to find $R$, the ``` mean square angular deviation ```, $\langle \theta_d^2 \rangle$, is minimized. This value should then be as small as possible.
 
 
 ## Spectrum
@@ -270,4 +287,5 @@ Spectra, i.e. peak intensity with respect to the d-spacing, can be plotted from 
 
 ![](images/spectrum.png)
 
+[^mackenzie]: J. Mackenzie, Acta Cryst. 1957, 10, 61.
 
