@@ -3,6 +3,7 @@ import numpy as np
 from PyQt4 import QtGui, QtCore
 import sys
 import os
+from itertools import combinations
 from PIL import Image
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
@@ -137,7 +138,11 @@ def distance():
         if d == 0:
             bet = 0
         else:
-            bet = 180 - np.arccos((y1 - y) / (n * d)) * 180 / np.pi
+            if x1-x>0:
+	        bet = 180 - np.arccos((y1 - y) / (n * d)) * 180 / np.pi
+	    else:
+	        bet = np.arccos((y1 - y) / (n * d)) * 180 / np.pi
+	            
         d = eval(x_calib[ui.Calib_box.currentIndex()][4]) / d
 
     if np.isinf(d) == 0:
@@ -150,7 +155,61 @@ def distance():
 # Get theoretical distance
 #
 ############################
+def angle_check(Dis):
+    global G,Dstar,D
+    if ui.tilt_a_entry.text()==[]:
+    	return
+    else:
+	    s_a, s_b, s_z = tilt_axes()
+	    ta=np.float(ui.tilt_a_entry.text())
+	    tb=np.float(ui.tilt_b_entry.text())
+	    tz=np.float(ui.tilt_z_entry.text())
+	    inc = ui.ListBox_d_2.currentItem().text().split(',')
+	    
+	    t_ang = np.float(ui.tilt_axis_angle_entry.text())
+	    R = np.dot(Rot(s_z * tz, 0, 0, 1), np.dot(Rot(s_b * tb, 1, 0, 0), Rot(s_a * ta, 0, 1, 0)))
+	    ny = (-np.float(inc[1])) * np.pi / 180
+	    t = np.array([-np.sin(ny), np.cos(ny), 0])
+	    g_d = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
+	    
+	    if ui.diff_spot_Listbox.count()==0:
+	    	Dis=np.hstack((Dis, np.zeros((Dis.shape[0],1))))
+	    	return Dis
+	    else:
+	    	s1=[ui.diff_spot_Listbox.item(i).text() for i in range(ui.diff_spot_Listbox.count())]
+	    	tilt_a = []
+	    	tilt_b = []
+	    	tilt_z = []
+	    	inclination = []
+	    	g_hkl = []
 
+
+		for i in range(0, len(s1)):
+			l = map(float, s1[i].split(','))
+			tilt_a.append(l[0])
+			tilt_b.append(l[1])
+			tilt_z.append(l[2])
+			inclination.append(l[3])
+			g_hkl.append(l[4:7])
+     		inclination = np.array(inclination)
+	        tilt_a = np.array(tilt_a)
+	        tilt_b = np.array(tilt_b)
+	        tilt_z = np.array(tilt_z)
+	        g_hkl = np.array(g_hkl)
+	        t_ang = np.float(ui.tilt_axis_angle_entry.text())
+		ang_i = np.zeros((np.shape(tilt_a)[0], 3))
+	        for i in range(0, np.shape(tilt_a)[0]):
+	        	Dis=np.hstack((Dis, np.zeros((Dis.shape[0],1))))
+			R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
+			ny = (-inclination[i]) * np.pi / 180
+			t = np.array([-np.sin(ny), np.cos(ny), 0])
+			for k in range(0,Dis.shape[0]):
+				a=angle(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)),g_d)
+				Dis[k,-1]=np.around(np.abs(angle(Dis[k,1:4],g_hkl[i,:])-a)*180/np.pi,decimals=1)
+    Dis=Dis[np.argsort(Dis[:, -1])]
+    return Dis
+
+    
 def distance_theo():
     global d, G, Dstar, D
 
@@ -173,18 +232,19 @@ def distance_theo():
     Dstar = np.transpose(np.linalg.inv(D))
     ui.ListBox_theo.clear()
     w = 0
-    for i in range(-e, e + 1):
-        for j in range(-e, e + 1):
-            for k in range(-e, e + 1):
+    for i in range(e+1, -e, -1):
+        for j in range(e+1, -e, -1):
+            for k in range(e+1, -e, -1):
                 if (i, j, k) != (0, 0, 0):
                     di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
-                    if di < (d + 0.1) and di > (d - 0.1):
+                    
+                    if di < (d/(1-d*np.float(ui.precision_entry.text())/eval(x_calib[ui.Calib_box.currentIndex()][4]))) and di > (d/(1+d*np.float(ui.precision_entry.text())/eval(x_calib[ui.Calib_box.currentIndex()][4]))):
                         I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
-                        Dist[w, :] = np.array([np.around(di, decimals=3), i, j, k, I])
+                        Dist[w, :] = np.array([np.around(di, decimals=3), int(i), int(j), int(k), I])
                         w = w + 1
-
-    for k in range(0, w):
-        ui.ListBox_theo.addItem(str(Dist[k, 0]) + ',' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + ',' + str(Dist[k, 4]))
+    Dist=angle_check(Dist[:w,:]) 
+    for k in range(0, Dist.shape[0]):
+           ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4])+'  |  '+', '.join(map(str, Dist[k,5:])))
     return
 
 ########################
@@ -195,13 +255,14 @@ def distance_theo():
 
 
 def add_spot():
-    s1 = ui.ListBox_theo.currentItem().text().split(',')
+    s1 = ui.ListBox_theo.currentItem().text().split('|')
+    s11= s1[1].split(',')
     s2 = ui.ListBox_d_2.currentItem().text().split(',')
     s3 = ui.tilt_a_entry.text()
     s4 = ui.tilt_b_entry.text()
     s5 = ui.tilt_z_entry.text()
 
-    s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s1[1] + ',' + s1[2] + ',' + s1[3]
+    s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2]
     ui.diff_spot_Listbox.addItem(s)
 
 
@@ -257,47 +318,9 @@ def angle(p1, p2):
     global Dstar, D
     p1c = np.dot(Dstar, p1)
     p2c = np.dot(Dstar, p2)
-    the = np.arccos(np.dot(p1c, p2c) / (np.linalg.norm(p1c) * np.linalg.norm(p2c)))
+    the = np.clip(np.dot(p1c, p2c) / (np.linalg.norm(p1c) * np.linalg.norm(p2c)),-1,1)
+    the=np.arccos(the)
     return the
-
-#
-# Get all equivalent diffraction +/-g
-# from permutation
-#
-
-
-def perm_g(pole1, pole2, pole3):
-
-    v = dhkl(pole1, pole2, pole3)
-
-    g = np.array([[pole1, pole2, pole3], [pole1, pole2, -pole3], [pole1, -pole2, pole3], [-pole1, pole2, pole3], [pole2, pole1, pole3], [pole2, pole1, -pole3], [pole2, -pole1, pole3], [-pole2, pole1, pole3], [pole2, pole3, pole1], [pole2, pole3, -pole1], [pole2, -pole3, pole1], [-pole2, pole3, pole1], [pole1, pole3, pole2], [pole1, pole3, -pole2], [pole1, -pole3, pole2], [-pole1, pole3, pole2], [pole3, pole1, pole2], [pole3, pole1, -pole2], [pole3, -pole1, pole2], [-pole3, pole1, pole2], [pole3, pole2, pole1], [pole3, pole2, -pole1], [pole3, -pole2, pole1], [-pole3, pole2, pole1]])
-
-    o = []
-    for i in range(0, g.shape[0]):
-        if np.abs(dhkl(g[i, 0], g[i, 1], g[i, 2]) - v) < 1e-9:
-            o = np.append(o, i)
-    g = g[np.array(o, dtype=int), :]
-#    g = np.vstack((g, -g))
-    g = unique_rows(g)
-    return g
-
-
-def sym_g(r, g, a):
-
-    v = dhkl(r[0, 0], r[0, 1], r[0, 2])
-    w = dhkl(g[0], g[1], g[2])
-    L = r[0, :]
-    for i in range(0, r.shape[0]):
-        if np.abs(np.abs(angle(r[i, :], g)) - np.arccos(np.abs(a))) * 180 / np.pi < 5:
-            if np.sign(np.dot(r[i, :], g) / v / w) == np.sign(a):
-                L = np.vstack((L, r[i, :]))
-            else:
-                L = np.vstack((L, -r[i, :]))
-
-    if L.shape[0] > 1:
-        L = L[1:, :]
-        L = unique_rows(L)
-    return L
 
 
 def cryststruct():
@@ -361,12 +384,11 @@ def Sy():
 
     return S
 
+##################
 #
-# Determine x,y,z axis in crystal coordinates for all the possible sets
-# of diffraction vectors. Retrieve the Euler angles from x,y,z. Define the
-# index=(x.y)^z as the measure of the orthogonality of the three vectors (should
-# be very close to 1). Incorrect index can be the consequence of a choice of coplanar vectors.
+# Determine orientation
 #
+#################
 
 
 def check_ambiguity(g2):
@@ -381,245 +403,86 @@ def check_ambiguity(g2):
     return aa
 
 
-def euler_determine_2(g_perm, g_sample):
-    global Dstar, cs
+def euler_determine(g_c, g_sample):
+    global Dstar,cs
     cryststruct()
-    R = []
-    g0 = g_perm[0][0]
-    g1 = g_perm[1][0]
-    a = np.dot(g_sample[0, :], g_sample[1, :])
-    L = sym_g(g_perm[1][:], g0, a)
-    g1 = L[0, :]
-    g2 = np.cross(np.dot(Dstar, g0), np.dot(Dstar, g1))
-    g2 = np.dot(np.linalg.inv(Dstar), g2)
-    aa = check_ambiguity(g2)
+    g_c = np.dot(Dstar, g_c.T)
+    g_c = (g_c / np.linalg.norm(g_c.T, axis=1)).T
+    aa=0
+    
+    if g_c.shape[0]==2:
+        g_cross=np.cross(g_c[0,:],g_c[1,:])
+    	g_c=np.vstack((g_c,g_cross/np.linalg.norm(g_cross)))
+    	g_sample_cross=np.cross(g_sample[0,:],g_sample[1,:])
+    	g_sample=np.vstack((g_sample,g_sample_cross/np.linalg.norm(g_sample_cross)))
+    	aa=check_ambiguity(g_cross)
+   
 
-    Gs = np.array([g0, g1, g2])
-    Gs = np.dot(Dstar, Gs.T)
-    Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-
-    g_sample_2 = np.cross(g_sample[0, :], g_sample[1, :])
-    g_sample_2 = g_sample_2 / np.linalg.norm(g_sample_2)
-    g_sample = np.vstack((g_sample, g_sample_2))
-    co = np.linalg.det(Gs)
-
-    if np.abs(co) < 1e-8:
-        R = np.array([0])
+    if np.linalg.matrix_rank(g_c)<3:
+    	g_cross=np.cross(g_c[0,:],g_c[1,:])
+    	g_c=np.vstack((g_c,g_cross))
+    	g_sample_cross=np.cross(g_sample[0,:],g_sample[1,:])
+    	g_sample=np.vstack((g_sample,g_sample_cross/np.linalg.norm(g_sample_cross)))
+        aa=check_ambiguity(g_cross)
+    
     else:
-        x = np.linalg.lstsq(Gs, g_sample[:, 0])[0]
-        x = x / np.linalg.norm(x)
-        y = np.linalg.lstsq(Gs, g_sample[:, 1])[0]
-        y = y / np.linalg.norm(y)
-        z, res = np.linalg.lstsq(Gs, g_sample[:, 2])[0:2]
-        z = z / np.linalg.norm(z)
-
-        phi_1 = np.arctan2(x[2], -y[2]) * 180 / np.pi
-        phi = np.arccos(z[2]) * 180 / np.pi
-        phi_2 = np.arctan2(z[0], z[1]) * 180 / np.pi
-        t = 0
-        for r in range(0, 3):
-            t = t + np.abs(np.arccos(np.dot(np.dot(rotation(phi_1, phi, phi_2), Gs[r, :]), g_sample[r, :])) * 180 / np.pi)
-        t = t / r
-
-        if aa == 1:
-            M = np.dot(Rot(180, g_sample[2, 0], g_sample[2, 1], g_sample[2, 2]), rotation(phi_1, phi, phi_2))
+    	    if g_c.shape[0]==3:
+    	    	c=list(combinations(range(g_c.shape[0]),2))
+    	    	for i in range(len(c)):
+    	    		a=list(set(list(range(g_c.shape[0])))-set(list(c[i])))
+    	    		ne= np.linalg.norm(np.dot(g_c[c[i],:],g_c[a,:].T))
+			if ne<1e-8:
+				aa=check_ambiguity(g_c[a,:])
+				if aa==1:
+				   g_sample_cross=g_sample[a,:][0]
+    	    	
+	    else:
+	    	    c=list(combinations(range(g_c.shape[0]),3))
+		    for i in range(len(c)):
+			de=np.linalg.det(g_c[c[i],:])
+			a=list(set(list(range(g_c.shape[0])))-set(list(c[i])))
+			print de,a
+			if np.abs(de)<1e-8:
+				ne= np.linalg.norm(np.dot(g_c[c[i],:],g_c[a,:].T))
+				if ne<1e-8:
+					aa=check_ambiguity(g_c[a,:])
+					if aa==1:
+				            g_sample_cross=g_sample[a,:][0]
+			
+   
+    if np.linalg.det(np.dot(g_c.T,g_sample))<0:
+        g_c=-g_c
+ 
+    U,S,V=np.linalg.svd(np.dot(g_c.T,g_sample))
+    M=np.dot(V.T,U.T)
+    
+    phi = np.arccos(M[2, 2]) * 180 / np.pi
+    phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+    phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+    t,t2 = 0,0
+    for r in range(0, 3):
+    	ang_dev=np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]),-1,1)
+        t = t + np.abs(np.arccos(ang_dev)) 
+        t2=t2 + (np.arccos(ang_dev)) **2
+    t = t / r * 180 / np.pi
+    t2=t2/r * (180 / np.pi)**2
+    
+    if aa == 1:
+            M = np.dot(Rot(180, g_sample_cross[0], g_sample_cross[1], g_sample_cross[2]), M)
             phip = np.arccos(M[2, 2]) * 180 / np.pi
             phi_2p = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
             phi_1p = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-            R.append([np.dot(np.cross(x, y), z), 0, phi_1, phi, phi_2, t, phi_1p, phip, phi_2p])
-        else:
-            R.append([np.dot(np.cross(x, y), z), 0, phi_1, phi, phi_2, t])
-        R = np.array(R)
-        R = R[np.argmin(R[:, 5]), :]
-    return R
-
-
-def euler_determine_3(g_perm, g_sample):
-    global cs
-    cryststruct()
-    R = []
-    for i in range(0, g_perm[0].shape[0]):
-        for j in range(0, g_perm[1].shape[0]):
-            for k in range(0, g_perm[2].shape[0]):
-                g0 = g_perm[0][i]
-                g1 = g_perm[1][j]
-                g2 = g_perm[2][k]
-                Gs = np.array([g0, g1, g2])
-                Gs = np.dot(Dstar, Gs.T)
-                Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-                x = np.linalg.lstsq(Gs, g_sample[:, 0])[0]
-                x = x / np.linalg.norm(x)
-                y = np.linalg.lstsq(Gs, g_sample[:, 1])[0]
-                y = y / np.linalg.norm(y)
-                z, res = np.linalg.lstsq(Gs, g_sample[:, 2])[0:2]
-                z = z / np.linalg.norm(z)
-                phi_1 = np.arctan2(x[2], -y[2]) * 180 / np.pi
-                phi = np.arccos(z[2]) * 180 / np.pi
-                phi_2 = np.arctan2(z[0], z[1]) * 180 / np.pi
-                t = 0
-                for r in range(0, 3):
-                    t = t + np.abs(np.arccos(np.dot(np.dot(rotation(phi_1, phi, phi_2), Gs[r, :]), g_sample[r, :])) * 180 / np.pi)
-                t = t / r
-
-                R.append([np.dot(np.cross(x, y), z), 0, phi_1, phi, phi_2, t, Gs[0, 0], Gs[0, 1], Gs[0, 2], Gs[1, 0], Gs[1, 1], Gs[1, 2], Gs[2, 0], Gs[2, 1], Gs[2, 2]])
-
-    R = np.array(R)
-    R = R[np.argmin(R[:, 5]), :]
-
-    if R[0] < 1e-3:
-        R = np.array([0])
+            R=np.array([phi_1, phi, phi_2, phi_1p, phip, phi_2p,t,t2])
     else:
-        a1, a2, a3 = 0, 0, 0
-        if np.abs(np.dot(R[6:9], R[9:12])) < 1e-5 and np.abs(np.dot(R[6:9], R[12:15])) < 1e-5:
-            a1 = check_ambiguity(R[6:9])
-        if np.abs(np.dot(R[6:9], R[9:12])) < 1e-5 and np.abs(np.dot(R[12:15], R[9:12])) < 1e-5:
-            a2 = check_ambiguity(R[9:12])
-        if np.abs(np.dot(R[6:9], R[12:15])) < 1e-5 and np.abs(np.dot(R[12:15], R[9:12])) < 1e-5:
-            a3 = check_ambiguity(R[12:15])
-
-        if a1 == 0 and a2 == 0 and a3 == 0:
-            R = R[0:6]
-        else:
-            if a1 == 1:
-                M = np.dot(Rot(180, g_sample[0, 0], g_sample[0, 1], g_sample[0, 2]), rotation(R[2], R[3], R[4]))
-            elif a2 == 1:
-                M = np.dot(Rot(180, g_sample[1, 0], g_sample[1, 1], g_sample[1, 2]), rotation(R[2], R[3], R[4]))
-            elif a3 == 1:
-                M = np.dot(Rot(180, g_sample[2, 0], g_sample[2, 1], g_sample[2, 2]), rotation(R[2], R[3], R[4]))
-
-            R[7] = np.arccos(M[2, 2]) * 180 / np.pi
-            R[8] = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
-            R[6] = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-            R = R[0:9]
-
+            R=np.array([phi_1, phi, phi_2, t,t2])
+    
     return R
+    
 
-
-def euler_determine_4(g_perm, g_sample):
-    R = []
-    N = []
-    for i in range(0, g_perm[0].shape[0]):
-        for j in range(0, g_perm[1].shape[0]):
-            for k in range(0, g_perm[2].shape[0]):
-                g0 = g_perm[0][i]
-                g1 = g_perm[1][j]
-                g2 = g_perm[2][k]
-                Gs = np.array([g0, g1, g2])
-                Gs = np.dot(Dstar, Gs.T)
-                Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-                x = np.linalg.lstsq(Gs, g_sample[0:3, 0])[0]
-                x = x / np.linalg.norm(x)
-                y = np.linalg.lstsq(Gs, g_sample[0:3, 1])[0]
-                y = y / np.linalg.norm(y)
-                z = np.linalg.lstsq(Gs, g_sample[0:3, 2])[0]
-                z = z / np.linalg.norm(z)
-                c = np.dot(np.cross(x, y), z)
-                N.append([c, g0[0], g0[1], g0[2], g1[0], g1[1], g1[2], g2[0], g2[1], g2[2]])
-
-    N = np.array(N)
-    N = N[np.argmax(N[:, 0]), 1:]
-    g0 = N[0:3]
-    g1 = N[3:6]
-    g2 = N[6:9]
-
-    for l in range(0, g_perm[3].shape[0]):
-        g3 = g_perm[3][l]
-        Gs = np.array([g0, g1, g2, g3], dtype=float)
-        Gs = np.dot(Dstar, Gs.T)
-        Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-        x = np.linalg.lstsq(Gs, g_sample[:, 0])[0]
-        x = x / np.linalg.norm(x)
-        y = np.linalg.lstsq(Gs, g_sample[:, 1])[0]
-        y = y / np.linalg.norm(y)
-        z, res = np.linalg.lstsq(Gs, g_sample[:, 2])[0:2]
-        z = z / np.linalg.norm(z)
-        phi_1 = np.arctan2(x[2], -y[2]) * 180 / np.pi
-        phi = np.arccos(z[2]) * 180 / np.pi
-        phi_2 = np.arctan2(z[0], z[1]) * 180 / np.pi
-        t = 0
-        for r in range(0, 4):
-            t = t + np.abs(np.arccos(np.dot(np.dot(rotation(phi_1, phi, phi_2), Gs[r, :]), g_sample[r, :])) * 180 / np.pi)
-        t = t / r
-
-        if res:
-            R.append([np.dot(np.cross(x, y), z), res[0], phi_1, phi, phi_2, t])
-
-    R = np.array(R)
-    R = R[np.argmin(R[:, 5]), :]
-    return R
-
-
-def euler_determine_5(g_perm, g_sample):
-    R = []
-    N = []
-    L = []
-    for i in range(0, g_perm[0].shape[0]):
-        for j in range(0, g_perm[1].shape[0]):
-            for k in range(0, g_perm[2].shape[0]):
-                g0 = g_perm[0][i]
-                g1 = g_perm[1][j]
-                g2 = g_perm[2][k]
-                Gs = np.array([g0, g1, g2])
-                Gs = np.dot(Dstar, Gs.T)
-                Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-                x = np.linalg.lstsq(Gs, g_sample[0:3, 0])[0]
-                x = x / np.linalg.norm(x)
-                y = np.linalg.lstsq(Gs, g_sample[0:3, 1])[0]
-                y = y / np.linalg.norm(y)
-                z = np.linalg.lstsq(Gs, g_sample[0:3, 2])[0]
-                z = z / np.linalg.norm(z)
-                c = np.abs(np.dot(np.cross(x, y), z))
-                N.append([c, g0[0], g0[1], g0[2], g1[0], g1[1], g1[2], g2[0], g2[1], g2[2]])
-
-    N = np.array(N)
-    N = N[np.argmax(N[:, 0]), 1:]
-
-    g0 = N[0:3]
-    g1 = N[3:6]
-    g2 = N[6:9]
-
-    for l in range(0, g_perm[3].shape[0]):
-        g3 = g_perm[3][l]
-        Gs = np.array([g0, g1, g2, g3], dtype=float)
-        Gs = np.dot(Dstar, Gs.T)
-        Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-        z, res = np.linalg.lstsq(Gs, g_sample[0:4, 2])[0:2]
-        L.append([res, g0[0], g0[1], g0[2], g1[0], g1[1], g1[2], g2[0], g2[1], g2[2], g3[0], g3[1], g3[2]])
-
-    L = np.array(L)
-    L = L[np.argmin(L[:, 0]), 1:]
-    g0 = L[0:3]
-    g1 = L[3:6]
-    g2 = L[6:9]
-    g3 = L[9:12]
-
-    for n in range(0, g_perm[4].shape[0]):
-        g4 = g_perm[4][n]
-        Gs = np.array([g0, g1, g2, g3, g4], dtype=float)
-        Gs = np.dot(Dstar, Gs.T)
-        Gs = (Gs / np.linalg.norm(Gs.T, axis=1)).T
-        x = np.linalg.lstsq(Gs, g_sample[:, 0])[0]
-        x = x / np.linalg.norm(x)
-        y = np.linalg.lstsq(Gs, g_sample[:, 1])[0]
-        y = y / np.linalg.norm(y)
-        z, res = np.linalg.lstsq(Gs, g_sample[:, 2])[0:2]
-        z = z / np.linalg.norm(z)
-        phi_1 = np.arctan2(x[2], -y[2]) * 180 / np.pi
-        phi = np.arccos(z[2]) * 180 / np.pi
-        phi_2 = np.arctan2(z[0], z[1]) * 180 / np.pi
-        t = 0
-        for r in range(0, 5):
-            t = t + np.abs(np.arccos(np.dot(np.dot(rotation(phi_1, phi, phi_2), Gs[r, :]), g_sample[r, :])) * 180 / np.pi)
-        t = t / r
-        if res:
-            R.append([np.dot(np.cross(x, y), z), res[0], phi_1, phi, phi_2, t])
-    R = np.array(R)
-    R = R[np.argmin(R[:, 5]), :]
-    return R
 
 ########################################
 #
-# Determine orientation from the selected spots.
+# Get orientation from the selected spots.
 #
 #########################################
 
@@ -645,7 +508,7 @@ def get_orientation():
     tilt_b = []
     tilt_z = []
     inclination = []
-    g_hkl = []
+    g_c = []
 
     for i in range(0, len(s)):
         l = map(float, s[i].split(','))
@@ -653,54 +516,33 @@ def get_orientation():
         tilt_b.append(l[1])
         tilt_z.append(l[2])
         inclination.append(l[3])
-        g_hkl.append(l[4:7])
+        g_c.append(l[4:7])
     inclination = np.array(inclination)
     tilt_a = np.array(tilt_a)
     tilt_b = np.array(tilt_b)
     tilt_z = np.array(tilt_z)
-    g_hkl = np.array(g_hkl)
+    g_c = np.array(g_c)
     t_ang = np.float(ui.tilt_axis_angle_entry.text())
-    g_perm = []
-    for i in range(0, np.shape(g_hkl)[0]):
-        g_perm.append(perm_g(g_hkl[i, 0], g_hkl[i, 1], g_hkl[i, 2]))
-
     g_sample = np.zeros((np.shape(tilt_a)[0], 3))
+
     for i in range(0, np.shape(tilt_a)[0]):
         R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
         ny = (-inclination[i]) * np.pi / 180
         t = np.array([-np.sin(ny), np.cos(ny), 0])
         g_sample[i, :] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
-
-    if g_hkl.shape[0] == 2:
-        R = euler_determine_2(g_perm, g_sample)
-
-    elif g_hkl.shape[0] == 3:
-        R = euler_determine_3(g_perm, g_sample)
-
-    elif g_hkl.shape[0] == 4:
-        R = euler_determine_4(g_perm, g_sample)
-
-    elif g_hkl.shape[0] == 5:
-        R = euler_determine_5(g_perm, g_sample)
-
-    else:
-        ui.euler_listbox.addItem("Number of spots should be between 2 and 5")
-    np.set_printoptions(suppress=True)
-
-    if R.shape[0] == 1:
-        ui.euler_listbox.addItem('Coplanar vectors or inconsistent results')
-
-    if R.shape[0] == 6:
+   
+    R=euler_determine(g_c,g_sample)
+    if R.shape[0] == 5:
         ui.euler_listbox.addItem('Phi1,Phi,Phi2')
-        ui.euler_listbox.addItem(str(np.around(R[2], decimals=3)) + ',' + str(np.around(R[3], decimals=3)) + ',' + str(np.around(R[4], decimals=3)))
-        ui.euler_listbox.addItem('Mean angular deviation, Orthogonality, Residual')
-        ui.euler_listbox.addItem(str(np.around(R[5], decimals=3)) + ',' + str(np.around(R[0], decimals=5)) + ',' + str(np.around(R[1], decimals=6)))
-    if R.shape[0] == 9:
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format,R[0:3])))
+        ui.euler_listbox.addItem('Mean angular deviation, Mean square angular dev.')
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format,R[3:5])))
+    if R.shape[0] == 8:
         ui.euler_listbox.addItem('Phi1,Phi,Phi2 - ambiguous result')
-        ui.euler_listbox.addItem(str(np.around(R[2], decimals=3)) + ',' + str(np.around(R[3], decimals=3)) + ',' + str(np.around(R[4], decimals=3)))
-        ui.euler_listbox.addItem(str(np.around(R[6], decimals=3)) + ',' + str(np.around(R[7], decimals=3)) + ',' + str(np.around(R[8], decimals=3)))
-        ui.euler_listbox.addItem('Mean angular deviation, Orthogonality, Residual')
-        ui.euler_listbox.addItem(str(np.around(R[5], decimals=3)) + ',' + str(np.around(R[0], decimals=5)) + ',' + str(np.around(R[1], decimals=6)))
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format,R[0:3])))
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format,R[3:6])))
+        ui.euler_listbox.addItem('Mean angular deviation, Mean square angular dev.')
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format,R[6:8])))
 
 
 #########################
@@ -894,11 +736,11 @@ class NavigationToolbar(NavigationToolbar):
     def set_message(self, msg):
         pass
 
-#############################################################
+####################
 #
 # Launch
 #
-# "
+# ##################
 
 
 try:
@@ -968,10 +810,10 @@ for i in range(0, len(x_space)):
 f_space.close()
 
 
-#################################################################################
+#############################
 # import crystal structures from un txt file Name,a,b,c,alpha,beta,gamma,space group
 #
-################################################################################
+############################
 
 def structure(item):
     global x0, e_entry
@@ -1034,7 +876,7 @@ ui.tilt_axis_angle_entry.setText('0')
 ui.tilt_a_entry.setText('0')
 ui.tilt_b_entry.setText('0')
 ui.tilt_z_entry.setText('0')
-
+ui.precision_entry.setText('10')
 s = 1
 gclick = np.zeros((1, 2))
 Index.show()

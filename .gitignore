@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+#drawing
+*.svg
+
 # Distribution / packaging
 .Python
 build/
