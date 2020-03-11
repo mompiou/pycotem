@@ -416,7 +416,7 @@ def euler_determine(g_c, g_sample):
 
     if np.linalg.matrix_rank(g_c) < 3:
         g_cross = np.cross(g_c[0, :], g_c[1, :])
-        g_c = np.vstack((g_c, g_cross))
+        g_c=np.vstack((g_c,g_cross / np.linalg.norm(g_cross)))
         g_sample_cross = np.cross(g_sample[0, :], g_sample[1, :])
         g_sample = np.vstack((g_sample, g_sample_cross / np.linalg.norm(g_sample_cross)))
         aa = check_ambiguity(g_cross)
@@ -455,12 +455,12 @@ def euler_determine(g_c, g_sample):
     phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
     phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
     t, t2 = 0, 0
-    for r in range(0, 3):
+    for r in range(0, g_sample.shape[0]):
         ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
         t = t + np.abs(np.arccos(ang_dev))
         t2 = t2 + (np.arccos(ang_dev)) ** 2
-    t = t / r * 180 / np.pi
-    t2 = t2 / r * (180 / np.pi)**2
+    t = t / g_sample.shape[0] * 180 / np.pi
+    t2 = t2 / g_sample.shape[0]
 
     if aa == 1:
         M = np.dot(Rot(180, g_sample_cross[0], g_sample_cross[1], g_sample_cross[2]), M)
