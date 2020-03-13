@@ -1264,12 +1264,12 @@ def trace_plan2(B):
 
         for g in np.linspace(-np.pi, np.pi, 100):
             Aa = np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g), np.cos(g), 0])))
-            if np.sign(Aa[2])<0 and np.abs(Aa[2])<1e-8:
-            	Aa=-Aa
+            if np.sign(Aa[2]) < 0 and np.abs(Aa[2]) < 1e-8:
+                Aa = -Aa
             A[:, w] = proj(Aa[0], Aa[1], Aa[2]) * 300
             Q = np.vstack((Q, A[:, w]))
             w = w + 1
-	
+
         Q = np.delete(Q, 0, 0)
         Q = Q[~np.isnan(Q).any(axis=1)]
 
@@ -1310,10 +1310,10 @@ def trace_cone2(B):
 
         for g in np.linspace(-np.pi, np.pi, 100):
             Aa = np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g) * np.sin(i * np.pi / 180), np.cos(g) * np.sin(i * np.pi / 180), np.cos(i * np.pi / 180)])))
-	    if np.abs(Aa[2])>1e-5:
-	        Ap = proj2(Aa[0], Aa[1], Aa[2]) * 300
-	        Q = np.vstack((Q, Ap))
-	        w = w + 1
+            if np.abs(Aa[2]) > 1e-5:
+                Ap = proj2(Aa[0], Aa[1], Aa[2]) * 300
+                Q = np.vstack((Q, Ap))
+                w = w + 1
 
         Q = np.delete(Q, 0, 0)
         asign = np.sign(Q[:, 2])
@@ -1321,30 +1321,29 @@ def trace_cone2(B):
         wp = np.where(signchange == 1)[0]
         wp = np.append(0, wp)
         wp = np.append(wp, Q.shape[0])
-        r1,r2=intersect_cone(S,np.array([0,0,1]),np.cos(i*np.pi/180))
-        if Q.shape[0]>0:
-		for k in range(1,wp.shape[0]-1):
-			if np.linalg.norm(r1*300-Q[wp[k],:])<50 or np.linalg.norm(-r1*300-Q[wp[k],:])<50:
-			    Az=np.array([np.sign(Q[wp[k],2])*r1[0], np.sign(Q[wp[k],2])*r1[1], (r1[2]+np.sign(Q[wp[k],2])*1)]) * 300
-			    
-			elif np.linalg.norm(r2*300-Q[wp[k],:])<50 or np.linalg.norm(-r2*300-Q[wp[k],:])<50:
-			    Az=np.array([np.sign(Q[wp[k],2])*r2[0], np.sign(Q[wp[k],2])*r2[1], (r2[2]+np.sign(Q[wp[k],2])*1)]) * 300
+        r1, r2 = intersect_cone(S, np.array([0, 0, 1]), np.cos(i * np.pi / 180))
+        if Q.shape[0] > 0:
+            for k in range(1, wp.shape[0] - 1):
+                if np.linalg.norm(r1 * 300 - Q[wp[k], :]) < 50 or np.linalg.norm(-r1 * 300 - Q[wp[k], :]) < 50:
+                    Az = np.array([np.sign(Q[wp[k], 2]) * r1[0], np.sign(Q[wp[k], 2]) * r1[1], (r1[2] + np.sign(Q[wp[k], 2]) * 1)]) * 300
 
-			Az.shape=(1,3)
-			if np.sign(Q[wp[k]+1,2])==np.sign(Az[0,2]):
-				Q = np.vstack((Q[:wp[k]+k-1,:], -Az,Az,Q[wp[k]+k:,:]))
-			else:
-				Q = np.vstack((Q[:wp[k]+k-1,:], Az,-Az,Q[wp[k]+k:,:]))
-		Q=np.vstack((Q,Q[0,:]))
+                elif np.linalg.norm(r2 * 300 - Q[wp[k], :]) < 50 or np.linalg.norm(-r2 * 300 - Q[wp[k], :]) < 50:
+                    Az = np.array([np.sign(Q[wp[k], 2]) * r2[0], np.sign(Q[wp[k], 2]) * r2[1], (r2[2] + np.sign(Q[wp[k], 2]) * 1)]) * 300
 
-	
-	asign = np.sign(Q[:, 2])
+                Az.shape = (1, 3)
+                if np.sign(Q[wp[k] + 1, 2]) == np.sign(Az[0, 2]):
+                    Q = np.vstack((Q[:wp[k] + k - 1, :], -Az, Az, Q[wp[k] + k:, :]))
+                else:
+                    Q = np.vstack((Q[:wp[k] + k - 1, :], Az, -Az, Q[wp[k] + k:, :]))
+            Q = np.vstack((Q, Q[0, :]))
+
+        asign = np.sign(Q[:, 2])
         signchange = ((np.roll(asign, 1) - asign) != 0).astype(int)
         wp = np.where(signchange == 1)[0]
         wp = np.append(0, wp)
         wp = np.append(wp, Q.shape[0])
-	
-	for tt in range(0, np.shape(wp)[0] - 1):
+
+        for tt in range(0, np.shape(wp)[0] - 1):
             if B[h, 4] == 1:
                 a.plot(Q[int(wp[tt]):int(wp[tt + 1]), 0] + 300, Q[int(wp[tt]):int(wp[tt + 1]), 1] + 300, 'g')
             if B[h, 4] == 2:
@@ -1358,6 +1357,7 @@ def trace_cone2(B):
 # Click a pole
 #
 ####################################################################
+
 
 def click_a_pole(event):
 
@@ -2222,7 +2222,8 @@ def intersection_dir_proj():
     n_intersect = intersect_norm(n, norm_xyz, 1)
     ui_inter.n_proj_label.setText(str(np.round(n_intersect[0], decimals=3)) + ', ' + str(np.round(n_intersect[1], decimals=3)) + ', ' + str(np.round(n_intersect[2], decimals=3)))
 
-def intersect_cone(c,n,r):
+
+def intersect_cone(c, n, r):
     x1 = (c[0] * n[1]**2 * r + c[0] * n[2]**2 * r - c[1] * n[0] * n[1] * r - c[1] * n[2] * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2) - c[2] * n[0] * n[2] * r + c[2] * n[1] * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2)) / (c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2)
     y1 = (-c[0] * n[0] * n[1] * r + c[0] * n[2] * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2) + c[1] * n[0]**2 * r + c[1] * n[2]**2 * r - c[2] * n[0] * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2) - c[2] * n[1] * n[2] * r) / (c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2)
     z1 = (-r * (c[0] * n[0] * n[2] + c[1] * n[1] * n[2] - c[2] * n[0]**2 - c[2] * n[1]**2) + (-c[0] * n[1] + c[1] * n[0]) * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2)) / (c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2)
@@ -2231,8 +2232,9 @@ def intersect_cone(c,n,r):
     z2 = (-r * (c[0] * n[0] * n[2] + c[1] * n[1] * n[2] - c[2] * n[0]**2 - c[2] * n[1]**2) + (c[0] * n[1] - c[1] * n[0]) * np.sqrt(c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2 - n[0]**2 * r**2 - n[1]**2 * r**2 - n[2]**2 * r**2)) / (c[0]**2 * n[1]**2 + c[0]**2 * n[2]**2 - 2 * c[0] * c[1] * n[0] * n[1] - 2 * c[0] * c[2] * n[0] * n[2] + c[1]**2 * n[0]**2 + c[1]**2 * n[2]**2 - 2 * c[1] * c[2] * n[1] * n[2] + c[2]**2 * n[0]**2 + c[2]**2 * n[1]**2)
     r1 = np.array([x1, y1, z1])
     r2 = np.array([x2, y2, z2])
-    return r1,r2
-    
+    return r1, r2
+
+
 def intersection_cone():
     global Dstar, D
     Dr = 1e10 * D
@@ -2246,7 +2248,7 @@ def intersection_cone():
     n = n / np.linalg.norm(n)
     c = np.dot(Dstarr, c)
     c = c / np.linalg.norm(c)
-    r1,r2=intersect_cone(c,n,r)
+    r1, r2 = intersect_cone(c, n, r)
 
     if ui_inter.checkBox_3.isChecked():
         r1 = np.dot(np.linalg.inv(Dr), r1)
