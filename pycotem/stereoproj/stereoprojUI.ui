@@ -664,13 +664,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="angle_alpha_label">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;α&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
           <item row="11" column="2">
            <widget class="QLineEdit" name="angle_z_entry"/>
           </item>
@@ -730,18 +723,19 @@
             </property>
            </widget>
           </item>
-          <item row="13" column="2">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="2" column="0">
+           <widget class="QLabel" name="angle_alpha_label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;α&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
+           </widget>
+          </item>
+          <item row="12" column="4" colspan="2">
+           <widget class="QPushButton" name="reset_angle_button">
+            <property name="text">
+             <string>Reset</string>
             </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -808,11 +802,18 @@
     </property>
     <addaction name="actionPlot_Kikuchi_lines"/>
    </widget>
+   <widget class="QMenu" name="menuList">
+    <property name="title">
+     <string>list</string>
+    </property>
+    <addaction name="actionShow_list_of_poles_directions"/>
+   </widget>
    <addaction name="menuSave"/>
    <addaction name="menuStructure"/>
    <addaction name="menuAngle"/>
    <addaction name="menuSchmid_factor"/>
    <addaction name="menuXyz_directions"/>
+   <addaction name="menuList"/>
    <addaction name="menuWidth"/>
    <addaction name="menuIntersections"/>
    <addaction name="menuDiffraction"/>
@@ -873,6 +874,11 @@
     <string>plot Kikuchi lines or diffraction pattern</string>
    </property>
   </action>
+  <action name="actionShow_list_of_poles_directions">
+   <property name="text">
+    <string>show list of poles/directions</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>abc_entry</tabstop>
@@ -883,13 +889,6 @@
   <tabstop>dm_button</tabstop>
   <tabstop>d_entry</tabstop>
   <tabstop>dp_button</tabstop>
-  <tabstop>diff_entry</tabstop>
-  <tabstop>tilt_entry</tabstop>
-  <tabstop>inclinaison_entry</tabstop>
-  <tabstop>button_trace</tabstop>
-  <tabstop>rot_gm_button</tabstop>
-  <tabstop>rot_g_entry</tabstop>
-  <tabstop>rot_gp_button</tabstop>
   <tabstop>color_trace_bleu</tabstop>
   <tabstop>color_trace_vert</tabstop>
   <tabstop>color_trace_rouge</tabstop>
@@ -898,7 +897,18 @@
   <tabstop>real_space_checkBox</tabstop>
   <tabstop>size_var</tabstop>
   <tabstop>text_size_entry</tabstop>
+  <tabstop>tilt_angle_entry</tabstop>
+  <tabstop>image_angle_entry</tabstop>
+  <tabstop>hexa_button</tabstop>
+  <tabstop>uvw_button</tabstop>
   <tabstop>reset_view_button</tabstop>
+  <tabstop>diff_entry</tabstop>
+  <tabstop>tilt_entry</tabstop>
+  <tabstop>inclinaison_entry</tabstop>
+  <tabstop>button_trace</tabstop>
+  <tabstop>rot_gm_button</tabstop>
+  <tabstop>rot_g_entry</tabstop>
+  <tabstop>rot_gp_button</tabstop>
   <tabstop>lock_checkButton</tabstop>
   <tabstop>angle_alpha_buttonm</tabstop>
   <tabstop>angle_alpha_entry</tabstop>
@@ -912,6 +922,7 @@
   <tabstop>angle_z_entry</tabstop>
   <tabstop>angle_z_buttonp</tabstop>
   <tabstop>theta_signBox</tabstop>
+  <tabstop>reset_angle_button</tabstop>
   <tabstop>pole_entry</tabstop>
   <tabstop>addpole_button</tabstop>
   <tabstop>undo_addpole_button</tabstop>

@@ -1105,12 +1105,14 @@ def trace_plan2(B):
 
         for g in np.linspace(-np.pi, np.pi, 100):
             Aa = np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g), np.cos(g), 0])))
+            if np.sign(Aa[2]) < 0 and np.abs(Aa[2]) < 1e-8:
+                Aa = -Aa
             A[:, w] = proj(Aa[0], Aa[1], Aa[2]) * 300
             Q = np.vstack((Q, A[:, w]))
             w = w + 1
 
         Q = np.delete(Q, 0, 0)
-
+        Q = Q[~np.isnan(Q).any(axis=1)]
         if B[h, 4] == 1:
             a.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'b')
         if B[h, 4] == 2:

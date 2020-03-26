@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>List</class>
+ <widget class="QDialog" name="List">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>452</width>
+    <height>557</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>List</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="6">
+    <widget class="QPushButton" name="list_button">
+     <property name="text">
+      <string>Update list</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <widget class="QRadioButton" name="beta_button">
+     <property name="text">
+      <string>β tilt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QRadioButton" name="z_button">
+     <property name="text">
+      <string>z-tilt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="6">
+    <widget class="QTableWidget" name="list_table"/>
+   </item>
+   <item row="4" column="4">
+    <widget class="QCheckBox" name="ZA_button">
+     <property name="text">
+      <string>Zone Axis</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="6">
+    <widget class="QPushButton" name="plot_button">
+     <property name="text">
+      <string>Add/Remove selected</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="tilt_label">
+     <property name="text">
+      <string>tilt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="6">
+    <widget class="QPushButton" name="alpha_button">
+     <property name="text">
+      <string>Compute α tilt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="tilt_entry"/>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>list_table</tabstop>
+  <tabstop>list_button</tabstop>
+  <tabstop>plot_button</tabstop>
+  <tabstop>tilt_entry</tabstop>
+  <tabstop>z_button</tabstop>
+  <tabstop>beta_button</tabstop>
+  <tabstop>ZA_button</tabstop>
+  <tabstop>alpha_button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

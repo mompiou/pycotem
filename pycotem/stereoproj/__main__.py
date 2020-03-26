@@ -27,6 +27,7 @@ import xyzUI
 import hkl_uvwUI
 import widthUI
 import kikuchiUI
+import listUI
 
 
 ################
@@ -678,6 +679,9 @@ def pole(pole1, pole2, pole3):
             pole2 = pole2a
 
     Gs = np.array([pole1, pole2, pole3], float)
+    m = reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3 and np.abs(m) != 1:
+        pole1, pole2, pole3 = Gs / m
 
     if var_uvw() == 0:
         Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
@@ -733,6 +737,9 @@ def undo_pole(pole1, pole2, pole3):
             pole2 = pole2a
 
     Gs = np.array([pole1, pole2, pole3], float)
+    m = reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3:
+        pole1, pole2, pole3 = Gs / m
 
     if var_uvw() == 0:
         Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
@@ -753,10 +760,11 @@ def undo_pole(pole1, pole2, pole3):
             pole1 = h
             pole2 = k
             pole3 = l
-            ind = np.where((axes[:, 0] == pole1) & (axes[:, 1] == pole2) & (axes[:, 2] == pole3) | (axes[:, 0] == -pole1) & (axes[:, 1] == -pole2) & (axes[:, 2] == -pole3))
+            ind = np.where((np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6))
 
     else:
-        ind = np.where((axes[:, 0] == pole1) & (axes[:, 1] == pole2) & (axes[:, 2] == pole3) | (axes[:, 0] == -pole1) & (axes[:, 1] == -pole2) & (axes[:, 2] == -pole3))
+        ind = np.where((np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6))
+
     axes = np.delete(axes, ind, 0)
     T = np.delete(T, ind, 0)
     axesh = np.delete(axesh, ind, 0)
@@ -1474,6 +1482,18 @@ def reset_view():
     trace()
 
 
+def reset_angle():
+    global g, angle_z, angle_alpha, angle_beta
+    g = 0
+    ui.rg_label.setText(str(0))
+    angle_z = 0
+    ui.angle_z_label_2.setText(str(0))
+    angle_beta = 0
+    ui.angle_beta_label_2.setText(str(0))
+    angle_alpha = 0
+    ui.angle_alpha_label_2.setText(str(0))
+
+
 def tilt_axes():
     global s_a, s_b, s_z
     s_a, s_b, s_z = 1, 1, 1
@@ -1531,11 +1551,11 @@ def text_label(A, B):
     Ab = A[1]
     Ac = A[2]
     if B[3] == 1 & var_hexa() == 1:
-        Aa = (2 * A[0] - A[1])
-        Ab = (2 * A[1] - A[0])
-        Ac = 3 * A[2]
+        Aa = (2 * A[0] - A[1]) / 3
+        Ab = (2 * A[1] - A[0]) / 3
+        Ac = A[2]
         m = reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
-        if np.abs(m) > 1e-3:
+        if np.abs(m) > 1e-3 and np.abs(m) != 1:
             Aa = Aa / m
             Ab = Ab / m
             Ac = Ac / m
@@ -2288,6 +2308,175 @@ def intersection_cone():
 
     ui_inter.cone_plane_label.setText(str(np.round(r1[0], decimals=3)) + ',' + str(np.round(r1[1], decimals=3)) + ',' + str(np.round(r1[2], decimals=3)) + '\n' + str(np.round(r2[0], decimals=3)) + ',' + str(np.round(r2[1], decimals=3)) + ',' + str(np.round(r2[2], decimals=3)))
 
+##################################
+#
+# Get list of pole/directions plotted.
+# Remove selected
+# Compute alpha tilt angle for given beta/z tilts
+#
+###########################
+
+
+def list_pole():
+    global M, axes, axesh, T, V, D, Dstar, naxes, axes_list
+    axes_list = np.zeros((axes.shape[0], 4))
+    for i in range(0, axes.shape[0]):
+
+        if axesh[i, 3] == 0:
+            Gsh = np.dot(Dstar, axes[i, :]) / np.linalg.norm(np.dot(Dstar, axes[i, :]))
+        else:
+            Gsh = np.dot(D, axes[i, :]) / np.linalg.norm(np.dot(D, axes[i, :]))
+
+        S = np.dot(M, Gsh)
+
+        if S[2] >= -1e-7:
+            if axesh[i, 3] == 1:
+                axes_list[i, 3] = 1
+                if var_hexa() == 1:
+                    i01 = (2 * axes[i, 0] - axes[i, 1]) / 3
+                    i02 = (2 * axes[i, 1] - axes[i, 0]) / 3
+                    axes_list[i, 0] = i01
+                    axes_list[i, 1] = i02
+                    axes_list[i, 2] = axes[i, 2]
+                    m = reduce(lambda x, y: GCD(x, y), axes_list[i, :])
+
+                    if np.abs(m) > 1e-3:
+                        axes_list[i, :] = axes_list[i, :] / m
+
+                else:
+                    axes_list[i, 0:3] = axes[i, :]
+
+            else:
+                axes_list[i, 0:3] = axes[i, :]
+    axes_list = axes_list[~np.all(axes_list == 0, axis=1)]
+
+    return axes_list
+
+
+def get_list():
+    global M, axesh, axes, axes_list
+
+    ui_list.list_table.clear()
+    axes_list = list_pole()
+    ui_list.list_table.setColumnCount(4)
+    ui_list.list_table.setRowCount(int(axes_list.shape[0]))
+    header = ui_list.list_table.horizontalHeader()
+    header.setResizeMode(0, QtGui.QHeaderView.Stretch)
+    header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
+    header.setResizeMode(2, QtGui.QHeaderView.ResizeToContents)
+    header.setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
+    for row in range(0, axes_list.shape[0]):
+
+        if int(axes_list[row, 0]) == axes_list[row, 0] and int(axes_list[row, 1]) == axes_list[row, 1] and int(axes_list[row, 2]) == axes_list[row, 2]:
+            newitem = QtGui.QTableWidgetItem(str(int(axes_list[row, 0])) + ',' + str(int(axes_list[row, 1])) + ',' + str(int(axes_list[row, 2])))
+        else:
+            newitem = QtGui.QTableWidgetItem(str(axes_list[row, 0]) + ',' + str(axes_list[row, 1]) + ',' + str(axes_list[row, 2]))
+        ui_list.list_table.setItem(row, 0, newitem)
+        ui_list.list_table.setItem(row, 1, QtGui.QTableWidgetItem('o'))
+        if axes_list[row, 3] == 1:
+            ui_list.list_table.setItem(row, 2, QtGui.QTableWidgetItem('uvw'))
+        else:
+            ui_list.list_table.setItem(row, 2, QtGui.QTableWidgetItem('hkl'))
+
+    ui_list.list_table.horizontalHeader().hide()
+    ui_list.list_table.show()
+
+
+def add_remove_list():
+    global M, axesh, axes
+
+    indexes = ui_list.list_table.selectionModel().selectedRows()
+    for index in sorted(indexes):
+        inn = ui_list.list_table.item(index.row(), 0).text().split(",")
+        i0 = float(inn[0])
+        i1 = float(inn[1])
+        i2 = float(inn[2])
+
+        if ui_list.list_table.item(index.row(), 1).text() == 'o':
+            if ui_list.list_table.item(index.row(), 2).text() == 'uvw':
+                if ui.uvw_button.isChecked() is False:
+                    ui.uvw_button.toggle()
+            undo_pole(i0, i1, i2)
+
+            ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('x'))
+
+        else:
+            if ui_list.list_table.item(index.row(), 2).text() == 'uvw':
+                if ui.uvw_button.isChecked() is False:
+                    ui.uvw_button.toggle()
+
+            pole(i0, i1, i2)
+            ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('o'))
+    if ui.uvw_button.isChecked() is True:
+        ui.uvw_button.toggle()
+    trace()
+
+
+def get_tilt():
+    global M, axes_list, Dstar, s_a, s_b, s_z
+    if ui_list.ZA_button.isChecked() is False:
+        t_ang = ang_work_space()
+        tilt = float(ui_list.tilt_entry.text())
+        if ui_list.z_button.isChecked():
+            M2 = np.dot(Rot(s_z * tilt, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), M))
+        else:
+            M2 = np.dot(Rot(s_b * tilt, 1, 0, 0), np.dot(Rot(t_ang, 0, 0, 1), M))
+
+        a = np.dot(M2.T, [0, 1, 0])
+        B = np.dot(M2.T, [0, 0, 1])
+
+        for i in range(0, axes_list.shape[0]):
+            if axes_list[i, 3] == 1:
+                if var_hexa() == 1:
+                    axes_list0 = np.dot(D, [2 * axes_list[i, 0] + axes_list[i, 1], 2 * axes_list[i, 1] + axes_list[i, 0], axes_list[i, 2]])
+                else:
+                    axes_list0 = np.dot(D, axes_list[i, 0:3])
+
+            else:
+                axes_list0 = np.dot(Dstar, axes_list[i, 0:3])
+            axes_list0 = axes_list0 / np.linalg.norm(axes_list0)
+            u = np.cross(axes_list0, a)
+            alpha = s_a * np.arccos(np.dot(u / np.linalg.norm(u), B)) * 180 / np.pi
+            if np.abs(alpha) > 90:
+                alpha = alpha - s_a * 180
+            if np.dot(M2, axes_list0)[2] < 0:
+                alpha = -alpha
+            ui_list.list_table.setItem(i, 3, QtGui.QTableWidgetItem(str(np.around(alpha, decimals=1))))
+    else:
+        t_ang = ang_work_space()
+        M2 = np.dot(Rot(t_ang, 0, 0, 1), M)
+        a = np.dot(M2.T, [1, 0, 0])
+        c = np.dot(M2.T, [0, 1, 0])
+        B = np.dot(M2.T, [0, 0, 1])
+
+        for i in range(0, axes_list.shape[0]):
+            if axes_list[i, 3] == 1:
+                if var_hexa() == 1:
+                    axes_list0 = np.dot(D, [2 * axes_list[i, 0] + axes_list[i, 1], 2 * axes_list[i, 1] + axes_list[i, 0], axes_list[i, 2]])
+                else:
+                    axes_list0 = np.dot(D, axes_list[i, 0:3])
+
+            else:
+                axes_list0 = np.dot(Dstar, axes_list[i, 0:3])
+            axes_list0 = axes_list0 / np.linalg.norm(axes_list0)
+
+            if ui_list.z_button.isChecked():
+                u = np.cross(axes_list0, B)
+                s = np.sign(np.linalg.det([u, c, B]))
+                tilt2 = s * s_z * (np.arccos(np.dot(u / np.linalg.norm(u), c)) * 180 / np.pi)
+                if np.abs(tilt2) > 90:
+                    tilt2 = tilt2 - np.sign(tilt2) * 180
+                M3 = np.dot(Rot(tilt2, 0, 0, 1), M2)
+            else:
+                u = np.cross(axes_list0, a)
+                tilt2 = s_b * (-90 + np.arccos(np.dot(u / np.linalg.norm(u), B)) * 180 / np.pi)
+                M3 = np.dot(Rot(tilt2, 1, 0, 0), M2)
+
+            B3 = np.dot(M3.T, [0, 0, 1])
+            a3 = np.dot(M3.T, [0, 1, 0])
+            s = np.sign(np.linalg.det([axes_list0, B3, a3]))
+            alpha = s_a * s * np.arccos(np.dot(axes_list0, B3)) * 180 / np.pi
+            ui_list.list_table.setItem(i, 3, QtGui.QTableWidgetItem(str(np.around(alpha, decimals=1)) + ',' + str(np.around(tilt2, decimals=1))))
 
 ###################################################
 #
@@ -2297,6 +2486,8 @@ def intersection_cone():
 # a sum of Gaussian functions (see http://lampx.tugraz.at/~hadley/ss1/crystaldiffraction/atomicformfactors/formfactors.php)
 #
 #################################################
+
+
 def diff_reciprocal():
     global axesh_diff, axes_diff, G, V, Dstar
 
@@ -2597,6 +2788,16 @@ if __name__ == "__main__":
     toolbar_kikuchi.setMinimumWidth(100)
     toolbar_kikuchi.setStyleSheet("background-color:White;")
 
+    List = QtGui.QDialog()
+    ui_list = listUI.Ui_List()
+    ui_list.setupUi(List)
+    Index.connect(ui.actionShow_list_of_poles_directions, QtCore.SIGNAL('triggered()'), List.show)
+    ui_list.list_button.clicked.connect(get_list)
+    ui_list.plot_button.clicked.connect(add_remove_list)
+    ui_list.alpha_button.clicked.connect(get_tilt)
+    ui_list.tilt_entry.setText('0')
+    ui_list.beta_button.setChecked(True)
+
     ui.button_trace2.clicked.connect(princ2)
     ui.button_trace.clicked.connect(princ)
     ui.reciprocal_checkBox.stateChanged.connect(lattice_reciprocal)
@@ -2625,6 +2826,8 @@ if __name__ == "__main__":
     ui.dm_button.clicked.connect(dm)
     ui.dp_button.clicked.connect(dp)
     ui.reset_view_button.clicked.connect(reset_view)
+    ui.reset_angle_button.clicked.connect(reset_angle)
+
     figure.canvas.mpl_connect('motion_notify_event', coordinates)
     figure.canvas.mpl_connect('button_press_event', click_a_pole)
 
@@ -2657,8 +2860,6 @@ if __name__ == "__main__":
     ui.image_angle_entry.setText('0')
     ui.d_entry.setText('1')
     ui.rot_g_entry.setText('5')
-    ui.inclination_entry.setText('60')
-    ui.pole_entry.setText('1,1,1')
     a = figure.add_subplot(111)
     tilt_axes()
     wulff()
