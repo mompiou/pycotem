@@ -253,7 +253,7 @@ Thus for every diffraction patterns, the diffraction vector, inclination angle, 
 
 - Select both the __dist, inclination__ field and the appropriate __g vector__. For the first condition, the indices of the g-vector can arbitrary be chosen. 
 
-- Press ```Add data ```. A line appears ``` alpha angle, beta angle, z angle, inclination, h,k,l ```. Data can be removed by selecting the line and by pressing ``` Remove data ```.
+- Press ```Add data ```. A line appears ``` alpha angle, beta angle, theta angle, inclination, h,k,l ```. Data can be removed by selecting the line and by pressing ``` Remove data ```.
 
 - Repeat the above operations for at least 2 diffraction spots. For every conditions, the angle between the proposed g-vectors and the already chosen g-vectors are indicated. Choose the $(h,k,l)$ indices that minimize all the angles.
 

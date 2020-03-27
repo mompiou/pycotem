@@ -269,7 +269,7 @@ class Ui_Diffraction(object):
         self.remove_spot_button.setText(_translate("Diffraction", "Remove", None))
         self.alpha_label_2.setText(_translate("Diffraction", "α (°)", None))
         self.label.setText(_translate("Diffraction", "<html><head/><body><p><span style=\" font-weight:600;\">Dist., inclination</span></p></body></html>", None))
-        self.z_label.setText(_translate("Diffraction", "z (°)", None))
+        self.z_label.setText(_translate("Diffraction", "θ (°)", None))
         self.beta_label.setText(_translate("Diffraction", "β (°)", None))
         self.label_3.setText(_translate("Diffraction", "<html><head/><body><p><span style=\" font-weight:600;\">Tilt angles/AC</span></p></body></html>", None))
         self.Button_reset.setText(_translate("Diffraction", "Reset points", None))

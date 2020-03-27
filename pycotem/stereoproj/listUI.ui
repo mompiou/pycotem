@@ -31,7 +31,7 @@
    <item row="4" column="2">
     <widget class="QRadioButton" name="z_button">
      <property name="text">
-      <string>z-tilt</string>
+      <string>θ tilt</string>
      </property>
     </widget>
    </item>
@@ -62,7 +62,7 @@
    <item row="10" column="0" colspan="6">
     <widget class="QPushButton" name="alpha_button">
      <property name="text">
-      <string>Compute α tilt</string>
+      <string>Compute tilt</string>
      </property>
     </widget>
    </item>

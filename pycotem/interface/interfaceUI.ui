@@ -91,7 +91,7 @@
        <item row="23" column="0">
         <widget class="QLabel" name="z_label">
          <property name="text">
-          <string>z (°)</string>
+          <string>θ  (°)</string>
          </property>
         </widget>
        </item>
@@ -164,7 +164,7 @@
        <item row="15" column="4">
         <widget class="QRadioButton" name="tilt_rot_button">
          <property name="text">
-          <string>tilt rot (α,z)</string>
+          <string>tilt rot (α,θ)</string>
          </property>
         </widget>
        </item>

@@ -53,8 +53,8 @@ The equation can be solved using the least square method, by varying $\mathrm{sg
 The inputs data used are for a double tilt holder using the convention described in [stereoproj](stereoproj.md) derived from the position of the beam direction and apparent trace direction in the sample coordinates:
 
 $$
-\vec{b}_{ei}=Rx(\beta_i)Ry(\alpha_i)[0,0,1]^T \\
-\vec{t}_{pi}=Rx(\beta_i)Ry(\alpha_i)Rz(\delta)Rz(\eta)[0,1,0]^T
+\vec{b}_{ei}=R_x(\beta_i)R_y(\alpha_i)[0,0,1]^T \\
+\vec{t}_{pi}=R_x(\beta_i)R_y(\alpha_i)R_z(\delta)R_z(\eta)[0,1,0]^T
 $$
 
 ### Line determination
@@ -95,13 +95,13 @@ When calibrated, the ```Magnification``` field can be filled. Note that magnific
 
 - Select the holder configuration
 
-- Open an image taken at a given $\alpha$, $\beta$, $z$ angles. Anticlockwise rotation can be indicated in the ```AC``` box. Make sure that the file name does not contain non-ASCII character.
+- Open an image taken at a given $\alpha$, $\beta$, $\theta$ angles. Anticlockwise rotation can be indicated in the ```AC``` box. Make sure that the file name does not contain non-ASCII character.
 
 - Select the corresponding magnification for a given microscope setting
 
 - On the image, define the apparent trace direction by clicking on two points. Click a third point on the second trace (from a reference point if the traces are not parallel). Zoom in the image if necessary. The view and points can be reset using the two corresponding buttons 
 
-- ```Add data``` to the list. In the data box below appears ```width, eta angle, alpha, beta, z ```
+- ```Add data``` to the list. In the data box below appears ```width, eta angle, alpha, beta, theta ```
 
 - Repeat the operation to get at least 3 conditions but 5-6 will improve accuracy. Select the lines used for the analysis
 

@@ -72,9 +72,9 @@ class Ui_List(object):
         List.setWindowTitle(_translate("List", "List", None))
         self.list_button.setText(_translate("List", "Update list", None))
         self.beta_button.setText(_translate("List", "β tilt", None))
-        self.z_button.setText(_translate("List", "z-tilt", None))
+        self.z_button.setText(_translate("List", "θ tilt", None))
         self.ZA_button.setText(_translate("List", "Zone Axis", None))
         self.plot_button.setText(_translate("List", "Add/Remove selected", None))
         self.tilt_label.setText(_translate("List", "tilt", None))
-        self.alpha_button.setText(_translate("List", "Compute α tilt", None))
+        self.alpha_button.setText(_translate("List", "Compute tilt", None))
 

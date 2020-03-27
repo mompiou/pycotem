@@ -79,6 +79,8 @@ The sample, and then the crystal, can be rotated around the tilt axes. Rotation 
 
 ![](images/rotation.png)
 
+The ```Reset``` button allows to reset the values displayed.
+
 When the ```Lock Axes``` box is checked, the $x$ and $z$ axes are now fixed with the sample, in order to mimic the behavior of double tilt and tilt-rotation holder.
 
 !!! info "Rotation in double tilt "
@@ -112,7 +114,7 @@ Because it is easier to navigate in the stereographic projection when knowing ei
 ![](images/rotation-image-diff2.png)
 
 !!! info "Note"
-	Note that the Euler angles are always defined in the $(x,y,z)$ holder coordinates. However, rotation along the $\alpha$, $\beta$ and $z$ axes will now be updated.
+	Note that the Euler angles are always defined in the $(x,y,z)$ holder coordinates. However, rotation along the $\alpha$, $\beta$ and $\theta$ axes will now be updated.
 
 
 
@@ -211,7 +213,7 @@ The orientation can be alternatively set the following way:
 
 1. choose a diffraction vector $(h,k,l)$ (see [diffraction](diffraction.md) to determine it)
 
-2. set its inclination $\eta$ and tilt angles $\alpha$, $\beta$, $z$ (comma separated)
+2. set its inclination $\eta$ and tilt angles $\alpha$, $\beta$, $\theta$ (comma separated)
 
 3. adjust a second diffraction vector by rotating around the first vector
 
@@ -219,8 +221,8 @@ The orientation can be alternatively set the following way:
 ![](images/stereo-diff.png)
 
 !!!info "Multiple tilting axes"
-	When considering a diffraction vector obtained after double tilt ($\alpha$ and $\beta$) or after tilt-rotation ($\alpha$, $z$), the diffraction vector should be placed on the stereographic projection taking into account the fact that the $\beta$ (or $z$) -tilt axis moves with the holder while $\alpha$-tilt is fixed.
-	For instance, if the $(1,1,1)$ diffraction vector is recorded at $(\alpha,\beta,z)=(10,-20,0)$ with an inclination of $\eta=40$, the diffraction is placed such that after rotating first by $\beta=-20$ and second by $\alpha=10$ it forms an angle $\eta=40$ with the $y$ direction on the diffraction pattern (owing that there is no rotation between the $\alpha$ tilt axis and the $y$ direction). This means that in the sample frame, the diffraction vector coordinates are, starting from $[0,1,0]$, in the direction $[x,y,z]$, given by: a rotation of $-\eta$ then a rotation of $-\alpha$ and finally a rotation of $-\beta$:
+	When considering a diffraction vector obtained after double tilt ($\alpha$ and $\beta$) or after tilt-rotation ($\alpha$, $\theta$), the diffraction vector should be placed on the stereographic projection taking into account the fact that the $\beta$ (or $\theta$) -tilt axis moves with the holder while $\alpha$-tilt is fixed.
+	For instance, if the $(1,1,1)$ diffraction vector is recorded at $(\alpha,\beta,\theta)=(10,-20,0)$ with an inclination of $\eta=40$, the diffraction is placed such that after rotating first by $\beta=-20$ and second by $\alpha=10$ it forms an angle $\eta=40$ with the $y$ direction on the diffraction pattern (owing that there is no rotation between the $\alpha$ tilt axis and the $y$ direction). This means that in the sample frame, the diffraction vector coordinates are, starting from $[0,1,0]$, in the direction $[x,y,z]$, given by: a rotation of $-\eta$ then a rotation of $-\alpha$ and finally a rotation of $-\beta$:
 	
 	$$
 	[x,y,z]^T=R_x(-\beta)R_y(-\alpha)R_z(-\eta)[0,1,0]^T
@@ -315,6 +317,30 @@ After pressing ```OK```, the Schmid factor appear below the the $T$ field. In th
 $x,y,z$ directions can be determined in the ```calculate xyz directions``` menu. Simply press ```update```. The values indicated correspond to poles (i.e. in reciprocal space). Copy, paste in the ```pole/plane``` field and ```Add``` to plot. To get directions, use the ```hkl<>uvw``` menu. Press ```To uvw``` or ```To hkl``` to make the conversion. Then, copy and paste the result in the same way except ```uvw``` box need to be ticked.
 
 ![](images/xyz.png)
+
+### List
+
+A list of plotted poles/directions can be  displayed using the ```show list poles/directions``` menu. When the ```Update list``` button is pressed the list is printed in a table showing in columns:
+
+- indices
+
+- a sign ```o``` for plotted or ```x``` for hidden
+
+- ```hkl``` for a pole and ```uvw``` for a direction 
+
+Poles/directions can be hidden or shown by selecting the corresponding rows and by clicking on ```Add/Remove selected``` button. Then the signs ```o``` or ```x``` change.
+
+If the list is updated, then the hidden poles/directions are deleted.
+
+An easier navigation in the crystal space can be achieved by determining the tilt sequence to reach either a given two beam condition or a zone axis. The angles are indicated in the last table column when pressing the ```Compute tilt``` button.
+
+If the ```ZA``` (zone axis) button is ticked, the $\alpha$-tilt and either $\beta$ tilt or $\theta$ tilt needed to reach the corresponding zone axis are computed. The corresponding $\beta$ or $\theta$ tilt button needs to be selected.
+
+If the ```ZA``` button is not selected, the $\alpha$ tilt angle needed to have a given pole/direction perpendicular to the electron beam (may correspond to a 2 beam condition) can be computed for a given $\beta$ or $\theta$ tilt angle.
+
+![](/images/stereo-list.png)
+
+ 
 
 ### Width
 
