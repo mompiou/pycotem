@@ -69,6 +69,27 @@ def click(event):
 # Reset points
 #
 ############################
+def reset_last_point():
+    global image_diff, gclick, s, minx, maxx, miny, maxy
+
+    a = figure.add_subplot(111)
+    a.figure.clear()
+    a = figure.add_subplot(111)
+    img = Image.open(str(image_diff))
+    img = np.array(img)
+    figure.suptitle(str(image_diff))
+    a.imshow(img, origin="upper")
+    gclick=gclick[:-1,:]
+    s = s-1
+    for i in range(1,gclick.shape[0]):
+	    a.annotate(str(i), (gclick[i,0], gclick[i,1]))
+    a.plot(gclick[1:,0], gclick[1:,1], 'b+')
+    
+    a.axis([minx, maxx, miny, maxy])
+    a.axis('off')
+    a.figure.canvas.draw()
+
+    return s, gclick
 
 
 def reset_points():
@@ -111,12 +132,14 @@ def reset():
     miny = height
     maxy = 0
     a.axis([minx, maxx, miny, maxy])
+    for i in range(1,gclick.shape[0]):
+	    a.annotate(str(i), (gclick[i,0], gclick[i,1]))
+    a.plot(gclick[1:,0], gclick[1:,1], 'b+')
+    
     a.axis('off')
     a.figure.canvas.draw()
-    gclick = np.zeros((1, 2))
-    # ui.conditions_Listbox.clear()
     ui.euler_Listbox.clear()
-    s = 1
+    
     return s, gclick
 
 
@@ -137,7 +160,7 @@ def add_condition():
         y3 = gclick[3, 1]
         d = np.abs((y2 - y1) * x3 - (x2 - x1) * y3 + x2 * y1 - y2 * x1) / np.sqrt((y2 - y1)**2 + (x2 - x1)**2)
     else:
-        d = 0
+        d = np.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 
     d12 = np.sqrt((x1 - x2)**2 + (y1 - y2)**2)
     if d12 == 0:
@@ -162,6 +185,9 @@ def add_condition():
 
     s = str(np.around(s1, decimals=3)) + ',' + str(np.around(s2, decimals=3)) + ',' + s3 + ',' + s4 + ',' + s5
     ui.conditions_Listbox.addItem(s)
+    ss= ui.conditions_Listbox.count()
+    item = ui.conditions_Listbox.item(ss-1)
+    item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
 
 
 def remove_condition():
@@ -305,7 +331,21 @@ def get():
     else:
         get_normal()
 
-
+def deviation_thick(angle,S):
+	r = np.sqrt(S[0]**2 + S[1]**2 + S[2]**2)
+        Q = np.zeros((1, 3))
+        t = np.arctan2(S[1], S[0]) * 180 / np.pi
+        w = 0
+        ph = np.arccos(S[2] / r) * 180 / np.pi
+        Aa=[]
+	for g in np.linspace(-np.pi, np.pi, 10):
+		for j in range(1,10):
+	            Aa = np.append(Aa,np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g) * np.sin(angle/j * np.pi / 180), np.cos(g) * np.sin(angle/j * np.pi / 180), np.cos(angle/j * np.pi / 180)])))[2])
+          
+	m=np.abs(S[2]-np.amax(Aa))  
+	return m
+	
+          
 def get_direction():
     ui.euler_Listbox.clear()
     s_a, s_b, s_z = tilt_axes()
@@ -317,6 +357,7 @@ def get_direction():
         tilt_b = []
         tilt_z = []
         inclination = []
+        d=[]
 
         for i in range(0, len(s)):
             l = map(float, s[i].split(','))
@@ -324,11 +365,13 @@ def get_direction():
             tilt_b.append(l[3])
             tilt_z.append(l[4])
             inclination.append(l[1])
+            d.append(l[0])
 
         inclination = np.array(inclination)
         tilt_a = np.array(tilt_a)
         tilt_b = np.array(tilt_b)
         tilt_z = np.array(tilt_z)
+        d=np.array(d)
 
         B = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
@@ -342,11 +385,19 @@ def get_direction():
             t = np.array([-np.cos(ny), np.sin(ny), 0])
             BxTp[:, i] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
             BxTp[:, i] = BxTp[:, i] / np.linalg.norm(BxTp[:, i])
+   
+        BxTp=np.hstack((BxTp, B)).T
+        b=np.hstack((np.zeros((tilt_a.shape[0])), d))
+        T = np.dot(np.linalg.pinv(BxTp), b.T)
+        T, dev_angle_T, dev_width = bootstrap_norm(BxTp, b.T, T / np.linalg.norm(T), 10000, 95)
 
-        u, s, v = np.linalg.svd(BxTp)
-        T = u[:, 2]
-        T_mean, dev_angle = bootstrap_dir(BxTp.T, T / np.linalg.norm(T), 10000, 95)
-        T = T_mean
+        dT = T / np.linalg.norm(T)
+        thick = np.abs(T[2])
+        dev_t=deviation_thick(dev_angle_T, dT)*np.linalg.norm(T)
+        dev_thick = (dev_t+dev_width) * np.abs(T[2])
+        
+        dev_thick = deviation_thick(dev_angle_T, dT)*(np.linalg.norm(T)+dev_width * np.abs(dT[2]))
+         
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
             phi1 = np.float(euler[0])
@@ -360,11 +411,17 @@ def get_direction():
             T_cc = T
 
         np.set_printoptions(suppress=True)
-        ui.euler_Listbox.addItem('Mean direction')
+        ui.euler_Listbox.addItem('Direction')
         ui.euler_Listbox.addItem(str(np.around(T_cc[0], decimals=3)) + ',' + str(np.around(T_cc[1], decimals=3)) + ',' + str(np.around(T_cc[2], decimals=3)))
-        ui.euler_Listbox.addItem('95% confidence interval (deg)')
-        ui.euler_Listbox.addItem(str(np.around(dev_angle, decimals=3)))
-
+        ui.euler_Listbox.addItem('Error on trace direction (deg)')
+        ui.euler_Listbox.addItem(str(np.around(dev_angle_T, decimals=3)))
+        ui.euler_Listbox.addItem('Direction length')
+        ui.euler_Listbox.addItem(str(np.around(np.linalg.norm(T), decimals=3)))
+        ui.euler_Listbox.addItem('Error on direction width')
+        ui.euler_Listbox.addItem(str(np.around(dev_width, decimals=3)))
+        ui.euler_Listbox.addItem('Estimated thickness')
+        ui.euler_Listbox.addItem(str(np.around(thick, decimals=3)) + '+/-' + str(np.around(dev_thick, decimals=3)))
+        
 
 def get_normal():
 
@@ -431,7 +488,8 @@ def get_normal():
 
         dn = n / np.linalg.norm(n)
         thick = np.linalg.norm(n) * np.sqrt(1 - dn[2]**2)
-        dev_thick = dev_width * np.sqrt(1 - dn[2]**2)
+        dev_n=deviation_thick(dev_angle_n, dn)*np.linalg.norm(n)
+        dev_thick = (dev_n+dev_width) * np.sqrt(1 - dn[2]**2)
         # in crystal coordinate
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
@@ -502,8 +560,8 @@ def draw_planes_dir():
     M = cryst()
     D = np.transpose(M)
     Dstar = np.transpose(np.linalg.inv(D))
-    x = gclick[1, 0]
-    y = gclick[1, 1]
+    x = gclick[-1, 0]
+    y = gclick[-1, 1]
     a = figure.add_subplot(111)
     minx, maxx = a.get_xlim()
     miny, maxy = a.get_ylim()
@@ -657,6 +715,51 @@ def tilt_rot():
     ui.tilt_y_entry.setText('0')
     ui.tilt_z_entry.setText('0')
 
+def import_data():
+	ui.conditions_Listbox.clear()
+	ui.euler_Listbox.clear()	
+	data_file = QtGui.QFileDialog.getOpenFileName(Interface, "Open a data file", "", "*.txt")
+	data=open(data_file, 'r')
+	x0 = []
+
+	for line in data:
+		line = line.strip()
+		if not line:  
+       			continue
+		if line.startswith("#"):
+			continue
+        	x0.append(map(str, line.split()))
+        
+        data.close()
+        if len(x0[0][0].split(','))==3:
+        	ui.euler_entry.setText(str(x0[0][0]))
+        	x0=x0[1:]
+        for item in x0:
+        	ui.conditions_Listbox.addItem(item[0])
+          
+def export_data():
+	s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
+	res= [str(ui.euler_Listbox.item(i).text()) for i in range(ui.euler_Listbox.count())]
+	name = QtGui.QFileDialog.getSaveFileName(Interface, 'Save File')
+        fout = open(name,'w')
+        fout.write('# Interface data file \n')
+        fout.write('# Euler angles \n')
+        fout.write(str(ui.euler_entry.text())+'\n')
+        if ui.direction_button.isChecked():
+        	d='direction'
+        else:
+        	d='plane'
+        fout.write ('# Data for a  '+str(d)+'\n')
+        for item in s:
+            fout.write("%s\n" % item)
+         
+        fout.write ('\n')
+        fout.write('# Results \n')
+        for item in res:
+            fout.write("# %s\n" % item)
+        
+        
+        fout.close()    
 
 ######################################################
 #
@@ -697,6 +800,9 @@ if __name__ == "__main__":
     ui_draw.buttonBox.rejected.connect(Draw.close)
     ui_draw.buttonBox.accepted.connect(draw_planes_dir)
 
+    Interface.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
+    Interface.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
+    
     single_tilt()
     ui.single_button.setChecked(True)
     ui.tilt_x_entry.setText('0')
@@ -744,7 +850,11 @@ if __name__ == "__main__":
         ui.micro_box.addItem(x_micro[i][0])
 
     f_micro.close()
+# Ctrl+z shortcut to remove clicked pole
 
+    shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+z"), Interface)
+    shortcut.activated.connect(reset_last_point)
+    
     Interface.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
 
     figure.canvas.mpl_connect('button_press_event', onpress)

@@ -1,0 +1,11 @@
+# Diffraction data file 
+-43,0,0,119.16,2,0,0
+24,0,0,121.83,1,1,1
+-1.3,0,0,34.4,0,2,-2
+-21,0,0,65.77,1,1,-1
+
+# Results 
+# Phi1,Phi,Phi2
+# -4.486,54.161,-45.564
+# Mean angular deviation, Mean square angular dev.
+# 1.149,0.001

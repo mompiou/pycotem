@@ -53,8 +53,8 @@ The equation can be solved using the least square method, by varying $\mathrm{sg
 The inputs data used are for a double tilt holder using the convention described in [stereoproj](stereoproj.md) derived from the position of the beam direction and apparent trace direction in the sample coordinates:
 
 $$
-\vec{b}_{ei}=R_x(\beta_i)R_y(\alpha_i)[0,0,1]^T \\
-\vec{t}_{pi}=R_x(\beta_i)R_y(\alpha_i)R_z(\delta)R_z(\eta)[0,1,0]^T
+\vec{b}_{ei}=R_x(-\beta_i)R_y(-\alpha_i)[0,0,1]^T \\
+\vec{t}_{pi}=R_x(-\beta_i)R_y(-\alpha_i)R_z(\delta)R_z(\eta)[0,1,0]^T
 $$
 
 ### Line determination

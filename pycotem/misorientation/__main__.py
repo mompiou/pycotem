@@ -1625,7 +1625,7 @@ def desorientation():
 
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
-        A = np.dot(np.linalg.inv(gB), In) - np.eye(3)
+        A = np.dot(In,np.linalg.inv(gB)) - np.eye(3)
         V = null(A, 0.001).T
 
         if 0.5 * (np.trace(A + np.eye(3)) - 1) > 1:

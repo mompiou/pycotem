@@ -206,10 +206,8 @@ def angle_check(Dis):
     Dis = Dis[np.argsort(Dis[:, -1])]
     return Dis
 
-
-def distance_theo():
-    global d, G, Dstar, D
-
+def cryst():
+    global D, Dstar,G
     abc = ui.abc_entry.text().split(",")
     a = np.float(abc[0])
     b = np.float(abc[1])
@@ -218,15 +216,21 @@ def distance_theo():
     alpha = np.float(alphabetagamma[0])
     beta = np.float(alphabetagamma[1])
     gamma = np.float(alphabetagamma[2])
-    e = np.int(ui.indice_entry.text())
     alpha = alpha * np.pi / 180
     beta = beta * np.pi / 180
     gamma = gamma * np.pi / 180
-    Dist = np.zeros(((2 * e + 1)**3 - 1, 5))
     V = a * b * c * np.sqrt(1 - (np.cos(alpha)**2) - (np.cos(beta))**2 - (np.cos(gamma))**2 + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma))
     D = np.array([[a, b * np.cos(gamma), c * np.cos(beta)], [0, b * np.sin(gamma), c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)], [0, 0, V / (a * b * np.sin(gamma))]])
     G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
     Dstar = np.transpose(np.linalg.inv(D))
+    return
+    
+def distance_theo():
+    global d, G, Dstar, D
+    cryst()
+    e = np.int(ui.indice_entry.text())
+    Dist = np.zeros(((2 * e + 1)**3 - 1, 5))
+
     ui.ListBox_theo.clear()
     w = 0
     for i in range(e + 1, -e, -1):
@@ -258,10 +262,12 @@ def add_spot():
     s3 = ui.tilt_a_entry.text()
     s4 = ui.tilt_b_entry.text()
     s5 = ui.tilt_z_entry.text()
-
+    s11.replaceInStrings(QtCore.QRegExp("^\s*"),"")
     s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2]
     ui.diff_spot_Listbox.addItem(s)
-
+    ss= ui.diff_spot_Listbox.count()
+    item = ui.diff_spot_Listbox.item(ss-1)
+    item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
 
 def remove_spot():
     ui.diff_spot_Listbox.takeItem(ui.diff_spot_Listbox.currentRow())
@@ -714,6 +720,52 @@ def extinction(space_group, h, k, l):
     I = np.around(float(np.real(F * np.conj(F))), decimals=2)
     return I
 
+def import_data():
+
+	ui.ListBox_theo.clear()
+	ui.diff_spot_Listbox.clear()
+	ui.euler_listbox.clear()
+
+	if ui.abc_entry.text()==None:
+		return
+
+	cryst()
+
+	data_file = QtGui.QFileDialog.getOpenFileName(Index, "Open a data file", "", "*.txt")
+	data=open(data_file, 'r')
+	x0 = []
+
+	for line in data:
+		line = line.strip()
+		if not line:  
+       			continue
+		if line.startswith("#"):
+			continue
+        	x0.append(map(str, line.split()))
+        
+        data.close()
+        print x0
+        for item in x0:
+        	ui.diff_spot_Listbox.addItem(item[0])
+        
+        
+          
+def export_data():
+	s = [str(x.text()) for x in ui.diff_spot_Listbox.selectedItems()]
+	res= [str(ui.euler_listbox.item(i).text()) for i in range(ui.euler_listbox.count())]
+	name = QtGui.QFileDialog.getSaveFileName(Index, 'Save File')
+        fout = open(name,'w')
+        fout.write('# Diffraction data file \n')
+        for item in s:
+            fout.write("%s\n" % item)
+         
+        fout.write ('\n')
+        fout.write('# Results \n')
+        for item in res:
+            fout.write("# %s\n" % item)
+        
+        fout.close()    
+
 
 ##################################################
 #
@@ -852,6 +904,9 @@ figure.canvas.mpl_connect('button_release_event', onrelease)
 figure.canvas.mpl_connect('motion_notify_event', onmove)
 press = False
 move = False
+
+Index.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
+Index.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
 
 ui.Button_reset.clicked.connect(reset_points)
 ui.Button_reset_all.clicked.connect(reset)

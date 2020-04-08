@@ -338,7 +338,7 @@ If the ```ZA``` (zone axis) button is ticked, the $\alpha$-tilt and either $\bet
 
 If the ```ZA``` button is not selected, the $\alpha$ tilt angle needed to have a given pole/direction perpendicular to the electron beam (may correspond to a 2 beam condition) can be computed for a given $\beta$ or $\theta$ tilt angle.
 
-![](/images/stereo-list.png)
+![](images/stereo-list.png)
 
  
 

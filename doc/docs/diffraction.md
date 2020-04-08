@@ -151,7 +151,7 @@ The data $(h,k,l)$, the inclination angle $\eta$ and the tilt angles, can be use
 
 ## Orientation from a set of diffraction vectors
 
-If a set of at least 3 linearly independent diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates $s$ (see below regarding ambiguities). Given the direction $X$ in the crystal $c$ coordinates:
+If a set of diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates $s$ (see below regarding ambiguities). Given the direction $X$ in the crystal $c$ coordinates:
 
 $$
 G_c  X = G_s  
@@ -215,10 +215,10 @@ $$
 lead to:
 
 $$
-RG_c^T=G_s^T
+G_c A=G_s
 $$
 
-where $R$ is a Euler rotation matrix. Finding $R$ can be done with the approach proposed by Mackenzie [^mackenzie] using singular value decomposition:
+where $A$ is a rotation matrix. The Euler rotation matrix $R$ can be found with the approach proposed by Mackenzie [^mackenzie] using singular value decomposition:
 
 $$
 U,S,V^T=svd(G_c^TG_s) \\
@@ -234,9 +234,9 @@ $$
 $$
 
 !!! info "180° ambiguity"
-	When the inputs g-vectors are coplanar, the above equation can still be solved by defining an extra condition as the cross product of two other vectors. This however can only be achieved in specific cases which avoid the 180° ambiguity. 
+	When the inputs g-vectors are coplanar, the retrieved orientation may suffer the 180° ambiguity. 
 	
-	The situation described on the left side of the figure below is ambiguous even if the three diffraction vectors are linearly independent. In this case, the 180° rotation along $g_3$ leads two different crystal orientations.
+	The situation described on the left side of the figure below is ambiguous. In this case, the 180° rotation along $g_3$ leads two different crystal orientations.
 	On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along $(0\bar{1}1)$ is a crystal symmetry. 
 	
 	Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. 

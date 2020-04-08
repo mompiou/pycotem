@@ -278,9 +278,17 @@
     </property>
     <addaction name="actionDirections_planes"/>
    </widget>
+   <widget class="QMenu" name="menuData">
+    <property name="title">
+     <string>Data</string>
+    </property>
+    <addaction name="actionImport"/>
+    <addaction name="actionExport"/>
+   </widget>
    <addaction name="menuSave"/>
    <addaction name="menuStructure"/>
    <addaction name="menuDraw"/>
+   <addaction name="menuData"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave_figure">
@@ -301,6 +309,16 @@
   <action name="actionDirections_planes">
    <property name="text">
     <string>directions/planes</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export</string>
    </property>
   </action>
  </widget>
