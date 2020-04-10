@@ -373,6 +373,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#importexport-data" title="Import/Export data" class="md-nav__link">
+    Import/Export data
+  </a>
+  
+</li>
+      
       
       
       
@@ -508,6 +515,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#importexport-data" title="Import/Export data" class="md-nav__link">
+    Import/Export data
+  </a>
   
 </li>
       
@@ -677,7 +691,22 @@ value +/- in  px or nm
 </pre></div>
 
 <p><img alt="" src="../images/interface-determination.png" /></p>
-<p>Errors are computed using the <em>bootstrap method</em>. Starting from the set of data <span><span class="MathJax_Preview">(\vec{b}_{ei}, \eta_i)</span><script type="math/tex">(\vec{b}_{ei}, \eta_i)</script></span> or  <span><span class="MathJax_Preview">(\vec{b}_{ei}, w_i)</span><script type="math/tex">(\vec{b}_{ei}, w_i)</script></span>, to estimate the trace direction and normal, respectively, the data sets were resampled and estimated traces and normals were determined using the equation above. The 95% confidence interval was calculated from the 95<sup>th</sup> percentile of deviation of the trace and normal. This indicates that the normal should stay in a cone centered around <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with a deviation of <span><span class="MathJax_Preview">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</span><script type="math/tex">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</script></span>. Note that for some configurations, the confidence interval may be excessively large due to spurious resampling. Artificially adding twice the same data can avoid this phenomena.</p>
+<div class="admonition info">
+<p class="admonition-title">Results accuracy</p>
+<p>Errors are computed using the <em>bootstrap method</em>. Starting from the set of data <span><span class="MathJax_Preview">(\vec{b}_{ei}, \eta_i)</span><script type="math/tex">(\vec{b}_{ei}, \eta_i)</script></span> or  <span><span class="MathJax_Preview">(\vec{b}_{ei}, w_i)</span><script type="math/tex">(\vec{b}_{ei}, w_i)</script></span>, to estimate the trace direction and normal, respectively, the data sets were resampled and estimated traces and normals were determined using the equation above. The 95% confidence interval was calculated from the 95<sup>th</sup> percentile of deviation of the trace and normal. This indicates that the normal should stay in a cone centered around <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with a deviation of <span><span class="MathJax_Preview">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</span><script type="math/tex">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</script></span>. </p>
+<p>The same procedure is carried out also in case of the measurement of  direction which leads to <span><span class="MathJax_Preview">\Delta\theta=\widehat{(\vec{l},\vec{l}'_{0.95})}</span><script type="math/tex">\Delta\theta=\widehat{(\vec{l},\vec{l}'_{0.95})}</script></span>. </p>
+<p>Note that for some configurations, the confidence interval may be excessively large due to spurious resampling. Adding multiple data, ie. several measurements will prevent from this effect.</p>
+<p>The sample thickness can be estimated from:</p>
+<div>
+<div class="MathJax_Preview">
+t=d\sqrt{1-(\vec{n}\cdot\vec{s})^2}=d\vec{l}\cdot\vec{s}
+</div>
+<script type="math/tex; mode=display">
+t=d\sqrt{1-(\vec{n}\cdot\vec{s})^2}=d\vec{l}\cdot\vec{s}
+</script>
+</div>
+<p><span><span class="MathJax_Preview">\vec{s}</span><script type="math/tex">\vec{s}</script></span> being the foil normal. It is estimated in the results by considering that the foil normal is along <span><span class="MathJax_Preview">z_M</span><script type="math/tex">z_M</script></span>. The error on the estimation is complex because it depends both on the error on <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> and on the deviation of <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> or <span><span class="MathJax_Preview">\vec{l}</span><script type="math/tex">\vec{l}</script></span>. The two contributions can be approximately estimated to provide an error on the thickness.</p>
+</div>
 <p><img alt="" src="../images/interface-stereo.png" /></p>
 <blockquote>
 <p>Example of interface determination from a set of images (see <a href="https://github.com/mompiou/pycotem/tree/master/test/interface">here</a>). Cones around <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> and <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> (normal and trace) corresponds to the 95% confidence interval.</p>
@@ -707,6 +736,50 @@ value +/- in  px or nm
 <p><img alt="" src="../images/interface-draw.png" /></p>
 <p>The same procedure can be applied to determined and draw directions. The <code>direction</code> box should then be checked.</p>
 <p><img alt="" src="../images/interface-draw-dir.png" /></p>
+<h2 id="importexport-data">Import/Export data<a class="headerlink" href="#importexport-data" title="Permanent link">&para;</a></h2>
+<p>Using the <code>Data</code> menu, data can be imported and results exported. 
+Data sets are provided in a <code>.txt</code> file using the following scheme</p>
+<div class="codehilite"><pre><span></span># Interface data file 
+# Euler angles 
+phi1,phi, phi2 (may be left blank)
+# Data for a  plane/direction
+w_1(or l_1), eta_1,alpha_1,beta_1,theta_1
+...
+w_N(or l_N), eta_N,alpha_N,beta_N,theta_N
+</pre></div>
+
+<p>Exporting data will write in a <code>.txt</code> file,  adding to the above datasets. For plane:</p>
+<div class="codehilite"><pre><span></span># Results 
+# Plane normal
+# n_1,n_2, n_3 
+# Trace
+# t_1,t_2,t_3
+# Error on trace direction (deg)
+# ang
+# Error on plane normal (deg)
+# ang
+# Plane width
+# d
+# Error on plane width
+# dd
+# Estimated thickness
+# t
+</pre></div>
+
+<p>for directions:</p>
+<p><div class="codehilite"><pre><span></span># Results 
+# Direction
+# d1,d2,d3
+# Error on trace direction (deg)
+# ang
+# Direction length
+# l
+# Error on direction width
+# dl
+# Estimated thickness
+# t
+</pre></div>
+The two files can be combined in one as <code>#</code> sign will not be read during import.</p>
                 
                   
                 

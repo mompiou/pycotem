@@ -338,6 +338,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#importexport-data" title="Import/Export data" class="md-nav__link">
+    Import/Export data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#spectrum" title="Spectrum" class="md-nav__link">
     Spectrum
   </a>
@@ -514,6 +521,13 @@
         <li class="md-nav__item">
   <a href="#orientation-from-a-set-of-diffraction-vectors" title="Orientation from a set of diffraction vectors" class="md-nav__link">
     Orientation from a set of diffraction vectors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#importexport-data" title="Import/Export data" class="md-nav__link">
+    Import/Export data
   </a>
   
 </li>
@@ -797,7 +811,7 @@ G_c A=G_s
 G_c A=G_s
 </script>
 </div>
-<p>where <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> is a rotation matrix. The Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">1</a></sup> using singular value decomposition:</p>
+<p>The above equation defines the crystal orientation, so that <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> should be a rotation matrix. The closest Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">1</a></sup> using singular value decomposition:</p>
 <div>
 <div class="MathJax_Preview">
 U,S,V^T=svd(G_c^TG_s) \\
@@ -871,6 +885,23 @@ On the contrary, the right side of the figure is not ambiguous, as the 180° rot
 <ul>
 <li>In the approach to find <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span>, the <code>mean square angular deviation</code>, <span><span class="MathJax_Preview">\langle \theta_d^2 \rangle</span><script type="math/tex">\langle \theta_d^2 \rangle</script></span>, is minimized. This value should then be as small as possible.</li>
 </ul>
+<h2 id="importexport-data">Import/Export data<a class="headerlink" href="#importexport-data" title="Permanent link">&para;</a></h2>
+<p>Using the <code>Data</code> menu, data can be imported and results exported. 
+Data sets are provided in a <code>.txt</code> file using the following scheme</p>
+<div class="codehilite"><pre><span></span># Diffraction data file 
+alpha_1,beta_1,theta_1,eta_1,h_1,k_1,l_1
+...
+alpha_N,beta_N,theta_N,eta_N,h_N,k_N,l_N
+</pre></div>
+
+<p>Exporting data will write in a <code>.txt</code> file,  adding to the above datasets:</p>
+<p><div class="codehilite"><pre><span></span># Results 
+# Phi1,Phi,Phi2
+# phi_1,phi, phi_2
+# Mean angular deviation, Mean square angular dev.
+# ang_d, ang_d^2
+</pre></div>
+The two files can be combined in one as <code>#</code> sign will not be read during import.</p>
 <h2 id="spectrum">Spectrum<a class="headerlink" href="#spectrum" title="Permanent link">&para;</a></h2>
 <p>Spectra, i.e. peak intensity with respect to the d-spacing, can be plotted from the top menu. The maximum indices should be indicated.</p>
 <p><img alt="" src="../images/spectrum.png" /></p>
