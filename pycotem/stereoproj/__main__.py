@@ -2397,10 +2397,8 @@ def add_remove_list():
                 if ui.uvw_button.isChecked() is False:
                     ui.uvw_button.toggle()
             undo_pole(i0, i1, i2)
-            if ui_list.plane_checkBox.isChecked():
-	        undo_trace_plan(i0,i1,i2)
-            if ui_list.cone_checkBox.isChecked():
-                undo_trace_cone(i0,i1,i2)
+            undo_trace_plan(i0,i1,i2)
+            undo_trace_cone(i0,i1,i2)
 
             ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('x'))
 
