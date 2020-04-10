@@ -1,0 +1,670 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Kikuchi - pycotem</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#7e57c2">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap:300,400,400i,700|&display=fallback">
+        <style>body,input{font-family:"Asap","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#introduction" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="pycotem" class="md-header-nav__button md-logo">
+          
+            <img src="../images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                pycotem
+              </span>
+              <span class="md-header-nav__topic">
+                Kikuchi
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../images/logo.png" width="26" height="51">
+      
+    </span>
+   
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../diffraction/" title="Diffraction" class="md-nav__link">
+      Diffraction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+<!--    -->
+<!--    -->
+<!--      <label class="md-nav__link md-nav__link--active" for="__toc">-->
+<!--        Kikuchi-->
+<!--      </label>-->
+<!--    -->
+    <a href="./" title="Kikuchi" class="md-nav__link md-nav__link--active">
+      Kikuchi
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-kikuchi-bands" title="Indexing Kikuchi bands" class="md-nav__link">
+    Indexing Kikuchi bands
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calibration" title="Calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orientation" title="Orientation" class="md-nav__link">
+    Orientation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#procedure" title="Procedure" class="md-nav__link">
+    Procedure
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../stereoproj/" title="StereoProj" class="md-nav__link">
+      StereoProj
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../interface/" title="Interface" class="md-nav__link">
+      Interface
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../misorientation/" title="Misorientation" class="md-nav__link">
+      Misorientation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../crystal/" title="Crystal" class="md-nav__link">
+      Crystal
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ressources/" title="Further ressources" class="md-nav__link">
+      Further ressources
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contribute/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-kikuchi-bands" title="Indexing Kikuchi bands" class="md-nav__link">
+    Indexing Kikuchi bands
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calibration" title="Calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orientation" title="Orientation" class="md-nav__link">
+    Orientation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#procedure" title="Procedure" class="md-nav__link">
+    Procedure
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/mompiou/pycotem/tree/master/doc/docs/kikuchi.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Kikuchi</h1>
+                
+                <p><code>kikuchi</code> allows to determine orientation from a kikuchi pattern.</p>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>Kikuchi lines result from inelastic scattering in a sufficiently thick crystal. Considering an electron beam entering the crystal, electron are scattered in different directions, but more likely in the forward direction. The electrons that are in Bragg conditions, i.e. forming an angle <span><span class="MathJax_Preview">\pm \theta_B</span><script type="math/tex">\pm \theta_B</script></span>, with an atomic plane will eventually be diffracted. Their wave vectors <span><span class="MathJax_Preview">\vec{k}_0</span><script type="math/tex">\vec{k}_0</script></span>, <span><span class="MathJax_Preview">\vec{k}'_0</span><script type="math/tex">\vec{k}'_0</script></span> are distributed in two <em>Kossel cones</em> of aperture <span><span class="MathJax_Preview">90-\theta_B</span><script type="math/tex">90-\theta_B</script></span>,  around the plane normal, corresponding to the diffraction vectors <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span> or <span><span class="MathJax_Preview">\vec{g}'=-\vec{g}</span><script type="math/tex">\vec{g}'=-\vec{g}</script></span>. The diffrated beam with wave vectors <span><span class="MathJax_Preview">\vec{k}_g</span><script type="math/tex">\vec{k}_g</script></span> and <span><span class="MathJax_Preview">\vec{k}'_g</span><script type="math/tex">\vec{k}'_g</script></span>, which are also distributed on the cones, intersect the observation screen and form lines, as <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> is small. Because the inelastic scattering is more intense in the forward direction, the diffracted beam <span><span class="MathJax_Preview">\vec{k}_g</span><script type="math/tex">\vec{k}_g</script></span> gives rise to a line with a higher intensity, i.e. an excess line. On the contrary, <span><span class="MathJax_Preview">\vec{k}'_g</span><script type="math/tex">\vec{k}'_g</script></span> corresponds to a defected line.</p>
+<p><img alt="" src="../images/kikuchi-lines.png" /></p>
+<p>The defected and excess lines are separated by the angle <span><span class="MathJax_Preview">2\theta_B</span><script type="math/tex">2\theta_B</script></span> which in the observation plane corresponds to a distance</p>
+<div>
+<div class="MathJax_Preview">
+r \approx L\theta_B = \frac{\lambda L}{d} 
+</div>
+<script type="math/tex; mode=display">
+r \approx L\theta_B = \frac{\lambda L}{d} 
+</script>
+</div>
+<p>where <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> is the camera length, i.e. the effective distance between the back focal plane of the objective lens and the observation screen, <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span> the electron wavelength, and <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> the interplanar distance related to the <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> plane.</p>
+<p>Thus, the nature of the Kikuchi bands can be determined, knowing the calibration parameter <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span>, the electron wavelength, which depends on the acceleration voltage and the crystal structure.</p>
+<h2 id="indexing-kikuchi-bands">Indexing Kikuchi bands<a class="headerlink" href="#indexing-kikuchi-bands" title="Permanent link">&para;</a></h2>
+<p><span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> bands can be retrieved, knowing the crystal structure. It can be imported from the <code>structure</code> menu. This menu can be populated by adding structures in the <code>structure.txt</code> files following the template:</p>
+<div class="codehilite"><pre><span></span>Name a(A) b(A) c(A) alpha beta gamma space group
+</pre></div>
+
+<p>The space group is defined in the <code>space_group.txt</code> file and with the  <code>scattering.txt</code> file (see <a href="../diffraction/">diffraction</a> for more details).</p>
+<p>Alternatively, the structure can be set by filling the <span><span class="MathJax_Preview">a,b,c</span><script type="math/tex">a,b,c</script></span>  and <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> fields.</p>
+<h2 id="calibration">Calibration<a class="headerlink" href="#calibration" title="Permanent link">&para;</a></h2>
+<p>The Kikuchi pattern needs to be carefully calibrated on the microscope used. </p>
+<p>The calibration are set in the <code>calibration.txt</code> file following the scheme:</p>
+<div class="codehilite"><pre><span></span>Microscope_name voltage camera length binning r.d
+...
+</pre></div>
+
+<p>Contrary to <code>diffraction</code> we use here the <strong>value of the camera length</strong>.</p>
+<h2 id="orientation">Orientation<a class="headerlink" href="#orientation" title="Permanent link">&para;</a></h2>
+<p>Orientation of the crystal can be retrieved from the analysis of the band configuration.
+The figure below shows the relation between the Kikuchi bands AB and AC, and the vector <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> corresponding to the reverse of the electron beam direction.</p>
+<p>Here the planes <span><span class="MathJax_Preview">BAP</span><script type="math/tex">BAP</script></span> and <span><span class="MathJax_Preview">CAP</span><script type="math/tex">CAP</script></span> correspond to the diffraction vector <span><span class="MathJax_Preview">\vec{g}_1=(h_1,k_1,l_1)</span><script type="math/tex">\vec{g}_1=(h_1,k_1,l_1)</script></span> and <span><span class="MathJax_Preview">\vec{g}_2=(h_2,k_2,l_2)</span><script type="math/tex">\vec{g}_2=(h_2,k_2,l_2)</script></span>. The pole A, at the intersection of the two bands corresponds to <span><span class="MathJax_Preview">\vec{g}_3=\vec{g}_1 \times \vec{g}_2=(h_3,k_3,l_3)</span><script type="math/tex">\vec{g}_3=\vec{g}_1 \times \vec{g}_2=(h_3,k_3,l_3)</script></span></p>
+<p>The angles <span><span class="MathJax_Preview">\phi_i</span><script type="math/tex">\phi_i</script></span> can be defined as:</p>
+<div>
+<div class="MathJax_Preview">
+\phi_1=\arctan{(L/OB)} \\
+\phi_2=\arctan{(L/OC)} \\
+\phi_3=\arctan{(OA/L)}
+</div>
+<script type="math/tex; mode=display">
+\phi_1=\arctan{(L/OB)} \\
+\phi_2=\arctan{(L/OC)} \\
+\phi_3=\arctan{(OA/L)}
+</script>
+</div>
+<p>The vector <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> satisfies the equation:</p>
+<div>
+<div class="MathJax_Preview">
+\vec{Z}/\|\vec{Z} \|= O_c^{-1} \begin{pmatrix} 
+\|\vec{g}_1\| \cos{\phi_1}\\
+\|\vec{g}_2\| \cos{\phi_2} \\
+\|\vec{g}_3\| \cos{\phi_3}  
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+\vec{Z}/\|\vec{Z} \|= O_c^{-1} \begin{pmatrix} 
+\|\vec{g}_1\| \cos{\phi_1}\\
+\|\vec{g}_2\| \cos{\phi_2} \\
+\|\vec{g}_3\| \cos{\phi_3}  
+\end{pmatrix}
+</script>
+</div>
+<p>where, </p>
+<div>
+<div class="MathJax_Preview">
+O_c= D^\ast \begin{pmatrix} 
+h_1 &amp; k_1 &amp; l_1\\
+h_2 &amp; k_2 &amp; l_2\\
+h_3 &amp; k_3 &amp; l_3     
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+O_c= D^\ast \begin{pmatrix} 
+h_1 & k_1 & l_1\\
+h_2 & k_2 & l_2\\
+h_3 & k_3 & l_3     
+\end{pmatrix}
+</script>
+</div>
+<p>with <span><span class="MathJax_Preview">D^\ast</span><script type="math/tex">D^\ast</script></span> defined <a href="../stereoproj/#setting-up-the-crystal">here</a>,</p>
+<p>From <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> and the band orientation in the screen plane, the orientation of the crystal given by the Euler angles can be retrieved.</p>
+<p><img alt="" src="../images/kikuchi-orientation.png" /></p>
+<h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
+<p>The interface is composed of  a top bar menu, a plotting area to display Kikuchi pattern and a setting/results panel.</p>
+<p><img alt="" src="../images/kikuchi-interface.png" /></p>
+<h2 id="procedure">Procedure<a class="headerlink" href="#procedure" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Enter the crystal structure and space group.</p>
+</li>
+<li>
+<p>Select the maximum indices for band identification.</p>
+</li>
+<li>
+<p>Enter the microscope calibration.</p>
+</li>
+<li>
+<p>Open a pattern.</p>
+</li>
+<li>
+<p>To highlight the band, the <code>brightness</code> can be adjusted.</p>
+</li>
+<li>
+<p>Select a band by clicking three times. The first two points define the direction along one line. The third point should be on the second parallel line. Then, both the azimuthal angle and d-spacing can be retrieved.</p>
+</li>
+<li>
+<p>Press <code>Add bands</code>. The band number and the corresponding d-spacing appear in the <strong>Bands</strong> box. Bands can be removed by pressing the <code>Remove band</code> button.</p>
+</li>
+<li>
+<p>Clear the points and view (if zoomed in) with the <code>Reset points</code> and <code>Reset view</code> buttons.</p>
+</li>
+<li>
+<p>Repeat the operation at least 3 times and no more than 5 times (3 to 5 bands to identify). </p>
+</li>
+<li>
+<p>Click on the pattern center and press <code>Add center</code>. Position of the center appears below.</p>
+</li>
+<li>
+<p>Press the <code>Run</code> button to display solutions in the <strong>Results</strong> box.</p>
+</li>
+<li>
+<p>By selecting the different sets of data and by clicking on the <code>Show results-orientation</code> button, the bands are plotted in overlay. The Euler angles appear below.</p>
+</li>
+</ul>
+<p><img alt="" src="../images/kikuchi-procedure.png" /></p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/envelope.png"  ></A>
+          </div>
+        
+        powered by
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

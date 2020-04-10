@@ -1,0 +1,1252 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>StereoProj - pycotem</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#7e57c2">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap:300,400,400i,700|&display=fallback">
+        <style>body,input{font-family:"Asap","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#stereographic-projections" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="pycotem" class="md-header-nav__button md-logo">
+          
+            <img src="../images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                pycotem
+              </span>
+              <span class="md-header-nav__topic">
+                StereoProj
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../images/logo.png" width="26" height="51">
+      
+    </span>
+   
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../diffraction/" title="Diffraction" class="md-nav__link">
+      Diffraction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../kikuchi/" title="Kikuchi" class="md-nav__link">
+      Kikuchi
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+<!--    -->
+<!--    -->
+<!--      <label class="md-nav__link md-nav__link--active" for="__toc">-->
+<!--        StereoProj-->
+<!--      </label>-->
+<!--    -->
+    <a href="./" title="StereoProj" class="md-nav__link md-nav__link--active">
+      StereoProj
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stereographic-projections" title="Stereographic projections" class="md-nav__link">
+    Stereographic projections
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#construction" title="Construction" class="md-nav__link">
+    Construction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-wulff-net" title="The Wulff net" class="md-nav__link">
+    The Wulff net
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#euler-angles" title="Euler angles" class="md-nav__link">
+    Euler angles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinate-systems" title="Coordinate systems" class="md-nav__link">
+    Coordinate systems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-procedure" title="Plotting procedure" class="md-nav__link">
+    Plotting procedure
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-the-crystal" title="Setting up the crystal" class="md-nav__link">
+    Setting up the crystal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-euler-angles" title="From Euler angles" class="md-nav__link">
+    From Euler angles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-a-diffraction-vector" title="From a diffraction vector" class="md-nav__link">
+    From a diffraction vector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plotting-poleplanes" title="Plotting pole/planes" class="md-nav__link">
+    Plotting pole/planes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layout" title="Layout" class="md-nav__link">
+    Layout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-features" title="Additional features" class="md-nav__link">
+    Additional features
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#save" title="Save" class="md-nav__link">
+    Save
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#angle" title="Angle" class="md-nav__link">
+    Angle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schmid-factor" title="Schmid factor" class="md-nav__link">
+    Schmid factor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xyz-directions" title="xyz directions" class="md-nav__link">
+    xyz directions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list" title="List" class="md-nav__link">
+    List
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#width" title="Width" class="md-nav__link">
+    Width
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intersections" title="Intersections" class="md-nav__link">
+    Intersections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diffraction" title="Diffraction" class="md-nav__link">
+    Diffraction
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diffraction-pattern" title="Diffraction pattern" class="md-nav__link">
+    Diffraction pattern
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kikuchi-lines" title="Kikuchi lines" class="md-nav__link">
+    Kikuchi lines
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../interface/" title="Interface" class="md-nav__link">
+      Interface
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../misorientation/" title="Misorientation" class="md-nav__link">
+      Misorientation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../crystal/" title="Crystal" class="md-nav__link">
+      Crystal
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ressources/" title="Further ressources" class="md-nav__link">
+      Further ressources
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contribute/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stereographic-projections" title="Stereographic projections" class="md-nav__link">
+    Stereographic projections
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#construction" title="Construction" class="md-nav__link">
+    Construction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-wulff-net" title="The Wulff net" class="md-nav__link">
+    The Wulff net
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#euler-angles" title="Euler angles" class="md-nav__link">
+    Euler angles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinate-systems" title="Coordinate systems" class="md-nav__link">
+    Coordinate systems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotting-procedure" title="Plotting procedure" class="md-nav__link">
+    Plotting procedure
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-the-crystal" title="Setting up the crystal" class="md-nav__link">
+    Setting up the crystal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-euler-angles" title="From Euler angles" class="md-nav__link">
+    From Euler angles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-a-diffraction-vector" title="From a diffraction vector" class="md-nav__link">
+    From a diffraction vector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plotting-poleplanes" title="Plotting pole/planes" class="md-nav__link">
+    Plotting pole/planes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layout" title="Layout" class="md-nav__link">
+    Layout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-features" title="Additional features" class="md-nav__link">
+    Additional features
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#save" title="Save" class="md-nav__link">
+    Save
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#angle" title="Angle" class="md-nav__link">
+    Angle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schmid-factor" title="Schmid factor" class="md-nav__link">
+    Schmid factor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xyz-directions" title="xyz directions" class="md-nav__link">
+    xyz directions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list" title="List" class="md-nav__link">
+    List
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#width" title="Width" class="md-nav__link">
+    Width
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intersections" title="Intersections" class="md-nav__link">
+    Intersections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diffraction" title="Diffraction" class="md-nav__link">
+    Diffraction
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diffraction-pattern" title="Diffraction pattern" class="md-nav__link">
+    Diffraction pattern
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kikuchi-lines" title="Kikuchi lines" class="md-nav__link">
+    Kikuchi lines
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/mompiou/pycotem/tree/master/doc/docs/stereoproj.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>StereoProj</h1>
+                
+                <p><code>stereoproj</code> allows to work with stereographic projections.</p>
+<h2 id="stereographic-projections">Stereographic projections<a class="headerlink" href="#stereographic-projections" title="Permanent link">&para;</a></h2>
+<p>A stereographic projection is a type of projection that maps a unit sphere onto a plane. It is a conformal projection, which means it preserves the angles. Stereographic projections are often use for practical reason in crystallography to display symmetry elements. This is an essential tool for electron microscopists who want to analyze microstructures. Traditionally projections are drawn by hand with the help of a Wulff net.</p>
+<h3 id="construction">Construction<a class="headerlink" href="#construction" title="Permanent link">&para;</a></h3>
+<p>Let consider the south pole <span><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> of a sphere lying in a <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> coordinate system. A point <span><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> in the upper hemisphere of the sphere can be projected on <span><span class="MathJax_Preview">M'</span><script type="math/tex">M'</script></span> defined as the intersection between the line <span><span class="MathJax_Preview">MS</span><script type="math/tex">MS</script></span> and the equatorial plane, i.e the plane that cuts the sphere at <span><span class="MathJax_Preview">z=0</span><script type="math/tex">z=0</script></span>. </p>
+<p><img alt="" src="../images/stereo1.png" /></p>
+<div class="admonition info">
+<p class="admonition-title">Projection convention</p>
+<p>From a geometrical construction, points in the lower hemisphere (<span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> negative) do not appear. They can alternatively be projected on the plane from the north pole instead. Opposite 3D directions, will then have opposite coordinates in the projection planes. In <code>stereoproj</code>  we choose to discard points from the lower hemisphere.</p>
+</div>
+<p>From this construction, it results several important features:</p>
+<ul>
+<li>
+<p>3D directions <span><span class="MathJax_Preview">(x_0,y_0,z_0)</span><script type="math/tex">(x_0,y_0,z_0)</script></span> are projected into points of coordinates <span><span class="MathJax_Preview">(X_0,Y_0)</span><script type="math/tex">(X_0,Y_0)</script></span>  such as <span><span class="MathJax_Preview">X_0= \frac{x_0}{1+z_0} \ Y_0=\frac{y_0}{1+z_0}</span><script type="math/tex">X_0= \frac{x_0}{1+z_0} \ Y_0=\frac{y_0}{1+z_0}</script></span></p>
+</li>
+<li>
+<p>circles on the sphere, which correspond to 3D planes (full circles) or cones (smaller circles), are projected as portion or full circles.</p>
+</li>
+<li>
+<p>the north pole is located at the center of the stereographic projection</p>
+</li>
+<li>
+<p>the equatorial plane is projected as a great circle that bounds the stereograpic projection.</p>
+</li>
+<li>
+<p>any 3D direction can be defined by two angles <sup id="fnref:ang"><a class="footnote-ref" href="#fn:ang" rel="footnote">1</a></sup> that we can choose as their inclination angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> with respect to the <span><span class="MathJax_Preview">Oy</span><script type="math/tex">Oy</script></span> direction and tilt angle <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> with respect to the reference equatorial plane.</p>
+</li>
+</ul>
+<h3 id="the-wulff-net">The Wulff net<a class="headerlink" href="#the-wulff-net" title="Permanent link">&para;</a></h3>
+<p>The Wulff net results from the projection of equally distributed planes called meridians and parallels <sup id="fnref:ang2"><a class="footnote-ref" href="#fn:ang2" rel="footnote">2</a></sup>. The first ones correspond to planes of a given tilt angle, the second corresponds to planes of a given inclination angle <sup id="fnref:ang3"><a class="footnote-ref" href="#fn:ang3" rel="footnote">3</a></sup>. In <code>stereoproj</code>, meridians and parallels can be displayed and are spaced every 2° with thicker lines every 10°.</p>
+<p><img alt="" src="../images/stereo2.png" /></p>
+<blockquote>
+<p>Meridians and parallels forming a Wulff net. Definition of the inclination and tilt angles</p>
+</blockquote>
+<h3 id="euler-angles">Euler angles<a class="headerlink" href="#euler-angles" title="Permanent link">&para;</a></h3>
+<p>The orientation of a crystal can be set by 3 angles. Indeed given a direction, defined by two angles, the orientation can be fixed after rotating along this direction. A second standard definition of orientation is set by the Euler angles <span><span class="MathJax_Preview">(\varphi_1, \phi, \varphi_2)</span><script type="math/tex">(\varphi_1, \phi, \varphi_2)</script></span>. In crystallography, it is traditionally adopted, according to Bunge, that it corresponds to:</p>
+<ol>
+<li>
+<p>a rotation along the <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> of  axis <span><span class="MathJax_Preview">\varphi_1</span><script type="math/tex">\varphi_1</script></span></p>
+</li>
+<li>
+<p>a rotation along <span><span class="MathJax_Preview">x'</span><script type="math/tex">x'</script></span> of <span><span class="MathJax_Preview">\phi</span><script type="math/tex">\phi</script></span> </p>
+</li>
+<li>
+<p>a rotation along <span><span class="MathJax_Preview">z'</span><script type="math/tex">z'</script></span> of <span><span class="MathJax_Preview">\varphi_2</span><script type="math/tex">\varphi_2</script></span>. </p>
+</li>
+</ol>
+<p>In the example below: <span><span class="MathJax_Preview">(\varphi_1,\phi,\varphi_2)=(-80,40,30)</span><script type="math/tex">(\varphi_1,\phi,\varphi_2)=(-80,40,30)</script></span></p>
+<p><img alt="" src="../images/euler.png" /></p>
+<blockquote>
+<p>Definition of the Euler angles, represented on the stereographic projection and in 3D. Points on the projections indicate the <span><span class="MathJax_Preview">x,y,z</span><script type="math/tex">x,y,z</script></span> directions. </p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title">Rotation matrices and Euler angles </p>
+<p>The orientation is defined by a rotation matrix that links the reference frame <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> to the crystal frame <span><span class="MathJax_Preview">(x',y',z')</span><script type="math/tex">(x',y',z')</script></span> by composing the 3 rotations. In the example shown, it was considered that the rotations operate sequentially in a moving frame: they are called intrinsic. </p>
+<p>This definition is however not convenient for working with rotation matrices as the rotation axes move in the reference frame. So, we can define the Euler angles from extrinsic rotations, i.e. rotations that operate in the fixed reference frame <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span>, in the way presented in the figure below for <span><span class="MathJax_Preview">(\varphi_1,\phi,\varphi_2)=(-80,40,30)</span><script type="math/tex">(\varphi_1,\phi,\varphi_2)=(-80,40,30)</script></span>. </p>
+<p><img alt="" src="../images/extrinsic.png" /></p>
+<p>This corresponds to: a rotation along <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> of an angle <span><span class="MathJax_Preview">\varphi_2</span><script type="math/tex">\varphi_2</script></span>, a rotation along <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> of <span><span class="MathJax_Preview">\phi</span><script type="math/tex">\phi</script></span> and a rotation along <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> of <span><span class="MathJax_Preview">\varphi_1</span><script type="math/tex">\varphi_1</script></span>, i.e. <sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">4</a></sup>: </p>
+<p>$$
+R=R_z(\varphi_1)R_x(\phi)R_z(\varphi_2)
+$$
+where <span><span class="MathJax_Preview">R_z(a)</span><script type="math/tex">R_z(a)</script></span> and <span><span class="MathJax_Preview">R_x(a)</span><script type="math/tex">R_x(a)</script></span> are the rotation matrices along <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> and <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> axis of an angle <span><span class="MathJax_Preview">a</span><script type="math/tex">a</script></span>.
+Inversely, knowing the rotation matrix, the Euler angles can be determined: 
+$$
+\varphi_1 = \arctan(R_{02}/R_{12}), \phi = \arccos(R_{22}), \varphi_2 = \arctan(R_{20}/R_{21})
+$$
+However, when <span><span class="MathJax_Preview">\phi=0 (\pi)</span><script type="math/tex">\phi=0 (\pi)</script></span>, the angles <span><span class="MathJax_Preview">\varphi_2</span><script type="math/tex">\varphi_2</script></span> and <span><span class="MathJax_Preview">\varphi_1</span><script type="math/tex">\varphi_1</script></span> are not defined independently, i.e. because they share a common rotation axis. This phenomena is known as <em>gimbal lock</em>  and can be resolved by setting <span><span class="MathJax_Preview">\phi = 0</span><script type="math/tex">\phi = 0</script></span>, <span><span class="MathJax_Preview">\varphi_1 = 0</span><script type="math/tex">\varphi_1 = 0</script></span> and <span><span class="MathJax_Preview">\varphi_2 = \arctan(R_{10}/R_{00})</span><script type="math/tex">\varphi_2 = \arctan(R_{10}/R_{00})</script></span></p>
+</div>
+<h2 id="coordinate-systems">Coordinate systems<a class="headerlink" href="#coordinate-systems" title="Permanent link">&para;</a></h2>
+<p>Coordinate system of the sample is given by the axes <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> as shown in the figure below. The <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis corresponds to the primary tilt axis called <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis. The <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> direction corresponds to the secondary tilt axis called <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>-tilt axis for a double tilt sample holder. The <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> direction is anti-parallel with the electron beam. It corresponds to the rotation axis for a tilt-rotation sample holder. By default, the rotation angles are taken positive in the clockwise sense, i.e. right handed.</p>
+<p><img alt="" src="../images/coordinate.png" /></p>
+<p>The sample, and then the crystal, can be rotated around the tilt axes. Rotation steps are 5° by default. The value of rotation angle are indicated. The sense of rotation can be changed by ticking the <code>AC</code> (anti-clockwise) box. </p>
+<p><img alt="" src="../images/rotation.png" /></p>
+<p>The <code>Reset</code> button allows to reset the values displayed.</p>
+<p>When the <code>Lock Axes</code> box is checked, the <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> and <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> axes are now fixed with the sample, in order to mimic the behavior of double tilt and tilt-rotation holder.</p>
+<div class="admonition info">
+<p class="admonition-title">Rotation in double tilt </p>
+<p>When the axes are fixed in the microscope frame <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span>, the rotation order matters. However when the <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> axis is fixed in the sample frame and <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> fixed in the microscope frame, the two operations are commutative. In terms of rotation matrices, we have: </p>
+<div>
+<div class="MathJax_Preview">
+R_y(\alpha)R_x(\beta)=R_u(\beta)R_y(\alpha) \\
+u=R_y(\alpha)  [1,0,0]~^T
+</div>
+<script type="math/tex; mode=display">
+R_y(\alpha)R_x(\beta)=R_u(\beta)R_y(\alpha) \\
+u=R_y(\alpha)  [1,0,0]~^T
+</script>
+</div>
+<p>Same conclusions hold for tilt-rotation holder.</p>
+<p><img alt="" src="../images/doubletilt.png" /></p>
+<blockquote>
+<p>Top: rotation with fixed rotation axes, Bottom: rotation with a fixed <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> tilt and moving <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> tilt. Red and blue paths represent a switch in the tilt order.</p>
+</blockquote>
+</div>
+<p>Crystallographic feature analyses are carried out in a TEM using both diffraction and image mode. When the electrons passing through the specimen are focused in the back focal plane of the objective lens, they form a diffraction pattern which can be magnified in the projection plane where the pattern is recorded. Conversely, an image is formed in the first image plane of the objective lens, which can also be magnified in the projected lens. To switch from image to diffraction mode, the power of the objective lens has to be modified which induces an image rotation. To enlarge the pattern or the image, the effect of intermediate and projection lenses may also introduce rotations.
+For this reason, the holder coordinate system does not correspond to the coordinate system as viewed in the recorded image or diffraction patterns. Users need thus to determine the relation between the two.</p>
+<p><img alt="" src="../images/rotation-image-diff.png" /></p>
+<p>In image mode, the position of the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis with respect to the <span><span class="MathJax_Preview">Y</span><script type="math/tex">Y</script></span> axis, represented by an angle <span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span>, can be determined by pushing or pulling on the holder and recording the motion of features on the image.</p>
+<p>In diffraction mode, the position of the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis with respect to the <span><span class="MathJax_Preview">Y</span><script type="math/tex">Y</script></span> axis, represented by an angle <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span>, can be determined by rotating the crystal and recording the displacement of the Kikuchi bands, which will be perpendicular to the rotation axis.</p>
+<div class="admonition info">
+<p class="admonition-title">180° rotation</p>
+<p>Because images and diffraction patterns are naturally inverted because of the objective lens, there usually exists a 180° rotation between image and diffraction modes. In some cases, this extra rotation needs to be taken into account, i.e. when we care about <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> or <span><span class="MathJax_Preview">(\bar{h},\bar{k},\bar{l})</span><script type="math/tex">(\bar{h},\bar{k},\bar{l})</script></span>. This can be solved by inspecting the sense of displacement of the Kikuchi lines with respect to the tilt angle, or by inspecting how the image is inverted or not in diffraction mode, compared to image mode, when under or over-focusing the diffraction lens.</p>
+</div>
+<p>Because it is easier to navigate in the stereographic projection when knowing either the angle <span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span>, in reciprocal space or <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> in direct space, the rotation angle in image and diffraction mode can be indicated in the <code>diff alpha/y-angle</code> and <code>image alpha/y angle</code> fields. Tick the <code>img/diff</code> box to switch to image mode. When the view is updated, the tilting axes (and Wulff net) are rotated accordingly along the <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> axis as illustrated in the picture below. </p>
+<p><img alt="" src="../images/rotation-image-diff2.png" /></p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Note that the Euler angles are always defined in the <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> holder coordinates. However, rotation along the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> and <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> axes will now be updated.</p>
+</div>
+<h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
+<p>The interface is composed of a top menu bar, the plotting area and the plotting panel. Zoom and pan are available in the plotting area. Click on the <code>update/reset view</code> button to restore the full view.</p>
+<p><img alt="" src="../images/stereo_interface.png" /></p>
+<h2 id="plotting-procedure">Plotting procedure<a class="headerlink" href="#plotting-procedure" title="Permanent link">&para;</a></h2>
+<h3 id="setting-up-the-crystal">Setting up the crystal<a class="headerlink" href="#setting-up-the-crystal" title="Permanent link">&para;</a></h3>
+<p>Stereographic projection reflects the symmetry of a given lattice system which depends on the lattice parameters <span><span class="MathJax_Preview">a,b,c</span><script type="math/tex">a,b,c</script></span> and the angles <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> and <span><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> of the cell.  <span><span class="MathJax_Preview">a,b,c</span><script type="math/tex">a,b,c</script></span> and <span><span class="MathJax_Preview">\alpha, \beta, \gamma</span><script type="math/tex">\alpha, \beta, \gamma</script></span> can be set up in the <strong>Crystal parameters</strong>.</p>
+<p><img alt="" src="../images/system.png" /></p>
+<div class="admonition info crystal metric">
+<p class="admonition-title">Info</p>
+<p>A crystal direction expressed by their Miller indices are related to Cartesian coordinates, in the crystal frame, by:</p>
+<div>
+<div class="MathJax_Preview"> 
+\begin{bmatrix}x\\ y \\ z \end{bmatrix}=D \begin{bmatrix}u \\ v \\ w \end{bmatrix}
+</div>
+<script type="math/tex; mode=display"> 
+\begin{bmatrix}x\\ y \\ z \end{bmatrix}=D \begin{bmatrix}u \\ v \\ w \end{bmatrix}
+</script>
+</div>
+<p>with</p>
+<div>
+<div class="MathJax_Preview">
+D=
+\begin{pmatrix} 
+a &amp; b \cos \gamma &amp; c \cos \beta \\ 
+0 &amp; b \sin \gamma &amp;  c (\cos \alpha - \cos \beta  \cos \gamma)/ \sin \gamma\\ 
+0 &amp; 0 &amp; V/(a b \sin \gamma) 
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+D=
+\begin{pmatrix} 
+a & b \cos \gamma & c \cos \beta \\ 
+0 & b \sin \gamma &  c (\cos \alpha - \cos \beta  \cos \gamma)/ \sin \gamma\\ 
+0 & 0 & V/(a b \sin \gamma) 
+\end{pmatrix}
+</script>
+</div>
+<p><span><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span> being the crystal volume <span><span class="MathJax_Preview">V = a b c \sqrt {1 - \cos^2\alpha - \cos^2 \beta - \cos^2 \gamma + 2 \cos \alpha \cos \beta \cos \gamma }</span><script type="math/tex">V = a b c \sqrt {1 - \cos^2\alpha - \cos^2 \beta - \cos^2 \gamma + 2 \cos \alpha \cos \beta \cos \gamma }</script></span></p>
+<p>Inversely in the reciprocal space, poles, i.e. normal to planes are related by:</p>
+<div>
+<div class="MathJax_Preview"> 
+\begin{pmatrix}x\\ y \\ z \end{pmatrix}=D^\ast \begin{pmatrix}h \\ k \\ l \end{pmatrix}
+</div>
+<script type="math/tex; mode=display"> 
+\begin{pmatrix}x\\ y \\ z \end{pmatrix}=D^\ast \begin{pmatrix}h \\ k \\ l \end{pmatrix}
+</script>
+</div>
+<p>with <span><span class="MathJax_Preview">D^\ast= (D^{-1}) ~^T</span><script type="math/tex">D^\ast= (D^{-1}) ~^T</script></span>.</p>
+<p>The metric of the crystal <span><span class="MathJax_Preview">G</span><script type="math/tex">G</script></span> allows to measure distance in direct and reciprocal space. The inter-reticular spacing for a plane <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> for instance is given by: </p>
+<div>
+<div class="MathJax_Preview">
+d_{hkl}=\frac{1}{d^\ast_{hkl}}=\frac{1}{\sqrt{(h \ k \ l)G^\star (h \ k \ l)~^T}}
+</div>
+<script type="math/tex; mode=display">
+d_{hkl}=\frac{1}{d^\ast_{hkl}}=\frac{1}{\sqrt{(h \ k \ l)G^\star (h \ k \ l)~^T}}
+</script>
+</div>
+<p>with </p>
+<div>
+<div class="MathJax_Preview"> 
+G^\ast=D^\ast~^T D^\ast
+</div>
+<script type="math/tex; mode=display"> 
+G^\ast=D^\ast~^T D^\ast
+</script>
+</div>
+</div>
+<p>Change the number of pole/direction drawn by increasing or decreasing the value of <code>d</code> (choose an increment) and/or by changing the <code>maximum indices</code>.</p>
+<p><img alt="" src="../images/stereo-crystal.png" /></p>
+<p>Crystal structure can be imported from the <code>structure</code> menu. This menu can be populated by adding structures in the <code>structure.txt</code> files following the template:</p>
+<div class="codehilite"><pre><span></span>Name a(A) b(A) c(A) alpha beta gamma space group
+</pre></div>
+
+<p>The space group is defined in the <code>space_group.txt</code> file following the scheme:</p>
+<div class="codehilite"><pre><span></span>Name
+Atom name1 x1 y1 z1
+Atom name1 x2 y2 z2
+...
+Atom name2 x3 y3 z3
+</pre></div>
+
+<p>Additionally, atoms need to be defined in the <code>scattering.txt</code> file (see <a href="../diffraction/">diffraction</a> for more details).</p>
+<p>From diffraction, crystals with different space groups (even with the same lattice system) present diffraction vectors, i.e. in the reciprocal space, with different intensities. Filling the space group field and ticking the <code>reciprocal indices</code> box will allow to plot poles with sizes proportional to their intensity (see the <a href="../diffraction/">diffraction</a> page for more details).</p>
+<p><img alt="" src="../images/reciproc.png" /></p>
+<blockquote>
+<p>Example for a TiAl crystal</p>
+</blockquote>
+<h3 id="from-euler-angles">From Euler angles<a class="headerlink" href="#from-euler-angles" title="Permanent link">&para;</a></h3>
+<p>Stereographic projections can be drawn from the 3 Euler angles. The angles can be read at all time after rotation operations. Tilt and inclination angles can be read from the mouse position on  the Wulff net.</p>
+<p><img alt="" src="../images/euler_box.png" /></p>
+<h3 id="from-a-diffraction-vector">From a diffraction vector<a class="headerlink" href="#from-a-diffraction-vector" title="Permanent link">&para;</a></h3>
+<p>The orientation can be alternatively set the following way: </p>
+<ol>
+<li>
+<p>choose a diffraction vector <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> (see <a href="../diffraction/">diffraction</a> to determine it)</p>
+</li>
+<li>
+<p>set its inclination <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and tilt angles <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> (comma separated)</p>
+</li>
+<li>
+<p>adjust a second diffraction vector by rotating around the first vector</p>
+</li>
+</ol>
+<p><img alt="" src="../images/stereo-diff.png" /></p>
+<div class="admonition info">
+<p class="admonition-title">Multiple tilting axes</p>
+<p>When considering a diffraction vector obtained after double tilt (<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> and <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>) or after tilt-rotation (<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span>), the diffraction vector should be placed on the stereographic projection taking into account the fact that the <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> (or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span>) -tilt axis moves with the holder while <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt is fixed.
+For instance, if the <span><span class="MathJax_Preview">(1,1,1)</span><script type="math/tex">(1,1,1)</script></span> diffraction vector is recorded at <span><span class="MathJax_Preview">(\alpha,\beta,\theta)=(10,-20,0)</span><script type="math/tex">(\alpha,\beta,\theta)=(10,-20,0)</script></span> with an inclination of <span><span class="MathJax_Preview">\eta=40</span><script type="math/tex">\eta=40</script></span>, the diffraction is placed such that after rotating first by <span><span class="MathJax_Preview">\beta=-20</span><script type="math/tex">\beta=-20</script></span> and second by <span><span class="MathJax_Preview">\alpha=10</span><script type="math/tex">\alpha=10</script></span> it forms an angle <span><span class="MathJax_Preview">\eta=40</span><script type="math/tex">\eta=40</script></span> with the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> direction on the diffraction pattern (owing that there is no rotation between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> tilt axis and the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> direction). This means that in the sample frame, the diffraction vector coordinates are, starting from <span><span class="MathJax_Preview">[0,1,0]</span><script type="math/tex">[0,1,0]</script></span>, in the direction <span><span class="MathJax_Preview">[x,y,z]</span><script type="math/tex">[x,y,z]</script></span>, given by: a rotation of <span><span class="MathJax_Preview">-\eta</span><script type="math/tex">-\eta</script></span> then a rotation of <span><span class="MathJax_Preview">-\alpha</span><script type="math/tex">-\alpha</script></span> and finally a rotation of <span><span class="MathJax_Preview">-\beta</span><script type="math/tex">-\beta</script></span>:</p>
+<div>
+<div class="MathJax_Preview">
+[x,y,z]^T=R_x(-\beta)R_y(-\alpha)R_z(-\eta)[0,1,0]^T
+</div>
+<script type="math/tex; mode=display">
+[x,y,z]^T=R_x(-\beta)R_y(-\alpha)R_z(-\eta)[0,1,0]^T
+</script>
+</div>
+<p><img alt="" src="../images/double-tilt-rot.png" /></p>
+</div>
+<h3 id="plotting-poleplanes">Plotting pole/planes<a class="headerlink" href="#plotting-poleplanes" title="Permanent link">&para;</a></h3>
+<p>Poles (or directions) can be additionally plotted. <code>Add</code> a pole or all the symmetric ones by pressing <code>Symmetry</code> after entering the indices comma separated. A <code>Plane</code> or all their symmetric,<code>Sym Plane</code> can be drawn.
+A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
+<p><img alt="" src="../images/plot_planes.png" /></p>
+<p>Iso-schmid factor lines can be plotted by specifying the plane in the pole/plane field and by pressing the <code>Schmid</code> button. The straining axis is here parallel to the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis. Further explanation will be given
+<a href="./#schmid-factor">here</a></p>
+<p><img alt="" src="../images/iso-schmid.png" /></p>
+<p>Finally inter-reticular distances are given by entering a plane normal on the pole/plane field and by pressing <code>dhkl</code> button. The value appears in a field near the button.</p>
+<h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
+<p>Several layout options have been already discussed. Additional ones are presented here. </p>
+<ul>
+<li>
+<p>Colors can be set for poles or planes plotted.  </p>
+</li>
+<li>
+<p>Open symbols can be drawn by ticking the <code>open/filled</code> box (default are filled symbols)</p>
+</li>
+<li>
+<p>Wulff net can be drawn if the <code>Wulff net</code> box is ticked</p>
+</li>
+<li>
+<p>Marker size and text size can be indicated in the corresponding fields</p>
+</li>
+<li>
+<p><span><span class="MathJax_Preview">[uvw]</span><script type="math/tex">[uvw]</script></span> can be displayed by ticking the <code>uvw</code> box and replotting.</p>
+</li>
+</ul>
+<p><img alt="" src="../images/layout.png" /></p>
+<p>For hexagonal structure, the <code>hexa</code> box can be selected to let the 4 indices notations.</p>
+<div class="admonition info">
+<p class="admonition-title">Hexagonal structure and notation</p>
+<p>For hexagonal structure it is more convenient to represent directions or planes using a basis with 4 integer indices than using the conventional cartesian basis. This basis is composed of the 3 vectors <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> separated by 120° angles and the <span><span class="MathJax_Preview">\vec{c}</span><script type="math/tex">\vec{c}</script></span> perpendicular to the <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> vectors. Hence any directions is given by <span><span class="MathJax_Preview">[uvtw]</span><script type="math/tex">[uvtw]</script></span> with <span><span class="MathJax_Preview">t=-u-v</span><script type="math/tex">t=-u-v</script></span>. In the reciprocal space, a plane is represented by <span><span class="MathJax_Preview">(hkil)</span><script type="math/tex">(hkil)</script></span> with <span><span class="MathJax_Preview">i=-h-k</span><script type="math/tex">i=-h-k</script></span>.</p>
+<p>Transforming indices from the 3 <span><span class="MathJax_Preview">(HKL)</span><script type="math/tex">(HKL)</script></span> indices to 4 (hkil) indices is straightforward for planes as <span><span class="MathJax_Preview">H=h</span><script type="math/tex">H=h</script></span>, <span><span class="MathJax_Preview">K=k</span><script type="math/tex">K=k</script></span>, <span><span class="MathJax_Preview">L=l</span><script type="math/tex">L=l</script></span>. For directions, <span><span class="MathJax_Preview">[UVW]</span><script type="math/tex">[UVW]</script></span> we have the relationships, <span><span class="MathJax_Preview">U=2u+v</span><script type="math/tex">U=2u+v</script></span>, <span><span class="MathJax_Preview">V=2v+u</span><script type="math/tex">V=2v+u</script></span> and <span><span class="MathJax_Preview">W=w</span><script type="math/tex">W=w</script></span> or <span><span class="MathJax_Preview">u=1/3(2U-V)</span><script type="math/tex">u=1/3(2U-V)</script></span>, <span><span class="MathJax_Preview">v=1/3(2V-U)</span><script type="math/tex">v=1/3(2V-U)</script></span> and <span><span class="MathJax_Preview">w=W</span><script type="math/tex">w=W</script></span>.</p>
+<p>Note that with the four indices notations, directions are perpendicular to plane normals (i.e. contain in a plane) if <span><span class="MathJax_Preview">(hkil)\cdot[uvtw]=0</span><script type="math/tex">(hkil)\cdot[uvtw]=0</script></span> as shown for instance below</p>
+<p>Note that for Euler angles convention, <span><span class="MathJax_Preview">\langle a \rangle</span><script type="math/tex">\langle a \rangle</script></span> is parallel to <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> and <span><span class="MathJax_Preview">\langle c \rangle</span><script type="math/tex">\langle c \rangle</script></span> is parallel to <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> at <span><span class="MathJax_Preview">(0,0,0)</span><script type="math/tex">(0,0,0)</script></span>.</p>
+<p><img alt="" src="../images/hexa.png" /></p>
+</div>
+<p>Except <code>uvw</code> and colors, the above features can be updated by clicking the <code>Update/Reset view</code> button.</p>
+<div class="admonition info">
+<p class="admonition-title">click a pole/directions</p>
+<p>By right clicking on the stereographic projection, poles or directions (if <code>uvw</code> is ticked) will be displayed. Make <code>Ctrl+z</code> to remove the last click</p>
+</div>
+<h2 id="additional-features">Additional features<a class="headerlink" href="#additional-features" title="Permanent link">&para;</a></h2>
+<p>They are accessible from the menu bar.</p>
+<h3 id="save">Save<a class="headerlink" href="#save" title="Permanent link">&para;</a></h3>
+<p>Stereographic plots can be saved as image with <code>png</code> format.</p>
+<h3 id="angle">Angle<a class="headerlink" href="#angle" title="Permanent link">&para;</a></h3>
+<p>Angles between two poles (or two directions if the <code>uvw</code> button is ticked) can be computed by entering them in the field <code>n1</code> and <code>n2</code> (comma separated). The result appears after pressing <code>OK</code>.  <code>Cancel</code> to quit.</p>
+<p><img alt="" src="../images/angle.png" /></p>
+<h3 id="schmid-factor">Schmid factor<a class="headerlink" href="#schmid-factor" title="Permanent link">&para;</a></h3>
+<p>Schmid factors can be computed by entering both <span><span class="MathJax_Preview">\vec{b}</span><script type="math/tex">\vec{b}</script></span> (as a direction), plane normal <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> and straining axis <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span>. <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span> should be expressed in the holder coordinates before the <code>alpha-tilt/y angle</code> applies.</p>
+<p><img alt="" src="../images/SF.png" /></p>
+<p>After pressing <code>OK</code>, the Schmid factor appear below the the <span><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> field. In the box below appear all possible slip systems <code>n</code>, <code>b</code>, with their Schmid factor values <code>s</code>.</p>
+<div class="admonition info">
+<p class="admonition-title"> Schimd factor</p>
+<p>For a crystal strained along a tensile axis <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span> with a stress <span><span class="MathJax_Preview">\sigma</span><script type="math/tex">\sigma</script></span>, dislocation slip on plane <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with the Burgers vector <span><span class="MathJax_Preview">\vec{b}</span><script type="math/tex">\vec{b}</script></span> will appear if the resolved shear stress on the plane rises a critical value, i.e.
+$$
+ \tau_c=\sigma \cos {(\vec{n},\vec{T})} \cos{(\vec{b},\vec{T})}
+$$
+Thus, the most favored slip system should be the one with the highest Schmid factor i.e., <span><span class="MathJax_Preview">m=\cos{(\vec{n},\vec{T})} \cos{(\vec{b},\vec{T})}</span><script type="math/tex">m=\cos{(\vec{n},\vec{T})} \cos{(\vec{b},\vec{T})}</script></span>. For dislocation glide, <span><span class="MathJax_Preview">m</span><script type="math/tex">m</script></span> should range between 0 and 0.5 </p>
+</div>
+<h3 id="xyz-directions">xyz directions<a class="headerlink" href="#xyz-directions" title="Permanent link">&para;</a></h3>
+<p><span><span class="MathJax_Preview">x,y,z</span><script type="math/tex">x,y,z</script></span> directions can be determined in the <code>calculate xyz directions</code> menu. Simply press <code>update</code>. The values indicated correspond to poles (i.e. in reciprocal space). Copy, paste in the <code>pole/plane</code> field and <code>Add</code> to plot. To get directions, use the <code>hkl&lt;&gt;uvw</code> menu. Press <code>To uvw</code> or <code>To hkl</code> to make the conversion. Then, copy and paste the result in the same way except <code>uvw</code> box need to be ticked.</p>
+<p><img alt="" src="../images/xyz.png" /></p>
+<h3 id="list">List<a class="headerlink" href="#list" title="Permanent link">&para;</a></h3>
+<p>A list of plotted poles/directions can be  displayed using the <code>show list poles/directions</code> menu. When the <code>Update list</code> button is pressed the list is printed in a table showing in columns:</p>
+<ul>
+<li>
+<p>indices</p>
+</li>
+<li>
+<p>a sign <code>o</code> for plotted or <code>x</code> for hidden</p>
+</li>
+<li>
+<p><code>hkl</code> for a pole and <code>uvw</code> for a direction </p>
+</li>
+</ul>
+<p>Poles/directions can be hidden or shown by selecting the corresponding rows and by clicking on <code>Add/Remove selected</code> button. Then the signs <code>o</code> or <code>x</code> change.</p>
+<p>If the list is updated, then the hidden poles/directions are deleted.</p>
+<p>An easier navigation in the crystal space can be achieved by determining the tilt sequence to reach either a given two beam condition or a zone axis. The angles are indicated in the last table column when pressing the <code>Compute tilt</code> button.</p>
+<p>If the <code>ZA</code> (zone axis) button is ticked, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt and either <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> tilt or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt needed to reach the corresponding zone axis are computed. The corresponding <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt button needs to be selected.</p>
+<p>If the <code>ZA</code> button is not selected, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> tilt angle needed to have a given pole/direction perpendicular to the electron beam (may correspond to a 2 beam condition) can be computed for a given <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angle.</p>
+<p><img alt="" src="../images/stereo-list.png" /></p>
+<h3 id="width">Width<a class="headerlink" href="#width" title="Permanent link">&para;</a></h3>
+<p>Using <code>calculate apparent width</code> menu allows to plot the apparent width and apparent trace directions of an interface, when the sample is tilted along the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis from -40° to 40°. More precision on the method will be given in <a href="../interface/">interface</a>.</p>
+<p>First, indicate the <code>plane</code>. The foil surface may be indicated if the box right to the box is ticked. The sample <code>thickness</code> may be indicated in  nm if the box is checked . If not, the apparent width is normalized by the interface width <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. The <code>trace dir.</code> can be plotted if the box is checked with a blue overlay. Note that if several plots are made, which can be sometimes convenient, they will  be superimposed. To erase the plots, click the <code>clear</code> button.</p>
+<p><img alt="" src="../images/width.png" /></p>
+<h3 id="intersections">Intersections<a class="headerlink" href="#intersections" title="Permanent link">&para;</a></h3>
+<p>Several intersections can be calculated through the <code>calculate intersections</code> menu.
+In the different cases results will appear by pressing <code>OK</code>. Results shown correspond to poles except if the <code>directions</code> box is ticked.</p>
+<ul>
+<li>
+<p>intersections between two planes <code>n1</code> and <code>n2</code>.</p>
+</li>
+<li>
+<p>intersections between a plane <code>n1</code> and the direction in the <span><span class="MathJax_Preview">(x,y)</span><script type="math/tex">(x,y)</script></span> plane making a given angle with the <span><span class="MathJax_Preview">Oy</span><script type="math/tex">Oy</script></span> direction indicated by an <code>angle</code> (°).</p>
+</li>
+<li>
+<p>intersections between a plane <code>n1</code> and a cone <code>c</code> of a given angle aperture indicated by the <code>inclination angle</code> (°). If no solution, <code>nan</code> will appear.</p>
+</li>
+</ul>
+<p><img alt="" src="../images/inter.png" /></p>
+<h3 id="diffraction">Diffraction<a class="headerlink" href="#diffraction" title="Permanent link">&para;</a></h3>
+<p>The <code>plot Kikuchi lines and diffraction pattern</code> menu allows simple diffraction features drawing. They can be accessed through the button <code>Diffraction</code> or <code>Kikuchi</code>, after setting a crystal and an orientation (see above).</p>
+<h4 id="diffraction-pattern">Diffraction pattern<a class="headerlink" href="#diffraction-pattern" title="Permanent link">&para;</a></h4>
+<p>The following parameters are needed:</p>
+<ul>
+<li>
+<p>Acceleration voltage: <code>E(kv)</code></p>
+</li>
+<li>
+<p><code>Aperture angle</code> determining the extension in (°) viewed in the reciprocal space</p>
+</li>
+<li>
+<p><code>Max indices</code> determining the extension of the reciprocal space calculated</p>
+</li>
+<li>
+<p><code>Spot size</code> (arb. units) determining a scaling factor in the intensity</p>
+</li>
+<li>
+<p><code>Thckness</code> is the sample thickness in nm</p>
+</li>
+<li>
+<p><code>Excitation error</code> in 1/nm</p>
+</li>
+</ul>
+<p>Click on <code>Diff calc.</code> button to compute the intensity of every reflexion (see <a href="../diffraction/">diffraction</a> for more details)</p>
+<p>Click then on <code>OK</code> button to draw the diffraction pattern. Update the drawing by clicking <code>OK</code> if the orientation is changed.</p>
+<p>Tick the <code>label</code> box to show indices (for hexagonal crystal, 3 indices are used).</p>
+<div class="admonition info">
+<p class="admonition-title">Diffraction pattern simulation</p>
+<p>When an incoming electron wave of wavelength <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span> and a wave vector <span><span class="MathJax_Preview">\vec{k}</span><script type="math/tex">\vec{k}</script></span> hits a crystal plane, it will be elastically diffracted in a direction given by the wave vector <span><span class="MathJax_Preview">\vec{k}_g</span><script type="math/tex">\vec{k}_g</script></span>, with the relation:
+$$
+\vec{k}_g=\vec{k}+\vec{g}
+$$
+or equivalently
+$$
+2d\sin{\theta_B}=\lambda
+$$
+where <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> is the Bragg angle and <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> the interplanar distance defined by the <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span> vector. </p>
+<p>When the crystal is tilted away from the Bragg condition, diffraction ceases but not abruptly. To determine the decrease of the intensity, we need to define the vector <span><span class="MathJax_Preview">\vec{s}</span><script type="math/tex">\vec{s}</script></span> which norm is called the excitation error, as shown below.</p>
+<p><img alt="" src="../images/bragg.png" /></p>
+<p>Kinematical calculations show that:</p>
+<div>
+<div class="MathJax_Preview">
+I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
+</div>
+<script type="math/tex; mode=display">
+I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
+</script>
+</div>
+<p>where <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> is the crystal thickness, <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> the extinction distance, which indicates how the diffracted electron wave oscillates through the crystal, and the <span><span class="MathJax_Preview">s_e= \sqrt{(s^2 + 1/\xi^2)}</span><script type="math/tex">s_e= \sqrt{(s^2 + 1/\xi^2)}</script></span> the effective excitation error.   </p>
+<p>For a given orientation, the excitation error <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> can be computed for every possible diffraction vectors, and then their corresponding intensity.</p>
+</div>
+<p><img alt="" src="../images/diffraction.png" /></p>
+<h4 id="kikuchi-lines">Kikuchi lines<a class="headerlink" href="#kikuchi-lines" title="Permanent link">&para;</a></h4>
+<p>Kikuchi lines results from inelastic scattering in the sample and will be more discussed in the <a href="../kikuchi/">Kikuchi section</a>. They can be plotted by selecting <code>Kikuchi</code> button.</p>
+<p>The following parameters are needed:</p>
+<ul>
+<li>
+<p>Acceleration voltage: <code>E(kv)</code></p>
+</li>
+<li>
+<p><code>Aperture angle</code> determining the extension in (°) viewed in the reciprocal space</p>
+</li>
+<li>
+<p><code>Max indices</code> determining the number of bands calculated</p>
+</li>
+</ul>
+<p>Click on <code>Diff calc.</code> button to compute the intensity of the band.</p>
+<p>Click then on <code>OK</code> button to draw the Kikuchi pattern. Update the drawing by clicking <code>OK</code> if the orientation is changed.</p>
+<p>Change the <code>Aperture angle</code> to view a larger pattern.</p>
+<p>Tick the <code>label</code> box to show indices (for hexagonal crystal, 3 indices are used).</p>
+<div class="admonition info">
+<p class="admonition-title">Kikuchi band formation</p>
+<p>When inelastically scattered electrons are in Bragg condition, they will diffract, but because they can come from directions, they will be scattered in a cone around <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span>. As there are two diffraction directions (<span><span class="MathJax_Preview">\pm \vec{g}</span><script type="math/tex">\pm \vec{g}</script></span>), two cones will form, one being brighter and the other darker than the background. When hitting the observation screen, they will form pairs of lines which separation width is proportional to the inter-planar distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. Their projection is called gnomomic, i.e. a point of coordinate <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> will become <span><span class="MathJax_Preview">(X,Y)</span><script type="math/tex">(X,Y)</script></span> with <span><span class="MathJax_Preview">X = x/z</span><script type="math/tex">X = x/z</script></span> and <span><span class="MathJax_Preview">Y = y / z</span><script type="math/tex">Y = y / z</script></span>.</p>
+<p>Here, to mimic the kinematical approximation, the line widths are proportional to the intensity of the corresponding diffraction vector and the intensity difference between the lines are not taken into account.</p>
+</div>
+<p><img alt="" src="../images/kikuchi.png" /></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:ang">
+<p>In the reference frame, the vector <span><span class="MathJax_Preview">(0,1,0)</span><script type="math/tex">(0,1,0)</script></span> is first rotated along <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> by an angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and then along <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> by an angle <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, the rotation axes being fixed. The definition proposed here differs from the usual spherical coordinates that refers on azimuthal and elevation angles.&#160;<a class="footnote-backref" href="#fnref:ang" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:ang2">
+<p>These names usually refers in geography  to lines of given longitude and latitude connecting north and south poles. Here the lines connect east and west poles of the sphere.&#160;<a class="footnote-backref" href="#fnref:ang2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:ang3">
+<p>As meridians pass by two poles, they correspond to full circles on the sphere. Contrary parallels (except the equator) correspond to smaller circles on the sphere. Meridians result then from the intersection of planes with the sphere and parallels from the intersection of cones of given aperture.&#160;<a class="footnote-backref" href="#fnref:ang3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:1">
+<p>We consider active rotations and rotation matrix acting by pre-multiplying column vectors.&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/envelope.png"  ></A>
+          </div>
+        
+        powered by
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

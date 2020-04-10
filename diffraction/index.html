@@ -1,0 +1,931 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Diffraction - pycotem</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#7e57c2">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap:300,400,400i,700|&display=fallback">
+        <style>body,input{font-family:"Asap","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#introduction" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="pycotem" class="md-header-nav__button md-logo">
+          
+            <img src="../images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                pycotem
+              </span>
+              <span class="md-header-nav__topic">
+                Diffraction
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../images/logo.png" width="26" height="51">
+      
+    </span>
+   
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/mompiou/pycotem/" title="Go to repository" class="md-source" >
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      mompiou/pycotem
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+<!--    -->
+<!--    -->
+<!--      <label class="md-nav__link md-nav__link--active" for="__toc">-->
+<!--        Diffraction-->
+<!--      </label>-->
+<!--    -->
+    <a href="./" title="Diffraction" class="md-nav__link md-nav__link--active">
+      Diffraction
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diffraction-pattern-in-tem" title="Diffraction pattern in TEM" class="md-nav__link">
+    Diffraction pattern in TEM
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calibration-and-operating-conditions" title="Calibration and operating conditions" class="md-nav__link">
+    Calibration and operating conditions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-a-diffraction-pattern" title="Indexing a diffraction pattern" class="md-nav__link">
+    Indexing a diffraction pattern
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procedure" title="Procedure" class="md-nav__link">
+    Procedure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orientation-from-a-set-of-diffraction-vectors" title="Orientation from a set of diffraction vectors" class="md-nav__link">
+    Orientation from a set of diffraction vectors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spectrum" title="Spectrum" class="md-nav__link">
+    Spectrum
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../kikuchi/" title="Kikuchi" class="md-nav__link">
+      Kikuchi
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../stereoproj/" title="StereoProj" class="md-nav__link">
+      StereoProj
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../interface/" title="Interface" class="md-nav__link">
+      Interface
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../misorientation/" title="Misorientation" class="md-nav__link">
+      Misorientation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../crystal/" title="Crystal" class="md-nav__link">
+      Crystal
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ressources/" title="Further ressources" class="md-nav__link">
+      Further ressources
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../contribute/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diffraction-pattern-in-tem" title="Diffraction pattern in TEM" class="md-nav__link">
+    Diffraction pattern in TEM
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calibration-and-operating-conditions" title="Calibration and operating conditions" class="md-nav__link">
+    Calibration and operating conditions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface" title="Interface" class="md-nav__link">
+    Interface
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-a-diffraction-pattern" title="Indexing a diffraction pattern" class="md-nav__link">
+    Indexing a diffraction pattern
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procedure" title="Procedure" class="md-nav__link">
+    Procedure
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orientation-from-a-set-of-diffraction-vectors" title="Orientation from a set of diffraction vectors" class="md-nav__link">
+    Orientation from a set of diffraction vectors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spectrum" title="Spectrum" class="md-nav__link">
+    Spectrum
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/mompiou/pycotem/tree/master/doc/docs/diffraction.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Diffraction</h1>
+                
+                <p><code>diffraction</code> allows to determine orientation from a set of diffraction patterns.</p>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>Determining orientation from diffraction patterns requires to collect and identify a set of diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>.
+When using this approach, we assume that the diffraction vector is in Bragg condition, which is fulfill at least in a two beam orientation. This often needs to tilt the specimen. Alternatively we present in <a href="../kikuchi/">Kikuchi</a> a method based on Kikuchi lines.</p>
+<p>Consider an electronic wave scattered by a crystal plane <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> corresponding to a diffraction vector <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>. Its amplitude and phase is given by:</p>
+<div>
+<div class="MathJax_Preview">
+\Psi(\vec{q})=\sum_{j=1}^N f_j e^{- 2i\pi \vec{q}\cdot\vec{r}_j}
+</div>
+<script type="math/tex; mode=display">
+\Psi(\vec{q})=\sum_{j=1}^N f_j e^{- 2i\pi \vec{q}\cdot\vec{r}_j}
+</script>
+</div>
+<p>where the sum is made on all the atoms <span><span class="MathJax_Preview">j</span><script type="math/tex">j</script></span> placed at <span><span class="MathJax_Preview">\vec{r}_j</span><script type="math/tex">\vec{r}_j</script></span> in the unit cell.</p>
+<p>The intensity recorded is thus: </p>
+<div>
+<div class="MathJax_Preview">
+I(\vec{q})=\Psi(\vec{q})\Psi^\ast(\vec{q})
+</div>
+<script type="math/tex; mode=display">
+I(\vec{q})=\Psi(\vec{q})\Psi^\ast(\vec{q})
+</script>
+</div>
+<p>For a given crystal, the wave intensity will depend both on the <span><span class="MathJax_Preview">\vec{q}\cdot\vec{r}</span><script type="math/tex">\vec{q}\cdot\vec{r}</script></span> and on the atomic form factor <span><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span>. </p>
+<div class="admonition info">
+<p class="admonition-title">Systematic extinctions</p>
+<p>Extinctions for specific <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> diffracted planes are expected if:
+$$
+\sum_{j=1}^N e^{- 2i\pi (h \cdot x_j + k \cdot y_j  + l \cdot z_j)}=0
+$$
+For fcc cubic crystals, with atoms placed at <span><span class="MathJax_Preview">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</span><script type="math/tex">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity</p>
+</div>
+<p>The atomic form factor <span><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> corresponds to the amplitude of the wave diffracting on a single atom. In the range of scattering vectors between <span><span class="MathJax_Preview">0\leq q \leq 25 \mathring{A}^{-1}</span><script type="math/tex">0\leq q \leq 25 \mathring{A}^{-1}</script></span>, the atomic form factor can be approximated by a Gaussian decomposition:</p>
+<div>
+<div class="MathJax_Preview">
+f(q)=\sum _{i=1}^{4}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)+c 
+</div>
+<script type="math/tex; mode=display">
+f(q)=\sum _{i=1}^{4}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)+c 
+</script>
+</div>
+<p>where the values of <span><span class="MathJax_Preview">a_i</span><script type="math/tex">a_i</script></span>, <span><span class="MathJax_Preview">b_i</span><script type="math/tex">b_i</script></span>, and <span><span class="MathJax_Preview">c_i</span><script type="math/tex">c_i</script></span> can be found for every atoms for instance <a href="http://lampx.tugraz.at/~hadley/ss1/crystaldiffraction/atomicformfactors/formfactors.php">here</a> </p>
+<p>The position and the name of atoms are defined in the <code>space_group.txt</code> file following the scheme:</p>
+<div class="codehilite"><pre><span></span>Name
+Atom name1 x1 y1 z1
+Atom name1 x2 y2 z2
+...
+Atom name2 x3 y3 z3
+</pre></div>
+
+<p>The atomic factor is defined in the <code>scattering.txt</code> file according to the scheme:</p>
+<div class="codehilite"><pre><span></span>Atom name1 a1 b1 a2 b2 a3 b3 a4 b4 c
+...
+</pre></div>
+
+<h2 id="diffraction-pattern-in-tem">Diffraction pattern in TEM<a class="headerlink" href="#diffraction-pattern-in-tem" title="Permanent link">&para;</a></h2>
+<p>When a plane electronic wave is scattered by a crystal under a given orientation, a spot diffraction pattern is formed in the back focal plane of the objective lens. The spots correspond to different diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>, the intensity of the pattern depending both on the crystal lattice and its orientation (see <a href="../stereoproj/#diffraction">stereoproj</a>). In <code>diffraction</code>, we only use the structure factor as a guide to identify diffraction spots.  </p>
+<p>Thus, an electron wave traveling in the direction <span><span class="MathJax_Preview">-z</span><script type="math/tex">-z</script></span> will be diffracted by an angle <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> given by the Bragg law:</p>
+<div>
+<div class="MathJax_Preview">
+2d \sin{\theta} = n \lambda
+</div>
+<script type="math/tex; mode=display">
+2d \sin{\theta} = n \lambda
+</script>
+</div>
+<p><span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span> being the wavelength, <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> the inter-reticular spacing and <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> the diffraction order (corresponding to parallel diffraction vectors <span><span class="MathJax_Preview">n(h,k,l)</span><script type="math/tex">n(h,k,l)</script></span>).</p>
+<p>Diffracted spots will be located at a given distance <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> from the transmitted beam and at a given angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> from a fixed direction, chosen here as the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis.</p>
+<p><img alt="" src="../images/pattern.png" /></p>
+<p>The observed/recorded pattern will depend on:</p>
+<ul>
+<li>
+<p>the magnification due to intermediate and projection lenses. The distance <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> measured will thus depend on the value of <span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span> called the camera length, given by
+$$ 
+L=\frac{rd}{n\lambda}
+$$
+As a consequence, the pattern will depend on the acceleration voltage, through the wavelength.</p>
+</li>
+<li>
+<p>the rotation, by an angle <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span>, between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis which defines the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis in the holder reference frame, and the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis on the pattern. </p>
+</li>
+</ul>
+<h3 id="calibration-and-operating-conditions">Calibration and operating conditions<a class="headerlink" href="#calibration-and-operating-conditions" title="Permanent link">&para;</a></h3>
+<p>The diffraction pattern needs to be carefully calibrated on the microscope used. Use a crystal with known lattice parameters and record a diffraction pattern, ideally forming rows or a zone axis with a large value of <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>. For every camera length and acceleration voltage, measure <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> in pixels corresponding to <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> in angstrom.</p>
+<p>The calibration are set in the <code>calibration.txt</code> file following the scheme:</p>
+<div class="codehilite"><pre><span></span>Microscope_name voltage camera length binning r.d
+...
+</pre></div>
+
+<p>For <code>diffraction</code>,  only the value <span><span class="MathJax_Preview">r . d</span><script type="math/tex">r . d</script></span> is necessary, the other fields are informative.  </p>
+<h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
+<p>The interface is composed of  a top bar menu, a plotting area to display diffraction pattern and a setting/results panel.</p>
+<p><img alt="" src="../images/diffraction-interface.png" /></p>
+<h2 id="indexing-a-diffraction-pattern">Indexing a diffraction pattern<a class="headerlink" href="#indexing-a-diffraction-pattern" title="Permanent link">&para;</a></h2>
+<p>Crystal structure can be imported from the <code>structure</code> menu. This menu can be populated by adding structures in the <code>structure.txt</code> files following the template:</p>
+<div class="codehilite"><pre><span></span>Name a(A) b(A) c(A) alpha beta gamma space group
+</pre></div>
+
+<p>The space group is defined in the <code>space_group.txt</code> file and with the  <code>scattering.txt</code> file as defined above.</p>
+<p>Alternatively, the structure can be set by filling the <span><span class="MathJax_Preview">a,b,c</span><script type="math/tex">a,b,c</script></span>  and <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> fields.</p>
+<h3 id="procedure">Procedure<a class="headerlink" href="#procedure" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Open a diffraction pattern. Make sure that the file name does not contain non-ASCII character.</p>
+</li>
+<li>
+<p>Define a calibration in the <code>Calibrations</code> box</p>
+</li>
+<li>
+<p>Set the <code>Diffraction alpha y-axis angle</code> (see <a href="../stereoproj/#coordinate-systems">stereoproj</a> )</p>
+</li>
+<li>
+<p>Left click on a diffraction spot. Zoom in to ensure a higher precision. </p>
+</li>
+<li>
+<p>Click again on a second spot corresponding to the diffraction order <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>.</p>
+</li>
+<li>
+<p>Indicate the order <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> in the <code>diffraction order</code> field.</p>
+</li>
+<li>
+<p>Click <code>reset view</code>  or <code>reset point</code>  if needed</p>
+</li>
+</ul>
+<p><img alt="" src="../images/diff-proc1.png" /></p>
+<ul>
+<li>
+<p>The distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> (A) and the inclination angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> are indicated in the <strong>Dist, Inclination</strong> box.</p>
+</li>
+<li>
+<p>Indicate a value in px  in the <code>precision</code> box. The g-vectors will be chosen within the uncertainty range <span><span class="MathJax_Preview">\pm</span><script type="math/tex">\pm</script></span> the precision. By default, the value is 10 px.</p>
+</li>
+<li>
+<p>Click on <code>Find diffraction spots</code> to identify the spot . The results appear in the <strong>g vectors</strong> box with the scheme
+<div class="codehilite"><pre><span></span>d(A) |  h,k,l | Intensity(arb. units) | angles
+</pre></div>
+The angles values are explained below to determine orientation from a set of diffraction vectors.</p>
+</li>
+</ul>
+<p>The data <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span>, the inclination angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and the tilt angles, can be used to plot <a href="../stereoproj/#from-a-diffraction-vector">stereographic projection from a diffraction vector</a></p>
+<h2 id="orientation-from-a-set-of-diffraction-vectors">Orientation from a set of diffraction vectors<a class="headerlink" href="#orientation-from-a-set-of-diffraction-vectors" title="Permanent link">&para;</a></h2>
+<p>If a set of diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> (see below regarding ambiguities). Given the direction <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> in the crystal <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> coordinates:</p>
+<div>
+<div class="MathJax_Preview">
+G_c  X = G_s  
+\begin{pmatrix} 
+1\\
+0 \\
+0   
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+G_c  X = G_s  
+\begin{pmatrix} 
+1\\
+0 \\
+0   
+\end{pmatrix}
+</script>
+</div>
+<p>where </p>
+<div>
+<div class="MathJax_Preview">
+G_c=D^\ast \begin{pmatrix} 
+h_1 &amp; k_1 &amp; l_1\\
+&amp; ... &amp; \\
+h_N &amp; k_N &amp; l_N     
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+G_c=D^\ast \begin{pmatrix} 
+h_1 & k_1 & l_1\\
+& ... & \\
+h_N & k_N & l_N     
+\end{pmatrix}
+</script>
+</div>
+<p>are the the g-vectors in the crystal coordinates and
+<span><span class="MathJax_Preview">D^\ast</span><script type="math/tex">D^\ast</script></span> is defined <a href="../stereoproj/#setting-up-the-crystal">here</a>, and: </p>
+<div>
+<div class="MathJax_Preview"> 
+G_s=\begin{pmatrix} 
+x_1 &amp; y_1 &amp; z_1\\
+&amp; ... &amp; \\
+x_N &amp; y_N &amp; z_N     
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display"> 
+G_s=\begin{pmatrix} 
+x_1 & y_1 & z_1\\
+& ... & \\
+x_N & y_N & z_N     
+\end{pmatrix}
+</script>
+</div>
+<p>are the g-vectors in the sample coordinates.</p>
+<p>The coordinates <span><span class="MathJax_Preview">x_i,y_i,z_i</span><script type="math/tex">x_i,y_i,z_i</script></span> are obtained by appropriate rotation in the sample coordinates. For a double tilt holder, with no angle between the vertical direction and the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis, the coordinates of the diffraction vector <span><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> is:</p>
+<div>
+<div class="MathJax_Preview">
+\begin{pmatrix} 
+x_i\\
+y_i \\
+z_i 
+\end{pmatrix}
+=
+R_x(-\beta_i) R_y(-\alpha_i) R_z(-\eta_i) \begin{pmatrix} 
+0\\
+1 \\
+0   
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+\begin{pmatrix} 
+x_i\\
+y_i \\
+z_i 
+\end{pmatrix}
+=
+R_x(-\beta_i) R_y(-\alpha_i) R_z(-\eta_i) \begin{pmatrix} 
+0\\
+1 \\
+0   
+\end{pmatrix}
+</script>
+</div>
+<p><img alt="" src="../images/double-tilt-rot.png" /></p>
+<blockquote>
+<p>Example of a tilt sequence in a double tilt holder. The recorded diffraction vector <span><span class="MathJax_Preview">(1,1,1)</span><script type="math/tex">(1,1,1)</script></span> is obtained after rotating along <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> of an angle <span><span class="MathJax_Preview">\beta=-20</span><script type="math/tex">\beta=-20</script></span>, then along <span><span class="MathJax_Preview">\alpha=10</span><script type="math/tex">\alpha=10</script></span>. The inclination made on diffraction pattern with the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis (here along the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> direction) is <span><span class="MathJax_Preview">\eta=40</span><script type="math/tex">\eta=40</script></span>.</p>
+</blockquote>
+<p>The equations</p>
+<div>
+<div class="MathJax_Preview">
+G_cX=G_s [1,0,0]^T \\
+G_cY=G_s [0,1,0]^T \\
+G_cZ =G_s [0,0,1]^T
+</div>
+<script type="math/tex; mode=display">
+G_cX=G_s [1,0,0]^T \\
+G_cY=G_s [0,1,0]^T \\
+G_cZ =G_s [0,0,1]^T
+</script>
+</div>
+<p>lead to:</p>
+<div>
+<div class="MathJax_Preview">
+G_c A=G_s
+</div>
+<script type="math/tex; mode=display">
+G_c A=G_s
+</script>
+</div>
+<p>where <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> is a rotation matrix. The Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">1</a></sup> using singular value decomposition:</p>
+<div>
+<div class="MathJax_Preview">
+U,S,V^T=svd(G_c^TG_s) \\
+R=V U^T
+</div>
+<script type="math/tex; mode=display">
+U,S,V^T=svd(G_c^TG_s) \\
+R=V U^T
+</script>
+</div>
+<p>The Euler angles are retrieved from the <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> matrix:</p>
+<div>
+<div class="MathJax_Preview">
+\varphi_1 = \arctan (R_{02}, R_{12}) \\
+\phi = \arccos(R_{22}) \\
+\varphi_2 = \arctan (R_{20},R_{21})
+</div>
+<script type="math/tex; mode=display">
+\varphi_1 = \arctan (R_{02}, R_{12}) \\
+\phi = \arccos(R_{22}) \\
+\varphi_2 = \arctan (R_{20},R_{21})
+</script>
+</div>
+<div class="admonition info">
+<p class="admonition-title">180° ambiguity</p>
+<p>When the inputs g-vectors are coplanar, the retrieved orientation may suffer the 180° ambiguity. </p>
+<p>The situation described on the left side of the figure below is ambiguous. In this case, the 180° rotation along <span><span class="MathJax_Preview">g_3</span><script type="math/tex">g_3</script></span> leads two different crystal orientations.
+On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along <span><span class="MathJax_Preview">(0\bar{1}1)</span><script type="math/tex">(0\bar{1}1)</script></span> is a crystal symmetry. </p>
+<p>Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. </p>
+<p>In <code>diffraction</code> ambiguous results can be detected.</p>
+<p><img alt="" src="../images/ambiguity.png" /></p>
+</div>
+<p>Thus for every diffraction patterns, the diffraction vector, inclination angle, and tilt angles need to be provided. </p>
+<ul>
+<li>
+<p>Fill the tilt angles fields.  Tick the box to indicate that rotation is anti-clockwise.</p>
+</li>
+<li>
+<p>Click and <code>Find diffraction spots</code></p>
+</li>
+<li>
+<p>Select both the <strong>dist, inclination</strong> field and the appropriate <strong>g vector</strong>. For the first condition, the indices of the g-vector can arbitrary be chosen. </p>
+</li>
+<li>
+<p>Press <code>Add data</code>. A line appears <code>alpha angle, beta angle, theta angle, inclination, h,k,l</code>. Data can be removed by selecting the line and by pressing <code>Remove data</code>.</p>
+</li>
+<li>
+<p>Repeat the above operations for at least 2 diffraction spots. For every conditions, the angle between the proposed g-vectors and the already chosen g-vectors are indicated. Choose the <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> indices that minimize all the angles.</p>
+</li>
+<li>
+<p>Then select the data lines and press <code>Get orientation</code> </p>
+</li>
+</ul>
+<p><img alt="" src="../images/diff-data.png" /></p>
+<p>The result box shows: </p>
+<p><code>phi1, phi, phi2 (Euler angles), mean angular deviation, mean square angular deviation</code> </p>
+<p>Two sets of <code>phi1, phi, phi2</code> angles are displayed if the results are ambiguous.</p>
+<p>The accuracy of the result is given by: </p>
+<ul>
+<li>The <code>mean angular  deviation</code>, which is the average angle between each diffraction vector computed from the Euler angles and the experimental values:</li>
+</ul>
+<div>
+<div class="MathJax_Preview">
+\langle \theta_d \rangle = \| {\sum_i^N \arccos(R \vec{g}_i \cdot [x_i,y_i,z_i]^T) }\|/N
+</div>
+<script type="math/tex; mode=display">
+\langle \theta_d \rangle = \| {\sum_i^N \arccos(R \vec{g}_i \cdot [x_i,y_i,z_i]^T) }\|/N
+</script>
+</div>
+<p>where <span><span class="MathJax_Preview">\vec{g}_i</span><script type="math/tex">\vec{g}_i</script></span> is the normalized diffraction vector corresponding to the <span><span class="MathJax_Preview">(h_i,k_i,l_i)</span><script type="math/tex">(h_i,k_i,l_i)</script></span> plane.</p>
+<ul>
+<li>In the approach to find <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span>, the <code>mean square angular deviation</code>, <span><span class="MathJax_Preview">\langle \theta_d^2 \rangle</span><script type="math/tex">\langle \theta_d^2 \rangle</script></span>, is minimized. This value should then be as small as possible.</li>
+</ul>
+<h2 id="spectrum">Spectrum<a class="headerlink" href="#spectrum" title="Permanent link">&para;</a></h2>
+<p>Spectra, i.e. peak intensity with respect to the d-spacing, can be plotted from the top menu. The maximum indices should be indicated.</p>
+<p><img alt="" src="../images/spectrum.png" /></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:mackenzie">
+<p>J. Mackenzie, Acta Cryst. 1957, 10, 61.&#160;<a class="footnote-backref" href="#fnref:mackenzie" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Contact  &nbsp <A HREF="mailto:mompiou@cemes.fr"><img src="/images/envelope.png"  ></A>
+          </div>
+        
+        powered by
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>
