@@ -595,34 +595,141 @@ def show_result():
 # 12.  Display the correct Euler angles in the orientation box.
 #####################################################################
 
+def proj(x, y, z):
 
+    if z == 1:
+        X = 0
+        Y = 0
+    elif z < -0.000001:
+        X = 'nan'
+        Y = 'nan'
+    else:
+
+        X = x / (1 + z)
+        Y = y / (1 + z)
+
+    return np.array([X, Y], float)
+    
 def orientation():
     global B2, K, v0, Ct, pOB, width, height, image_diff, L, v, vg, sol, Res, Dstar
+   
+    B2=np.array([[  0.00000000e+00,   0.00000000e+00,   0.00000000e+00], [ -4.11214953e-01,   1.72332755e+02,  -3.23096438e+01], [ -1.74705882e+00,   7.03119238e+02,  -3.30867804e+01], [  2.11206897e-01,   2.50964867e+02,   5.02352944e+01], [  1.12698413e+00,   3.01107193e+01,   5.10978399e+01],
+ [ -1.63742690e-01,   4.17050598e+02,  -4.39083761e+01]])
+    K=np.array([[[   1,   -2,    0,    0, 2702],  [   1,   -2,    1,    1, 2702], [   0,    3,    2,    1, 2702],  [   0,    1,    3,    2, 2702],  [   0,    3,    1,    0, 2702]], [[   1,    0,    0,    2, 2702],  [   1,    1,    1,    2, 2702],  [   0,    2,    3,   -1, 2702],  [   0,    1,    2,   -3, 2702],  [   0,    0,    1,   -3, 2702]]])
+    Ct=np.array([ 351.40045302,  217.69987503])
+    pOB=np.array([[ 189.80012783], [ 736.42126997], [ 225.29310391], [  -8.3834004 ], [ 439.2971538 ]])
+    v0=np.array([[ -67.59117586,  164.36945039], [ -56.38993929,   32.27706963], [ -21.26760815, -100.69561408], [-102.33681136,  -90.80590304], [  22.24817449, -135.87277991]])
+    v=np.array([[-0.37779168,  0.91872067, -0.11500343],
+ [-0.86710694,  0.49632384, -0.04228702],
+ [-0.20618523, -0.97622396, -0.06689119],
+ [-0.74503723, -0.66108937, -0.08877145],
+ [ 0.16094474, -0.98291255, -0.08932921]])
+    h = 6.62607004e-34
+    m0 = 9.10938356e-31
+    e = 1.60217662e-19
+    c = 299792458
+    V = eval(x_calib[ui.Calib_box.currentIndex()][1]) * 1e3
+    lambd = h / np.sqrt(2 * m0 * e * V) * 1 / np.sqrt(1 + e * V / (2 * m0 * c**2))
 
+    L = eval(x_calib[ui.Calib_box.currentIndex()][2]) * 1e-10 / (lambd)
     Num = np.shape(B2)[0]
+#    v = np.zeros((Num - 1, 3))
+#    vp= np.zeros((Num - 1, 2))
+#    #v0[:,1]=-v0[:,1]
+#    for z in range(0, B2.shape[0]-1):
+#    	v[z, :] = three_coor(-v0[z, :], -L)
+#        v[z, :] = v[z, :] / np.linalg.norm(v[z, :])
+#        vp[z,:]=proj(v[z,0],v[z,1],v[z,2])
+
     ds = []
-    sol = ui.ListBox_theo.currentRow()
+    #sol = ui.ListBox_theo.currentRow()
+    sol=0
+    a,b,c=2.8665,2.8665,2.8665
+    alp,bet,gam=np.pi/2,np.pi/2,np.pi/2
+    Vc = a * b * c * np.sqrt(1 - (np.cos(alp)**2) - (np.cos(bet))**2 - (np.cos(gam))**2 + 2 * np.cos(alp) * np.cos(bet) * np.cos(gam))
+    D = np.array([[a, b * np.cos(gam), c * np.cos(bet)], [0, b * np.sin(gam), c * (np.cos(alp) - np.cos(bet) * np.cos(gam)) / np.sin(gam)], [0, 0, Vc / (a * b * np.sin(gam))]])
+    Dstar = np.transpose(np.linalg.inv(D))
+    height=445
+    
+    g_c=K[sol, :, 1:4]
+    g_c = np.dot(Dstar, g_c.T)
+    g_c = (g_c / np.linalg.norm(g_c.T, axis=1)).T
+    g_sample=np.array([v[:,0],-v[:,1],v[:,2]]).T
+    
+    print g_c
+    print g_sample
+#    figure2 = plt.figure()
+#    a1 = figure.add_subplot(111)
+#    circle = plt.Circle((0,0), 1, color='black', fill=False)
+#    for z in range(0,Num-1):
+#        a1.plot([0, v0[z, 0]], [0, v0[z, 1]], 'g-')
+#        a1.annotate(str(z), (v0[z, 0], v0[z, 1]))
+#    a1.add_artist(circle)
+#    a1.plot(vp[:,0],vp[:,1], 'bo')
+#    a1.plot(v0[:,0]/np.linalg.norm(v0,axis=1),v0[:,1]/np.linalg.norm(v0,axis=1), 'ro')
+#    a1.axis("off") 
+#    a1.axis([-1,1, -1, 1])
+#    a1.set_aspect('equal')
+#    a1.figure.canvas.draw()
+    N = Num-1
+    shuffle = np.zeros((2**(N - 1) + 1, N))
+    res = np.zeros(2**(N - 1))
+    
+    for i in range(0, 2**(N - 1)):
+        b = np.zeros((1, N))
+        shuffle[i, :] = np.array(list(np.binary_repr(i, width=N)), dtype=int) * -1
+        shuffle[shuffle == 0] = 1  # sgn(i)
+        
+        for j in range(0, N-1):
+            b[:, j] = shuffle[i, j] * g_sample[j,0]
+        
+        n = np.dot(np.linalg.pinv(g_c), b.T)
+        res[i] = np.linalg.norm(np.dot(g_c, n) - b.T)
+        g_c=np.multiply(g_c, shuffle[i,:,np.newaxis]) 
+       
+        U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
+    	M = np.dot(V.T, U.T)
 
-    for i in range(0, Num - 1):
+    	phi = np.arccos(M[2, 2]) * 180 / np.pi
+    	phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+    	phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+        print phi_1,phi,phi_2
+        
 
-        ds = np.append(ds, np.sqrt(B2[i + 1, 0]**2 + 1) * eval(x_calib[ui.Calib_box.currentIndex()][2]) / distance(K[sol, i, 1], K[sol, i, 2], K[sol, i, 3]))
+    mini = np.argmin(res)
+    g_c=np.multiply(g_c, shuffle[mini,:,np.newaxis])    
+    print shuffle[mini,:]
+    print np.multiply(K[sol, :, 1:4], shuffle[mini,:,np.newaxis])    
+    #print K[sol, :, 1:4]    
+    U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
+    M = np.dot(V.T, U.T)
 
-    brightness()
+    phi = np.arccos(M[2, 2]) * 180 / np.pi
+    phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+    phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+    ui.orientation_result.setText(str(np.around(phi_1, decimals=1)) + ',' + str(np.around(phi, decimals=1)) + ',' + str(np.around(phi_2, decimals=1)))
+    
+#    for i in range(0, Num - 1):
 
-    a = figure.add_subplot(111)
+#        ds = np.append(ds, np.sqrt(B2[i + 1, 0]**2 + 1) * eval(x_calib[ui.Calib_box.currentIndex()][2]) / distance(K[sol, i, 1], K[sol, i, 2], K[sol, i, 3]))
 
-    for z in range(0, np.shape(v0)[0]):
-        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] + B2[z + 1, 0] * 2 * Ct[0])], 'r-')
-        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] + ds[z] / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] + ds[z] / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
-        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] - ds[z] / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] - ds[z] / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
+#    brightness()
 
-        a.plot([Ct[0], Ct[0] + v0[z, 0]], [Ct[1], Ct[1] + v0[z, 1]], 'g-')
-        a.annotate(str(z), (Ct[0] + v0[z, 0], Ct[1] + v0[z, 1]))
+#    a = figure.add_subplot(111)
 
-    a.axis([0, width, height, 0])
-    a.axis('off')
-    a.figure.canvas.draw()
+#    for z in range(0, np.shape(v0)[0]):
+#        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] + B2[z + 1, 0] * 2 * Ct[0])], 'r-')
+#        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] + ds[z] / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] + ds[z] / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
+#        a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB[z] - ds[z] / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB[z] - ds[z] / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
 
+#        a.plot([Ct[0], Ct[0] + v0[z, 0]], [Ct[1], Ct[1] + v0[z, 1]], 'g-')
+#        a.annotate(str(z), (Ct[0] + v0[z, 0], Ct[1] + v0[z, 1]))
+
+#    a.axis([0, width, height, 0])
+#    a.axis('off')
+#    a.figure.canvas.draw()
+
+    
     OB1 = np.abs(B2[1, 0] * Ct[0] - (height - Ct[1]) + pOB[0]) / np.sqrt(1 + B2[1, 0]**2)  # first band
     OB2 = np.abs(B2[2, 0] * Ct[0] - (height - Ct[1]) + pOB[1]) / np.sqrt(1 + B2[2, 0]**2)		# second band
 
@@ -678,10 +785,13 @@ def orientation():
         phi_1 = np.arctan2(r2[0, 2], -r2[1, 2]) * 180 / np.pi
 
         E[i, :] = np.array([phi_1, phi, phi_2, np.linalg.norm(g2r + v0[1, :] / np.linalg.norm(v0[1, :])) + np.linalg.norm(g3r + v0[2, :] / np.linalg.norm(v0[2, :]))])
+    print E
 
     Res = E[np.where(np.amin(E[:, 3]) == E[:, 3])[0], :][0][0:3]
+    print Res
+#    ui.orientation_result.setText(str(np.around(Res[0], decimals=1)) + ',' + str(np.around(Res[1], decimals=1)) + ',' + str(np.around(Res[2], decimals=1)))
 
-    ui.orientation_result.setText(str(np.around(Res[0], decimals=1)) + ',' + str(np.around(Res[1], decimals=1)) + ',' + str(np.around(Res[2], decimals=1)))
+      
 
 
 ###################################################
