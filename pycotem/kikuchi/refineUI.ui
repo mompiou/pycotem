@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Refine</class>
+ <widget class="QDialog" name="Refine">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>339</width>
+    <height>222</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Refine orientation</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="4">
+      <widget class="QLabel" name="ty_label">
+       <property name="text">
+        <string>                        </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="Rz_label">
+       <property name="text">
+        <string>Rz</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="Rxp_button">
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="Rx_entry"/>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="Rz_entry"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="tx_label">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="Rym_button">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QLabel" name="tz_label">
+       <property name="text">
+        <string>                    </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="L_label">
+       <property name="text">
+        <string>L</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QPushButton" name="Ryp_button">
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="Ry_entry"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="L_entry"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="Rzm_button">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QPushButton" name="Rzp_button">
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="Ry_label">
+       <property name="text">
+        <string>Ry</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="Rxm_button">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="Rx_label">
+       <property name="text">
+        <string>Rx</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" rowspan="2" colspan="5">
+      <widget class="QLabel" name="euler_label">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="V_label">
+       <property name="text">
+        <string>V</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="V_entry"/>
+     </item>
+     <item row="4" column="3" colspan="2">
+      <widget class="QPushButton" name="update_button">
+       <property name="text">
+        <string>update</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>Rxm_button</tabstop>
+  <tabstop>Rx_entry</tabstop>
+  <tabstop>Rxp_button</tabstop>
+  <tabstop>Rym_button</tabstop>
+  <tabstop>Ry_entry</tabstop>
+  <tabstop>Ryp_button</tabstop>
+  <tabstop>Rzm_button</tabstop>
+  <tabstop>Rz_entry</tabstop>
+  <tabstop>Rzp_button</tabstop>
+  <tabstop>L_entry</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
