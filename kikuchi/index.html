@@ -330,6 +330,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#refining-the-results" title="Refining the results" class="md-nav__link">
+    Refining the results
+  </a>
+  
+</li>
+      
       
       
       
@@ -473,6 +480,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#refining-the-results" title="Refining the results" class="md-nav__link">
+    Refining the results
+  </a>
+  
+</li>
+      
       
       
       
@@ -517,67 +531,96 @@ r \approx L\theta_B = \frac{\lambda L}{d}
 <p>The space group is defined in the <code>space_group.txt</code> file and with the  <code>scattering.txt</code> file (see <a href="../diffraction/">diffraction</a> for more details).</p>
 <p>Alternatively, the structure can be set by filling the <span><span class="MathJax_Preview">a,b,c</span><script type="math/tex">a,b,c</script></span>  and <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> fields.</p>
 <h2 id="calibration">Calibration<a class="headerlink" href="#calibration" title="Permanent link">&para;</a></h2>
-<p>The Kikuchi pattern needs to be carefully calibrated on the microscope used. </p>
-<p>The calibration are set in the <code>calibration.txt</code> file following the scheme:</p>
+<p>The Kikuchi pattern needs to be calibrated on the microscope used but the calibration can be adjusted afterward. </p>
+<p>The calibrations are set in the <code>calibration.txt</code> file following the scheme:</p>
 <div class="codehilite"><pre><span></span>Microscope_name voltage camera length binning r.d
 ...
 </pre></div>
 
-<p>Contrary to <code>diffraction</code> we use here the <strong>value of the camera length</strong>.</p>
 <h2 id="orientation">Orientation<a class="headerlink" href="#orientation" title="Permanent link">&para;</a></h2>
-<p>Orientation of the crystal can be retrieved from the analysis of the band configuration.
-The figure below shows the relation between the Kikuchi bands AB and AC, and the vector <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> corresponding to the reverse of the electron beam direction.</p>
-<p>Here the planes <span><span class="MathJax_Preview">BAP</span><script type="math/tex">BAP</script></span> and <span><span class="MathJax_Preview">CAP</span><script type="math/tex">CAP</script></span> correspond to the diffraction vector <span><span class="MathJax_Preview">\vec{g}_1=(h_1,k_1,l_1)</span><script type="math/tex">\vec{g}_1=(h_1,k_1,l_1)</script></span> and <span><span class="MathJax_Preview">\vec{g}_2=(h_2,k_2,l_2)</span><script type="math/tex">\vec{g}_2=(h_2,k_2,l_2)</script></span>. The pole A, at the intersection of the two bands corresponds to <span><span class="MathJax_Preview">\vec{g}_3=\vec{g}_1 \times \vec{g}_2=(h_3,k_3,l_3)</span><script type="math/tex">\vec{g}_3=\vec{g}_1 \times \vec{g}_2=(h_3,k_3,l_3)</script></span></p>
-<p>The angles <span><span class="MathJax_Preview">\phi_i</span><script type="math/tex">\phi_i</script></span> can be defined as:</p>
+<p>Orientation of the crystal can be retrieved from the analysis of the band configuration in an approach similar to the one described in <a href="../diffraction/">diffraction</a>.</p>
+<p>The figure below shows the relation between the Kikuchi bands corresponding to diffraction vectors <span><span class="MathJax_Preview">\vec{g}_i=(h_i,k_i,l_i)</span><script type="math/tex">\vec{g}_i=(h_i,k_i,l_i)</script></span>, their projection <span><span class="MathJax_Preview">\vec{g}_{pi}</span><script type="math/tex">\vec{g}_{pi}</script></span> in the the observation plane normal to vector <span><span class="MathJax_Preview">\vec{z}</span><script type="math/tex">\vec{z}</script></span>, i.e. the reverse of the electron beam direction.</p>
+<p>From the projected vector, the diffraction vector in the observation plane coordinates can be deduced knowing the camera length <span><span class="MathJax_Preview">L=\|\vec{OP}\|</span><script type="math/tex">L=\|\vec{OP}\|</script></span>:</p>
 <div>
 <div class="MathJax_Preview">
-\phi_1=\arctan{(L/OB)} \\
-\phi_2=\arctan{(L/OC)} \\
-\phi_3=\arctan{(OA/L)}
+\vec{g}_i=(x_i,y_i,z_i)^T=\vec{g}_{pi}+(0,0,\|\vec{g}_{pi}\|^2/L)^T
 </div>
 <script type="math/tex; mode=display">
-\phi_1=\arctan{(L/OB)} \\
-\phi_2=\arctan{(L/OC)} \\
-\phi_3=\arctan{(OA/L)}
+\vec{g}_i=(x_i,y_i,z_i)^T=\vec{g}_{pi}+(0,0,\|\vec{g}_{pi}\|^2/L)^T
 </script>
 </div>
-<p>The vector <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> satisfies the equation:</p>
-<div>
-<div class="MathJax_Preview">
-\vec{Z}/\|\vec{Z} \|= O_c^{-1} \begin{pmatrix} 
-\|\vec{g}_1\| \cos{\phi_1}\\
-\|\vec{g}_2\| \cos{\phi_2} \\
-\|\vec{g}_3\| \cos{\phi_3}  
-\end{pmatrix}
-</div>
-<script type="math/tex; mode=display">
-\vec{Z}/\|\vec{Z} \|= O_c^{-1} \begin{pmatrix} 
-\|\vec{g}_1\| \cos{\phi_1}\\
-\|\vec{g}_2\| \cos{\phi_2} \\
-\|\vec{g}_3\| \cos{\phi_3}  
-\end{pmatrix}
-</script>
-</div>
-<p>where, </p>
-<div>
-<div class="MathJax_Preview">
-O_c= D^\ast \begin{pmatrix} 
-h_1 &amp; k_1 &amp; l_1\\
-h_2 &amp; k_2 &amp; l_2\\
-h_3 &amp; k_3 &amp; l_3     
-\end{pmatrix}
-</div>
-<script type="math/tex; mode=display">
-O_c= D^\ast \begin{pmatrix} 
-h_1 & k_1 & l_1\\
-h_2 & k_2 & l_2\\
-h_3 & k_3 & l_3     
-\end{pmatrix}
-</script>
-</div>
-<p>with <span><span class="MathJax_Preview">D^\ast</span><script type="math/tex">D^\ast</script></span> defined <a href="../stereoproj/#setting-up-the-crystal">here</a>,</p>
-<p>From <span><span class="MathJax_Preview">\vec{Z}</span><script type="math/tex">\vec{Z}</script></span> and the band orientation in the screen plane, the orientation of the crystal given by the Euler angles can be retrieved.</p>
 <p><img alt="" src="../images/kikuchi-orientation.png" /></p>
+<p>Considering N bands, the orientation can be defined by: </p>
+<div>
+<div class="MathJax_Preview">
+G_c A=G_s
+</div>
+<script type="math/tex; mode=display">
+G_c A=G_s
+</script>
+</div>
+<p>with</p>
+<div>
+<div class="MathJax_Preview">
+G_c=D^\ast \begin{pmatrix} 
+h_1 &amp; k_1 &amp; l_1\\
+&amp; ... &amp; \\
+h_N &amp; k_N &amp; l_N     
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display">
+G_c=D^\ast \begin{pmatrix} 
+h_1 & k_1 & l_1\\
+& ... & \\
+h_N & k_N & l_N     
+\end{pmatrix}
+</script>
+</div>
+<p>the g-vectors in the crystal coordinates and
+<span><span class="MathJax_Preview">D^\ast</span><script type="math/tex">D^\ast</script></span> is defined <a href="../stereoproj/#setting-up-the-crystal">here</a>, and: </p>
+<div>
+<div class="MathJax_Preview"> 
+G_s=\begin{pmatrix} 
+x_1 &amp; y_1 &amp; z_1\\
+&amp; ... &amp; \\
+x_N &amp; y_N &amp; z_N     
+\end{pmatrix}
+</div>
+<script type="math/tex; mode=display"> 
+G_s=\begin{pmatrix} 
+x_1 & y_1 & z_1\\
+& ... & \\
+x_N & y_N & z_N     
+\end{pmatrix}
+</script>
+</div>
+<p>As the above equation defines the crystal orientation, <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> should be a rotation matrix. The closest Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie using singular value decomposition:</p>
+<div>
+<div class="MathJax_Preview">
+U,S,V^T=svd(G_c^TG_s) \\
+R=V U^T
+</div>
+<script type="math/tex; mode=display">
+U,S,V^T=svd(G_c^TG_s) \\
+R=V U^T
+</script>
+</div>
+<p>The Euler angles are retrieved from the <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> matrix:</p>
+<div>
+<div class="MathJax_Preview">
+\varphi_1 = \arctan (R_{02}, R_{12}) \\
+\phi = \arccos(R_{22}) \\
+\varphi_2 = \arctan (R_{20},R_{21})
+</div>
+<script type="math/tex; mode=display">
+\varphi_1 = \arctan (R_{02}, R_{12}) \\
+\phi = \arccos(R_{22}) \\
+\varphi_2 = \arctan (R_{20},R_{21})
+</script>
+</div>
+<p>In <a href="../diffraction/">diffraction</a>, the g-vectors in crystal coordinates are determined step by step by calculating the angles between the vectors, and letting the user to choose. 
+Kikuchi bands usually have higher indices so that it is more difficult to guess the right indices. 
+Here we choose to compare the relative measured angles of g-vectors <span><span class="MathJax_Preview">\theta_{ij}=\widehat{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\widehat{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span><span class="MathJax_Preview">\theta'_{ij}=\widehat{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\widehat{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. A consistent set of  g-vectors is obtained if all the angles difference <span><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span> that can be chosen.  </p>
 <h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
 <p>The interface is composed of  a top bar menu, a plotting area to display Kikuchi pattern and a setting/results panel.</p>
 <p><img alt="" src="../images/kikuchi-interface.png" /></p>
@@ -596,31 +639,76 @@ h_3 & k_3 & l_3
 <p>Open a pattern.</p>
 </li>
 <li>
-<p>To highlight the band, the <code>brightness</code> can be adjusted.</p>
+<p>Click on the pattern center and press <code>Add center</code>. Position of the center appears in the box.</p>
 </li>
 <li>
-<p>Select a band by clicking three times. The first two points define the direction along one line. The third point should be on the second parallel line. Then, both the azimuthal angle and d-spacing can be retrieved.</p>
+<p>To highlight the bands, the <code>brightness</code> can be adjusted.</p>
 </li>
 <li>
-<p>Press <code>Add bands</code>. The band number and the corresponding d-spacing appear in the <strong>Bands</strong> box. Bands can be removed by pressing the <code>Remove band</code> button.</p>
+<p>Select a band by clicking three times. The first two points define the direction along one line. The third point should be on the second parallel line. Then, both the d-spacing and the projected g-vector can be retrieved. A better accuracy can be achieved if the direction is measured with two extreme points along the line. Zooming in the pattern can also be helpful.</p>
+</li>
+<li>
+<p>Press <code>Add bands</code>. The band number and the corresponding (projected) d-spacing dp (in px) appears in the <strong>Bands</strong> box. Bands can be removed by pressing the <code>Remove band</code> button.</p>
 </li>
 <li>
 <p>Clear the points and view (if zoomed in) with the <code>Reset points</code> and <code>Reset view</code> buttons.</p>
 </li>
 <li>
-<p>Repeat the operation at least 3 times and no more than 5 times (3 to 5 bands to identify). </p>
+<p>Repeat the operation at least twice and no more than 6 times (2 to 6 bands to identify). </p>
 </li>
 <li>
-<p>Click on the pattern center and press <code>Add center</code>. Position of the center appears below.</p>
+<p>Choose a tolerance angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span> less than 3 degrees. 1 by default.</p>
 </li>
 <li>
-<p>Press the <code>Run</code> button to display solutions in the <strong>Results</strong> box.</p>
+<p>Plot the bands to verify the measured bands.</p>
 </li>
 <li>
-<p>By selecting the different sets of data and by clicking on the <code>Show results-orientation</code> button, the bands are plotted in overlay. The Euler angles appear below.</p>
+<p>Press the <code>Run</code> button to display solutions in the <strong>Results</strong> box. If no solutions, remove the bands and try a more accurate point and click and/or increase the tolerance angle.</p>
+</li>
+<li>
+<p>By selecting the different sets of data and by clicking on the <code>Show bands</code> button, the theoretical bands are plotted in overlay. The results are shown according the scheme:</p>
 </li>
 </ul>
+<div class="codehilite"><pre><span></span>g: [h1,k1,l1],....,[hN,kN,lN]
+Euler angles phi1, phi, phi2
+dev_angle, dev_width
+...
+</pre></div>
+
+<p>The <code>dev_angle</code> value corresponds to the mean misorientation: </p>
+<div>
+<div class="MathJax_Preview">
+\langle \Delta \theta \rangle = \frac{1}{N}{\sum_i^N \left| \arccos(R \vec{g}_{h_i k_i l_i} \cdot [x_i,y_i,z_i]^T) \right |}
+</div>
+<script type="math/tex; mode=display">
+\langle \Delta \theta \rangle = \frac{1}{N}{\sum_i^N \left| \arccos(R \vec{g}_{h_i k_i l_i} \cdot [x_i,y_i,z_i]^T) \right |}
+</script>
+</div>
+<p>The <code>dev_width</code> value corresponds to the mean deviation on the d spacing values (in percents).</p>
+<div>
+<div class="MathJax_Preview">
+\langle \Delta d \rangle= \frac{1}{N} {\sum_i^N  \frac{\left|d_{h_i k_i l_i} - d_i \right|}{d_{h_i k_i l_i}} }
+</div>
+<script type="math/tex; mode=display">
+\langle \Delta d \rangle= \frac{1}{N} {\sum_i^N  \frac{\left|d_{h_i k_i l_i} - d_i \right|}{d_{h_i k_i l_i}} }
+</script>
+</div>
 <p><img alt="" src="../images/kikuchi-procedure.png" /></p>
+<p>These two values should be as minimum as possible. Usually a good fit can be obtained with <span><span class="MathJax_Preview">\langle \Delta \theta \rangle</span><script type="math/tex">\langle \Delta \theta \rangle</script></span> of the order of 0.2 degrees and <span><span class="MathJax_Preview">\langle \Delta d \rangle</span><script type="math/tex">\langle \Delta d \rangle</script></span> of the order of few percents.</p>
+<h2 id="refining-the-results">Refining the results<a class="headerlink" href="#refining-the-results" title="Permanent link">&para;</a></h2>
+<p>Refining the results can be made from the <code>Refine</code> menu:</p>
+<ul>
+<li>
+<p>Manual rotations along <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span>, <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> and <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> axes can be performed to judge the qualitative agreement between the pattern and the theoretical lines.</p>
+</li>
+<li>
+<p>The calibration and acceleration voltage can also be adjusted. By clicking the <code>update</code> button, the solutions are re-calculated using the new sets of values. A better fit can be judged by inspecting how <span><span class="MathJax_Preview">\langle \Delta \theta \rangle</span><script type="math/tex">\langle \Delta \theta \rangle</script></span> and <span><span class="MathJax_Preview">\langle \Delta d \rangle</span><script type="math/tex">\langle \Delta d \rangle</script></span> are minimized.</p>
+</li>
+<li>
+<p>The updated Euler angles can be read at the bottom of the refine window.</p>
+</li>
+</ul>
+<p><img alt="" src="../images/kikuchi-refine.png" /></p>
                 
                   
                 
