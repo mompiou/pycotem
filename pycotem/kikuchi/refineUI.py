@@ -25,12 +25,13 @@ except AttributeError:
 class Ui_Refine(object):
     def setupUi(self, Refine):
         Refine.setObjectName(_fromUtf8("Refine"))
-        Refine.resize(339, 222)
+        Refine.resize(341, 237)
         self.gridLayout_2 = QtGui.QGridLayout(Refine)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.gridLayout = QtGui.QGridLayout()
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.ty_label = QtGui.QLabel(Refine)
+        self.ty_label.setText(_fromUtf8(""))
         self.ty_label.setObjectName(_fromUtf8("ty_label"))
         self.gridLayout.addWidget(self.ty_label, 1, 4, 1, 1)
         self.Rz_label = QtGui.QLabel(Refine)
@@ -53,6 +54,7 @@ class Ui_Refine(object):
         self.Rym_button.setObjectName(_fromUtf8("Rym_button"))
         self.gridLayout.addWidget(self.Rym_button, 1, 1, 1, 1)
         self.tz_label = QtGui.QLabel(Refine)
+        self.tz_label.setText(_fromUtf8(""))
         self.tz_label.setObjectName(_fromUtf8("tz_label"))
         self.gridLayout.addWidget(self.tz_label, 2, 4, 1, 1)
         self.L_label = QtGui.QLabel(Refine)
@@ -112,18 +114,16 @@ class Ui_Refine(object):
 
     def retranslateUi(self, Refine):
         Refine.setWindowTitle(_translate("Refine", "Refine orientation", None))
-        self.ty_label.setText(_translate("Refine", "                        ", None))
         self.Rz_label.setText(_translate("Refine", "Rz", None))
         self.Rxp_button.setText(_translate("Refine", "+", None))
         self.Rym_button.setText(_translate("Refine", "-", None))
-        self.tz_label.setText(_translate("Refine", "                    ", None))
-        self.L_label.setText(_translate("Refine", "L", None))
+        self.L_label.setText(_translate("Refine", "rd (pxA)", None))
         self.Ryp_button.setText(_translate("Refine", "+", None))
         self.Rzm_button.setText(_translate("Refine", "-", None))
         self.Rzp_button.setText(_translate("Refine", "+", None))
         self.Ry_label.setText(_translate("Refine", "Ry", None))
         self.Rxm_button.setText(_translate("Refine", "-", None))
         self.Rx_label.setText(_translate("Refine", "Rx", None))
-        self.V_label.setText(_translate("Refine", "V", None))
+        self.V_label.setText(_translate("Refine", "V (kV)", None))
         self.update_button.setText(_translate("Refine", "update", None))
 

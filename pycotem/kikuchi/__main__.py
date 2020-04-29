@@ -1,22 +1,8 @@
-#############################################################################################################################################################
+##################
 #
-# KikuPy: determine the crytal orientation given a set of three Kikuchi bands. From F. Mompiou (CEMES-CNRS) with the help of Juan Du (Tsinghua University) and Guillaume Perret (Univ. de Toulouse)
-# Requirements
-# python 2.7 with matplotlib, numpy, pyqt4
-# Procedure:
-# 1. Open an image.
-# 2. Change brightness to see the Kikuchi bands.
-# 3. Select a calibration of the pattern from the list (can be changed in the calibrations.txt file
-# 4. Select crystal parameters either from the fields or from an import structure from the menu list. Choose "max indices" of the possible Kikuchi bands (3 by default)
-# 5. Determine the g vectors associated to the bands. Click on three consecutive Pts -> Pts1 & 2 are on the same line Pt3 is in the parallel line
-# 6. Add bands
-# 7. Repeat the procedure to get three bands
-# 8. Add the center of the pattern (transmitted beam)
-# 9. Click Run to get possibles solutions
-# 10. Pick one from the results list and click show results to draw overlays and determine the corresponding Euler angles
+# Kikuchi is a tool to orient crystals from kikuchi lines in TEM
 #
-# Tested with different files. Matches may not be found at first. Repeat the determination of the bands by making a "reset points". Try to pick the finest bands. In some cases the indices of the bands may be exact after  a circular permutation.
-#############################################################################################################################################################
+##################
 
 
 from __future__ import division
@@ -73,7 +59,6 @@ def click(event):
     miny, maxy = a.get_ylim()
     x = event.xdata
     y = event.ydata
-    r = str(np.around(x, decimals=2)) + ',' + str(np.around(y, decimals=2))
     a.annotate(str(s), (x, y))
     a.plot(x, y, 'b+')
     a.axis('off')
@@ -123,9 +108,7 @@ def reset():
     a.figure.canvas.draw()
     gclick = np.zeros((1, 2))
     ui.ListBox_theo.clear()
-    # ui.ListBox_d_2.clear()
     brightness()
-    # ui.brightness_slider.setValue(100)
     s = 1
     return s, gclick
 
@@ -232,9 +215,8 @@ def addband():
     m = (Pt2[1] - Pt1[1]) / (Pt2[0] - Pt1[0])
     b = (Pt1[1] * Pt2[0] - Pt2[1] * Pt1[0]) / (Pt2[0] - Pt1[0])
     d0 = (m * Pt3[0] - Pt3[1] + b) / np.sqrt(1 + m**2)
-    d = eval(x_calib[ui.Calib_box.currentIndex()][2]) / d0
     B2 = np.vstack((B2, [m, b, d0]))
-    ui.ListBox_d_2.addItem(str(np.shape(B2)[0] - 2) + ', d:' + str(np.around(np.abs(d), decimals=3)))
+    ui.ListBox_d_2.addItem(str(np.shape(B2)[0] - 2) + ', dp (px):' + str(np.around(np.abs(d0), decimals=3)))
     reset_points()
 
     return B2
@@ -309,11 +291,11 @@ def open_image():
     return s, gclick
 
 
-#####################################################
+##############################################
 #
 # Rotation matrix for Euler angle and rotation along axis
 #
-#####################################################
+##############################################
 
 
 def rotation(phi1, phi, phi2):
@@ -342,16 +324,16 @@ def Rot(th, a, b, c):
 
     return R
 
-###########################################################################################################################################################
+##############################################
 #
 # Determine  the orientation: get the beam direction from two intersecting bands. A third band is necessary to discriminate the correct indices of the bands
 # Inputs are stored in the B2=[m,p,d,h,k,l] matrix from the bands
 #
-##########################################################################################################################################################
+##############################################
 
-####################################################
+##############################################
 # Get the third coordinate a g vector from the camera length L
-#####################################################
+##############################################
 
 
 def three_coor(vect, L):
@@ -362,30 +344,33 @@ def three_coor(vect, L):
 
 ##############################################################
 #
-# Test functions for 3 to 6 bands. Search for conditions where the theoretical angles stored in Tab of length P0 are in agreement with the measured ones stored in tab. The min misorientation is 0.5 degrees. It can be increased up to 3 degrees by 0.5 degree step until match. Return a list of  g vectors
+# Test functions for 2 to 6 bands. Search for conditions where the theoretical angles stored in Tab of length P0 are in agreement with the measured ones stored in tab. The min misorientation is 0.5 degrees. It can be increased up to 3 degrees by 0.5 degree step until match. Return a list of  g vectors
 #
 #################################################################
+
+
 def testangle2(tab):
-    global P0,Tab,eps
+    global P0, Tab, eps
     liste_possibles = []
     while liste_possibles == []:
-		for ii in P0:
-			
-			T1 = np.where(np.abs(Tab[ii,:] - tab[0,1]) <= eps) 
-			
-			for jj in T1[0]:
-				T = [list(list2[ii].astype(np.int)),\
-						list(list2[jj].astype(np.int))]
-				liste_possibles.append(T)
-		
-		if eps<3:
-			eps += 0.5
-			ui.ListBox_theo.addItem('Still running...')
-		else:
-			ui.ListBox_theo.addItem('No match')
-			break
-	
+        for ii in P0:
+
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+
+            for jj in T1[0]:
+                T = [list(list2[ii].astype(np.int)),
+                     list(list2[jj].astype(np.int))]
+                liste_possibles.append(T)
+
+        if eps < 3:
+            eps += 0.5
+            ui.ListBox_theo.addItem('Still running...')
+        else:
+            ui.ListBox_theo.addItem('No match')
+            break
+
     return liste_possibles
+
 
 def testangle3(tab):
     global P0, Tab, eps
@@ -512,11 +497,11 @@ def testangle6(tab):
 
     return liste_possibles
 
-##################################################################
+##############################################
 #
 # Test the uniqueness of a set of solution. Return a vector d with the interplanar distance of the row vector of A
 #
-######################################################################
+##############################################
 
 
 def Uniqueness(A):
@@ -548,27 +533,27 @@ def Uniqueness(A):
 # 3. For all the bands in B2, calculate the normal vectors to the bands v0 and their normalized 3D value v and the value of p (in the equation y=mx+p)
 # 4. Calculate the angle between the normal vectors and store in Tab
 # 5. Test the angles with the testangle function and store the possibilities in the K array and keep only the unique solutions
-# 6. Display the solutions in the results box
+# 6. Compute orientation from Mackenzie approach
+# 7. Display the solutions in the results box
 
 #################################################################################
 
 
 def show_result():
-    global Ct, B2, Dist, P0, eps, Tab, list2, tab, K, v0, pOB, L, v, euler,lambd,calib
+    global Ct, B2, Dist, P0, eps, Tab, list2, tab, K, v0, pOB, L, v, euler, lambd, calib
     ui.ListBox_theo.clear()
-    Re=np.identity(3)
-    if ui_Refine.L_entry.text()=='':
-     	ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][2] ))
-    if ui_Refine.V_entry.text()=='':
-        ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1] ))
-    calib= np.float(ui_Refine.L_entry.text())
-    Vt= np.float(ui_Refine.V_entry.text())*1e3
-    
+    if ui_Refine.L_entry.text() == '':
+        ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][4]))
+    if ui_Refine.V_entry.text() == '':
+        ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1]))
+    calib = np.float(ui_Refine.L_entry.text())
+    Vt = np.float(ui_Refine.V_entry.text()) * 1e3
+
     h = 6.62607004e-34
     m0 = 9.10938356e-31
     e = 1.60217662e-19
     c = 299792458
-    lambd = h / np.sqrt(2 * m0 * e * Vt) * 1 / np.sqrt(1 + e * Vt / (2 * m0 * c**2))*1e10
+    lambd = h / np.sqrt(2 * m0 * e * Vt) * 1 / np.sqrt(1 + e * Vt / (2 * m0 * c**2)) * 1e10
 
     L = calib / lambd
     list2, Tab = listb()
@@ -577,20 +562,23 @@ def show_result():
     Num = np.shape(B2)[0]
     v = np.zeros((Num - 1, 3))
     v0 = np.zeros((Num - 1, 2))
+    dp = np.zeros((Num - 1, 1))
     for z in range(0, Num - 1):
         v0[z, :] = np.array([(Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) - Ct[0], height - (B2[z + 1, 0] * (Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) + B2[z + 1, 1]) - Ct[1]])
-        v0[z,:]=v0[z,:]*(1+0.5*np.sign(v0[z,1])*B2[z + 1, 2]/np.linalg.norm(v0[z,:]))
+        g = (1 + 0.5 * np.sign(v0[z, 1]) * B2[z + 1, 2] / np.linalg.norm(v0[z, :]))
+        v0[z, :] = v0[z, :] * g
         v[z, :] = three_coor(v0[z, :], L)
+        dp[z] = calib / 2 / np.linalg.norm(v[z, :] - three_coor(v0[z, :] / g, L))
         v[z, :] = v[z, :] / np.linalg.norm(v[z, :])
-   
-    v[:,1]=-v[:,1]
+
+    v[:, 1] = -v[:, 1]
     tab = np.zeros((np.shape(v)[0], np.shape(v)[0]))
     for l in range(0, np.shape(v)[0]):
         for f in range(0, np.shape(v)[0]):
             tab[l, f] = np.arccos(np.dot(v[l, :], v[f, :])) * 180 / np.pi
 
     n = np.shape(tab)[0]
-    if eps<3:
+    if eps < 3:
         if n == 2:
             K = testangle2(tab)
         elif n == 3:
@@ -605,9 +593,9 @@ def show_result():
             ui.ListBox_theo.addItem('Number of bands should be less than 7')
             return
     else:
-          ui.ListBox_theo.addItem('tol. should be below 3 degrees')
-          return
-     		
+        ui.ListBox_theo.addItem('tol. should be below 3 degrees')
+        return
+
     K = np.asarray(K)
     U = np.zeros((np.shape(K)[0], Num - 1))
 
@@ -615,72 +603,58 @@ def show_result():
         U[t, :] = Uniqueness(K[t, :, 1:4])
 
     K = K[np.unique(U, return_index=True, axis=0)[1], :, :]
-    euler=np.zeros((K.shape[0],5))    
-    for sol in range(0,K.shape[0]):
-	g_c=K[sol, :, 1:4]
-	g_c = np.dot(Dstar, g_c.T)
-	n_c=np.linalg.norm(g_c.T,axis=1)
-	g_c = (g_c / n_c).T
-	g_sample=v
-	if np.abs(np.linalg.det(np.dot(g_c.T, g_sample)) )< 1e-7:
-		g_cc=np.cross(g_c[0,:],g_c[1,:])
-		g_sc=np.cross(g_sample[0,:],g_sample[1,:])
-		g_sc=g_sc/np.linalg.norm(g_sc)
-		g_cc=g_cc/np.linalg.norm(g_cc)
-		g_c=np.vstack((g_c, g_cc))
-		g_sample=np.vstack((g_sample, g_sc))
-	if np.linalg.det(np.dot(g_c.T, g_sample)) < 0:
-	        g_c = -g_c
+    euler = np.zeros((K.shape[0], 5))
+    for sol in range(0, K.shape[0]):
+        g_c = K[sol, :, 1:4]
+        g_c = np.dot(Dstar, g_c.T)
+        n_c = np.linalg.norm(g_c.T, axis=1)
+        g_c = (g_c / n_c).T
+        g_sample = v
+        if np.abs(np.linalg.det(np.dot(g_c.T, g_sample))) < 1e-7:
+            g_cc = np.cross(g_c[0, :], g_c[1, :])
+            g_sc = np.cross(g_sample[0, :], g_sample[1, :])
+            g_sc = g_sc / np.linalg.norm(g_sc)
+            g_cc = g_cc / np.linalg.norm(g_cc)
+            g_c = np.vstack((g_c, g_cc))
+            g_sample = np.vstack((g_sample, g_sc))
+        if np.linalg.det(np.dot(g_c.T, g_sample)) < 0:
+            g_c = -g_c
 
-	U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
-	M = np.dot(V.T, U.T)
-	
-	phi = np.arccos(M[2, 2]) * 180 / np.pi
-	phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
-	phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-	
-	t=0
-	d_dev=0
-	
-	for r in range(0, Num-1):
-        	ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
-        	d_dev=d_dev+np.abs(1/n_c[r]-np.abs(calib / B2[r+1,2]))
-        	t = t + np.abs(np.arccos(ang_dev))
+        U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
+        M = np.dot(V.T, U.T)
+
+        phi = np.arccos(M[2, 2]) * 180 / np.pi
+        phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+        phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+
+        t = 0
+        d_dev = 0
+        for r in range(0, Num - 1):
+            ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
+            d_dev = d_dev + n_c[r] * 100 * np.abs(1 / n_c[r] - dp[r])
+            t = t + np.abs(np.arccos(ang_dev))
         t = t / g_sample.shape[0] * 180 / np.pi
-        d_dev=d_dev/ g_sample.shape[0]
-        euler[sol,:]=np.array([np.around(phi_1,decimals=3),np.around(phi, decimals=3), np.around(phi_2,decimals=3),np.around(t,decimals=3),np.around(d_dev,decimals=3)])
+        d_dev = d_dev / g_sample.shape[0]
+        euler[sol, :] = np.array([np.around(phi_1, decimals=3), np.around(phi, decimals=3), np.around(phi_2, decimals=3), np.around(t, decimals=3), np.around(d_dev, decimals=3)])
 
-	
-    so=euler[:,3].argsort()
-    K=K[so,:,:]
-    euler=euler[so]        
+    so = euler[:, 3].argsort()
+    K = K[so, :, :]
+    euler = euler[so]
     ui.ListBox_theo.clear()
-    for h in range(0,euler.shape[0]):
-	    ss='g:'
-	    for hh in range(0,Num-1):
-	        ss=ss+' '+str(K[h, hh, 1:4])
-	    ui.ListBox_theo.addItem(ss)
-    	    ui.ListBox_theo.addItem(str(euler[h,0])+','+str(euler[h,1])+','+str(euler[h,2]))
-            ui.ListBox_theo.addItem(str(euler[h,3])+','+str(euler[h,4]))
-    return K,euler
+    for h in range(0, euler.shape[0]):
+        ss = 'g:'
+        for hh in range(0, Num - 1):
+            ss = ss + ' ' + str(K[h, hh, 1:4])
+        ui.ListBox_theo.addItem(ss)
+        ui.ListBox_theo.addItem(str(euler[h, 0]) + ',' + str(euler[h, 1]) + ',' + str(euler[h, 2]))
+        ui.ListBox_theo.addItem(str(euler[h, 3]) + ',' + str(euler[h, 4]))
+    return K, euler
 
-# "
+#######################################
 #
-# Display results and get the orientation
+# Display results . Compute the expected bands from the orientation matrix. Refine the results by rotation along x,y,z axes, or by adjusting rd and V
 #
-# 1. Pick the solution in the box, calculate the theoretical width of the bands
-# 2.  Plot the bands, center line and edges.
-# 3. Measure the distance between the transmitted beam Ct with the first two bands OB1 and OB2 and the intersection of the two bands OA
-# 4. Get the  distance of the center (xa,ya) to the line of equation y=mx+p : |m*xa-ya+p|/sqrt(1+m**2)
-# 5. Get the angles made by the Kikuchi bands with the transmitted beam phi1,phi2,phi3
-# 6. Pick the 3 first bands g1,g2,g3 and get g4=g1xg2
-# 7. Form the matrix M composed with the row vector of g1,g2,g4 with the appropriate sign (there are 8 possible positions of the central beam with respect to the crossing A
-# 8. Get the experimental angle gamma1 formed by the first band with respect to the Ox axis
-# 9. Compute the q vector (normalized beam direction) from the equation q/|q|=M^-1(|g1|cos(phi1),|g2|cos(phi2),|g4|cos(phi3))
-# 10. Determine Euler angles (phi_1, phi, phi_2) from q and the position of g1 and gamma1 for all the possibilities
-# 11.  Determine the position of g1,g2 and g3 and compare them to the corresponding 3 v0. If the three vectors are ok then the sum of the norm of the difference vector g-v0 should be minimum (stored in E). Then the relative position of the bands with respect to the center is correct.
-# 12.  Display the correct Euler angles in the orientation box.
-#####################################################################
+#######################################
 
 
 def plot_bands():
@@ -689,14 +663,14 @@ def plot_bands():
     Num = np.shape(B2)[0]
     brightness()
     a = figure.add_subplot(111)
-    
+
     for z in range(0, Num - 1):
-    
+
         v0 = np.array([(Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) - Ct[0], height - (B2[z + 1, 0] * (Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) + B2[z + 1, 1]) - Ct[1]])
         ds = np.sqrt(B2[z + 1, 0]**2 + 1) * B2[z + 1, 2]
-        v0=v0*(1+0.5*np.sign(v0[1])*B2[z + 1, 2]/np.linalg.norm(v0))
-        pOB= B2[z + 1, 1] - 0.5 * ds
-	
+        v0 = v0 * (1 + 0.5 * np.sign(v0[1]) * B2[z + 1, 2] / np.linalg.norm(v0))
+        pOB = B2[z + 1, 1] - 0.5 * ds
+
         a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB + B2[z + 1, 0] * 2 * Ct[0])], 'r-')
         a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB + ds / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB + ds / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
         a.plot([-2 * Ct[0], 2 * Ct[0]], [height - (pOB - ds / 2 + B2[z + 1, 0] * (-2) * Ct[0]), height - (pOB - ds / 2 + B2[z + 1, 0] * 2 * Ct[0])], 'b-')
@@ -708,120 +682,127 @@ def plot_bands():
     a.axis('off')
     a.figure.canvas.draw()
 
+
 def plot_orientation_init():
-    global M,sol, euler,angx,angy,angz,calib,lambd
+    global M, sol, euler, angx, angy, angz, calib, lambd
     line = ui.ListBox_theo.currentRow()
-    sol=int(line/3)
-    M=rotation(euler[sol,0],euler[sol,1],euler[sol,2])
-    angx,angy,angz=0,0,0
-    ui_Refine.tx_label.setText(str(np.around(angx,decimals=2)))
-    ui_Refine.ty_label.setText(str(np.around(angy,decimals=2)))
-    ui_Refine.tz_label.setText(str(np.around(angz,decimals=2)))
-    ui_Refine.euler_label.setText(str(euler[sol,0])+','+str(euler[sol,1])+','+str(euler[sol,2]))
+    sol = int(line / 3)
+    M = rotation(euler[sol, 0], euler[sol, 1], euler[sol, 2])
+    angx, angy, angz = 0, 0, 0
+    ui_Refine.tx_label.setText(str(np.around(angx, decimals=2)))
+    ui_Refine.ty_label.setText(str(np.around(angy, decimals=2)))
+    ui_Refine.tz_label.setText(str(np.around(angz, decimals=2)))
+    ui_Refine.euler_label.setText(str(euler[sol, 0]) + ',' + str(euler[sol, 1]) + ',' + str(euler[sol, 2]))
     plot_orientation()
 
 
 def plot_orientation():
-    global B2, K, v0, Ct, pOB, width, height, image_diff, L, Dstar, sol, M,calib,lambd
-    
+    global B2, K, v0, Ct, pOB, width, height, image_diff, L, Dstar, sol, M, calib, lambd
+
     brightness()
     a = figure.add_subplot(111)
-    g_c=K[sol, :, 1:4]
+    g_c = K[sol, :, 1:4]
     g_c = np.dot(Dstar, g_c.T)
-    n_c=np.linalg.norm(g_c.T,axis=1)
+    n_c = np.linalg.norm(g_c.T, axis=1)
     g_c = (g_c / n_c).T
-    L=calib/lambd
+    L = calib / lambd
     for z in range(0, g_c.shape[0]):
-        g_xyz=np.dot(M,g_c[z,:])
-        m=-g_xyz[0]/g_xyz[1]
-        vm=-L*np.array([0,0,1])+L*g_xyz[2]*g_xyz
-        br=np.arcsin(lambd/2/distance(K[sol, z, 1], K[sol, z, 2], K[sol, z, 3]))
-        vp1=vm+np.linalg.norm(vm)*np.tan(br)*g_xyz
-        vp2=vm-np.linalg.norm(vm)*np.tan(br)*g_xyz
-        
+        g_xyz = np.dot(M, g_c[z, :])
+        vm = -L * np.array([0, 0, 1]) + L * g_xyz[2] * g_xyz
+        br = np.arcsin(lambd / 2 / distance(K[sol, z, 1], K[sol, z, 2], K[sol, z, 3]))
+        vp1 = vm + np.linalg.norm(vm) * np.tan(br) * g_xyz
+        vp2 = vm - np.linalg.norm(vm) * np.tan(br) * g_xyz
+
         a.plot([Ct[0], Ct[0] - vp1[0]], [Ct[1], Ct[1] + vp1[1]], 'g-')
         a.annotate(str(z), (Ct[0] - vp1[0], Ct[1] + vp1[1]))
-        a.plot([-vp1[0]+Ct[0] - 1000*vp1[1], -vp1[0]+Ct[0] + 1000*vp1[1]], [vp1[1]+Ct[1] - 1000*vp1[0], vp1[1]+Ct[1] + 1000*vp1[0]], 'r-')
-        a.plot([-vp2[0]+Ct[0] - 1000*vp2[1], -vp2[0]+Ct[0] + 1000*vp2[1]], [vp2[1]+Ct[1] - 1000*vp2[0], vp2[1]+Ct[1] + 1000*vp2[0]], 'r-')
+        a.plot([-vp1[0] + Ct[0] - 1000 * vp1[1], -vp1[0] + Ct[0] + 1000 * vp1[1]], [vp1[1] + Ct[1] - 1000 * vp1[0], vp1[1] + Ct[1] + 1000 * vp1[0]], 'r-')
+        a.plot([-vp2[0] + Ct[0] - 1000 * vp2[1], -vp2[0] + Ct[0] + 1000 * vp2[1]], [vp2[1] + Ct[1] - 1000 * vp2[0], vp2[1] + Ct[1] + 1000 * vp2[0]], 'r-')
         a.axis([0, width, height, 0])
         a.axis('off')
         a.figure.canvas.draw()
 
+
 def Rxm():
-    global M,angx
+    global M, angx
     tx = -np.float(ui_Refine.Rx_entry.text())
-    M = np.dot(Rot(tx, 1,0,0),M)
-    angx=angx+tx
+    M = np.dot(Rot(tx, 1, 0, 0), M)
+    angx = angx + tx
     update_orientation()
     return
-    
-def Rxp():    
-    global M,angx
+
+
+def Rxp():
+    global M, angx
     tx = np.float(ui_Refine.Rx_entry.text())
-    M = np.dot(Rot(tx, 1,0,0),M)
-    angx=angx+tx
+    M = np.dot(Rot(tx, 1, 0, 0), M)
+    angx = angx + tx
     update_orientation()
     return
+
 
 def Rym():
-    global angy,M
+    global angy, M
     ty = -np.float(ui_Refine.Ry_entry.text())
-    M = np.dot(Rot(ty, 0,1,0),M)
-    angy=angy+ty
+    M = np.dot(Rot(ty, 0, 1, 0), M)
+    angy = angy + ty
     update_orientation()
     return
-    
+
+
 def Ryp():
-    global angy,M
+    global angy, M
     ty = np.float(ui_Refine.Ry_entry.text())
-    M = np.dot(Rot(ty, 0,1,0),M)
-    angy=angy+ty
+    M = np.dot(Rot(ty, 0, 1, 0), M)
+    angy = angy + ty
     update_orientation()
     return
-    
-def Rzm():    
-    global angz,M
+
+
+def Rzm():
+    global angz, M
     tz = np.float(ui_Refine.Rz_entry.text())
-    M = np.dot(Rot(tz, 0,0,1),M)
-    angz=angz+tz
+    M = np.dot(Rot(tz, 0, 0, 1), M)
+    angz = angz + tz
     update_orientation()
     return
-    
+
+
 def Rzp():
-    global angz,M
+    global angz, M
     tz = -np.float(ui_Refine.Rz_entry.text())
-    M = np.dot(Rot(tz, 0,0,1),M)
-    angz=angz+tz
+    M = np.dot(Rot(tz, 0, 0, 1), M)
+    angz = angz + tz
     update_orientation()
     return
+
 
 def update_L():
-    global calib,M,angx,angy,angz
-    if ui_Refine.L_entry.text()=='':
-     	ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][2] ))
-    if ui_Refine.V_entry.text()=='':
-     	ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1] ))
-    calib= np.float(ui_Refine.L_entry.text())
-    Vt= np.float(ui_Refine.V_entry.text())*1e3
+    global calib, M, angx, angy, angz, Vt
+    if ui_Refine.L_entry.text() == '':
+        ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][4]))
+    if ui_Refine.V_entry.text() == '':
+        ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1]))
+    calib = np.float(ui_Refine.L_entry.text())
+    Vt = np.float(ui_Refine.V_entry.text()) * 1e3
     show_result()
     plot_orientation_init()
-	
-	
-def update_orientation():
-     global calib,Vt, M,angx,angy,angz
 
-     calib= np.float(ui_Refine.L_entry.text())
-     Vt= np.float(ui_Refine.V_entry.text())
-     ui_Refine.tx_label.setText(str(np.around(angx,decimals=2)))
-     ui_Refine.ty_label.setText(str(np.around(angy,decimals=2)))
-     ui_Refine.tz_label.setText(str(np.around(angz,decimals=2)))
-     phi = np.arccos(M[2, 2]) * 180 / np.pi
-     phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
-     phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-     ui_Refine.euler_label.setText(str(np.around(phi_1,decimals=3))+','+str(np.around(phi,decimals=3))+','+str(np.around(phi_2,decimals=3)))
-     plot_orientation()  
-     return	
-    
+
+def update_orientation():
+    global calib, Vt, M, angx, angy, angz
+
+    calib = np.float(ui_Refine.L_entry.text())
+    Vt = np.float(ui_Refine.V_entry.text())
+    ui_Refine.tx_label.setText(str(np.around(angx, decimals=2)))
+    ui_Refine.ty_label.setText(str(np.around(angy, decimals=2)))
+    ui_Refine.tz_label.setText(str(np.around(angz, decimals=2)))
+    phi = np.arccos(M[2, 2]) * 180 / np.pi
+    phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+    phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+    ui_Refine.euler_label.setText(str(np.around(phi_1, decimals=3)) + ',' + str(np.around(phi, decimals=3)) + ',' + str(np.around(phi_2, decimals=3)))
+    plot_orientation()
+    return
+
 ###################################################
 #
 # Get extinction from the space group
@@ -912,7 +893,7 @@ class NavigationToolbar(NavigationToolbar):
 
 ###############################################################
 #
-# Main, import Gui from KikuPyUI
+# Main, import Gui from KikuchiUI and refineUI
 #
 ################################################################
 
@@ -976,11 +957,12 @@ if __name__ == "__main__":
         ui.space_group_Box.addItem(x0[i][7])
         i = i + 1
 
-###########################################################################################################################################
+################################################
 #
-# Import calibrations from the txt file: microscope name..., E(kV), r.d constant in a calibrated diffraction pattern (d should be in A^-1, r in pixel)
+# Import calibrations from the txt file: microscope name..., E(kV), r.d constant in a calibrated diffraction pattern (d should be in A, r in pixel)
 #
-###############################################################################################################################################
+##############################################
+
     f_calib = open(os.path.join(os.path.dirname(__file__), 'calibrations.txt'), "r")
 
     x_calib = []
@@ -992,7 +974,7 @@ if __name__ == "__main__":
     counter = len(x_calib)
 
     for i in range(counter):
-        ui.Calib_box.addItem(x_calib[i][0] + ' ' + x_calib[i][1] + 'keV ' + x_calib[i][2])
+        ui.Calib_box.addItem(x_calib[i][0] + ' ' + x_calib[i][1] + 'keV ' + x_calib[i][2] + 'cm' + ', Binning:' + x_calib[i][3])
 
     f_scatt = open(os.path.join(os.path.dirname(__file__), 'scattering.txt'), "r")
 
@@ -1009,7 +991,7 @@ if __name__ == "__main__":
     figure.canvas.mpl_connect('motion_notify_event', onmove)
     press = False
     move = False
-    
+
     Refine = QtGui.QDialog()
     ui_Refine = refineUI.Ui_Refine()
     ui_Refine.setupUi(Refine)
