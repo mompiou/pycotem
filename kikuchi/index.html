@@ -337,6 +337,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#tilt-conditions" title="Tilt conditions" class="md-nav__link">
+    Tilt conditions
+  </a>
+  
+</li>
+      
       
       
       
@@ -487,6 +494,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#tilt-conditions" title="Tilt conditions" class="md-nav__link">
+    Tilt conditions
+  </a>
+  
+</li>
+      
       
       
       
@@ -620,7 +634,7 @@ R=V U^T
 </div>
 <p>In <a href="../diffraction/">diffraction</a>, the g-vectors in crystal coordinates are determined step by step by calculating the angles between the vectors, and letting the user to choose. 
 Kikuchi bands usually have higher indices so that it is more difficult to guess the right indices. 
-Here we choose to compare the relative measured angles of g-vectors <span><span class="MathJax_Preview">\theta_{ij}=\widehat{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\widehat{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span><span class="MathJax_Preview">\theta'_{ij}=\widehat{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\widehat{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. A consistent set of  g-vectors is obtained if all the angles difference <span><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span> that can be chosen.  </p>
+Here we choose to compare the relative measured angles of g-vectors <span><span class="MathJax_Preview">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span><span class="MathJax_Preview">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. A consistent set of  g-vectors is obtained if all the angles difference <span><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span> that can be chosen.  </p>
 <h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
 <p>The interface is composed of  a top bar menu, a plotting area to display Kikuchi pattern and a setting/results panel.</p>
 <p><img alt="" src="../images/kikuchi-interface.png" /></p>
@@ -709,6 +723,13 @@ dev_angle, dev_width
 </li>
 </ul>
 <p><img alt="" src="../images/kikuchi-refine.png" /></p>
+<h2 id="tilt-conditions">Tilt conditions<a class="headerlink" href="#tilt-conditions" title="Permanent link">&para;</a></h2>
+<p>By default the orientation determined corresponds to the situation of the holder at zero tilt. To retrieve the Euler angle at zero tilt from a tilted sample, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angles and the angle between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis and the y-axis should be indicated.</p>
+<ul>
+<li>Fill the filed in the Tilt conditions window accessed from the <code>Tool</code></li>
+<li>Press <code>Run</code> in the main window or <code>Update</code> in the Refine window to update the Euler angles.</li>
+</ul>
+<p><img alt="" src="../images/kikuchi-tilt.png" /></p>
                 
                   
                 
