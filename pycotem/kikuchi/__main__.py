@@ -534,7 +534,7 @@ def tilt_axes():
     if ui_Tilt.beta_signBox.isChecked():
         s_b = 1
     if ui_Tilt.theta_signBox.isChecked():
-        s_b = 1
+        s_z = 1
     return s_a, s_b, s_z
 
 def rot_tilt_angle():
