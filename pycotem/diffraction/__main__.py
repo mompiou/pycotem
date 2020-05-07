@@ -201,7 +201,7 @@ def angle_check(Dis):
                 ny = (-inclination[i]) * np.pi / 180
                 t = np.array([-np.sin(ny), np.cos(ny), 0])
                 for k in range(0, Dis.shape[0]):
-                    a = angle(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)), g_d)
+                    a = np.arccos(np.dot(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)), g_d))
                     Dis[k, -1] = np.around(np.abs(angle(Dis[k, 1:4], g_hkl[i, :]) - a) * 180 / np.pi, decimals=1)
     Dis = Dis[np.argsort(Dis[:, -1])]
     return Dis
@@ -248,6 +248,54 @@ def distance_theo():
         ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4]) + '  |  ' + ', '.join(map(str, Dist[k, 5:])))
     return
 
+def listb():
+    global Dist, Ang, G, Dstar
+    abc = ui.abc_entry.text().split(",")
+    a = np.float(abc[0])
+    b = np.float(abc[1])
+    c = np.float(abc[2])
+    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+    alp = np.float(alphabetagamma[0])
+    bet = np.float(alphabetagamma[1])
+    gam = np.float(alphabetagamma[2])
+    e = np.int(ui.indice_entry.text())
+    alp = alp * np.pi / 180
+    bet = bet * np.pi / 180
+    gam = gam * np.pi / 180
+    Dist = np.zeros(((2 * e + 1)**3 - 1, 5))
+    G = np.array([[a**2, a * b * np.cos(gam), a * c * np.cos(bet)], [a * b * np.cos(gam), b**2, b * c * np.cos(alp)], [a * c * np.cos(bet), b * c * np.cos(alp), c**2]])
+    V = a * b * c * np.sqrt(1 - (np.cos(alp)**2) - (np.cos(bet))**2 - (np.cos(gam))**2 + 2 * np.cos(alp) * np.cos(bet) * np.cos(gam))
+    D = np.array([[a, b * np.cos(gam), c * np.cos(bet)], [0, b * np.sin(gam), c * (np.cos(alp) - np.cos(bet) * np.cos(gam)) / np.sin(gam)], [0, 0, V / (a * b * np.sin(gam))]])
+    Dstar = np.transpose(np.linalg.inv(D))
+    w = 0
+    for i in range(-e, e + 1):
+        for j in range(-e, e + 1):
+            for k in range(-e, e + 1):
+                if (i, j, k) != (0, 0, 0):
+                    di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
+                    I  = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
+                    if I != 0:
+                        Dist[w, :] = np.array([np.around(di, decimals=3), i, j, k, I])
+                        w = w + 1
+
+    Dist = Dist[Dist[:, 0].argsort()]
+    Dist = Dist[~np.all(Dist == 0, axis=1)]
+    Dist = Dist[::-1]
+
+    lenD = np.shape(Dist)[0]
+    Ang = np.zeros((lenD, lenD))
+
+    for i in range(lenD):
+        T = np.zeros(lenD)
+        for j in range(lenD):
+            c1c = np.dot(Dstar, Dist[i, 1:4])
+            c2c = np.dot(Dstar, Dist[j, 1:4])
+            T[j] = np.around(np.arccos(np.dot(c1c, c2c) / (np.linalg.norm(c1c) * np.linalg.norm(c2c))) * 180 / np.pi, decimals=3)
+
+        Ang[i, :] = T
+
+    return Dist, Ang
+
 ########################
 #
 # Add/Remove spot
@@ -256,14 +304,18 @@ def distance_theo():
 
 
 def add_spot():
-    s1 = ui.ListBox_theo.currentItem().text().split('|')
-    s11 = s1[1].split(',')
+
     s2 = ui.ListBox_d_2.currentItem().text().split(',')
     s3 = ui.tilt_a_entry.text()
     s4 = ui.tilt_b_entry.text()
     s5 = ui.tilt_z_entry.text()
-    s11.replaceInStrings(QtCore.QRegExp("^\s*"),"")
-    s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2]
+    if ui.do_not_guess_checkBox.isChecked():
+    		s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + '0' + ',' + '0' + ',' + '0'+','+s2[0]
+    else:
+    	s1 = ui.ListBox_theo.currentItem().text().split('|')
+    	s11 = s1[1].split(',')
+    	s11.replaceInStrings(QtCore.QRegExp("^\s*"),"")
+	s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2]+ ',' +s2[0]
     ui.diff_spot_Listbox.addItem(s)
     ss= ui.diff_spot_Listbox.count()
     item = ui.diff_spot_Listbox.item(ss-1)
@@ -406,11 +458,12 @@ def check_ambiguity(g2):
     return aa
 
 
-def euler_determine(g_c, g_sample):
+def euler_determine(g_c, g_sample,d):
     global Dstar, cs
     cryststruct()
     g_c = np.dot(Dstar, g_c.T)
-    g_c = (g_c / np.linalg.norm(g_c.T, axis=1)).T
+    n_c = np.linalg.norm(g_c.T, axis=1)
+    g_c = (g_c / n_c).T
     aa = 0
 
     if g_c.shape[0] == 2:
@@ -443,7 +496,6 @@ def euler_determine(g_c, g_sample):
             for i in range(len(c)):
                 de = np.linalg.det(g_c[c[i], :])
                 a = list(set(list(range(g_c.shape[0]))) - set(list(c[i])))
-                print de, a
                 if np.abs(de) < 1e-8:
                     ne = np.linalg.norm(np.dot(g_c[c[i], :], g_c[a, :].T))
                     if ne < 1e-8:
@@ -461,10 +513,10 @@ def euler_determine(g_c, g_sample):
     phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
     phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
     t, t2 = 0, 0
-    for r in range(0, g_sample.shape[0]):
+    for r in range(0, d.shape[0]):
         ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
         t = t + np.abs(np.arccos(ang_dev))
-        t2 = t2 + (np.arccos(ang_dev)) ** 2
+        t2 = t2 +n_c[r] * 100 * np.abs(1 / n_c[r] - d[r])
     t = t / g_sample.shape[0] * 180 / np.pi
     t2 = t2 / g_sample.shape[0]
 
@@ -473,10 +525,11 @@ def euler_determine(g_c, g_sample):
         phip = np.arccos(M[2, 2]) * 180 / np.pi
         phi_2p = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
         phi_1p = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-        R = np.array([phi_1, phi, phi_2, phi_1p, phip, phi_2p, t, t2])
+        
     else:
-        R = np.array([phi_1, phi, phi_2, t, t2])
-
+        phip,phi_1p,phi_2p=0,0,0
+        
+    R = np.array([phi_1, phi, phi_2, phi_1p, phip, phi_2p, t, t2])
     return R
 
 
@@ -497,10 +550,232 @@ def tilt_axes():
     if ui.theta_signBox.isChecked():
         s_b = 1
     return s_a, s_b, s_z
+###########################################
+def guess():
+	if ui.do_not_guess_checkBox.isChecked():
+		ui.label_2.setEnabled(False)
+		ui.ListBox_theo.setEnabled(False)
+		ui.distance_button.setEnabled(False)
+		ui.precision_entry.setEnabled(False)
+		ui.precision_label.setEnabled(False)
+	else:
+		ui.label_2.setEnabled(True)
+		ui.ListBox_theo.setEnabled(True)
+		ui.distance_button.setEnabled(True)
+		ui.precision_entry.setEnabled(True)
+		ui.precision_label.setEnabled(True)
+	
+
+def testangle2(tab):
+    global P0, Tab, eps
+    liste_possibles = []
+    while liste_possibles == []:
+        for ii in P0:
+
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+
+            for jj in T1[0]:
+                T = [list(list2[ii].astype(np.int)),
+                     list(list2[jj].astype(np.int))]
+                liste_possibles.append(T)
+
+        if eps < 3:
+            eps += 0.5
+            ui.euler_listbox.addItem('Still running...')
+        else:
+            ui.euler_listbox.addItem('No match')
+            break
+
+    return liste_possibles
 
 
-def get_orientation():
-    global G, Dstar
+def testangle3(tab):
+    global P0, Tab, eps
+    liste_possibles = []
+    while liste_possibles == []:
+        for ii in P0:
+
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
+            for jj in T1[0]:
+                for kk in T2[0]:
+                    if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps:
+                        T = [list(list2[ii].astype(np.int)),
+                             list(list2[jj].astype(np.int)),
+                             list(list2[kk].astype(np.int))]
+                        liste_possibles.append(T)
+
+        if eps < 3:
+            eps += 0.5
+            ui.euler_listbox.addItem('Still running...')
+        else:
+            ui.euler_listbox.addItem('No match')
+            break
+
+    return liste_possibles
+
+
+def testangle4(tab):
+    global P0, Tab, eps
+    liste_possibles = []
+    while liste_possibles == []:
+        for ii in P0:
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
+            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
+            for jj in T1[0]:
+                for kk in T2[0]:
+                    for pp in T3[0]:
+                        if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
+                                and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps:
+                            T = [list(list2[ii].astype(np.int)),
+                                 list(list2[jj].astype(np.int)),
+                                 list(list2[kk].astype(np.int)),
+                                 list(list2[pp].astype(np.int))]
+                            liste_possibles.append(T)
+
+        if eps < 3:
+            eps += 0.5
+            ui.euler_listbox.addItem('Still running...')
+        else:
+            ui.euler_listbox.addItem('No match')
+            break
+
+    return liste_possibles
+
+
+def testangle5(tab):
+    global P0, Tab, eps
+    liste_possibles = []
+    while liste_possibles == []:
+        for ii in P0:
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
+            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
+            T4 = np.where(np.abs(Tab[ii, :] - tab[0, 4]) <= eps)
+            for jj in T1[0]:
+                for kk in T2[0]:
+                    for pp in T3[0]:
+                        for hh in T4[0]:
+                            if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
+                                    and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
+                                    and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps:
+                                T = [list(list2[ii].astype(np.int)),
+                                     list(list2[jj].astype(np.int)),
+                                     list(list2[kk].astype(np.int)),
+                                     list(list2[pp].astype(np.int)),
+                                     list(list2[hh].astype(np.int))]
+                                liste_possibles.append(T)
+
+        if eps < 3:
+            ui.euler_listbox.addItem('Still running...')
+            eps += 0.5
+        else:
+            ui.euler_listbox.addItem('No match')
+            break
+
+    return liste_possibles
+
+
+def testangle6(tab):
+    global P0, Tab, eps
+    liste_possibles = []
+    while liste_possibles == []:
+        for ii in P0:
+            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
+            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
+            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
+            T4 = np.where(np.abs(Tab[ii, :] - tab[0, 4]) <= eps)
+            T5 = np.where(np.abs(Tab[ii, :] - tab[0, 5]) <= eps)
+            for jj in T1[0]:
+                for kk in T2[0]:
+                    for pp in T3[0]:
+                        for hh in T4[0]:
+                            for ll in T5[0]:
+                                if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
+                                        and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
+                                        and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps \
+                                        and np.abs(Tab[ll, jj] - tab[1, 5]) <= eps and np.abs(Tab[kk, ll] - tab[2, 5]) <= eps \
+                                        and np.abs(Tab[ll, pp] - tab[3, 5]) <= eps and np.abs(Tab[hh, ll] - tab[4, 5]) <= eps:
+                                    T = [list(list2[ii].astype(np.int)),
+                                         list(list2[jj].astype(np.int)),
+                                         list(list2[kk].astype(np.int)),
+                                         list(list2[pp].astype(np.int)),
+                                         list(list2[hh].astype(np.int)),
+                                         list(list2[ll].astype(np.int))]
+                                    liste_possibles.append(T)
+
+        if eps < 3:
+            ui.euler_listbox.addItem('Still running...')
+            eps += 0.5
+        else:
+            ui.euler_listbox.addItem('No match')
+            break
+
+    return liste_possibles
+
+def Uniqueness(A):
+    l = np.shape(A)[0]
+    abc = ui.abc_entry.text().split(",")
+    a = np.float(abc[0])
+    b = np.float(abc[1])
+    c = np.float(abc[2])
+    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+    alp = np.float(alphabetagamma[0])
+    bet = np.float(alphabetagamma[1])
+    gam = np.float(alphabetagamma[2])
+    alp = alp * np.pi / 180
+    bet = bet * np.pi / 180
+    gam = gam * np.pi / 180
+    G = np.array([[a**2, a * b * np.cos(gam), a * c * np.cos(bet)], [a * b * np.cos(gam), b**2, b * c * np.cos(alp)], [a * c * np.cos(bet), b * c * np.cos(alp), c**2]])
+    d = np.zeros((1, l))
+
+    for t in range(0, l):
+        d[:, t] = 1 / (np.sqrt(np.dot(A[t, :], np.dot(np.linalg.inv(G), A[t, :]))))
+
+    return d
+
+def do_not_guess(g_s):
+    global eps,P0,Tab,list2
+    
+    list2, Tab = listb()
+    eps=1
+    P0 = range(len(list2))
+    N=g_s.shape[0]
+    tab = np.zeros((N, N))
+    for l in range(0, N):
+        for f in range(0, N):
+            tab[l, f] = np.arccos(np.dot(g_s[l, :], g_s[f, :])) * 180 / np.pi
+
+    n = np.shape(tab)[0]
+    if n == 2:
+            K = testangle2(tab)
+    elif n == 3:
+            K = testangle3(tab)
+    elif n == 4:
+            K = testangle4(tab)
+    elif n == 5:
+            K = testangle5(tab)
+    elif n == 6:
+            K = testangle6(tab)
+    else:
+            ui.ListBox_theo.addItem('Number of bands should be less than 7')
+            return
+
+    K = np.asarray(K)
+    U = np.zeros((np.shape(K)[0], N))
+
+    for t in range(0, np.shape(K)[0]):
+        U[t, :] = Uniqueness(K[t, :, 1:4])
+
+    K = K[np.unique(U, return_index=True, axis=0)[1], :, :]
+
+    return K
+
+
+		
+def get_data():
+
     s_a, s_b, s_z = tilt_axes()
     ui.euler_listbox.clear()
     s = [str(x.text()) for x in ui.diff_spot_Listbox.selectedItems()]
@@ -509,19 +784,24 @@ def get_orientation():
     tilt_z = []
     inclination = []
     g_c = []
-
+    d_g=[]
+        
     for i in range(0, len(s)):
         l = map(float, s[i].split(','))
         tilt_a.append(l[0])
         tilt_b.append(l[1])
         tilt_z.append(l[2])
         inclination.append(l[3])
-        g_c.append(l[4:7])
+        d_g.append(l[7])
+       	g_c.append(l[4:7])
+        	
     inclination = np.array(inclination)
+    d_g=np.array(d_g)
     tilt_a = np.array(tilt_a)
     tilt_b = np.array(tilt_b)
     tilt_z = np.array(tilt_z)
     g_c = np.array(g_c)
+        	
     t_ang = np.float(ui.tilt_axis_angle_entry.text())
     g_sample = np.zeros((np.shape(tilt_a)[0], 3))
 
@@ -530,20 +810,45 @@ def get_orientation():
         ny = (-inclination[i]) * np.pi / 180
         t = np.array([-np.sin(ny), np.cos(ny), 0])
         g_sample[i, :] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
+     
+    if ui.do_not_guess_checkBox.isChecked():
+    	g_c=do_not_guess(g_sample)
+     
+    return g_c,g_sample,d_g
+	
+def display_result(A):
+	if (A[3:6]==0).all():
+		ui.euler_listbox.addItem('Phi1,Phi,Phi2')
+		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
+	else:
+		ui.euler_listbox.addItem('Phi1,Phi,Phi2 - ambiguous result')
+		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
+		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[3:6])))
+	ui.euler_listbox.addItem('Mean angular deviation, Mean d-spacing dev.')
+	ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[6:8])))
 
-    R = euler_determine(g_c, g_sample)
-    if R.shape[0] == 5:
-        ui.euler_listbox.addItem('Phi1,Phi,Phi2')
-        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, R[0:3])))
-        ui.euler_listbox.addItem('Mean angular deviation, Mean square angular dev.')
-        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, R[3:5])))
-    if R.shape[0] == 8:
-        ui.euler_listbox.addItem('Phi1,Phi,Phi2 - ambiguous result')
-        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, R[0:3])))
-        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, R[3:6])))
-        ui.euler_listbox.addItem('Mean angular deviation, Mean square angular dev.')
-        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, R[6:8])))
+def get_orientation():
+    global G, Dstar
+    g_c,g_sample,d_g=get_data()
+    if ui.do_not_guess_checkBox.isChecked():
+    	    euler = np.zeros((g_c.shape[0], 8))
+	    for sol in range(0, g_c.shape[0]):
+		euler[sol, :] = euler_determine(g_c[sol, :, 1:4], g_sample,d_g)
+	    so=np.lexsort((np.around(euler[:,7],decimals=3),np.around(euler[:,6],decimals=3)))    
+	    g0 = g_c[so, :, :]
+	    euler = euler[so]
+	    ui.euler_listbox.clear()
+	    for h in range(0, euler.shape[0]):
+		ss = 'g:'
+		for hh in range(0, g_sample.shape[0]):
+		    ss = ss + ' ' + str(g0[h, hh, 1:4])
+		ui.euler_listbox.addItem(ss)
 
+		display_result(euler[h,:])
+ 	
+    else:
+	    R = euler_determine(g_c, g_sample,d_g)
+	    display_result(R)
 
 #########################
 #
@@ -744,7 +1049,6 @@ def import_data():
         	x0.append(map(str, line.split()))
         
         data.close()
-        print x0
         for item in x0:
         	ui.diff_spot_Listbox.addItem(item[0])
         
@@ -917,10 +1221,11 @@ Index.connect(ui.actionCalculate_spectrum, QtCore.SIGNAL('triggered()'), dialSpe
 ui.add_spot_button.clicked.connect(add_spot)
 ui.remove_spot_button.clicked.connect(remove_spot)
 ui.orientation_button.clicked.connect(get_orientation)
+ui.do_not_guess_checkBox.toggled.connect(guess)
 
 ui.diff_spot_Listbox.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
 ui.n_entry.setText('1')
-ui.indice_entry.setText('5')
+ui.indice_entry.setText('3')
 ui.tilt_axis_angle_entry.setText('0')
 ui.tilt_a_entry.setText('0')
 ui.tilt_b_entry.setText('0')
@@ -928,5 +1233,6 @@ ui.tilt_z_entry.setText('0')
 ui.precision_entry.setText('10')
 s = 1
 gclick = np.zeros((1, 2))
+guess()
 Index.show()
 app.exec_()

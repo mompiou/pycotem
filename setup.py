@@ -15,7 +15,7 @@ setup(
     author = 'f. mompiou',
     author_email = 'frederic.mompiou@cemes.fr',
     license='GPL-3.0',
-    url = 'http://mompiou.free.fr/pycotem',
+    url = 'https://mompiou.github.io/pycotem/',
     download_url = 'https://github.com/mompiou/pycotem',
     keywords = ['scientific', 'crystallography', 'electron microscopy'],
     classifiers = ['Intended Audience :: Science/Research',

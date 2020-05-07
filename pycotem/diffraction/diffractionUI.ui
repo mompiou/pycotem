@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>851</height>
+    <height>856</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,14 +30,7 @@
        <string/>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="23" column="6" colspan="5">
-        <widget class="QPushButton" name="orientation_button">
-         <property name="text">
-          <string>Get orientation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0" colspan="6">
+       <item row="19" column="0" colspan="6">
         <widget class="QPushButton" name="distance_button">
          <property name="text">
           <string>Find diffraction spots</string>
@@ -54,7 +47,7 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="6">
+       <item row="19" column="6">
         <widget class="QLineEdit" name="precision_entry"/>
        </item>
        <item row="8" column="0" colspan="10">
@@ -74,7 +67,7 @@
        <item row="2" column="5" colspan="4">
         <widget class="QLineEdit" name="indice_entry"/>
        </item>
-       <item row="13" column="2">
+       <item row="14" column="2">
         <widget class="QCheckBox" name="alpha_signBox">
          <property name="text">
           <string/>
@@ -91,10 +84,17 @@
        <item row="5" column="4" colspan="7">
         <widget class="QComboBox" name="Calib_box"/>
        </item>
-       <item row="15" column="0" colspan="10">
+       <item row="18" column="0" colspan="10">
         <widget class="QListWidget" name="ListBox_theo"/>
        </item>
-       <item row="13" column="9">
+       <item row="27" column="3" colspan="3">
+        <widget class="QPushButton" name="remove_spot_button">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="9">
         <widget class="QCheckBox" name="theta_signBox">
          <property name="text">
           <string/>
@@ -104,7 +104,7 @@
        <item row="9" column="0" rowspan="2" colspan="5">
         <widget class="QListWidget" name="ListBox_d_2"/>
        </item>
-       <item row="13" column="1">
+       <item row="14" column="1">
         <widget class="QLineEdit" name="tilt_a_entry"/>
        </item>
        <item row="4" column="4" colspan="7">
@@ -117,14 +117,14 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="7" colspan="3">
+       <item row="19" column="7" colspan="3">
         <widget class="QLabel" name="precision_label">
          <property name="text">
           <string>precision</string>
          </property>
         </widget>
        </item>
-       <item row="21" column="0" colspan="2">
+       <item row="24" column="0" colspan="2">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Data&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -138,7 +138,7 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="5">
+       <item row="14" column="5">
         <widget class="QLineEdit" name="tilt_b_entry"/>
        </item>
        <item row="0" column="5" colspan="6">
@@ -158,18 +158,8 @@
          </property>
         </widget>
        </item>
-       <item row="22" column="0" colspan="11">
-        <widget class="QListWidget" name="diff_spot_Listbox"/>
-       </item>
-       <item row="25" column="0" colspan="11">
+       <item row="29" column="0" colspan="11">
         <widget class="QListWidget" name="euler_listbox"/>
-       </item>
-       <item row="14" column="0" colspan="10">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;g vectors&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="alpha_label">
@@ -178,52 +168,45 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0" colspan="3">
+       <item row="13" column="0" colspan="3">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Tilt angles/AC&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="6">
+       <item row="14" column="6">
         <widget class="QCheckBox" name="beta_signBox">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="14" column="0">
         <widget class="QLabel" name="alpha_label_2">
          <property name="text">
           <string>α (°)</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="8">
+       <item row="14" column="8">
         <widget class="QLineEdit" name="tilt_z_entry"/>
        </item>
-       <item row="23" column="3" colspan="3">
-        <widget class="QPushButton" name="remove_spot_button">
-         <property name="text">
-          <string>Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="7">
+       <item row="14" column="7">
         <widget class="QLabel" name="z_label">
          <property name="text">
           <string>θ (°)</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="4">
+       <item row="14" column="4">
         <widget class="QLabel" name="beta_label">
          <property name="text">
           <string>β (°)</string>
          </property>
         </widget>
        </item>
-       <item row="23" column="0" colspan="3">
+       <item row="27" column="0" colspan="3">
         <widget class="QPushButton" name="add_spot_button">
          <property name="text">
           <string>Add data</string>
@@ -242,6 +225,30 @@
        </item>
        <item row="1" column="5" colspan="6">
         <widget class="QLineEdit" name="alphabetagamma_entry"/>
+       </item>
+       <item row="16" column="0" colspan="4">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;g vectors&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="4" colspan="7">
+        <widget class="QCheckBox" name="do_not_guess_checkBox">
+         <property name="text">
+          <string>do not use g-vector guess</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="0" colspan="11">
+        <widget class="QListWidget" name="diff_spot_Listbox"/>
+       </item>
+       <item row="27" column="6" colspan="5">
+        <widget class="QPushButton" name="orientation_button">
+         <property name="text">
+          <string>Get orientation</string>
+         </property>
+        </widget>
        </item>
       </layout>
       <zorder>abc_label</zorder>
@@ -283,6 +290,7 @@
       <zorder>precision_entry</zorder>
       <zorder>precision_label</zorder>
       <zorder>Button_reset</zorder>
+      <zorder>do_not_guess_checkBox</zorder>
      </widget>
     </item>
    </layout>
@@ -369,6 +377,7 @@
   <tabstop>beta_signBox</tabstop>
   <tabstop>tilt_z_entry</tabstop>
   <tabstop>theta_signBox</tabstop>
+  <tabstop>do_not_guess_checkBox</tabstop>
   <tabstop>ListBox_theo</tabstop>
   <tabstop>distance_button</tabstop>
   <tabstop>precision_entry</tabstop>

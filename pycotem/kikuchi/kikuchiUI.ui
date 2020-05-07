@@ -27,7 +27,7 @@
        <string/>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0" rowspan="2" colspan="5">
+       <item row="2" column="0" rowspan="2" colspan="5">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="maximumSize">
           <size>
@@ -68,19 +68,6 @@
             </property>
            </widget>
           </item>
-          <item row="10" column="0" rowspan="2" colspan="4">
-           <widget class="QPushButton" name="Button_run">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Run</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="3">
            <widget class="QPushButton" name="Button_remove_band">
             <property name="text">
@@ -88,23 +75,13 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="2">
-           <widget class="QLineEdit" name="tol_entry"/>
-          </item>
           <item row="13" column="0" rowspan="2" colspan="4">
            <widget class="QListWidget" name="ListBox_theo"/>
           </item>
           <item row="4" column="3">
            <widget class="QPushButton" name="plot_bands_button">
             <property name="text">
-             <string>plot bands</string>
-            </property>
-           </widget>
-          </item>
-          <item row="15" column="0" colspan="4">
-           <widget class="QPushButton" name="Button_orientation">
-            <property name="text">
-             <string>Show bands</string>
+             <string>Plot bands</string>
             </property>
            </widget>
           </item>
@@ -118,17 +95,40 @@
           <item row="0" column="2" colspan="2">
            <widget class="QLineEdit" name="centerLine"/>
           </item>
-          <item row="4" column="0" colspan="2">
+          <item row="4" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>tol. angle</string>
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="tol_entry"/>
+          </item>
+          <item row="12" column="0" colspan="4">
+           <widget class="QPushButton" name="Button_run">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Run</string>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="0" colspan="4">
+           <widget class="QPushButton" name="Button_orientation">
+            <property name="text">
+             <string>Show bands</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="0" column="0" colspan="5">
+       <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="maximumSize">
           <size>
@@ -146,6 +146,13 @@
           <property name="spacing">
            <number>5</number>
           </property>
+          <item row="25" column="0" colspan="6">
+           <widget class="QPushButton" name="Button_reset">
+            <property name="text">
+             <string>Reset points</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="a_label">
             <property name="text">
@@ -217,13 +224,6 @@
           <item row="19" column="2">
            <widget class="QComboBox" name="Calib_box"/>
           </item>
-          <item row="25" column="0" colspan="6">
-           <widget class="QPushButton" name="Button_reset">
-            <property name="text">
-             <string>Reset points</string>
-            </property>
-           </widget>
-          </item>
           <item row="26" column="0" colspan="6">
            <widget class="QPushButton" name="reset_view_button">
             <property name="text">
@@ -264,9 +264,10 @@
    </widget>
    <widget class="QMenu" name="menuRefine">
     <property name="title">
-     <string>Refine</string>
+     <string>Tools</string>
     </property>
     <addaction name="actionRefine_orientation"/>
+    <addaction name="actionTilt"/>
    </widget>
    <addaction name="menuSave"/>
    <addaction name="menuStructure"/>
@@ -293,16 +294,36 @@
     <string>Refine orientation</string>
    </property>
   </action>
+  <action name="actionGet_orientation_at_zero_tilt">
+   <property name="text">
+    <string>get orientation at zero-tilt</string>
+   </property>
+  </action>
+  <action name="actionTilt">
+   <property name="text">
+    <string>Tilt conditions</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>abc_entry</tabstop>
   <tabstop>alphabetagamma_entry</tabstop>
   <tabstop>indice_entry</tabstop>
   <tabstop>space_group_Box</tabstop>
-  <tabstop>Calib_box</tabstop>
   <tabstop>brightness_slider</tabstop>
+  <tabstop>Calib_box</tabstop>
   <tabstop>Button_reset</tabstop>
   <tabstop>reset_view_button</tabstop>
+  <tabstop>Button_add_center</tabstop>
+  <tabstop>centerLine</tabstop>
+  <tabstop>ListBox_d_2</tabstop>
+  <tabstop>Button_addband</tabstop>
+  <tabstop>Button_remove_band</tabstop>
+  <tabstop>tol_entry</tabstop>
+  <tabstop>plot_bands_button</tabstop>
+  <tabstop>Button_run</tabstop>
+  <tabstop>ListBox_theo</tabstop>
+  <tabstop>Button_orientation</tabstop>
  </tabstops>
  <resources/>
  <connections/>
