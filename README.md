@@ -29,6 +29,10 @@ Run ```python -m pycotem.xxxx``` for the different tools: ```stereoproj```, ```d
 
 Image files and setting parameters are provided in the ```test``` directory in the github repository for testing ```diffraction```, ```interface``` and ```kikuchi```.
 
+## Documentation
+
+Available [here](https://mompiou.github.io/pycotem)
+
 
 ## Contributing
 

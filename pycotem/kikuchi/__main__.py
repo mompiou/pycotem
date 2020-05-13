@@ -526,6 +526,7 @@ def Uniqueness(A):
 
     return d
 
+
 def tilt_axes():
     global s_a, s_b, s_z
     s_a, s_b, s_z = -1, -1, -1
@@ -537,15 +538,16 @@ def tilt_axes():
         s_z = 1
     return s_a, s_b, s_z
 
+
 def rot_tilt_angle():
-	tilt_axes()
-	tilt_a=np.float(ui_Tilt.tilt_a_entry.text())
-	tilt_b=np.float(ui_Tilt.tilt_b_entry.text())
-	tilt_z=np.float(ui_Tilt.tilt_z_entry.text())
-	t_ang=np.float(ui_Tilt.t_ang_entry.text())
-	R= np.dot(Rot(s_z * tilt_z, 0, 0, 1), np.dot(Rot(s_b * tilt_b, 1, 0, 0), np.dot(Rot(s_a * tilt_a, 0, 1, 0),Rot(t_ang, 0, 0, 1))))
-	return R
-	
+    tilt_axes()
+    tilt_a = np.float(ui_Tilt.tilt_a_entry.text())
+    tilt_b = np.float(ui_Tilt.tilt_b_entry.text())
+    tilt_z = np.float(ui_Tilt.tilt_z_entry.text())
+    t_ang = np.float(ui_Tilt.t_ang_entry.text())
+    R = np.dot(Rot(s_z * tilt_z, 0, 0, 1), np.dot(Rot(s_b * tilt_b, 1, 0, 0), np.dot(Rot(s_a * tilt_a, 0, 1, 0), Rot(t_ang, 0, 0, 1))))
+    return R
+
 ##############################################################################
 #
 #  Show results function
@@ -559,8 +561,9 @@ def rot_tilt_angle():
 
 #################################################################################
 
+
 def show_result():
-    global Ct, B2, Dist, P0, eps, Tab, list2, tab, K, v0, pOB, L, v, euler, lambd, calib,euler_tilt
+    global Ct, B2, Dist, P0, eps, Tab, list2, tab, K, v0, pOB, L, v, euler, lambd, calib, euler_tilt
     ui.ListBox_theo.clear()
     if ui_Refine.L_entry.text() == '':
         ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][4]))
@@ -642,12 +645,12 @@ def show_result():
 
         U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
         M = np.dot(V.T, U.T)
-        
+
         phi = np.arccos(M[2, 2]) * 180 / np.pi
         phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
         phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-	
-	t = 0
+
+        t = 0
         d_dev = 0
         for r in range(0, Num - 1):
             ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
@@ -656,23 +659,23 @@ def show_result():
         t = t / g_sample.shape[0] * 180 / np.pi
         d_dev = d_dev / g_sample.shape[0]
         euler[sol, :] = np.array([np.around(phi_1, decimals=3), np.around(phi, decimals=3), np.around(phi_2, decimals=3), np.around(t, decimals=3), np.around(d_dev, decimals=3)])
-        
-    so = np.lexsort((euler[:,4],euler[:,3]))    
+
+    so = np.lexsort((euler[:, 4], euler[:, 3]))
     K = K[so, :, :]
     euler = euler[so]
     ui.ListBox_theo.clear()
     for h in range(0, euler.shape[0]):
-    	M_tilt = np.dot(rot_tilt_angle(), rotation(euler[h,0],euler[h,1],euler[h,2]))
-    	phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi,decimals=3)
-        phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi,decimals=3)
-        phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi,decimals=3)
+        M_tilt = np.dot(rot_tilt_angle(), rotation(euler[h, 0], euler[h, 1], euler[h, 2]))
+        phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi, decimals=3)
+        phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi, decimals=3)
+        phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi, decimals=3)
         ss = 'g:'
         for hh in range(0, Num - 1):
             ss = ss + ' ' + str(K[h, hh, 1:4])
         ui.ListBox_theo.addItem(ss)
         ui.ListBox_theo.addItem(str(phi_1_tilt) + ',' + str(phi_tilt) + ',' + str(phi_2_tilt))
         ui.ListBox_theo.addItem(str(euler[h, 3]) + ',' + str(euler[h, 4]))
-    
+
     return K, euler
 
 #######################################
@@ -718,9 +721,9 @@ def plot_orientation_init():
     ui_Refine.ty_label.setText(str(np.around(angy, decimals=2)))
     ui_Refine.tz_label.setText(str(np.around(angz, decimals=2)))
     M_tilt = np.dot(rot_tilt_angle(), M)
-    phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi,decimals=3)
-    phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi,decimals=3)
-    phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi,decimals=3)
+    phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi, decimals=3)
+    phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi, decimals=3)
+    phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi, decimals=3)
     ui_Refine.euler_label.setText(str(phi_1_tilt) + ',' + str(phi_tilt) + ',' + str(phi_2_tilt))
     plot_orientation()
 
@@ -1030,7 +1033,7 @@ if __name__ == "__main__":
     ui_Tilt.tilt_b_entry.setText('0')
     ui_Tilt.tilt_z_entry.setText('0')
     ui_Tilt.t_ang_entry.setText('0')
-    
+
     Refine = QtGui.QDialog()
     ui_Refine = refineUI.Ui_Refine()
     ui_Refine.setupUi(Refine)

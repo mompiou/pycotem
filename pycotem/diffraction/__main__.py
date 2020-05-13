@@ -206,8 +206,9 @@ def angle_check(Dis):
     Dis = Dis[np.argsort(Dis[:, -1])]
     return Dis
 
+
 def cryst():
-    global D, Dstar,G
+    global D, Dstar, G
     abc = ui.abc_entry.text().split(",")
     a = np.float(abc[0])
     b = np.float(abc[1])
@@ -224,7 +225,8 @@ def cryst():
     G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
     Dstar = np.transpose(np.linalg.inv(D))
     return
-    
+
+
 def distance_theo():
     global d, G, Dstar, D
     cryst()
@@ -247,6 +249,7 @@ def distance_theo():
     for k in range(0, Dist.shape[0]):
         ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4]) + '  |  ' + ', '.join(map(str, Dist[k, 5:])))
     return
+
 
 def listb():
     global Dist, Ang, G, Dstar
@@ -273,7 +276,7 @@ def listb():
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
                     di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
-                    I  = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
+                    I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
                     if I != 0:
                         Dist[w, :] = np.array([np.around(di, decimals=3), i, j, k, I])
                         w = w + 1
@@ -310,16 +313,17 @@ def add_spot():
     s4 = ui.tilt_b_entry.text()
     s5 = ui.tilt_z_entry.text()
     if ui.do_not_guess_checkBox.isChecked():
-    		s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + '0' + ',' + '0' + ',' + '0'+','+s2[0]
+        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + '0' + ',' + '0' + ',' + '0' + ',' + s2[0]
     else:
-    	s1 = ui.ListBox_theo.currentItem().text().split('|')
-    	s11 = s1[1].split(',')
-    	s11.replaceInStrings(QtCore.QRegExp("^\s*"),"")
-	s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2]+ ',' +s2[0]
+        s1 = ui.ListBox_theo.currentItem().text().split('|')
+        s11 = s1[1].split(',')
+        s11.replaceInStrings(QtCore.QRegExp("^\s*"), "")
+        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0]
     ui.diff_spot_Listbox.addItem(s)
-    ss= ui.diff_spot_Listbox.count()
-    item = ui.diff_spot_Listbox.item(ss-1)
+    ss = ui.diff_spot_Listbox.count()
+    item = ui.diff_spot_Listbox.item(ss - 1)
     item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+
 
 def remove_spot():
     ui.diff_spot_Listbox.takeItem(ui.diff_spot_Listbox.currentRow())
@@ -458,7 +462,7 @@ def check_ambiguity(g2):
     return aa
 
 
-def euler_determine(g_c, g_sample,d):
+def euler_determine(g_c, g_sample, d):
     global Dstar, cs
     cryststruct()
     g_c = np.dot(Dstar, g_c.T)
@@ -475,7 +479,7 @@ def euler_determine(g_c, g_sample,d):
 
     if np.linalg.matrix_rank(g_c) < 3:
         g_cross = np.cross(g_c[0, :], g_c[1, :])
-        g_c=np.vstack((g_c,g_cross / np.linalg.norm(g_cross)))
+        g_c = np.vstack((g_c, g_cross / np.linalg.norm(g_cross)))
         g_sample_cross = np.cross(g_sample[0, :], g_sample[1, :])
         g_sample = np.vstack((g_sample, g_sample_cross / np.linalg.norm(g_sample_cross)))
         aa = check_ambiguity(g_cross)
@@ -516,7 +520,7 @@ def euler_determine(g_c, g_sample,d):
     for r in range(0, d.shape[0]):
         ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
         t = t + np.abs(np.arccos(ang_dev))
-        t2 = t2 +n_c[r] * 100 * np.abs(1 / n_c[r] - d[r])
+        t2 = t2 + n_c[r] * 100 * np.abs(1 / n_c[r] - d[r])
     t = t / g_sample.shape[0] * 180 / np.pi
     t2 = t2 / g_sample.shape[0]
 
@@ -525,10 +529,10 @@ def euler_determine(g_c, g_sample,d):
         phip = np.arccos(M[2, 2]) * 180 / np.pi
         phi_2p = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
         phi_1p = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-        
+
     else:
-        phip,phi_1p,phi_2p=0,0,0
-        
+        phip, phi_1p, phi_2p = 0, 0, 0
+
     R = np.array([phi_1, phi, phi_2, phi_1p, phip, phi_2p, t, t2])
     return R
 
@@ -551,20 +555,22 @@ def tilt_axes():
         s_z = 1
     return s_a, s_b, s_z
 ###########################################
+
+
 def guess():
-	if ui.do_not_guess_checkBox.isChecked():
-		ui.label_2.setEnabled(False)
-		ui.ListBox_theo.setEnabled(False)
-		ui.distance_button.setEnabled(False)
-		ui.precision_entry.setEnabled(False)
-		ui.precision_label.setEnabled(False)
-	else:
-		ui.label_2.setEnabled(True)
-		ui.ListBox_theo.setEnabled(True)
-		ui.distance_button.setEnabled(True)
-		ui.precision_entry.setEnabled(True)
-		ui.precision_label.setEnabled(True)
-	
+    if ui.do_not_guess_checkBox.isChecked():
+        ui.label_2.setEnabled(False)
+        ui.ListBox_theo.setEnabled(False)
+        ui.distance_button.setEnabled(False)
+        ui.precision_entry.setEnabled(False)
+        ui.precision_label.setEnabled(False)
+    else:
+        ui.label_2.setEnabled(True)
+        ui.ListBox_theo.setEnabled(True)
+        ui.distance_button.setEnabled(True)
+        ui.precision_entry.setEnabled(True)
+        ui.precision_label.setEnabled(True)
+
 
 def testangle2(tab):
     global P0, Tab, eps
@@ -714,6 +720,7 @@ def testangle6(tab):
 
     return liste_possibles
 
+
 def Uniqueness(A):
     l = np.shape(A)[0]
     abc = ui.abc_entry.text().split(",")
@@ -735,13 +742,14 @@ def Uniqueness(A):
 
     return d
 
+
 def do_not_guess(g_s):
-    global eps,P0,Tab,list2
-    
+    global eps, P0, Tab, list2
+
     list2, Tab = listb()
-    eps=1
+    eps = 1
     P0 = range(len(list2))
-    N=g_s.shape[0]
+    N = g_s.shape[0]
     tab = np.zeros((N, N))
     for l in range(0, N):
         for f in range(0, N):
@@ -749,18 +757,18 @@ def do_not_guess(g_s):
 
     n = np.shape(tab)[0]
     if n == 2:
-            K = testangle2(tab)
+        K = testangle2(tab)
     elif n == 3:
-            K = testangle3(tab)
+        K = testangle3(tab)
     elif n == 4:
-            K = testangle4(tab)
+        K = testangle4(tab)
     elif n == 5:
-            K = testangle5(tab)
+        K = testangle5(tab)
     elif n == 6:
-            K = testangle6(tab)
+        K = testangle6(tab)
     else:
-            ui.ListBox_theo.addItem('Number of bands should be less than 7')
-            return
+        ui.ListBox_theo.addItem('Number of bands should be less than 7')
+        return
 
     K = np.asarray(K)
     U = np.zeros((np.shape(K)[0], N))
@@ -773,7 +781,6 @@ def do_not_guess(g_s):
     return K
 
 
-		
 def get_data():
 
     s_a, s_b, s_z = tilt_axes()
@@ -784,8 +791,8 @@ def get_data():
     tilt_z = []
     inclination = []
     g_c = []
-    d_g=[]
-        
+    d_g = []
+
     for i in range(0, len(s)):
         l = map(float, s[i].split(','))
         tilt_a.append(l[0])
@@ -793,15 +800,15 @@ def get_data():
         tilt_z.append(l[2])
         inclination.append(l[3])
         d_g.append(l[7])
-       	g_c.append(l[4:7])
-        	
+        g_c.append(l[4:7])
+
     inclination = np.array(inclination)
-    d_g=np.array(d_g)
+    d_g = np.array(d_g)
     tilt_a = np.array(tilt_a)
     tilt_b = np.array(tilt_b)
     tilt_z = np.array(tilt_z)
     g_c = np.array(g_c)
-        	
+
     t_ang = np.float(ui.tilt_axis_angle_entry.text())
     g_sample = np.zeros((np.shape(tilt_a)[0], 3))
 
@@ -810,45 +817,47 @@ def get_data():
         ny = (-inclination[i]) * np.pi / 180
         t = np.array([-np.sin(ny), np.cos(ny), 0])
         g_sample[i, :] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
-     
+
     if ui.do_not_guess_checkBox.isChecked():
-    	g_c=do_not_guess(g_sample)
-     
-    return g_c,g_sample,d_g
-	
+        g_c = do_not_guess(g_sample)
+
+    return g_c, g_sample, d_g
+
+
 def display_result(A):
-	if (A[3:6]==0).all():
-		ui.euler_listbox.addItem('Phi1,Phi,Phi2')
-		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
-	else:
-		ui.euler_listbox.addItem('Phi1,Phi,Phi2 - ambiguous result')
-		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
-		ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[3:6])))
-	ui.euler_listbox.addItem('Mean angular deviation, Mean d-spacing dev.')
-	ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[6:8])))
+    if (A[3:6] == 0).all():
+        ui.euler_listbox.addItem('Phi1,Phi,Phi2')
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
+    else:
+        ui.euler_listbox.addItem('Phi1,Phi,Phi2 - ambiguous result')
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[0:3])))
+        ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[3:6])))
+    ui.euler_listbox.addItem('Mean angular deviation, Mean d-spacing dev.')
+    ui.euler_listbox.addItem(','.join(map("{:.3f}".format, A[6:8])))
+
 
 def get_orientation():
     global G, Dstar
-    g_c,g_sample,d_g=get_data()
+    g_c, g_sample, d_g = get_data()
     if ui.do_not_guess_checkBox.isChecked():
-    	    euler = np.zeros((g_c.shape[0], 8))
-	    for sol in range(0, g_c.shape[0]):
-		euler[sol, :] = euler_determine(g_c[sol, :, 1:4], g_sample,d_g)
-	    so=np.lexsort((np.around(euler[:,7],decimals=3),np.around(euler[:,6],decimals=3)))    
-	    g0 = g_c[so, :, :]
-	    euler = euler[so]
-	    ui.euler_listbox.clear()
-	    for h in range(0, euler.shape[0]):
-		ss = 'g:'
-		for hh in range(0, g_sample.shape[0]):
-		    ss = ss + ' ' + str(g0[h, hh, 1:4])
-		ui.euler_listbox.addItem(ss)
+        euler = np.zeros((g_c.shape[0], 8))
+        for sol in range(0, g_c.shape[0]):
+            euler[sol, :] = euler_determine(g_c[sol, :, 1:4], g_sample, d_g)
+        so = np.lexsort((np.around(euler[:, 7], decimals=3), np.around(euler[:, 6], decimals=3)))
+        g0 = g_c[so, :, :]
+        euler = euler[so]
+        ui.euler_listbox.clear()
+        for h in range(0, euler.shape[0]):
+            ss = 'g:'
+            for hh in range(0, g_sample.shape[0]):
+                ss = ss + ' ' + str(g0[h, hh, 1:4])
+            ui.euler_listbox.addItem(ss)
 
-		display_result(euler[h,:])
- 	
+            display_result(euler[h, :])
+
     else:
-	    R = euler_determine(g_c, g_sample,d_g)
-	    display_result(R)
+        R = euler_determine(g_c, g_sample, d_g)
+        display_result(R)
 
 #########################
 #
@@ -1025,50 +1034,50 @@ def extinction(space_group, h, k, l):
     I = np.around(float(np.real(F * np.conj(F))), decimals=2)
     return I
 
+
 def import_data():
 
-	ui.ListBox_theo.clear()
-	ui.diff_spot_Listbox.clear()
-	ui.euler_listbox.clear()
+    ui.ListBox_theo.clear()
+    ui.diff_spot_Listbox.clear()
+    ui.euler_listbox.clear()
 
-	if ui.abc_entry.text()==None:
-		return
+    if ui.abc_entry.text() is None:
+        return
 
-	cryst()
+    cryst()
 
-	data_file = QtGui.QFileDialog.getOpenFileName(Index, "Open a data file", "", "*.txt")
-	data=open(data_file, 'r')
-	x0 = []
+    data_file = QtGui.QFileDialog.getOpenFileName(Index, "Open a data file", "", "*.txt")
+    data = open(data_file, 'r')
+    x0 = []
 
-	for line in data:
-		line = line.strip()
-		if not line:  
-       			continue
-		if line.startswith("#"):
-			continue
-        	x0.append(map(str, line.split()))
-        
-        data.close()
-        for item in x0:
-        	ui.diff_spot_Listbox.addItem(item[0])
-        
-        
-          
+    for line in data:
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            continue
+        x0.append(map(str, line.split()))
+
+    data.close()
+    for item in x0:
+        ui.diff_spot_Listbox.addItem(item[0])
+
+
 def export_data():
-	s = [str(x.text()) for x in ui.diff_spot_Listbox.selectedItems()]
-	res= [str(ui.euler_listbox.item(i).text()) for i in range(ui.euler_listbox.count())]
-	name = QtGui.QFileDialog.getSaveFileName(Index, 'Save File')
-        fout = open(name,'w')
-        fout.write('# Diffraction data file \n')
-        for item in s:
-            fout.write("%s\n" % item)
-         
-        fout.write ('\n')
-        fout.write('# Results \n')
-        for item in res:
-            fout.write("# %s\n" % item)
-        
-        fout.close()    
+    s = [str(x.text()) for x in ui.diff_spot_Listbox.selectedItems()]
+    res = [str(ui.euler_listbox.item(i).text()) for i in range(ui.euler_listbox.count())]
+    name = QtGui.QFileDialog.getSaveFileName(Index, 'Save File')
+    fout = open(name, 'w')
+    fout.write('# Diffraction data file \n')
+    for item in s:
+        fout.write("%s\n" % item)
+
+    fout.write('\n')
+    fout.write('# Results \n')
+    for item in res:
+        fout.write("# %s\n" % item)
+
+    fout.close()
 
 
 ##################################################
@@ -1201,7 +1210,6 @@ f_scatt.close()
 
 
 Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
-#figure.canvas.mpl_connect('button_press_event', click)
 
 figure.canvas.mpl_connect('button_press_event', onpress)
 figure.canvas.mpl_connect('button_release_event', onrelease)
