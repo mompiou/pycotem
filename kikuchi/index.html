@@ -553,14 +553,14 @@ r \approx L\theta_B = \frac{\lambda L}{d}
 
 <h2 id="orientation">Orientation<a class="headerlink" href="#orientation" title="Permanent link">&para;</a></h2>
 <p>Orientation of the crystal can be retrieved from the analysis of the band configuration in an approach similar to the one described in <a href="../diffraction/">diffraction</a>.</p>
-<p>The figure below shows the relation between the Kikuchi bands corresponding to diffraction vectors <span><span class="MathJax_Preview">\vec{g}_i=(h_i,k_i,l_i)</span><script type="math/tex">\vec{g}_i=(h_i,k_i,l_i)</script></span>, their projection <span><span class="MathJax_Preview">\vec{g}_{pi}</span><script type="math/tex">\vec{g}_{pi}</script></span> in the the observation plane normal to vector <span><span class="MathJax_Preview">\vec{z}</span><script type="math/tex">\vec{z}</script></span>, i.e. the reverse of the electron beam direction.</p>
-<p>From the projected vector, the diffraction vector in the observation plane coordinates can be deduced knowing the camera length <span><span class="MathJax_Preview">L=\|\vec{OP}\|</span><script type="math/tex">L=\|\vec{OP}\|</script></span>:</p>
+<p>The figure below shows the relation between the Kikuchi bands that can be defined by their normal vector <span><span class="MathJax_Preview">\vec{v}_{i}</span><script type="math/tex">\vec{v}_{i}</script></span> and their projection <span><span class="MathJax_Preview">\vec{v}_{pi}</span><script type="math/tex">\vec{v}_{pi}</script></span> in the the observation plane normal to vector <span><span class="MathJax_Preview">\vec{z}_P</span><script type="math/tex">\vec{z}_P</script></span>, i.e. the reverse of the electron beam direction.</p>
+<p>From the projected vector, the normal band vector in the viewing screen coordinate system <span><span class="MathJax_Preview">(x,y,z)_P</span><script type="math/tex">(x,y,z)_P</script></span> can be deduced knowing the camera length <span><span class="MathJax_Preview">L=\|\vec{OP}\|</span><script type="math/tex">L=\|\vec{OP}\|</script></span>:</p>
 <div>
 <div class="MathJax_Preview">
-\vec{g}_i=(x_i,y_i,z_i)^T=\vec{g}_{pi}+(0,0,\|\vec{g}_{pi}\|^2/L)^T
+\vec{v}_i=[x_i,y_i,z_i]^T=\vec{v}_{pi}+[0,0,\|\vec{v}_{pi}\|^2/L]^T
 </div>
 <script type="math/tex; mode=display">
-\vec{g}_i=(x_i,y_i,z_i)^T=\vec{g}_{pi}+(0,0,\|\vec{g}_{pi}\|^2/L)^T
+\vec{v}_i=[x_i,y_i,z_i]^T=\vec{v}_{pi}+[0,0,\|\vec{v}_{pi}\|^2/L]^T
 </script>
 </div>
 <p><img alt="" src="../images/kikuchi-orientation.png" /></p>
@@ -724,7 +724,15 @@ dev_angle, dev_width
 </ul>
 <p><img alt="" src="../images/kikuchi-refine.png" /></p>
 <h2 id="tilt-conditions">Tilt conditions<a class="headerlink" href="#tilt-conditions" title="Permanent link">&para;</a></h2>
-<p>By default the orientation determined corresponds to the situation of the holder at zero tilt. To retrieve the Euler angle at zero tilt from a tilted sample, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angles and the angle between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis and the y-axis should be indicated.</p>
+<p>By default the orientation determined corresponds to the situation of the holder at zero tilt the Euler angle being given in the <span><span class="MathJax_Preview">(x,y,z)_P</span><script type="math/tex">(x,y,z)_P</script></span> coordinate system. To retrieve the Euler angle at zero tilt from a tilted sample, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angles and the angle <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis and the y-axis should be indicated as the Euler rotation matrix at zero tilt <span><span class="MathJax_Preview">R_0</span><script type="math/tex">R_0</script></span> is deduced from the rotation matrix <span><span class="MathJax_Preview">R_t</span><script type="math/tex">R_t</script></span> obtained by the relation:</p>
+<div>
+<div class="MathJax_Preview">
+R_0=R_x(-\beta)R_y(-\alpha)R_z(\xi)R_t
+</div>
+<script type="math/tex; mode=display">
+R_0=R_x(-\beta)R_y(-\alpha)R_z(\xi)R_t
+</script>
+</div>
 <ul>
 <li>Fill the filed in the Tilt conditions window accessed from the <code>Tool</code></li>
 <li>Press <code>Run</code> in the main window or <code>Update</code> in the Refine window to update the Euler angles.</li>
