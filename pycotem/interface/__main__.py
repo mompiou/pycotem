@@ -373,21 +373,39 @@ def get_direction():
         tilt_z = np.array(tilt_z)
         d=np.array(d)
 
-        B = np.zeros((3, np.shape(tilt_a)[0]))
+        L = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
-
         t_ang = np.float(ui.image_angle_entry.text())
 
         for i in range(0, tilt_a.shape[0]):
             R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
-            B[:, i] = np.dot(R, np.array([0, 0, 1]))
             ny = inclination[i] * np.pi / 180
             t = np.array([-np.cos(ny), np.sin(ny), 0])
             BxTp[:, i] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
             BxTp[:, i] = BxTp[:, i] / np.linalg.norm(BxTp[:, i])
+            L[:, i] =np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), np.array([np.sin(ny), np.cos(ny), 0])))
    
-        BxTp=np.hstack((BxTp, B)).T
-        b=np.hstack((np.zeros((tilt_a.shape[0])), d))
+        BxTp=np.hstack((BxTp, L)).T
+        N = tilt_a.shape[0]
+        shuffle = np.zeros((2**(N - 1) + 1, N))
+        res = np.zeros(2**(N - 1))
+        
+        for i in range(0, 2**(N - 1)):
+            bb = np.zeros((N))
+            shuffle[i, :] = np.array(list(np.binary_repr(i, width=N)), dtype=int) * -1
+            shuffle[shuffle == 0] = 1  # sgn(i)
+            for j in range(0, N):
+                bb[j] = d[j] * shuffle[i, j] 
+            
+            b=np.hstack((np.zeros((tilt_a.shape[0])), bb))
+            T = np.dot(np.linalg.pinv(BxTp), b.T)
+            res[i] = np.linalg.norm(np.dot(BxTp, T) - b.T)
+
+        mini = np.argmin(res)
+
+        for j in range(0, N):
+            bb[j] = d[j] * shuffle[mini, j] 
+        b=np.hstack((np.zeros((tilt_a.shape[0])), bb))
         T = np.dot(np.linalg.pinv(BxTp), b.T)
         T, dev_angle_T, dev_width = bootstrap_norm(BxTp, b.T, T / np.linalg.norm(T), 10000, 95)
 
@@ -464,7 +482,6 @@ def get_normal():
         u, s, v = np.linalg.svd(BxTp)
         T = u[:, 2]
         T_mean, dev_angle_t = bootstrap_dir(BxTp.T, T / np.linalg.norm(T), 10000, 95)
-        # T=T_mean
         N = tilt_a.shape[0]
         shuffle = np.zeros((2**(N - 1) + 1, N))
         B = np.vstack((B.T, T))
@@ -533,10 +550,11 @@ def draw_planes_dir():
     global gclick, minx, miny, maxx, maxy
 
     t = np.float(ui_draw.thickness_entry.text())
+    s_a, s_b, s_z = tilt_axes()
     t_ang = np.float(ui.image_angle_entry.text())
-    tilt_x = np.float(ui.tilt_x_entry.text())
-    tilt_y = np.float(ui.tilt_y_entry.text())
-    tilt_z = np.float(ui.tilt_z_entry.text())
+    tilt_x = -s_b*np.float(ui.tilt_x_entry.text())
+    tilt_y = -s_a*np.float(ui.tilt_y_entry.text())
+    tilt_z = -s_z*np.float(ui.tilt_z_entry.text())
 
     ii = 0
     while ii < len(x_micro):
@@ -567,65 +585,91 @@ def draw_planes_dir():
     miny, maxy = a.get_ylim()
 
     if ui_draw.surf_checkBox.isChecked():
-        s = ui_draw.surface_entry.text().split(",")
-        s = np.array([np.float(s[0]), np.float(s[1]), np.float(s[2])])
-        if ui_draw.dir_checkBox.isChecked():
-            s = np.dot(D, s)
-        else:
-            s = np.dot(Dstar, s)
-
-        s = np.dot(rotation(phi1, phi, phi2), s)
-        s = s / np.linalg.norm(s)
-
-    else:
-        s = np.array([0, 0, 1])
-
-    if ui_draw.dir_checkBox.isChecked():
-        dire = np.dot(D, nd)
-        dire = np.dot(rotation(phi1, phi, phi2), dire)
-        dire = dire / np.linalg.norm(dire)
-        dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
-        d_proj = (dire / np.dot(dire, s) - s) * t / mag_conv
-
-        a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
-        a.axis('off')
-        if ui_draw.label_checkBox.isChecked():
-            st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-            a.annotate(st, (x + d_proj[0], y - d_proj[1]))
-        a.figure.canvas.draw()
-
-    else:
-        plan = np.dot(Dstar, nd)
-        plan = np.dot(rotation(phi1, phi, phi2), plan)
-        plan = plan / np.linalg.norm(plan)
-        plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
-
-        if ui_draw.surf_checkBox.isChecked():
             s = ui_draw.surface_entry.text().split(",")
             s = np.array([np.float(s[0]), np.float(s[1]), np.float(s[2])])
             s = np.dot(Dstar, s)
             s = np.dot(rotation(phi1, phi, phi2), s)
             s = s / np.linalg.norm(s)
-        else:
+    else:
             s = np.array([0, 0, 1])
+    
+    s = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), s))))
+    
+    if ui_draw.measure_checkBox.isChecked():
+        x0 = gclick[-2, 0]
+        x1= gclick[-1, 0]
+        y0 = gclick[-2, 1]
+        y1=gclick[-1, 1]
+        vn=np.array([-y1+y0,-x1+x0,0])
+        leng=np.linalg.norm(vn)
+        vn=vn/leng
+        v_plan = np.dot(Rot(-tilt_z, 0, 0, 1), np.dot(Rot(-tilt_x, 1, 0, 0), np.dot(Rot(-tilt_y, 0, 1, 0), np.dot(Rot(t_ang, 0, 0, 1), vn))))
+        v_plan = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), v_plan)
+        nd=np.dot(Dstar,nd)
+        intersec=np.cross(nd,v_plan) 
+        intersec_d=np.dot(np.linalg.inv(D), intersec)
+        if ui_draw.hexa_Button.isChecked():
+		    intersec_d=np.array([ (2 * intersec_d[0] - intersec_d[1])/3,(2 * intersec_d[1] - intersec_d[0])/3,intersec_d[2]])
+		    
+        dire = intersec
+        dire = np.dot(rotation(phi1, phi, phi2), dire)
+        dire = dire / np.linalg.norm(dire)
+        dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
+        b=np.array([0,0,1])
+        d_proj = (dire - np.dot(dire,b)*b) * t /np.dot(dire, s)
+        dr=np.abs(leng* mag_conv*t /np.dot(dire, s)/np.linalg.norm(d_proj))
+        
+        te='Distance measured in the plane: '+str(np.around(dr,decimals=2))+'\n'+'Direction in the plane: '+ str(np.around(100*intersec_d[0],decimals=3))+','+str(np.around(100*intersec_d[1],decimals=3))+','+str(np.around(100*intersec_d[2],decimals=3))+'\n'+'Max proj length: '+str(np.around(np.linalg.norm(d_proj),decimals=2))+'\n'+'Measured proj length: '+str(np.around(leng*mag_conv,decimals=2))
+        ui_draw.measure_label.setText(te)
+        if leng*mag_conv>np.linalg.norm(d_proj):
+    	    ui_draw.measure_label.setText(te+'\n'+str("Measure exceeds sample thickness"))
+ 
+    
+    else:
+            ui_draw.measure_label.clear()
+	    if ui_draw.dir_checkBox.isChecked():
+	    	if ui_draw.hexa_Button.isChecked():
+		    na = 2 * nd[0] + nd[1]
+		    n2a = 2 * nd[1] + nd[0]
+		    nd[0] = na
+		    nd[1] = n2a
 
-        s = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), s))))
-        T = np.cross(plan, s)
-        T = T / np.linalg.norm(T)
-        w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
-        xw = x - w * T[1]
-        yw = y - w * T[0]
+		dire = np.dot(D, nd)
+		dire = np.dot(rotation(phi1, phi, phi2), dire)
+		dire = dire / np.linalg.norm(dire)
+		dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
+		b=np.array([0,0,1])
+		d_proj = (dire - np.dot(dire,b)*b) * t /np.dot(dire, s)/ mag_conv
+		
+		a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
+		a.axis('off')
+		if ui_draw.label_checkBox.isChecked():
+		    st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
+		    a.annotate(st, (x + d_proj[0], y - d_proj[1]))
+		a.figure.canvas.draw()
 
-        a.plot([x - 100 * T[0], x + 100 * T[0]], [y + 100 * T[1], y - 100 * T[1]], 'b-')
-        a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
-        a.plot([x, xw], [y, yw], 'r-')
-        a.axis('off')
-        if ui_draw.label_checkBox.isChecked():
-            st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-            angp = np.arctan2(T[1], T[0]) * 180 / np.pi
-            a.annotate(st, (xw, yw), rotation=angp)
-        a.figure.canvas.draw()
+	    else:
+		plan = np.dot(Dstar, nd)
+		plan = np.dot(rotation(phi1, phi, phi2), plan)
+		plan = plan / np.linalg.norm(plan)
+		plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
 
+
+		T = np.cross(plan, s)
+		T = T / np.linalg.norm(T)
+		w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
+		xw = x - w * T[1]/np.sqrt(T[1]**2+T[0]**2)
+		yw = y - w * T[0]/np.sqrt(T[1]**2+T[0]**2)
+		
+		a.plot([x - 100 * T[0], x + 100 * T[0]], [y + 100 * T[1], y - 100 * T[1]], 'b-')
+		a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
+		a.plot([x, xw], [y, yw], 'r-')
+		a.axis('off')
+		if ui_draw.label_checkBox.isChecked():
+		    st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
+		    angp = np.arctan2(T[1], T[0]) * 180 / np.pi
+		    a.annotate(st, (xw, yw), rotation=angp)
+		a.figure.canvas.draw()
 
 #########################
 #
