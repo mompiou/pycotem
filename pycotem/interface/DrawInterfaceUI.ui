@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>245</height>
+    <height>281</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,44 +16,20 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="label_checkBox">
-       <property name="text">
-        <string>label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="plane_entry"/>
-     </item>
-     <item row="1" column="2">
+     <item row="1" column="3">
       <widget class="QCheckBox" name="surf_checkBox">
        <property name="text">
         <string>surf.</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="thickness_label">
+     <item row="2" column="1" colspan="2">
+      <widget class="QLineEdit" name="plane_entry"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="label_checkBox">
        <property name="text">
-        <string>Thickness (nm)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="3">
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="thickness_entry"/>
-     </item>
-     <item row="2" column="2">
-      <widget class="QCheckBox" name="dir_checkBox">
-       <property name="text">
-        <string>dir.</string>
+        <string>label</string>
        </property>
       </widget>
      </item>
@@ -71,10 +47,28 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="surface_entry"/>
+     <item row="6" column="0" colspan="4">
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
      </item>
-     <item row="3" column="2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="thickness_label">
+       <property name="text">
+        <string>Thickness (nm)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QCheckBox" name="dir_checkBox">
+       <property name="text">
+        <string>dir.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
       <widget class="QCheckBox" name="hexa_Button">
        <property name="text">
         <string>hexa</string>
@@ -88,7 +82,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="3">
+     <item row="5" column="0" colspan="4">
       <widget class="QLabel" name="measure_label">
        <property name="text">
         <string/>
@@ -97,6 +91,29 @@
         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
        </property>
       </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="QLineEdit" name="thickness_entry"/>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QLineEdit" name="surface_entry"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="proj_image_checkBox">
+       <property name="text">
+        <string>proj. image</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QCheckBox" name="scale_checkBox">
+       <property name="text">
+        <string>scale (nm)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="scale_entry"/>
      </item>
     </layout>
    </item>

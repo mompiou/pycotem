@@ -17,6 +17,7 @@ from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as Navigatio
 from matplotlib import pyplot as plt
 import interfaceUI
 import DrawInterfaceUI
+import DrawStretchedUI
 
 ######################
 #
@@ -547,8 +548,8 @@ def get_normal():
 
 
 def draw_planes_dir():
-    global gclick, minx, miny, maxx, maxy
-
+    global gclick, minx, miny, maxx, maxy,image_diff
+    			
     t = np.float(ui_draw.thickness_entry.text())
     s_a, s_b, s_z = tilt_axes()
     t_ang = np.float(ui.image_angle_entry.text())
@@ -665,11 +666,38 @@ def draw_planes_dir():
 		a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
 		a.plot([x, xw], [y, yw], 'r-')
 		a.axis('off')
+	        
+		
 		if ui_draw.label_checkBox.isChecked():
 		    st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
 		    angp = np.arctan2(T[1], T[0]) * 180 / np.pi
 		    a.annotate(st, (xw, yw), rotation=angp)
 		a.figure.canvas.draw()
+		
+		if ui_draw.proj_image_checkBox.isChecked():
+
+			a_r=np.arctan2(T[0],T[1])
+			a_g=np.abs(np.sqrt(1-T[2]**2)/plan[2])
+			a_stretched = figure_stretched.add_subplot(111)
+    			a_stretched.figure.clear()
+    			a_stretched = figure_stretched.add_subplot(111)
+    			img = Image.open(str(image_diff))
+    			im_rotate=img.rotate(a_r*180/np.pi,expand=1)
+    			stretched_size=(int(im_rotate.size[0]*a_g),im_rotate.size[1])
+    			im_stretched=im_rotate.resize(stretched_size)
+    			a_stretched.imshow(im_stretched, origin='upper')
+    			if ui_draw.scale_checkBox.isChecked():
+    				scale=np.float(ui_draw.scale_entry.text())
+	    			a_stretched.plot([stretched_size[0]/20,stretched_size[0]/20+scale/mag_conv],[stretched_size[1]/20,stretched_size[1]/20], 'w-',linewidth=1)
+    				a_stretched.annotate(str(scale)+'nm', (stretched_size[0]/20+scale/mag_conv+5,stretched_size[1]/20), color="white")
+    	
+    			
+    			a_stretched.axis('off')
+    			a_stretched.figure.canvas.draw()
+    			Stretched.show()
+			
+			
+			
 
 #########################
 #
@@ -846,6 +874,16 @@ if __name__ == "__main__":
 
     Interface.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
     Interface.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
+    
+    Stretched = QtGui.QDialog()
+    ui_stretched = DrawStretchedUI.Ui_Draw_Stretched()
+    ui_stretched.setupUi(Stretched)
+    figure_stretched = plt.figure()
+    canvas_stretched = FigureCanvas(figure_stretched)
+    ui_stretched.mplvl.addWidget(canvas_stretched)
+    toolbar_stretched = NavigationToolbar(canvas_stretched, canvas_stretched)
+    toolbar_stretched.setMinimumWidth(601)
+    
     
     single_tilt()
     ui.single_button.setChecked(True)
