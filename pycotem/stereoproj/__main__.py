@@ -2334,48 +2334,56 @@ def intersection_cone():
 ###########################
 
 
-def list_pole():
-    global M, axes, axesh, T, V, D, Dstar, naxes, axes_list
-    axes_list = np.zeros((axes.shape[0], 4))
+def list_pole(A):
+    global M, D, Dstar
+    axes_list = np.zeros((A.shape[0], 4))
     
-    for i in range(0, axes.shape[0]):
+    for i in range(0, A.shape[0]):
 
-        if axesh[i, 3] == 0:
-            Gsh = np.dot(Dstar, axes[i, :]) / np.linalg.norm(np.dot(Dstar, axes[i, :]))
+        if A[i, 3] == 0:
+            Gsh = np.dot(Dstar, A[i, 0:3]) / np.linalg.norm(np.dot(Dstar, A[i, 0:3]))
         else:
-            Gsh = np.dot(D, axes[i, :]) / np.linalg.norm(np.dot(D, axes[i, :]))
+            Gsh = np.dot(D, A[i, 0:3]) / np.linalg.norm(np.dot(D, A[i, 0:3]))
 
         S = np.dot(M, Gsh)
 
         if S[2] >= -1e-7:
-            if axesh[i, 3] == 1:
+            if A[i, 3] == 1:
                 axes_list[i, 3] = 1
                 if var_hexa() == 1:
-                    i01 = (2 * axes[i, 0] - axes[i, 1]) / 3
-                    i02 = (2 * axes[i, 1] - axes[i, 0]) / 3
+                    i01 = (2 * A[i, 0] - A[i, 1]) / 3
+                    i02 = (2 * A[i, 1] - A[i, 0]) / 3
                     axes_list[i, 0] = i01
                     axes_list[i, 1] = i02
-                    axes_list[i, 2] = axes[i, 2]
+                    axes_list[i, 2] = A[i, 2]
                     m = reduce(lambda x, y: GCD(x, y), axes_list[i, :])
 
                     if np.abs(m) > 1e-3:
-                        axes_list[i, :] = axes_list[i, :] / m
+                        axes_list[i, 0:3] = axes_list[i, 0:3] / m
 
                 else:
-                    axes_list[i, 0:3] = axes[i, :]
+                    axes_list[i, 0:3] = A[i, 0:3]
 
             else:
-                axes_list[i, 0:3] = axes[i, :]
-    axes_list = axes_list[~np.all(axes_list == 0, axis=1)]
+                axes_list[i, 0:3] = A[i, 0:3]
+    axes_list = axes_list[~np.all(axes_list[:,0:3] == 0, axis=1)]
 
     return axes_list
 
 
 def get_list():
-    global M, axesh, axes, axes_list
+    global M, axesh, axes, axes_list,trP,trC
 
     ui_list.list_table.clear()
-    axes_list = list_pole()
+    axes_l=np.vstack((axes.T,axesh[:,3])).T
+    axes_list = list_pole(axes_l)
+    trPc=np.vstack((trP,-trP))
+    plan_list= list_pole(trPc[:,0:4])
+    trCc=np.vstack((trC,-trC))
+    cone_list= list_pole(trCc[:,0:4])
+    axes_list=np.vstack((axes_list,plan_list,cone_list))
+    u,r=np.unique(axes_list[:,0:3],axis=0,return_index=True)
+    axes_list= axes_list[r,:]
     ui_list.list_table.setColumnCount(4)
     ui_list.list_table.setRowCount(int(axes_list.shape[0]))
     header = ui_list.list_table.horizontalHeader()
@@ -2414,9 +2422,14 @@ def add_remove_list():
             if ui_list.list_table.item(index.row(), 2).text() == 'uvw':
                 if ui.uvw_button.isChecked() is False:
                     ui.uvw_button.toggle()
-            undo_pole(i0, i1, i2)
-            undo_trace_plan(i0,i1,i2)
-            undo_trace_cone(i0,i1,i2)
+            
+            if ui_list.plane_checkBox.isChecked() or ui_list.cone_checkBox.isChecked():
+	        if ui_list.plane_checkBox.isChecked():
+	            undo_trace_plan(i0,i1,i2)
+                if ui_list.cone_checkBox.isChecked():
+                    undo_trace_cone(i0,i1,i2)
+            else:
+                undo_pole(i0, i1, i2)
 
             ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('x'))
 
@@ -2425,11 +2438,14 @@ def add_remove_list():
                 if ui.uvw_button.isChecked() is False:
                     ui.uvw_button.toggle()
 
-            pole(i0, i1, i2)
-            if ui_list.plane_checkBox.isChecked():
-	        trace_plan(i0,i1,i2)
-            if ui_list.cone_checkBox.isChecked():
-                trace_cone(i0,i1,i2)
+            
+            if ui_list.plane_checkBox.isChecked() or ui_list.cone_checkBox.isChecked():
+	        if ui_list.plane_checkBox.isChecked():
+	            trace_plan(i0,i1,i2)
+                if ui_list.cone_checkBox.isChecked():
+                    trace_cone(i0,i1,i2)
+            else:
+                pole(i0, i1, i2)
             
             ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('o'))
     if ui.uvw_button.isChecked() is True:
