@@ -983,11 +983,14 @@ def trace_plan(pole1, pole2, pole3):
     pole_i = 0
     pole_c = color_trace()
 
-    if var_hexa() == 1:
-        if var_uvw() == 1:
-            pole1 = 2 * pole1 + pole2
-            pole2 = 2 * pole2 + pole1
-            pole_i = 1
+    if var_uvw() == 1:
+        pole_i = 1
+        if var_hexa() == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1=pole1a
+            pole2=pole2a
+            
     trP = np.vstack((trP, np.array([pole1, pole2, pole3, pole_i, pole_c])))
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
@@ -999,11 +1002,13 @@ def trace_cone(pole1, pole2, pole3):
     pole_i = 0
     pole_c = color_trace()
     inc = np.float(ui.inclination_entry.text())
-    if var_hexa() == 1:
-        if var_uvw() == 1:
-            pole1 = 2 * pole1 + pole2
-            pole2 = 2 * pole2 + pole1
-            pole_i = 1
+    if var_uvw() == 1:
+        pole_i = 1
+        if var_hexa() == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1=pole1a
+            pole2=pole2a
     trC = np.vstack((trC, np.array([pole1, pole2, pole3, pole_i, pole_c, inc])))
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
     trC = np.unique(b).view(trC.dtype).reshape(-1, trC.shape[1])
@@ -1060,9 +1065,15 @@ def undo_trace_addcone():
 
 def undo_trace_plan(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trP, tr_schmid
-
-    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3))
-
+    
+    if var_uvw()==1 & var_hexa() == 1:
+    	pole1a = 2 * pole1 + pole2
+        pole2a = 2 * pole2 + pole1
+        pole1 = pole1a
+        pole2 = pole2a
+    	
+    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 3] == var_uvw()) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 3] == var_uvw()))
+    
     trP = np.delete(trP, ind, 0)
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
@@ -1071,7 +1082,13 @@ def undo_trace_plan(pole1, pole2, pole3):
 def undo_trace_cone(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trC, tr_schmid
 
-    ind = np.where((trC[:, 0] == pole1) & (trC[:, 1] == pole2) & (trC[:, 2] == pole3) | (trC[:, 0] == -pole1) & (trC[:, 1] == -pole2) & (trC[:, 2] == -pole3))
+    if var_uvw()==1 & var_hexa() == 1:
+    	pole1a = 2 * pole1 + pole2
+        pole2a = 2 * pole2 + pole1
+        pole1 = pole1a
+        pole2 = pole2a
+    	
+    ind = np.where((trC[:, 0] == pole1) & (trC[:, 1] == pole2) & (trC[:, 2] == pole3) & (trC[:, 3] == var_uvw()) | (trC[:, 0] == -pole1) & (trC[:, 1] == -pole2) & (trC[:, 2] == -pole3) & (trC[:, 3] == var_uvw()))
     trC = np.delete(trC, ind, 0)
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
 
@@ -2320,6 +2337,7 @@ def intersection_cone():
 def list_pole():
     global M, axes, axesh, T, V, D, Dstar, naxes, axes_list
     axes_list = np.zeros((axes.shape[0], 4))
+    
     for i in range(0, axes.shape[0]):
 
         if axesh[i, 3] == 0:
