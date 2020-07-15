@@ -73,7 +73,7 @@ def calcul():
     H = np.array([[0]])
     Dz = np.array([0, 0, 0])
 
-    if ui.dsc_box.isChecked() == False:
+    if ui.dsc_box.isChecked() is False:
         atom0 = np.array(atom0, float)
         maxi = np.int(atom0[np.shape(atom0)[0] - 1, 0])
         for h in range(1, maxi + 1):
@@ -103,8 +103,8 @@ def trace():
     fi.figure.clear()
     fi = figure.add_subplot(111)
     sim = int(ui.markers_entry.text())
-    if ui.dsc_box.isChecked() == False:
-        if ui.square_box.isChecked() == False:
+    if ui.dsc_box.isChecked() is False:
+        if ui.square_box.isChecked() is False:
             fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='o')
         else:
             fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='s')
@@ -290,7 +290,7 @@ def calcul_atom(atom):
     nb = np.int(n[1])
     nc = np.int(n[2])
 
-    if ui.dsc_box.isChecked() == False:
+    if ui.dsc_box.isChecked() is False:
         A = np.zeros((np.shape(atom)[0], np.shape(atom)[1] - 1))
         w = 0
         for v in range(0, np.shape(atom)[0]):
@@ -354,11 +354,11 @@ def getFileName():
     varname = QtGui.QFileDialog.getOpenFileName(None, 'OpenFile')
     return varname
 
- #######################################
- #
- # Save image as png
- #
- # #######################################
+#######################################
+#
+# Save image as png
+#
+#########################################
 
 
 def image_save():

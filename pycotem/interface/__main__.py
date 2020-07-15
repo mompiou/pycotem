@@ -54,7 +54,6 @@ def click(event):
     miny, maxy = a.get_ylim()
     x = event.xdata
     y = event.ydata
-    r = str(np.around(x, decimals=2)) + ',' + str(np.around(y, decimals=2))
     a.annotate(str(s), (x, y))
     a.plot(x, y, 'b+')
     a.axis('off')
@@ -80,12 +79,12 @@ def reset_last_point():
     img = np.array(img)
     figure.suptitle(str(image_diff))
     a.imshow(img, origin="upper")
-    gclick=gclick[:-1,:]
-    s = s-1
-    for i in range(1,gclick.shape[0]):
-	    a.annotate(str(i), (gclick[i,0], gclick[i,1]))
-    a.plot(gclick[1:,0], gclick[1:,1], 'b+')
-    
+    gclick = gclick[:-1, :]
+    s = s - 1
+    for i in range(1, gclick.shape[0]):
+        a.annotate(str(i), (gclick[i, 0], gclick[i, 1]))
+    a.plot(gclick[1:, 0], gclick[1:, 1], 'b+')
+
     a.axis([minx, maxx, miny, maxy])
     a.axis('off')
     a.figure.canvas.draw()
@@ -133,14 +132,14 @@ def reset():
     miny = height
     maxy = 0
     a.axis([minx, maxx, miny, maxy])
-    for i in range(1,gclick.shape[0]):
-	    a.annotate(str(i), (gclick[i,0], gclick[i,1]))
-    a.plot(gclick[1:,0], gclick[1:,1], 'b+')
-    
+    for i in range(1, gclick.shape[0]):
+        a.annotate(str(i), (gclick[i, 0], gclick[i, 1]))
+    a.plot(gclick[1:, 0], gclick[1:, 1], 'b+')
+
     a.axis('off')
     a.figure.canvas.draw()
     ui.euler_Listbox.clear()
-    
+
     return s, gclick
 
 
@@ -186,8 +185,8 @@ def add_condition():
 
     s = str(np.around(s1, decimals=3)) + ',' + str(np.around(s2, decimals=3)) + ',' + s3 + ',' + s4 + ',' + s5
     ui.conditions_Listbox.addItem(s)
-    ss= ui.conditions_Listbox.count()
-    item = ui.conditions_Listbox.item(ss-1)
+    ss = ui.conditions_Listbox.count()
+    item = ui.conditions_Listbox.item(ss - 1)
     item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
 
 
@@ -332,21 +331,20 @@ def get():
     else:
         get_normal()
 
-def deviation_thick(angle,S):
-	r = np.sqrt(S[0]**2 + S[1]**2 + S[2]**2)
-        Q = np.zeros((1, 3))
-        t = np.arctan2(S[1], S[0]) * 180 / np.pi
-        w = 0
-        ph = np.arccos(S[2] / r) * 180 / np.pi
-        Aa=[]
-	for g in np.linspace(-np.pi, np.pi, 10):
-		for j in range(1,10):
-	            Aa = np.append(Aa,np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g) * np.sin(angle/j * np.pi / 180), np.cos(g) * np.sin(angle/j * np.pi / 180), np.cos(angle/j * np.pi / 180)])))[2])
-          
-	m=np.abs(S[2]-np.amax(Aa))  
-	return m
-	
-          
+
+def deviation_thick(angle, S):
+    r = np.sqrt(S[0]**2 + S[1]**2 + S[2]**2)
+    t = np.arctan2(S[1], S[0]) * 180 / np.pi
+    ph = np.arccos(S[2] / r) * 180 / np.pi
+    Aa = []
+    for g in np.linspace(-np.pi, np.pi, 10):
+        for j in range(1, 10):
+            Aa = np.append(Aa, np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g) * np.sin(angle / j * np.pi / 180), np.cos(g) * np.sin(angle / j * np.pi / 180), np.cos(angle / j * np.pi / 180)])))[2])
+
+    m = np.abs(S[2] - np.amax(Aa))
+    return m
+
+
 def get_direction():
     ui.euler_Listbox.clear()
     s_a, s_b, s_z = tilt_axes()
@@ -358,7 +356,7 @@ def get_direction():
         tilt_b = []
         tilt_z = []
         inclination = []
-        d=[]
+        d = []
 
         for i in range(0, len(s)):
             l = map(float, s[i].split(','))
@@ -372,7 +370,7 @@ def get_direction():
         tilt_a = np.array(tilt_a)
         tilt_b = np.array(tilt_b)
         tilt_z = np.array(tilt_z)
-        d=np.array(d)
+        d = np.array(d)
 
         L = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
@@ -384,39 +382,39 @@ def get_direction():
             t = np.array([-np.cos(ny), np.sin(ny), 0])
             BxTp[:, i] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
             BxTp[:, i] = BxTp[:, i] / np.linalg.norm(BxTp[:, i])
-            L[:, i] =np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), np.array([np.sin(ny), np.cos(ny), 0])))
-   
-        BxTp=np.hstack((BxTp, L)).T
+            L[:, i] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), np.array([np.sin(ny), np.cos(ny), 0])))
+
+        BxTp = np.hstack((BxTp, L)).T
         N = tilt_a.shape[0]
         shuffle = np.zeros((2**(N - 1) + 1, N))
         res = np.zeros(2**(N - 1))
-        
+
         for i in range(0, 2**(N - 1)):
             bb = np.zeros((N))
             shuffle[i, :] = np.array(list(np.binary_repr(i, width=N)), dtype=int) * -1
             shuffle[shuffle == 0] = 1  # sgn(i)
             for j in range(0, N):
-                bb[j] = d[j] * shuffle[i, j] 
-            
-            b=np.hstack((np.zeros((tilt_a.shape[0])), bb))
+                bb[j] = d[j] * shuffle[i, j]
+
+            b = np.hstack((np.zeros((tilt_a.shape[0])), bb))
             T = np.dot(np.linalg.pinv(BxTp), b.T)
             res[i] = np.linalg.norm(np.dot(BxTp, T) - b.T)
 
         mini = np.argmin(res)
 
         for j in range(0, N):
-            bb[j] = d[j] * shuffle[mini, j] 
-        b=np.hstack((np.zeros((tilt_a.shape[0])), bb))
+            bb[j] = d[j] * shuffle[mini, j]
+        b = np.hstack((np.zeros((tilt_a.shape[0])), bb))
         T = np.dot(np.linalg.pinv(BxTp), b.T)
         T, dev_angle_T, dev_width = bootstrap_norm(BxTp, b.T, T / np.linalg.norm(T), 10000, 95)
 
         dT = T / np.linalg.norm(T)
         thick = np.abs(T[2])
-        dev_t=deviation_thick(dev_angle_T, dT)*np.linalg.norm(T)
-        dev_thick = (dev_t+dev_width) * np.abs(T[2])
-        
-        dev_thick = deviation_thick(dev_angle_T, dT)*(np.linalg.norm(T)+dev_width * np.abs(dT[2]))
-         
+        dev_t = deviation_thick(dev_angle_T, dT) * np.linalg.norm(T)
+        dev_thick = (dev_t + dev_width) * np.abs(T[2])
+
+        dev_thick = deviation_thick(dev_angle_T, dT) * (np.linalg.norm(T) + dev_width * np.abs(dT[2]))
+
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
             phi1 = np.float(euler[0])
@@ -440,7 +438,7 @@ def get_direction():
         ui.euler_Listbox.addItem(str(np.around(dev_width, decimals=3)))
         ui.euler_Listbox.addItem('Estimated thickness')
         ui.euler_Listbox.addItem(str(np.around(thick, decimals=3)) + '+/-' + str(np.around(dev_thick, decimals=3)))
-        
+
 
 def get_normal():
 
@@ -506,8 +504,8 @@ def get_normal():
 
         dn = n / np.linalg.norm(n)
         thick = np.linalg.norm(n) * np.sqrt(1 - dn[2]**2)
-        dev_n=deviation_thick(dev_angle_n, dn)*np.linalg.norm(n)
-        dev_thick = (dev_n+dev_width) * np.sqrt(1 - dn[2]**2)
+        dev_n = deviation_thick(dev_angle_n, dn) * np.linalg.norm(n)
+        dev_thick = (dev_n + dev_width) * np.sqrt(1 - dn[2]**2)
         # in crystal coordinate
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
@@ -548,14 +546,14 @@ def get_normal():
 
 
 def draw_planes_dir():
-    global gclick, minx, miny, maxx, maxy,image_diff
-    			
+    global gclick, minx, miny, maxx, maxy, image_diff
+
     t = np.float(ui_draw.thickness_entry.text())
     s_a, s_b, s_z = tilt_axes()
     t_ang = np.float(ui.image_angle_entry.text())
-    tilt_x = -s_b*np.float(ui.tilt_x_entry.text())
-    tilt_y = -s_a*np.float(ui.tilt_y_entry.text())
-    tilt_z = -s_z*np.float(ui.tilt_z_entry.text())
+    tilt_x = -s_b * np.float(ui.tilt_x_entry.text())
+    tilt_y = -s_a * np.float(ui.tilt_y_entry.text())
+    tilt_z = -s_z * np.float(ui.tilt_z_entry.text())
 
     ii = 0
     while ii < len(x_micro):
@@ -586,118 +584,112 @@ def draw_planes_dir():
     miny, maxy = a.get_ylim()
 
     if ui_draw.surf_checkBox.isChecked():
-            s = ui_draw.surface_entry.text().split(",")
-            s = np.array([np.float(s[0]), np.float(s[1]), np.float(s[2])])
-            s = np.dot(Dstar, s)
-            s = np.dot(rotation(phi1, phi, phi2), s)
-            s = s / np.linalg.norm(s)
+        s = ui_draw.surface_entry.text().split(",")
+        s = np.array([np.float(s[0]), np.float(s[1]), np.float(s[2])])
+        s = np.dot(Dstar, s)
+        s = np.dot(rotation(phi1, phi, phi2), s)
+        s = s / np.linalg.norm(s)
     else:
-            s = np.array([0, 0, 1])
-    
+        s = np.array([0, 0, 1])
+
     s = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), s))))
-    
+
     if ui_draw.measure_checkBox.isChecked():
         x0 = gclick[-2, 0]
-        x1= gclick[-1, 0]
+        x1 = gclick[-1, 0]
         y0 = gclick[-2, 1]
-        y1=gclick[-1, 1]
-        vn=np.array([-y1+y0,-x1+x0,0])
-        leng=np.linalg.norm(vn)
-        vn=vn/leng
+        y1 = gclick[-1, 1]
+        vn = np.array([-y1 + y0, -x1 + x0, 0])
+        leng = np.linalg.norm(vn)
+        vn = vn / leng
         v_plan = np.dot(Rot(-tilt_z, 0, 0, 1), np.dot(Rot(-tilt_x, 1, 0, 0), np.dot(Rot(-tilt_y, 0, 1, 0), np.dot(Rot(t_ang, 0, 0, 1), vn))))
         v_plan = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), v_plan)
-        nd=np.dot(Dstar,nd)
-        intersec=np.cross(nd,v_plan) 
-        intersec_d=np.dot(np.linalg.inv(D), intersec)
+        nd = np.dot(Dstar, nd)
+        intersec = np.cross(nd, v_plan)
+        intersec_d = np.dot(np.linalg.inv(D), intersec)
         if ui_draw.hexa_Button.isChecked():
-		    intersec_d=np.array([ (2 * intersec_d[0] - intersec_d[1])/3,(2 * intersec_d[1] - intersec_d[0])/3,intersec_d[2]])
-		    
+            intersec_d = np.array([(2 * intersec_d[0] - intersec_d[1]) / 3, (2 * intersec_d[1] - intersec_d[0]) / 3, intersec_d[2]])
+
         dire = intersec
         dire = np.dot(rotation(phi1, phi, phi2), dire)
         dire = dire / np.linalg.norm(dire)
         dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
-        b=np.array([0,0,1])
-        d_proj = (dire - np.dot(dire,b)*b) * t /np.dot(dire, s)
-        dr=np.abs(leng* mag_conv*t /np.dot(dire, s)/np.linalg.norm(d_proj))
-        
-        te='Distance measured in the plane: '+str(np.around(dr,decimals=2))+'\n'+'Direction in the plane: '+ str(np.around(100*intersec_d[0],decimals=3))+','+str(np.around(100*intersec_d[1],decimals=3))+','+str(np.around(100*intersec_d[2],decimals=3))+'\n'+'Max proj length: '+str(np.around(np.linalg.norm(d_proj),decimals=2))+'\n'+'Measured proj length: '+str(np.around(leng*mag_conv,decimals=2))
+        b = np.array([0, 0, 1])
+        d_proj = (dire - np.dot(dire, b) * b) * t / np.dot(dire, s)
+        dr = np.abs(leng * mag_conv * t / np.dot(dire, s) / np.linalg.norm(d_proj))
+
+        te = 'Distance measured in the plane: ' + str(np.around(dr, decimals=2)) + '\n' + 'Direction in the plane: ' + str(np.around(100 * intersec_d[0], decimals=3)) + ',' + str(np.around(100 * intersec_d[1], decimals=3)) + ',' + str(np.around(100 * intersec_d[2], decimals=3)) + '\n' + 'Max proj length: ' + str(np.around(np.linalg.norm(d_proj), decimals=2)) + '\n' + 'Measured proj length: ' + str(np.around(leng * mag_conv, decimals=2))
         ui_draw.measure_label.setText(te)
-        if leng*mag_conv>np.linalg.norm(d_proj):
-    	    ui_draw.measure_label.setText(te+'\n'+str("Measure exceeds sample thickness"))
- 
-    
+        if leng * mag_conv > np.linalg.norm(d_proj):
+            ui_draw.measure_label.setText(te + '\n' + str("Measure exceeds sample thickness"))
+
     else:
-            ui_draw.measure_label.clear()
-	    if ui_draw.dir_checkBox.isChecked():
-	    	if ui_draw.hexa_Button.isChecked():
-		    na = 2 * nd[0] + nd[1]
-		    n2a = 2 * nd[1] + nd[0]
-		    nd[0] = na
-		    nd[1] = n2a
+        ui_draw.measure_label.clear()
+        if ui_draw.dir_checkBox.isChecked():
+            if ui_draw.hexa_Button.isChecked():
+                na = 2 * nd[0] + nd[1]
+                n2a = 2 * nd[1] + nd[0]
+                nd[0] = na
+                nd[1] = n2a
 
-		dire = np.dot(D, nd)
-		dire = np.dot(rotation(phi1, phi, phi2), dire)
-		dire = dire / np.linalg.norm(dire)
-		dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
-		b=np.array([0,0,1])
-		d_proj = (dire - np.dot(dire,b)*b) * t /np.dot(dire, s)/ mag_conv
-		
-		a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
-		a.axis('off')
-		if ui_draw.label_checkBox.isChecked():
-		    st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-		    a.annotate(st, (x + d_proj[0], y - d_proj[1]))
-		a.figure.canvas.draw()
+            dire = np.dot(D, nd)
+            dire = np.dot(rotation(phi1, phi, phi2), dire)
+            dire = dire / np.linalg.norm(dire)
+            dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
+            b = np.array([0, 0, 1])
+            d_proj = (dire - np.dot(dire, b) * b) * t / np.dot(dire, s) / mag_conv
 
-	    else:
-		plan = np.dot(Dstar, nd)
-		plan = np.dot(rotation(phi1, phi, phi2), plan)
-		plan = plan / np.linalg.norm(plan)
-		plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
+            a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
+            a.axis('off')
+            if ui_draw.label_checkBox.isChecked():
+                st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
+                a.annotate(st, (x + d_proj[0], y - d_proj[1]))
+            a.figure.canvas.draw()
 
+        else:
+            plan = np.dot(Dstar, nd)
+            plan = np.dot(rotation(phi1, phi, phi2), plan)
+            plan = plan / np.linalg.norm(plan)
+            plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
 
-		T = np.cross(plan, s)
-		T = T / np.linalg.norm(T)
-		w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
-		xw = x - w * T[1]/np.sqrt(T[1]**2+T[0]**2)
-		yw = y - w * T[0]/np.sqrt(T[1]**2+T[0]**2)
-		
-		a.plot([x - 100 * T[0], x + 100 * T[0]], [y + 100 * T[1], y - 100 * T[1]], 'b-')
-		a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
-		a.plot([x, xw], [y, yw], 'r-')
-		a.axis('off')
-	        
-		
-		if ui_draw.label_checkBox.isChecked():
-		    st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-		    angp = np.arctan2(T[1], T[0]) * 180 / np.pi
-		    a.annotate(st, (xw, yw), rotation=angp)
-		a.figure.canvas.draw()
-		
-		if ui_draw.proj_image_checkBox.isChecked():
+            T = np.cross(plan, s)
+            T = T / np.linalg.norm(T)
+            w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
+            xw = x - w * T[1] / np.sqrt(T[1]**2 + T[0]**2)
+            yw = y - w * T[0] / np.sqrt(T[1]**2 + T[0]**2)
 
-			a_r=np.arctan2(T[0],T[1])
-			a_g=np.abs(np.sqrt(1-T[2]**2)/plan[2])
-			a_stretched = figure_stretched.add_subplot(111)
-    			a_stretched.figure.clear()
-    			a_stretched = figure_stretched.add_subplot(111)
-    			img = Image.open(str(image_diff))
-    			im_rotate=img.rotate(a_r*180/np.pi,expand=1)
-    			stretched_size=(int(im_rotate.size[0]*a_g),im_rotate.size[1])
-    			im_stretched=im_rotate.resize(stretched_size)
-    			a_stretched.imshow(im_stretched, origin='upper')
-    			if ui_draw.scale_checkBox.isChecked():
-    				scale=np.float(ui_draw.scale_entry.text())
-	    			a_stretched.plot([stretched_size[0]/20,stretched_size[0]/20+scale/mag_conv],[stretched_size[1]/20,stretched_size[1]/20], 'w-',linewidth=1)
-    				a_stretched.annotate(str(scale)+'nm', (stretched_size[0]/20+scale/mag_conv+5,stretched_size[1]/20), color="white")
-    	
-    			
-    			a_stretched.axis('off')
-    			a_stretched.figure.canvas.draw()
-    			Stretched.show()
-			
-			
-			
+            a.plot([x - 100 * T[0], x + 100 * T[0]], [y + 100 * T[1], y - 100 * T[1]], 'b-')
+            a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
+            a.plot([x, xw], [y, yw], 'r-')
+            a.axis('off')
+
+            if ui_draw.label_checkBox.isChecked():
+                st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
+                angp = np.arctan2(T[1], T[0]) * 180 / np.pi
+                a.annotate(st, (xw, yw), rotation=angp)
+            a.figure.canvas.draw()
+
+            if ui_draw.proj_image_checkBox.isChecked():
+
+                a_r = np.arctan2(T[0], T[1])
+                a_g = np.abs(np.sqrt(1 - T[2]**2) / plan[2])
+                a_stretched = figure_stretched.add_subplot(111)
+                a_stretched.figure.clear()
+                a_stretched = figure_stretched.add_subplot(111)
+                img = Image.open(str(image_diff))
+                im_rotate = img.rotate(a_r * 180 / np.pi, expand=1)
+                stretched_size = (int(im_rotate.size[0] * a_g), im_rotate.size[1])
+                im_stretched = im_rotate.resize(stretched_size)
+                a_stretched.imshow(im_stretched, origin='upper')
+                if ui_draw.scale_checkBox.isChecked():
+                    scale = np.float(ui_draw.scale_entry.text())
+                    a_stretched.plot([stretched_size[0] / 20, stretched_size[0] / 20 + scale / mag_conv], [stretched_size[1] / 20, stretched_size[1] / 20], 'w-', linewidth=1)
+                    a_stretched.annotate(str(scale) + 'nm', (stretched_size[0] / 20 + scale / mag_conv + 5, stretched_size[1] / 20), color="white")
+
+                a_stretched.axis('off')
+                a_stretched.figure.canvas.draw()
+                Stretched.show()
+
 
 #########################
 #
@@ -787,51 +779,53 @@ def tilt_rot():
     ui.tilt_y_entry.setText('0')
     ui.tilt_z_entry.setText('0')
 
-def import_data():
-	ui.conditions_Listbox.clear()
-	ui.euler_Listbox.clear()	
-	data_file = QtGui.QFileDialog.getOpenFileName(Interface, "Open a data file", "", "*.txt")
-	data=open(data_file, 'r')
-	x0 = []
 
-	for line in data:
-		line = line.strip()
-		if not line:  
-       			continue
-		if line.startswith("#"):
-			continue
-        	x0.append(map(str, line.split()))
-        
-        data.close()
-        if len(x0[0][0].split(','))==3:
-        	ui.euler_entry.setText(str(x0[0][0]))
-        	x0=x0[1:]
-        for item in x0:
-        	ui.conditions_Listbox.addItem(item[0])
-          
+def import_data():
+    ui.conditions_Listbox.clear()
+    ui.euler_Listbox.clear()
+    data_file = QtGui.QFileDialog.getOpenFileName(Interface, "Open a data file", "", "*.txt")
+    data = open(data_file, 'r')
+    x0 = []
+
+    for line in data:
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            continue
+        x0.append(map(str, line.split()))
+
+    data.close()
+    if len(x0[0][0].split(',')) == 3:
+        ui.euler_entry.setText(str(x0[0][0]))
+        x0 = x0[1:]
+    for item in x0:
+        ui.conditions_Listbox.addItem(item[0])
+
+
 def export_data():
-	s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
-	res= [str(ui.euler_Listbox.item(i).text()) for i in range(ui.euler_Listbox.count())]
-	name = QtGui.QFileDialog.getSaveFileName(Interface, 'Save File')
-        fout = open(name,'w')
-        fout.write('# Interface data file \n')
-        fout.write('# Euler angles \n')
-        fout.write(str(ui.euler_entry.text())+'\n')
-        if ui.direction_button.isChecked():
-        	d='direction'
-        else:
-        	d='plane'
-        fout.write ('# Data for a  '+str(d)+'\n')
-        for item in s:
-            fout.write("%s\n" % item)
-         
-        fout.write ('\n')
-        fout.write('# Results \n')
-        for item in res:
-            fout.write("# %s\n" % item)
-        
-        
-        fout.close()    
+    s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
+    res = [str(ui.euler_Listbox.item(i).text()) for i in range(ui.euler_Listbox.count())]
+    name = QtGui.QFileDialog.getSaveFileName(Interface, 'Save File')
+    fout = open(name, 'w')
+    fout.write('# Interface data file \n')
+    fout.write('# Euler angles \n')
+    fout.write(str(ui.euler_entry.text()) + '\n')
+    if ui.direction_button.isChecked():
+        d = 'direction'
+    else:
+        d = 'plane'
+    fout.write('# Data for a  ' + str(d) + '\n')
+    for item in s:
+        fout.write("%s\n" % item)
+
+    fout.write('\n')
+    fout.write('# Results \n')
+    for item in res:
+        fout.write("# %s\n" % item)
+
+    fout.close()
+
 
 ######################################################
 #
@@ -874,7 +868,7 @@ if __name__ == "__main__":
 
     Interface.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
     Interface.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
-    
+
     Stretched = QtGui.QDialog()
     ui_stretched = DrawStretchedUI.Ui_Draw_Stretched()
     ui_stretched.setupUi(Stretched)
@@ -883,8 +877,7 @@ if __name__ == "__main__":
     ui_stretched.mplvl.addWidget(canvas_stretched)
     toolbar_stretched = NavigationToolbar(canvas_stretched, canvas_stretched)
     toolbar_stretched.setMinimumWidth(601)
-    
-    
+
     single_tilt()
     ui.single_button.setChecked(True)
     ui.tilt_x_entry.setText('0')
@@ -936,7 +929,7 @@ if __name__ == "__main__":
 
     shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+z"), Interface)
     shortcut.activated.connect(reset_last_point)
-    
+
     Interface.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
 
     figure.canvas.mpl_connect('button_press_event', onpress)

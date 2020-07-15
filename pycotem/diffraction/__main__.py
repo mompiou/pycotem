@@ -319,7 +319,6 @@ def add_spot():
         s11 = s1[1].split(',')
         s11.replaceInStrings(QtCore.QRegExp("(?:\s+|$)"), "")
         s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0]
-        print s11[2],s
     ui.diff_spot_Listbox.addItem(s)
     ss = ui.diff_spot_Listbox.count()
     item = ui.diff_spot_Listbox.item(ss - 1)

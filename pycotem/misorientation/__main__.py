@@ -589,29 +589,6 @@ def rotgp():
     ui.rg_label.setText(str(g))
     return g, M
 
-###################################################
-#
-# Mirror the sample
-#
-#############################################
-
-# def mirror():
-#    global M,a,trP,trC
-##    a = figure.add_subplot(111)
-# a.figure.clear()
-#
-#    M_r=np.array([[1,0,0],[0,1,0],[0,0,-1]])
-#    M=np.dot(M_r,M)
-#    trace()
-#    phir=np.arccos(M[2,2])*180/np.pi
-#    phi2r=np.arctan2(M[2,0],M[2,1])*180/np.pi
-#    phi1r=np.arctan2(M[0,2],-M[1,2])*180/np.pi
-#    t=str(np.around(phi1r,decimals=1))+str(',')+str(np.around(phir,decimals=1))+str(',')+str(np.around(phi2r,decimals=1))
-#
-#    ui.angle_euler_label.setText(t)
-#
-#    return M
-
 
 ####################################################################
 #
@@ -1625,7 +1602,7 @@ def desorientation():
 
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
-        A = np.dot(In,np.linalg.inv(gB)) - np.eye(3)
+        A = np.dot(In, np.linalg.inv(gB)) - np.eye(3)
         V = null(A, 0.001).T
 
         if 0.5 * (np.trace(A + np.eye(3)) - 1) > 1:
@@ -1859,7 +1836,6 @@ if __name__ == "__main__":
     for item in x0:
         ui.structure_box.addItem(item[0])
         ui.structure2_box.addItem(item[0])
-        #Index.connect(entry,QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
         i = i + 1
 
     ui.structure_box.currentIndexChanged.connect(structure)

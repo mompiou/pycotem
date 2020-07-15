@@ -988,9 +988,9 @@ def trace_plan(pole1, pole2, pole3):
         if var_hexa() == 1:
             pole1a = 2 * pole1 + pole2
             pole2a = 2 * pole2 + pole1
-            pole1=pole1a
-            pole2=pole2a
-            
+            pole1 = pole1a
+            pole2 = pole2a
+
     trP = np.vstack((trP, np.array([pole1, pole2, pole3, pole_i, pole_c])))
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
@@ -1007,8 +1007,8 @@ def trace_cone(pole1, pole2, pole3):
         if var_hexa() == 1:
             pole1a = 2 * pole1 + pole2
             pole2a = 2 * pole2 + pole1
-            pole1=pole1a
-            pole2=pole2a
+            pole1 = pole1a
+            pole2 = pole2a
     trC = np.vstack((trC, np.array([pole1, pole2, pole3, pole_i, pole_c, inc])))
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
     trC = np.unique(b).view(trC.dtype).reshape(-1, trC.shape[1])
@@ -1065,15 +1065,15 @@ def undo_trace_addcone():
 
 def undo_trace_plan(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trP, tr_schmid
-    
-    if var_uvw()==1 & var_hexa() == 1:
-    	pole1a = 2 * pole1 + pole2
+
+    if var_uvw() == 1 & var_hexa() == 1:
+        pole1a = 2 * pole1 + pole2
         pole2a = 2 * pole2 + pole1
         pole1 = pole1a
         pole2 = pole2a
-    	
+
     ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 3] == var_uvw()) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 3] == var_uvw()))
-    
+
     trP = np.delete(trP, ind, 0)
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
@@ -1082,12 +1082,12 @@ def undo_trace_plan(pole1, pole2, pole3):
 def undo_trace_cone(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trC, tr_schmid
 
-    if var_uvw()==1 & var_hexa() == 1:
-    	pole1a = 2 * pole1 + pole2
+    if var_uvw() == 1 & var_hexa() == 1:
+        pole1a = 2 * pole1 + pole2
         pole2a = 2 * pole2 + pole1
         pole1 = pole1a
         pole2 = pole2a
-    	
+
     ind = np.where((trC[:, 0] == pole1) & (trC[:, 1] == pole2) & (trC[:, 2] == pole3) & (trC[:, 3] == var_uvw()) | (trC[:, 0] == -pole1) & (trC[:, 1] == -pole2) & (trC[:, 2] == -pole3) & (trC[:, 3] == var_uvw()))
     trC = np.delete(trC, ind, 0)
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
@@ -2337,7 +2337,7 @@ def intersection_cone():
 def list_pole(A):
     global M, D, Dstar
     axes_list = np.zeros((A.shape[0], 4))
-    
+
     for i in range(0, A.shape[0]):
 
         if A[i, 3] == 0:
@@ -2366,24 +2366,24 @@ def list_pole(A):
 
             else:
                 axes_list[i, 0:3] = A[i, 0:3]
-    axes_list = axes_list[~np.all(axes_list[:,0:3] == 0, axis=1)]
+    axes_list = axes_list[~np.all(axes_list[:, 0:3] == 0, axis=1)]
 
     return axes_list
 
 
 def get_list():
-    global M, axesh, axes, axes_list,trP,trC
+    global M, axesh, axes, axes_list, trP, trC
 
     ui_list.list_table.clear()
-    axes_l=np.vstack((axes.T,axesh[:,3])).T
+    axes_l = np.vstack((axes.T, axesh[:, 3])).T
     axes_list = list_pole(axes_l)
-    trPc=np.vstack((trP,-trP))
-    plan_list= list_pole(trPc[:,0:4])
-    trCc=np.vstack((trC,-trC))
-    cone_list= list_pole(trCc[:,0:4])
-    axes_list=np.vstack((axes_list,plan_list,cone_list))
-    u,r=np.unique(axes_list[:,0:3],axis=0,return_index=True)
-    axes_list= axes_list[r,:]
+    trPc = np.vstack((trP, -trP))
+    plan_list = list_pole(trPc[:, 0:4])
+    trCc = np.vstack((trC, -trC))
+    cone_list = list_pole(trCc[:, 0:4])
+    axes_list = np.vstack((axes_list, plan_list, cone_list))
+    u, r = np.unique(axes_list[:, 0:3], axis=0, return_index=True)
+    axes_list = axes_list[r, :]
     ui_list.list_table.setColumnCount(4)
     ui_list.list_table.setRowCount(int(axes_list.shape[0]))
     header = ui_list.list_table.horizontalHeader()
@@ -2422,12 +2422,12 @@ def add_remove_list():
             if ui_list.list_table.item(index.row(), 2).text() == 'uvw':
                 if ui.uvw_button.isChecked() is False:
                     ui.uvw_button.toggle()
-            
+
             if ui_list.plane_checkBox.isChecked() or ui_list.cone_checkBox.isChecked():
-	        if ui_list.plane_checkBox.isChecked():
-	            undo_trace_plan(i0,i1,i2)
+                if ui_list.plane_checkBox.isChecked():
+                    undo_trace_plan(i0, i1, i2)
                 if ui_list.cone_checkBox.isChecked():
-                    undo_trace_cone(i0,i1,i2)
+                    undo_trace_cone(i0, i1, i2)
             else:
                 undo_pole(i0, i1, i2)
 
@@ -2438,15 +2438,14 @@ def add_remove_list():
                 if ui.uvw_button.isChecked() is False:
                     ui.uvw_button.toggle()
 
-            
             if ui_list.plane_checkBox.isChecked() or ui_list.cone_checkBox.isChecked():
-	        if ui_list.plane_checkBox.isChecked():
-	            trace_plan(i0,i1,i2)
+                if ui_list.plane_checkBox.isChecked():
+                    trace_plan(i0, i1, i2)
                 if ui_list.cone_checkBox.isChecked():
-                    trace_cone(i0,i1,i2)
+                    trace_cone(i0, i1, i2)
             else:
                 pole(i0, i1, i2)
-            
+
             ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('o'))
     if ui.uvw_button.isChecked() is True:
         ui.uvw_button.toggle()
