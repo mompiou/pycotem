@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1212</width>
     <height>887</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Misorientation</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>misorientation-icon.png</normaloff>misorientation-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
@@ -37,37 +41,13 @@
            <string>Crystal 1</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="3" column="0" colspan="2">
-            <widget class="QLabel" name="e_label">
-             <property name="text">
-              <string>max indices</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="6">
-            <widget class="QCheckBox" name="hexa_button">
-             <property name="text">
-              <string>hexa</string>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="1" colspan="5">
             <widget class="QLineEdit" name="alphabetagamma_entry"/>
            </item>
-           <item row="0" column="0" colspan="6">
-            <widget class="QComboBox" name="structure_box"/>
-           </item>
-           <item row="11" column="1">
-            <widget class="QPushButton" name="dm_button">
+           <item row="2" column="0">
+            <widget class="QLabel" name="alphabetagamma_label">
              <property name="text">
-              <string>-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="3">
-            <widget class="QPushButton" name="dp_button">
-             <property name="text">
-              <string>+</string>
+              <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
              </property>
             </widget>
            </item>
@@ -78,27 +58,17 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QRadioButton" name="color_trace_bleu">
+           <item row="8" column="0" colspan="4">
+            <widget class="QCheckBox" name="style_box">
              <property name="text">
-              <string>blue</string>
+              <string>open/filled</string>
              </property>
             </widget>
            </item>
-           <item row="11" column="0">
-            <widget class="QLabel" name="d_label">
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="e_label">
              <property name="text">
-              <string>d</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="5">
-            <widget class="QLineEdit" name="abc_entry"/>
-           </item>
-           <item row="11" column="4" colspan="2">
-            <widget class="QLabel" name="d_label_var">
-             <property name="text">
-              <string/>
+              <string>max indices</string>
              </property>
             </widget>
            </item>
@@ -109,18 +79,18 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="alphabetagamma_label">
+           <item row="0" column="0" colspan="6">
+            <widget class="QComboBox" name="structure_box"/>
+           </item>
+           <item row="13" column="0">
+            <widget class="QLabel" name="d_label">
              <property name="text">
-              <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
+              <string>d</string>
              </property>
             </widget>
            </item>
-           <item row="11" column="2">
-            <widget class="QLineEdit" name="d_entry"/>
-           </item>
-           <item row="3" column="3" colspan="3">
-            <widget class="QLineEdit" name="e_entry"/>
+           <item row="1" column="1" colspan="5">
+            <widget class="QLineEdit" name="abc_entry"/>
            </item>
            <item row="6" column="1">
             <widget class="QRadioButton" name="color_trace_vert">
@@ -129,10 +99,34 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0" colspan="4">
-            <widget class="QCheckBox" name="style_box">
+           <item row="6" column="0">
+            <widget class="QRadioButton" name="color_trace_bleu">
              <property name="text">
-              <string>open/filled</string>
+              <string>blue</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3" colspan="3">
+            <widget class="QLineEdit" name="e_entry"/>
+           </item>
+           <item row="4" column="0" colspan="6">
+            <widget class="QCheckBox" name="hexa_button">
+             <property name="text">
+              <string>hexa</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="1" colspan="3">
+            <widget class="QSlider" name="d1_Slider">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="4" colspan="2">
+            <widget class="QLabel" name="d_label_var">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -151,7 +145,16 @@
            <string>Crystal 2</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>5</number>
+           </property>
+           <property name="topMargin">
+            <number>5</number>
+           </property>
+           <property name="rightMargin">
+            <number>5</number>
+           </property>
+           <property name="bottomMargin">
             <number>5</number>
            </property>
            <property name="spacing">
@@ -161,13 +164,6 @@
             <widget class="QLabel" name="d_label_var_2">
              <property name="text">
               <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="1">
-            <widget class="QPushButton" name="dm_button_2">
-             <property name="text">
-              <string>-</string>
              </property>
             </widget>
            </item>
@@ -184,9 +180,6 @@
               <string>a,b,c</string>
              </property>
             </widget>
-           </item>
-           <item row="12" column="2">
-            <widget class="QLineEdit" name="d_entry_2"/>
            </item>
            <item row="7" column="2">
             <widget class="QRadioButton" name="color_trace_rouge_2">
@@ -222,13 +215,6 @@
              </property>
             </widget>
            </item>
-           <item row="12" column="4">
-            <widget class="QPushButton" name="dp_button_2">
-             <property name="text">
-              <string>+</string>
-             </property>
-            </widget>
-           </item>
            <item row="7" column="0">
             <widget class="QRadioButton" name="color_trace_bleu_2">
              <property name="text">
@@ -253,6 +239,13 @@
             <widget class="QRadioButton" name="color_trace_vert_2">
              <property name="text">
               <string>green</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="1" colspan="4">
+            <widget class="QSlider" name="d2_Slider">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -352,7 +345,16 @@
         <string>stereo-proj</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <property name="spacing">
@@ -373,7 +375,16 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <property name="spacing">
@@ -780,7 +791,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>1212</width>
      <height>23</height>
     </rect>
    </property>
@@ -868,9 +879,6 @@
   <tabstop>color_trace_vert</tabstop>
   <tabstop>color_trace_rouge</tabstop>
   <tabstop>style_box</tabstop>
-  <tabstop>dm_button</tabstop>
-  <tabstop>d_entry</tabstop>
-  <tabstop>dp_button</tabstop>
   <tabstop>structure2_box</tabstop>
   <tabstop>abc_entry_2</tabstop>
   <tabstop>alphabetagamma_entry_2</tabstop>
@@ -880,9 +888,6 @@
   <tabstop>color_trace_vert_2</tabstop>
   <tabstop>color_trace_rouge_2</tabstop>
   <tabstop>style_box_2</tabstop>
-  <tabstop>dm_button_2</tabstop>
-  <tabstop>d_entry_2</tabstop>
-  <tabstop>dp_button_2</tabstop>
   <tabstop>crystal1_radioButton</tabstop>
   <tabstop>crystal2_radioButton</tabstop>
   <tabstop>lock_checkButton</tabstop>

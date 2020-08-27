@@ -7,13 +7,13 @@
 
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
 from PIL import Image
 from PIL import ImageEnhance
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import kikuchiUI
 import refineUI
@@ -96,9 +96,9 @@ def reset():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    img = Image.open(str(image_diff))
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     minx = 0
     maxx = width
@@ -267,12 +267,12 @@ def open_image():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    image_diff = QtGui.QFileDialog.getOpenFileName(Index, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
-    img = Image.open(str(image_diff))
+    image_diff = QtWidgets.QFileDialog.getOpenFileName(Index, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
+    img = Image.open(str(image_diff[0]))
     ih = img.convert('L').histogram()
     mean_ih = sum(ih[g] * g / sum(ih) for g in range(len(ih)))
     a.imshow(img, origin='upper')
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     width, height = img.size
     a.axis([0, width, height, 0])
     a.axis('off')
@@ -875,7 +875,7 @@ def extinction(space_group, h, k, l):
 
 def brightness():
 
-    img = Image.open(str(image_diff))
+    img = Image.open(str(image_diff[0]))
     ui.brightness_slider.setMinimum(10)
     ui.brightness_slider.setMaximum(25500 / mean_ih)
 
@@ -886,7 +886,7 @@ def brightness():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin='upper')
     a.axis([0, width, height, 0])
     a.axis('off')
@@ -948,8 +948,9 @@ except AttributeError:
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Index = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Kikuchi")
+    Index = QtWidgets.QMainWindow()
     ui = kikuchiUI.Ui_Kikuchi()
     ui.setupUi(Index)
     figure = plt.figure(facecolor='white', figsize=[2, 2], dpi=100)
@@ -965,7 +966,7 @@ if __name__ == "__main__":
     x_space = []
 
     for line in f_space:
-        x_space.append(map(str, line.split()))
+        x_space.append(list(map(str, line.split())))
 
     list_space_group = []
     for i in range(0, len(x_space)):
@@ -979,14 +980,14 @@ if __name__ == "__main__":
     x0 = []
 
     for line in file_struct:
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
 
     i = 0
     file_struct.close()
 
     for item in x0:
         entry = ui.menuStructure.addAction(item[0])
-        Index.connect(entry, QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
+        entry.triggered.connect(lambda checked, item=item: structure(item))
         ui.space_group_Box.addItem(x0[i][7])
         i = i + 1
 
@@ -1001,7 +1002,7 @@ if __name__ == "__main__":
     x_calib = []
 
     for line in f_calib:
-        x_calib.append(map(str, line.split()))
+        x_calib.append(list(map(str, line.split())))
 
     f_calib.close()
     counter = len(x_calib)
@@ -1014,30 +1015,30 @@ if __name__ == "__main__":
     x_scatt = []
 
     for line in f_scatt:
-        x_scatt.append(map(str, line.split()))
+        x_scatt.append(list(map(str, line.split())))
 
     f_scatt.close()
 
-    Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
+    ui.actionSave_figure.triggered.connect(open_image)
     figure.canvas.mpl_connect('button_press_event', onpress)
     figure.canvas.mpl_connect('button_release_event', onrelease)
     figure.canvas.mpl_connect('motion_notify_event', onmove)
     press = False
     move = False
 
-    Tilt = QtGui.QDialog()
+    Tilt = QtWidgets.QDialog()
     ui_Tilt = tiltUI.Ui_Tilt()
     ui_Tilt.setupUi(Tilt)
-    Index.connect(ui.actionTilt, QtCore.SIGNAL('triggered()'), Tilt.show)
+    ui.actionTilt.triggered.connect(Tilt.show)
     ui_Tilt.tilt_a_entry.setText('0')
     ui_Tilt.tilt_b_entry.setText('0')
     ui_Tilt.tilt_z_entry.setText('0')
     ui_Tilt.t_ang_entry.setText('0')
 
-    Refine = QtGui.QDialog()
+    Refine = QtWidgets.QDialog()
     ui_Refine = refineUI.Ui_Refine()
     ui_Refine.setupUi(Refine)
-    Index.connect(ui.actionRefine_orientation, QtCore.SIGNAL('triggered()'), Refine.show)
+    ui.actionRefine_orientation.triggered.connect(Refine.show)
     ui_Refine.Rxm_button.clicked.connect(Rxm)
     ui_Refine.Rxp_button.clicked.connect(Rxp)
     ui_Refine.Rym_button.clicked.connect(Rym)

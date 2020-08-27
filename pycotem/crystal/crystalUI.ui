@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Crystal</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>crystal-icon.png</normaloff>crystal-icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
     <item row="0" column="0">
@@ -226,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>1222</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">

@@ -13,6 +13,16 @@
   <property name="windowTitle">
    <string>Diffraction pattern</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>diffraction-icon.png</normaloff>diffraction-icon.png</iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>24</width>
+    <height>24</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
@@ -301,7 +311,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">

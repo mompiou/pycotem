@@ -2,80 +2,68 @@
 
 # Form implementation generated from reading ui file 'widthUI.ui'
 #
-# Created by: PyQt4 UI code generator 4.12.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
 
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_Width(object):
     def setupUi(self, Width):
-        Width.setObjectName(_fromUtf8("Width"))
+        Width.setObjectName("Width")
         Width.resize(682, 658)
-        self.layoutWidget = QtGui.QWidget(Width)
+        self.layoutWidget = QtWidgets.QWidget(Width)
         self.layoutWidget.setGeometry(QtCore.QRect(9, 9, 661, 641))
-        self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
-        self.gridLayout = QtGui.QGridLayout(self.layoutWidget)
-        self.gridLayout.setMargin(0)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.mplwindow = QtGui.QWidget(self.layoutWidget)
-        self.mplwindow.setObjectName(_fromUtf8("mplwindow"))
-        self.gridLayoutWidget = QtGui.QWidget(self.mplwindow)
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.mplwindow = QtWidgets.QWidget(self.layoutWidget)
+        self.mplwindow.setObjectName("mplwindow")
+        self.gridLayoutWidget = QtWidgets.QWidget(self.mplwindow)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(-1, -1, 661, 501))
-        self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
-        self.mplvl = QtGui.QGridLayout(self.gridLayoutWidget)
-        self.mplvl.setMargin(0)
-        self.mplvl.setObjectName(_fromUtf8("mplvl"))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.mplvl = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.mplvl.setContentsMargins(0, 0, 0, 0)
+        self.mplvl.setObjectName("mplvl")
         self.gridLayout.addWidget(self.mplwindow, 0, 0, 1, 7)
-        self.thickness_label = QtGui.QLabel(self.layoutWidget)
-        self.thickness_label.setObjectName(_fromUtf8("thickness_label"))
+        self.thickness_label = QtWidgets.QLabel(self.layoutWidget)
+        self.thickness_label.setObjectName("thickness_label")
         self.gridLayout.addWidget(self.thickness_label, 3, 0, 1, 1)
-        self.clear_button = QtGui.QPushButton(self.layoutWidget)
-        self.clear_button.setObjectName(_fromUtf8("clear_button"))
+        self.clear_button = QtWidgets.QPushButton(self.layoutWidget)
+        self.clear_button.setObjectName("clear_button")
         self.gridLayout.addWidget(self.clear_button, 1, 4, 1, 1)
-        self.trace_radio_button = QtGui.QRadioButton(self.layoutWidget)
-        self.trace_radio_button.setObjectName(_fromUtf8("trace_radio_button"))
+        self.trace_radio_button = QtWidgets.QRadioButton(self.layoutWidget)
+        self.trace_radio_button.setObjectName("trace_radio_button")
         self.gridLayout.addWidget(self.trace_radio_button, 1, 2, 1, 2)
-        self.thickness_checkBox = QtGui.QCheckBox(self.layoutWidget)
-        self.thickness_checkBox.setObjectName(_fromUtf8("thickness_checkBox"))
+        self.thickness_checkBox = QtWidgets.QCheckBox(self.layoutWidget)
+        self.thickness_checkBox.setObjectName("thickness_checkBox")
         self.gridLayout.addWidget(self.thickness_checkBox, 3, 2, 1, 2)
-        self.plane_entry = QtGui.QLineEdit(self.layoutWidget)
-        self.plane_entry.setObjectName(_fromUtf8("plane_entry"))
+        self.plane_entry = QtWidgets.QLineEdit(self.layoutWidget)
+        self.plane_entry.setObjectName("plane_entry")
         self.gridLayout.addWidget(self.plane_entry, 1, 1, 1, 1)
-        self.buttonBox = QtGui.QDialogButtonBox(self.layoutWidget)
+        self.buttonBox = QtWidgets.QDialogButtonBox(self.layoutWidget)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
         self.gridLayout.addWidget(self.buttonBox, 4, 3, 1, 4)
-        self.label = QtGui.QLabel(self.layoutWidget)
-        self.label.setObjectName(_fromUtf8("label"))
+        self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-        self.thickness = QtGui.QLineEdit(self.layoutWidget)
-        self.thickness.setObjectName(_fromUtf8("thickness"))
+        self.thickness = QtWidgets.QLineEdit(self.layoutWidget)
+        self.thickness.setObjectName("thickness")
         self.gridLayout.addWidget(self.thickness, 3, 1, 1, 1)
-        self.label_2 = QtGui.QLabel(self.layoutWidget)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
-        self.foil_surface = QtGui.QLineEdit(self.layoutWidget)
-        self.foil_surface.setObjectName(_fromUtf8("foil_surface"))
+        self.foil_surface = QtWidgets.QLineEdit(self.layoutWidget)
+        self.foil_surface.setObjectName("foil_surface")
         self.gridLayout.addWidget(self.foil_surface, 2, 1, 1, 1)
-        self.surface_box = QtGui.QCheckBox(self.layoutWidget)
-        self.surface_box.setText(_fromUtf8(""))
-        self.surface_box.setObjectName(_fromUtf8("surface_box"))
+        self.surface_box = QtWidgets.QCheckBox(self.layoutWidget)
+        self.surface_box.setText("")
+        self.surface_box.setObjectName("surface_box")
         self.gridLayout.addWidget(self.surface_box, 2, 2, 1, 2)
 
         self.retranslateUi(Width)
@@ -89,11 +77,11 @@ class Ui_Width(object):
         Width.setTabOrder(self.clear_button, self.buttonBox)
 
     def retranslateUi(self, Width):
-        Width.setWindowTitle(_translate("Width", "Apparent Width", None))
-        self.thickness_label.setText(_translate("Width", "thickness (nm)", None))
-        self.clear_button.setText(_translate("Width", "clear", None))
-        self.trace_radio_button.setText(_translate("Width", "trace dir.", None))
-        self.thickness_checkBox.setText(_translate("Width", "w (nm)", None))
-        self.label.setText(_translate("Width", "plane", None))
-        self.label_2.setText(_translate("Width", "foil surface", None))
-
+        _translate = QtCore.QCoreApplication.translate
+        Width.setWindowTitle(_translate("Width", "Apparent Width"))
+        self.thickness_label.setText(_translate("Width", "thickness (nm)"))
+        self.clear_button.setText(_translate("Width", "clear"))
+        self.trace_radio_button.setText(_translate("Width", "trace dir."))
+        self.thickness_checkBox.setText(_translate("Width", "w (nm)"))
+        self.label.setText(_translate("Width", "plane"))
+        self.label_2.setText(_translate("Width", "foil surface"))

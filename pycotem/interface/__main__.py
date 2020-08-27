@@ -8,12 +8,12 @@
 
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
 from PIL import Image
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import interfaceUI
 import DrawInterfaceUI
@@ -75,9 +75,9 @@ def reset_last_point():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    img = Image.open(str(image_diff))
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     gclick = gclick[:-1, :]
     s = s - 1
@@ -98,9 +98,9 @@ def reset_points():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    img = Image.open(str(image_diff))
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     a.axis([minx, maxx, miny, maxy])
     a.axis('off')
@@ -123,9 +123,9 @@ def reset():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    img = Image.open(str(image_diff))
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     minx = 0
     maxx = width
@@ -349,7 +349,7 @@ def get_direction():
     ui.euler_Listbox.clear()
     s_a, s_b, s_z = tilt_axes()
     s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
-    if s < 3:
+    if len(s) < 3:
         ui.euler_Listbox.addItem("Number of inputs should be more than 3")
     else:
         tilt_a = []
@@ -359,7 +359,7 @@ def get_direction():
         d = []
 
         for i in range(0, len(s)):
-            l = map(float, s[i].split(','))
+            l = list(map(float, s[i].split(',')))
             tilt_a.append(l[2])
             tilt_b.append(l[3])
             tilt_z.append(l[4])
@@ -445,7 +445,7 @@ def get_normal():
     ui.euler_Listbox.clear()
     s_a, s_b, s_z = tilt_axes()
     s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
-    if s < 3:
+    if len(s) < 3:
         ui.euler_Listbox.addItem("Number of spots should be between 3 and 5")
     else:
         tilt_a = []
@@ -454,7 +454,7 @@ def get_normal():
         width_inclination = []
 
         for i in range(0, len(s)):
-            l = map(float, s[i].split(','))
+            l = list(map(float, s[i].split(',')))
             tilt_a.append(l[2])
             tilt_b.append(l[3])
             tilt_z.append(l[4])
@@ -676,7 +676,7 @@ def draw_planes_dir():
                 a_stretched = figure_stretched.add_subplot(111)
                 a_stretched.figure.clear()
                 a_stretched = figure_stretched.add_subplot(111)
-                img = Image.open(str(image_diff))
+                img = Image.open(str(image_diff[0]))
                 im_rotate = img.rotate(a_r * 180 / np.pi, expand=1)
                 stretched_size = (int(im_rotate.size[0] * a_g), im_rotate.size[1])
                 im_stretched = im_rotate.resize(stretched_size)
@@ -705,11 +705,11 @@ def open_image():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    image_diff = QtGui.QFileDialog.getOpenFileName(Interface, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
-    img = Image.open(str(image_diff))
+    image_diff = QtWidgets.QFileDialog.getOpenFileName(Interface, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
     a.imshow(img, origin='upper')
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     height, width = img.shape[0], img.shape[1]
     a.axis([0, width, height, 0])
     a.axis('off')
@@ -783,8 +783,8 @@ def tilt_rot():
 def import_data():
     ui.conditions_Listbox.clear()
     ui.euler_Listbox.clear()
-    data_file = QtGui.QFileDialog.getOpenFileName(Interface, "Open a data file", "", "*.txt")
-    data = open(data_file, 'r')
+    data_file = QtWidgets.QFileDialog.getOpenFileName(Interface, "Open a data file", "", "*.txt")
+    data = open(data_file[0], 'r')
     x0 = []
 
     for line in data:
@@ -793,7 +793,7 @@ def import_data():
             continue
         if line.startswith("#"):
             continue
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
 
     data.close()
     if len(x0[0][0].split(',')) == 3:
@@ -806,8 +806,8 @@ def import_data():
 def export_data():
     s = [str(x.text()) for x in ui.conditions_Listbox.selectedItems()]
     res = [str(ui.euler_Listbox.item(i).text()) for i in range(ui.euler_Listbox.count())]
-    name = QtGui.QFileDialog.getSaveFileName(Interface, 'Save File')
-    fout = open(name, 'w')
+    name = QtWidgets.QFileDialog.getSaveFileName(Interface, 'Save File')
+    fout = open(name[0], 'w')
     fout.write('# Interface data file \n')
     fout.write('# Euler angles \n')
     fout.write(str(ui.euler_entry.text()) + '\n')
@@ -849,8 +849,9 @@ except AttributeError:
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Interface = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Interface")
+    Interface = QtWidgets.QMainWindow()
     ui = interfaceUI.Ui_Interface()
     ui.setupUi(Interface)
     figure = plt.figure()
@@ -859,17 +860,17 @@ if __name__ == "__main__":
     toolbar = NavigationToolbar(canvas, canvas)
     toolbar.setMinimumWidth(601)
 
-    Draw = QtGui.QDialog()
+    Draw = QtWidgets.QDialog()
     ui_draw = DrawInterfaceUI.Ui_Draw_plane_directions()
     ui_draw.setupUi(Draw)
-    Interface.connect(ui.actionDirections_planes, QtCore.SIGNAL('triggered()'), Draw.show)
+    ui.actionDirections_planes.triggered.connect(Draw.show)
     ui_draw.buttonBox.rejected.connect(Draw.close)
     ui_draw.buttonBox.accepted.connect(draw_planes_dir)
 
-    Interface.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
-    Interface.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
+    ui.actionImport.triggered.connect(import_data)
+    ui.actionExport.triggered.connect(export_data)
 
-    Stretched = QtGui.QDialog()
+    Stretched = QtWidgets.QDialog()
     ui_stretched = DrawStretchedUI.Ui_Draw_Stretched()
     ui_stretched.setupUi(Stretched)
     figure_stretched = plt.figure()
@@ -895,14 +896,14 @@ if __name__ == "__main__":
     x0 = []
 
     for line in file_struct:
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
 
     i = 0
     file_struct.close()
 
     for item in x0:
         entry = ui.menuStructure.addAction(item[0])
-        Interface.connect(entry, QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
+        entry.triggered.connect(lambda checked, item=item: structure(item))
         i = i + 1
 
 #########################
@@ -916,7 +917,7 @@ if __name__ == "__main__":
     x_micro = []
 
     for line in f_micro:
-        x_micro.append(map(str, line.split()))
+        x_micro.append(list(map(str, line.split())))
 
     x_micro = np.array(x_micro)
     x_micro_unique, ind_x = np.unique(x_micro[:, 0], return_index=True)
@@ -927,10 +928,10 @@ if __name__ == "__main__":
     f_micro.close()
 # Ctrl+z shortcut to remove clicked pole
 
-    shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+z"), Interface)
+    shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+z"), Interface)
     shortcut.activated.connect(reset_last_point)
 
-    Interface.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
+    ui.actionSave_figure.triggered.connect(open_image)
 
     figure.canvas.mpl_connect('button_press_event', onpress)
     figure.canvas.mpl_connect('button_release_event', onrelease)

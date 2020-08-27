@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>396</width>
-    <height>220</height>
+    <height>234</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>381</width>
-     <height>205</height>
+     <height>218</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -27,13 +27,6 @@
      <widget class="QLabel" name="Y_label">
       <property name="text">
        <string>Y</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0" colspan="2">
-     <widget class="QPushButton" name="xyz_button">
-      <property name="text">
-       <string>Update</string>
       </property>
      </widget>
     </item>
@@ -51,13 +44,27 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="10" column="0">
+     <widget class="QPushButton" name="xyz_button">
+      <property name="text">
+       <string>Update</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QCheckBox" name="uvw_CheckBox">
+      <property name="text">
+       <string>uvw</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2" colspan="2">
      <widget class="QLineEdit" name="X_text"/>
     </item>
-    <item row="4" column="0">
+    <item row="4" column="0" rowspan="2" colspan="2">
      <widget class="QLineEdit" name="Y_text"/>
     </item>
-    <item row="8" column="0">
+    <item row="8" column="0" rowspan="2" colspan="2">
      <widget class="QLineEdit" name="Z_text"/>
     </item>
    </layout>

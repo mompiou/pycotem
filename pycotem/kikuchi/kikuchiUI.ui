@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Kikuchi</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>kikuchi-icon.png</normaloff>kikuchi-icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="2">
@@ -140,7 +144,16 @@
           <string>Crystal Parameters</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <property name="spacing">
@@ -248,7 +261,7 @@
      <x>0</x>
      <y>0</y>
      <width>1213</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">

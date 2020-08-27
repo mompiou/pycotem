@@ -11,12 +11,13 @@
 
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore,QtWidgets
 import sys
 import os
+import functools
 from PIL import Image
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 import stereoprojUI
@@ -189,7 +190,7 @@ def var_carre():
 
 
 def crist():
-    global axes, axesh, D, Dstar, V, G
+    global axes, axesh, D, Dstar, V, G, dmip,e,hexa_cryst
     abc = ui.abc_entry.text().split(",")
     a = np.float(abc[0]) * 1e-10
     b = np.float(abc[1]) * 1e-10
@@ -198,11 +199,24 @@ def crist():
     alpha = np.float(alphabetagamma[0])
     beta = np.float(alphabetagamma[1])
     gamma = np.float(alphabetagamma[2])
+    hexa_cryst=0
+    if alpha == 90 and beta ==90 and gamma==120:
+	    hexa_cryst=1
+	    dmip=a/2-0.0001e-10
+    else:
+	    dmip=0
+    
     e = np.int(ui.e_entry.text())
-    d2 = np.float(ui.d_label_var.text())
+    ui.d_Slider.setMinimum(0)
+    ui.d_Slider.setMaximum(np.amax([a,b,c])*1e10*100)
+    ui.d_Slider.setSingleStep(100)
+    ui.d_Slider.setValue(dmip*1e10*100)
+    
+    ui.d_label_var.setText(str(np.around(dmip*1e10,decimals=3)))
     alpha = alpha * np.pi / 180
     beta = beta * np.pi / 180
     gamma = gamma * np.pi / 180
+    
     V = a * b * c * np.sqrt(1 - (np.cos(alpha)**2) - (np.cos(beta))**2 - (np.cos(gamma))**2 + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma))
     D = np.array([[a, b * np.cos(gamma), c * np.cos(beta)], [0, b * np.sin(gamma), c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)], [0, 0, V / (a * b * np.sin(gamma))]])
     Dstar = np.transpose(np.linalg.inv(D))
@@ -215,27 +229,34 @@ def crist():
         for j in range(-e, e + 1):
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
-                    d = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
-                    if d > d2 * 0.1 * np.amax([a, b, c]):
-                        if var_uvw() == 0:
+                    if  var_uvw() == 0:                   
                             Ma = np.dot(Dstar, np.array([i, j, k], float))
                             axesh[id, 3] = 0
-                        else:
+                    else:
                             Ma = np.dot(D, np.array([i, j, k], float))
                             axesh[id, 3] = 1
-
-                        m = np.abs(reduce(lambda x, y: GCD(x, y), [i, j, k]))
-                        if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
-                            axes[id, :] = np.array([i, j, k]) / m
-                        else:
-                            axes[id, :] = np.array([i, j, k])
-                        axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
-                        axesh[id, 5] = 1
-                        axesh[id, 6] = 1
-                        id = id + 1
+                         
+                    m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
+                    if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
+                           axes[id, :] = np.array([i, j, k]) / m
+                    else:
+                          axes[id, :] = np.array([i, j, k])
+                    axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
+                    axesh[id, 5] = 1
+                    axesh[id, 6] = 1
+                    id = id + 1
 
     axesh = axesh[~np.all(axesh[:, 0:3] == 0, axis=1)]
     axes = axes[~np.all(axes == 0, axis=1)]
+
+    for i in range(0, np.shape(axes)[0]):
+        axesh[i, 6] = 1
+        d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
+        if d < dmip :
+            axesh[i, 6] = 0
+        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+            axesh[i, 6] = 0
+           
 
     return axes, axesh, D, Dstar, V, G
 
@@ -255,8 +276,8 @@ def lattice_reciprocal():
 
 
 def crist_reciprocal():
-    global axes, axesh, naxes
-
+    global axes, axesh, naxes,G,dmip,hexa_cryst,e
+    ui.d_Slider.setValue(dmip*1e10*100)
     for z in range(0, np.shape(axes)[0]):
         if z < (np.shape(axes)[0] - naxes):
             I, h, k, l = extinction(ui.space_group_Box.currentText(), axes[z, 0], axes[z, 1], axes[z, 2], np.int(ui.e_entry.text()), 0)
@@ -282,6 +303,13 @@ def crist_reciprocal():
             axes[z, :] = np.array([0, 0, 0])
     axesh = axesh[~np.all(axesh[:, 0:3] == 0, axis=1)]
     axes = axes[~np.all(axes == 0, axis=1)]
+    for i in range(0, np.shape(axes)[0]):
+        axesh[i, 6] = 1
+        d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
+        if d < dmip :
+            axesh[i, 6] = 0
+        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+            axesh[i, 6] = 0
 
     return axes, axesh, naxes
 
@@ -292,7 +320,7 @@ def undo_crist_reciprocal():
         extra_axes = axes[-naxes:, :]
         extra_axesh = axesh[-naxes:, :]
         for i in range(0, np.shape(extra_axes)[0]):
-            m = reduce(lambda x, y: GCD(x, y), extra_axes[i, :])
+            m = functools.reduce(lambda x, y: GCD(x, y), extra_axes[i, :])
             extra_axes[i, :] = extra_axes[i, :] / m
             if var_uvw() == 0:
                 extra_axesh[i, 3] = 0
@@ -356,40 +384,19 @@ def extinction(space_group, h, k, l, lim, diff):
 #
 #######################################################
 def dist_restrict():
-    global G, axes, axesh
-    abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0]) * 1e-10
-    b = np.float(abc[1]) * 1e-10
-    c = np.float(abc[2]) * 1e-10
-    d2 = np.float(ui.d_label_var.text())
+    global G, axes, axesh,dmin,dmax,hexa_cryst,e
+    
+    d2 = ui.d_Slider.value()/100*1e-10
+    ui.d_label_var.setText(str(np.around(d2*1e10,decimals=3)))
     for i in range(0, np.shape(axes)[0]):
+        axesh[i, 6] = 1
         d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
-        if d < d2 * 0.1 * np.amax([a, b, c]):
+        if d < d2 :
             axesh[i, 6] = 0
-        else:
-            axesh[i, 6] = 1
+        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+            axesh[i, 6] = 0
 
     trace()
-
-
-def dm():
-    global dmip
-
-    dmip = dmip - np.float(ui.d_entry.text())
-    ui.d_label_var.setText(str(dmip))
-    dist_restrict()
-
-    return dmip
-
-
-def dp():
-    global dmip, a, axes, axesh
-
-    dmip = dmip + np.float(ui.d_entry.text())
-    ui.d_label_var.setText(str(dmip))
-    dist_restrict()
-
-    return dmip
 
 
 ####################################################################
@@ -679,7 +686,7 @@ def pole(pole1, pole2, pole3):
             pole2 = pole2a
 
     Gs = np.array([pole1, pole2, pole3], float)
-    m = reduce(lambda x, y: GCD(x, y), Gs)
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
     if np.abs(m) > 1e-3 and np.abs(m) != 1:
         pole1, pole2, pole3 = Gs / m
 
@@ -737,7 +744,7 @@ def undo_pole(pole1, pole2, pole3):
             pole2 = pole2a
 
     Gs = np.array([pole1, pole2, pole3], float)
-    m = reduce(lambda x, y: GCD(x, y), Gs)
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
     if np.abs(m) > 1e-3:
         pole1, pole2, pole3 = Gs / m
 
@@ -1465,7 +1472,6 @@ def coordinates(event):
 #
 #######################################################
 
-
 def dhkl():
     pole_entry = ui.pole_entry.text().split(",")
     i = np.float(pole_entry[0])
@@ -1571,7 +1577,7 @@ def text_label(A, B):
         Aa = (2 * A[0] - A[1]) / 3
         Ab = (2 * A[1] - A[0]) / 3
         Ac = A[2]
-        m = reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
+        m = functools.reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
         if np.abs(m) > 1e-3 and np.abs(m) != 1:
             Aa = Aa / m
             Ab = Ab / m
@@ -1627,21 +1633,22 @@ def trace():
     trace_cone2(trC)
     schmid_trace2(tr_schmid)
     tilt_axes()
+
     for i in range(0, axes.shape[0]):
         if axesh[i, 6] == 1:
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             T[i, :] = np.dot(M, axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
-
-            if axesh[i, 4] == 1:
-                C.append('g')
-            if axesh[i, 4] == 2:
-                C.append('b')
-            if axesh[i, 4] == 3:
-                C.append('r')
-
             s = text_label(axes[i, :], axesh[i, :])
             a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+        if axesh[i, 4] == 1:
+            C.append('g')
+        if axesh[i, 4] == 2:
+            C.append('b')
+        if axesh[i, 4] == 3:
+            C.append('r')
+
+            
     if ui.reciprocal_checkBox.isChecked():
         if np.shape(axes)[0] > 0:
             s0 = axesh[:, 6] * axesh[:, 5] / np.amax(axesh[:, 5])
@@ -1650,6 +1657,7 @@ def trace():
     else:
         s0 = axesh[:, 6]
 
+    
     if var_carre() == 0:
         a.scatter(P[:, 0] + 300, P[:, 1] + 300, c=C, s=s0 * np.float(ui.size_var.text()))
     else:
@@ -1671,7 +1679,6 @@ def princ():
     trC = np.zeros((1, 6))
     Stc = np.zeros((1, 3))
     tr_schmid = np.zeros((1, 3))
-    dmip = 0
     naxes = 0
     crist()
     tilt_axes()
@@ -1711,21 +1718,21 @@ def princ():
     nn = axes.shape[0]
     C = []
     for i in range(0, axes.shape[0]):
-        if axesh[i, 5] != -1:
+        if axesh[i, 5] != -1 and axesh[i, 6] == 1:
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             T[i, :] = np.dot(R, axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             axeshr = axeshr / np.linalg.norm(axeshr)
-
-            if axesh[i, 4] == 1:
-                C.append('g')
-            if axesh[i, 4] == 2:
-                C.append('b')
-            if axesh[i, 4] == 3:
-                C.append('r')
-
             s = text_label(axes[i, :], axesh[i, :])
             a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+        if axesh[i, 4] == 1:
+               C.append('g')
+        if axesh[i, 4] == 2:
+               C.append('b')
+        if axesh[i, 4] == 3:
+               C.append('r')      
+
+
     if ui.reciprocal_checkBox.isChecked():
         if np.shape(axes)[0] > 0:
             s0 = axesh[:, 6] * axesh[:, 5] / np.amax(axesh[:, 5])
@@ -1780,7 +1787,6 @@ def princ2():
     phi1 = np.float(phi1phiphi2[0])
     phi = np.float(phi1phiphi2[1])
     phi2 = np.float(phi1phiphi2[2])
-    dmip = 0
     naxes = 0
     crist()
     tilt_axes()
@@ -1793,26 +1799,24 @@ def princ2():
     C = []
 
     for i in range(0, axes.shape[0]):
-        axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
-        T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
-        P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
-        if color_trace() == 1:
-            C.append('g')
-            axesh[i, 4] = 1
-        if color_trace() == 2:
-            C.append('b')
-            axesh[i, 4] = 2
-        if color_trace() == 3:
-            C.append('r')
-            axesh[i, 4] = 3
+         if axesh[i, 5] != -1 and axesh[i, 6] == 1:
+            axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
+            T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
+            P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
+            axeshr = axeshr / np.linalg.norm(axeshr)
+            s = text_label(axes[i, :], axesh[i, :])
+            a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+         if axesh[i, 4] == 1:
+               C.append('g')
+         if axesh[i, 4] == 2:
+               C.append('b')
+         if axesh[i, 4] == 3:
+               C.append('r')      
 
-        s = text_label(axes[i, :], axesh[i, :])
-
-        a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
     if ui.reciprocal_checkBox.isChecked():
         s0 = axesh[:, 5] / np.amax(axesh[:, 5])
     else:
-        s0 = 1
+        s0 = axesh[:,6]
     if var_carre() == 0:
         a.scatter(P[:, 0] + 300, P[:, 1] + 300, c=C, s=s0 * np.float(ui.size_var.text()))
     else:
@@ -1860,8 +1864,7 @@ def princ2():
 ##############################################################
 
 def structure(item):
-    global x0, var_hexa, d_label_var, e_entry
-
+    global x0, var_hexa, e_entry
     ui.abc_entry.setText(str(item[1]) + ',' + str(item[2]) + ',' + str(item[3]))
     ui.alphabetagamma_entry.setText(str(item[4]) + ',' + str(item[5]) + ',' + str(item[6]))
 
@@ -1870,9 +1873,8 @@ def structure(item):
     if eval(item[4]) == 90 and eval(item[5]) == 90 and eval(item[6]) == 120:
         ui.hexa_button.setChecked(True)
         ui.e_entry.setText('2')
-        ui.d_label_var.setText('3')
+
     else:
-        ui.d_entry.setText('1')
         ui.e_entry.setText('1')
 
 
@@ -1896,14 +1898,17 @@ def angle():
     c1 = np.array([c100, c110, c120])
     c2 = np.array([c200, c210, c220])
     if ui.hexa_button.isChecked():
-        if ui.uvw_button.isChecked():
+        if ui_angle.uvw1_button.isChecked():
             c1 = np.array([2 * c100 + c110, 2 * c110 + c100, c120])
+        if ui_angle.uvw2_button.isChecked():
             c2 = np.array([2 * c200 + c210, 2 * c210 + c200, c220])
-    if ui.uvw_button.isChecked():
+    if ui_angle.uvw1_button.isChecked():
         c1c = np.dot(D, c1)
-        c2c = np.dot(D, c2)
     else:
         c1c = np.dot(Dstar, c1)
+    if ui_angle.uvw2_button.isChecked():
+        c2c = np.dot(D, c2)
+    else:        
         c2c = np.dot(Dstar, c2)
     the = np.arccos(np.dot(c1c, c2c) / (np.linalg.norm(c1c) * np.linalg.norm(c2c)))
     thes = str(np.around(the * 180 / np.pi, decimals=2))
@@ -2071,9 +2076,9 @@ def schmid():
 
 
 def image_save():
-    filename = QtGui.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    pixmap = QtGui.QPixmap.grabWidget(canvas)
-    pixmap.save(str(filename) + ".png")
+    filename = QtWidgets.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
+    f=str(filename[0]) + ".png"
+    canvas.print_figure(f)
 
 
 ##################################################
@@ -2088,16 +2093,26 @@ def center():
     A = np.dot(np.linalg.inv(M), np.array([0, 0, 1]))
     A2 = np.dot(np.linalg.inv(M), np.array([1, 0, 0]))
     A3 = np.dot(np.linalg.inv(M), np.array([0, 1, 0]))
-    C = np.dot(np.linalg.inv(Dstar), A)
-    Zp = C / np.linalg.norm(C)
-    C2 = np.dot(np.linalg.inv(Dstar), A2)
-    Xp = C2 / np.linalg.norm(C2)
-    C3 = np.dot(np.linalg.inv(Dstar), A3)
-    Yp = C3 / np.linalg.norm(C3)
-
-    ui_xyz.X_text.setText(str(Xp[0] * 100) + ', ' + str(Xp[1] * 100) + ', ' + str(Xp[2] * 100))
-    ui_xyz.Y_text.setText(str(Yp[0] * 100) + ', ' + str(Yp[1] * 100) + ', ' + str(Yp[2] * 100))
-    ui_xyz.Z_text.setText(str(Zp[0] * 100) + ', ' + str(Zp[1] * 100) + ', ' + str(Zp[2] * 100))
+    if ui_xyz.uvw_CheckBox.isChecked():
+    	Tr=np.linalg.inv(D)
+    else:
+    	Tr=np.linalg.inv(Dstar)
+    
+    C = np.dot(Tr, A)
+    C2 = np.dot(Tr, A2)
+    C3 = np.dot(Tr, A3)
+    if var_hexa() == 1 and ui_xyz.uvw_CheckBox.isChecked():
+        C = np.array([(2 * C[0] - C[1]) / 3, (2 * C[1] - C[0]) / 3,C[2]])
+        C2 = np.array([(2 * C2[0] - C2[1]) / 3, (2 * C2[1] - C2[0]) / 3,C2[2]])
+        C3 = np.array([(2 * C3[0] - C3[1]) / 3, (2 * C3[1] - C3[0]) / 3,C3[2]])
+        
+    Yp = np.around(100*C3 / np.linalg.norm(C3),decimals=3)
+    Zp = np.around(100*C / np.linalg.norm(C),decimals=3)
+    Xp = np.around(100*C2 / np.linalg.norm(C2),decimals=3)
+    	
+    ui_xyz.X_text.setText(str(Xp[0]) + ', ' + str(Xp[1] ) + ', ' + str(Xp[2] ))
+    ui_xyz.Y_text.setText(str(Yp[0] ) + ', ' + str(Yp[1] ) + ', ' + str(Yp[2] ))
+    ui_xyz.Z_text.setText(str(Zp[0] ) + ', ' + str(Zp[1] ) + ', ' + str(Zp[2] ))
     return Xp, Yp, Zp
 
 
@@ -2230,7 +2245,7 @@ def intersect_norm(n1, n2, d):
     else:
         n = np.dot(np.linalg.inv(Dstarr), n)
 
-    m = reduce(lambda x, y: GCD(x, y), [n[0], n[1], n[2]])
+    m = functools.reduce(lambda x, y: GCD(x, y), [n[0], n[1], n[2]])
     if np.abs(m) > 1e-3:
         n[0] = n[0] / m
         n[1] = n[1] / m
@@ -2307,7 +2322,7 @@ def intersection_cone():
         r1 = np.dot(np.linalg.inv(Dstarr), r1)
         r2 = np.dot(np.linalg.inv(Dstarr), r2)
 
-    m1 = reduce(lambda x, y: GCD(x, y), [r1[0], r1[1], r1[2]])
+    m1 = functools.reduce(lambda x, y: GCD(x, y), [r1[0], r1[1], r1[2]])
     if np.abs(m1) > 1e-3:
         r1[0] = r1[0] / m1
         r1[1] = r1[1] / m1
@@ -2315,7 +2330,7 @@ def intersection_cone():
     else:
         r1 = np.round(100 * r1, decimals=1)
 
-    m2 = reduce(lambda x, y: GCD(x, y), [r2[0], r2[1], r2[2]])
+    m2 = functools.reduce(lambda x, y: GCD(x, y), [r2[0], r2[1], r2[2]])
     if np.abs(m2) > 1e-3:
         r2[0] = r2[0] / m2
         r2[1] = r2[1] / m2
@@ -2356,7 +2371,7 @@ def list_pole(A):
                     axes_list[i, 0] = i01
                     axes_list[i, 1] = i02
                     axes_list[i, 2] = A[i, 2]
-                    m = reduce(lambda x, y: GCD(x, y), axes_list[i, :])
+                    m = functools.reduce(lambda x, y: GCD(x, y), axes_list[i, :])
 
                     if np.abs(m) > 1e-3:
                         axes_list[i, 0:3] = axes_list[i, 0:3] / m
@@ -2387,22 +2402,22 @@ def get_list():
     ui_list.list_table.setColumnCount(4)
     ui_list.list_table.setRowCount(int(axes_list.shape[0]))
     header = ui_list.list_table.horizontalHeader()
-    header.setResizeMode(0, QtGui.QHeaderView.Stretch)
-    header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
-    header.setResizeMode(2, QtGui.QHeaderView.ResizeToContents)
-    header.setResizeMode(3, QtGui.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+    header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
     for row in range(0, axes_list.shape[0]):
 
         if int(axes_list[row, 0]) == axes_list[row, 0] and int(axes_list[row, 1]) == axes_list[row, 1] and int(axes_list[row, 2]) == axes_list[row, 2]:
-            newitem = QtGui.QTableWidgetItem(str(int(axes_list[row, 0])) + ',' + str(int(axes_list[row, 1])) + ',' + str(int(axes_list[row, 2])))
+            newitem = QtWidgets.QTableWidgetItem(str(int(axes_list[row, 0])) + ',' + str(int(axes_list[row, 1])) + ',' + str(int(axes_list[row, 2])))
         else:
-            newitem = QtGui.QTableWidgetItem(str(axes_list[row, 0]) + ',' + str(axes_list[row, 1]) + ',' + str(axes_list[row, 2]))
+            newitem = QtWidgets.QTableWidgetItem(str(axes_list[row, 0]) + ',' + str(axes_list[row, 1]) + ',' + str(axes_list[row, 2]))
         ui_list.list_table.setItem(row, 0, newitem)
-        ui_list.list_table.setItem(row, 1, QtGui.QTableWidgetItem('o'))
+        ui_list.list_table.setItem(row, 1, QtWidgets.QTableWidgetItem('o'))
         if axes_list[row, 3] == 1:
-            ui_list.list_table.setItem(row, 2, QtGui.QTableWidgetItem('uvw'))
+            ui_list.list_table.setItem(row, 2, QtWidgets.QTableWidgetItem('uvw'))
         else:
-            ui_list.list_table.setItem(row, 2, QtGui.QTableWidgetItem('hkl'))
+            ui_list.list_table.setItem(row, 2, QtWidgets.QTableWidgetItem('hkl'))
 
     ui_list.list_table.horizontalHeader().hide()
     ui_list.list_table.show()
@@ -2431,7 +2446,7 @@ def add_remove_list():
             else:
                 undo_pole(i0, i1, i2)
 
-            ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('x'))
+            ui_list.list_table.setItem(index.row(), 1, QtWidgets.QTableWidgetItem('x'))
 
         else:
             if ui_list.list_table.item(index.row(), 2).text() == 'uvw':
@@ -2446,7 +2461,7 @@ def add_remove_list():
             else:
                 pole(i0, i1, i2)
 
-            ui_list.list_table.setItem(index.row(), 1, QtGui.QTableWidgetItem('o'))
+            ui_list.list_table.setItem(index.row(), 1, QtWidgets.QTableWidgetItem('o'))
     if ui.uvw_button.isChecked() is True:
         ui.uvw_button.toggle()
     trace()
@@ -2481,7 +2496,7 @@ def get_tilt():
                 alpha = alpha - s_a * 180
             if np.dot(M2, axes_list0)[2] < 0:
                 alpha = -alpha
-            ui_list.list_table.setItem(i, 3, QtGui.QTableWidgetItem(str(np.around(alpha, decimals=1))))
+            ui_list.list_table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(np.around(alpha, decimals=1))))
     else:
         t_ang = ang_work_space()
         M2 = np.dot(Rot(t_ang, 0, 0, 1), M)
@@ -2516,7 +2531,7 @@ def get_tilt():
             a3 = np.dot(M3.T, [0, 1, 0])
             s = np.sign(np.linalg.det([axes_list0, B3, a3]))
             alpha = s_a * s * np.arccos(np.dot(axes_list0, B3)) * 180 / np.pi
-            ui_list.list_table.setItem(i, 3, QtGui.QTableWidgetItem(str(np.around(alpha, decimals=1)) + ',' + str(np.around(tilt2, decimals=1))))
+            ui_list.list_table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(np.around(alpha, decimals=1)) + ',' + str(np.around(tilt2, decimals=1))))
 
 ###################################################
 #
@@ -2546,7 +2561,7 @@ def diff_reciprocal():
                         axes_diff[id, :] = np.array([i, j, k])
 
                     if ui_kikuchi.kikuchi_radioButton.isChecked():
-                        m = reduce(lambda x, y: GCD(x, y), [i, j, k])
+                        m = functools.reduce(lambda x, y: GCD(x, y), [i, j, k])
                         if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
                             axes_diff[id, :] = np.array([i, j, k]) / m
                         else:
@@ -2705,8 +2720,9 @@ except AttributeError:
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Index = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Stereoproj")
+    Index = QtWidgets.QMainWindow()
     ui = stereoprojUI.Ui_StereoProj()
     ui.setupUi(Index)
     figure = plt.figure()
@@ -2720,12 +2736,12 @@ if __name__ == "__main__":
     file_struct = open(os.path.join(os.path.dirname(__file__), 'structure.txt'), "r")
     x0 = []
     for line in file_struct:
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
     i = 0
     file_struct.close()
     for item in x0:
         entry = ui.menuStructure.addAction(item[0])
-        Index.connect(entry, QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
+        entry.triggered.connect(lambda checked, item=item: structure(item))
         i = i + 1
 
 # Read space_group file
@@ -2734,9 +2750,9 @@ if __name__ == "__main__":
     x_space = []
 
     for line in f_space:
-        x_space.append(map(str, line.split()))
+        x_space.append(list(map(str, line.split())))
 
-    ui.space_group_Box.addItems(" ")
+    ui.space_group_Box.addItem(" ")
     for i in range(0, len(x_space)):
         if len(x_space[i]) == 1:
             ui.space_group_Box.addItems(x_space[i])
@@ -2749,50 +2765,50 @@ if __name__ == "__main__":
     x_scatt = []
 
     for line in f_scatt:
-        x_scatt.append(map(str, line.split()))
+        x_scatt.append(list(map(str, line.split())))
 
     f_scatt.close()
 
 # Ctrl+z shortcut to remove clicked pole
 
-    shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+z"), Index)
+    shortcut = QtWidgets .QShortcut(QtGui.QKeySequence("Ctrl+z"), Index)
     shortcut.activated.connect(undo_click_a_pole)
 
 # Connect dialog boxes and buttons
 
-    Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), image_save)
+    ui.actionSave_figure.triggered.connect(image_save)
 
-    Angle = QtGui.QDialog()
+    Angle = QtWidgets.QDialog()
     ui_angle = angleUI.Ui_Angle()
     ui_angle.setupUi(Angle)
-    Index.connect(ui.actionCalculate_angle, QtCore.SIGNAL('triggered()'), Angle.show)
+    ui.actionCalculate_angle.triggered.connect(Angle.show)
     ui_angle.buttonBox.rejected.connect(Angle.close)
     ui_angle.buttonBox.accepted.connect(angle)
 
-    Xyz = QtGui.QDialog()
+    Xyz = QtWidgets.QDialog()
     ui_xyz = xyzUI.Ui_xyz_dialog()
     ui_xyz.setupUi(Xyz)
-    Index.connect(ui.actionCalculate_xyz, QtCore.SIGNAL('triggered()'), Xyz.show)
+    ui.actionCalculate_xyz.triggered.connect(Xyz.show)
     ui_xyz.xyz_button.clicked.connect(center)
 
-    Hkl_uvw = QtGui.QDialog()
+    Hkl_uvw = QtWidgets.QDialog()
     ui_hkl_uvw = hkl_uvwUI.Ui_hkl_uvw()
     ui_hkl_uvw.setupUi(Hkl_uvw)
-    Index.connect(ui.actionHkl_uvw, QtCore.SIGNAL('triggered()'), Hkl_uvw.show)
+    ui.actionHkl_uvw.triggered.connect(Hkl_uvw.show)
     ui_hkl_uvw.pushButton_to_uvw.clicked.connect(to_uvw)
     ui_hkl_uvw.pushButton_to_hkl.clicked.connect(to_hkl)
 
-    Schmid = QtGui.QDialog()
+    Schmid = QtWidgets.QDialog()
     ui_schmid = schmidUI.Ui_Schmid()
     ui_schmid.setupUi(Schmid)
-    Index.connect(ui.actionCalculate_Schmid_factor, QtCore.SIGNAL('triggered()'), Schmid.show)
+    ui.actionCalculate_Schmid_factor.triggered.connect(Schmid.show)
     ui_schmid.buttonBox.rejected.connect(Schmid.close)
     ui_schmid.buttonBox.accepted.connect(schmid)
 
-    Width = QtGui.QDialog()
+    Width = QtWidgets.QDialog()
     ui_width = widthUI.Ui_Width()
     ui_width.setupUi(Width)
-    Index.connect(ui.actionCalculate_apparent_width, QtCore.SIGNAL('triggered()'), Width.show)
+    ui.actionCalculate_apparent_width.triggered.connect(Width.show)
     ui_width.buttonBox.rejected.connect(Width.close)
     ui_width.buttonBox.accepted.connect(plot_width)
     ui_width.clear_button.clicked.connect(clear_width)
@@ -2802,18 +2818,18 @@ if __name__ == "__main__":
     toolbar_width = NavigationToolbar(canvas_width, canvas_width)
     toolbar_width.setMinimumWidth(601)
 
-    Intersections = QtGui.QDialog()
+    Intersections = QtWidgets.QDialog()
     ui_inter = intersectionsUI.Ui_Intersections()
     ui_inter.setupUi(Intersections)
-    Index.connect(ui.actionCalculate_intersections, QtCore.SIGNAL('triggered()'), Intersections.show)
+    ui.actionCalculate_intersections.triggered.connect(Intersections.show)
     ui_inter.pushButton_intersections_plans.clicked.connect(intersections_plans)
     ui_inter.pushButton_intersection_proj.clicked.connect(intersection_dir_proj)
     ui_inter.pushButton_intersection_cone.clicked.connect(intersection_cone)
 
-    Kikuchi = QtGui.QDialog()
+    Kikuchi = QtWidgets.QDialog()
     ui_kikuchi = kikuchiUI.Ui_Kikuchi()
     ui_kikuchi.setupUi(Kikuchi)
-    Index.connect(ui.actionPlot_Kikuchi_lines, QtCore.SIGNAL('triggered()'), Kikuchi.show)
+    ui.actionPlot_Kikuchi_lines.triggered.connect(Kikuchi.show)
     ui_kikuchi.buttonBox.rejected.connect(Kikuchi.close)
     ui_kikuchi.buttonBox.accepted.connect(plot_kikuchi)
     ui_kikuchi.Diff_button.clicked.connect(diff_reciprocal)
@@ -2828,10 +2844,10 @@ if __name__ == "__main__":
     toolbar_kikuchi.setMinimumWidth(100)
     toolbar_kikuchi.setStyleSheet("background-color:White;")
 
-    List = QtGui.QDialog()
+    List = QtWidgets.QDialog()
     ui_list = listUI.Ui_List()
     ui_list.setupUi(List)
-    Index.connect(ui.actionShow_list_of_poles_directions, QtCore.SIGNAL('triggered()'), List.show)
+    ui.actionShow_list_of_poles_directions.triggered.connect(List.show)
     ui_list.list_button.clicked.connect(get_list)
     ui_list.plot_button.clicked.connect(add_remove_list)
     ui_list.alpha_button.clicked.connect(get_tilt)
@@ -2863,34 +2879,33 @@ if __name__ == "__main__":
     ui.trace_schmid_button.clicked.connect(schmid_trace)
     ui.undo_trace_schmid.clicked.connect(undo_schmid_trace)
     ui.norm_button.clicked.connect(dhkl)
-    ui.dm_button.clicked.connect(dm)
-    ui.dp_button.clicked.connect(dp)
     ui.reset_view_button.clicked.connect(reset_view)
     ui.reset_angle_button.clicked.connect(reset_angle)
+    ui.d_Slider.sliderReleased.connect(dist_restrict)
 
     figure.canvas.mpl_connect('motion_notify_event', coordinates)
     figure.canvas.mpl_connect('button_press_event', click_a_pole)
 
 # Initialize variables
-
-    dmip = 0
+    ui.abc_entry.setText('1,1,1')
+    ui.alphabetagamma_entry.setText('90,90,90')
+    ui.e_entry.setText('1')
+    
 
     var_lock = 0
     ui.lock_checkButton.setChecked(False)
     ui.color_trace_bleu.setChecked(True)
     ui.wulff_button.setChecked(True)
     ui.wulff_button.setChecked(True)
-    ui.d_label_var.setText('0')
+
     ui.text_size_entry.setText('12')
     mpl.rcParams['font.size'] = ui.text_size_entry.text()
-    ui.abc_entry.setText('1,1,1')
-    ui.alphabetagamma_entry.setText('90,90,90')
+    
     ui.phi1phiphi2_entry.setText('0,0,0')
-    ui.e_entry.setText('1')
     ui.rg_label.setText('0.0')
     ui.angle_euler_label.setText(' ')
     ui.size_var.setText('40')
-    ui.e_entry.setText('1')
+    
     ui.angle_alpha_entry.setText('5')
     ui.angle_beta_entry.setText('5')
     ui.angle_z_entry.setText('5')
@@ -2898,7 +2913,6 @@ if __name__ == "__main__":
     ui.angle_z_entry.setText('5')
     ui.tilt_angle_entry.setText('0')
     ui.image_angle_entry.setText('0')
-    ui.d_entry.setText('1')
     ui.rot_g_entry.setText('5')
     a = figure.add_subplot(111)
     tilt_axes()

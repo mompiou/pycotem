@@ -1,12 +1,12 @@
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
 from itertools import combinations
 from PIL import Image
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import diffractionUI
 
@@ -75,7 +75,7 @@ def reset_points():
     a = figure.add_subplot(111)
     img = Image.open(str(image_diff))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     a.axis([minx, maxx, miny, maxy])
     a.axis('off')
@@ -101,7 +101,7 @@ def reset():
     a = figure.add_subplot(111)
     img = Image.open(str(image_diff))
     img = np.array(img)
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin="upper")
     minx = 0
     maxx = width
@@ -317,7 +317,7 @@ def add_spot():
     else:
         s1 = ui.ListBox_theo.currentItem().text().split('|')
         s11 = s1[1].split(',')
-        s11.replaceInStrings(QtCore.QRegExp("(?:\s+|$)"), "")
+        s11=[x.strip(' ') for x in s11]
         s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0]
     ui.diff_spot_Listbox.addItem(s)
     ss = ui.diff_spot_Listbox.count()
@@ -794,7 +794,7 @@ def get_data():
     d_g = []
 
     for i in range(0, len(s)):
-        l = map(float, s[i].split(','))
+        l = list(map(float, s[i].split(',')))
         tilt_a.append(l[0])
         tilt_b.append(l[1])
         tilt_z.append(l[2])
@@ -873,11 +873,11 @@ def open_image():
     a = figure.add_subplot(111)
     a.figure.clear()
     a = figure.add_subplot(111)
-    image_diff = QtGui.QFileDialog.getOpenFileName(Index, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
-    img = Image.open(str(image_diff))
+    image_diff = QtWidgets.QFileDialog.getOpenFileName(Index, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
+    img = Image.open(str(image_diff[0]))
     img = np.array(img)
     a.imshow(img, origin='upper')
-    figure.suptitle(str(image_diff))
+    figure.suptitle(str(image_diff[0]))
     height, width = img.shape[0], img.shape[1]
     a.axis([0, width, height, 0])
     a.axis('off')
@@ -909,7 +909,7 @@ def impair(number):
         return 0
 
 
-class Spect(QtGui.QDialog):
+class Spect(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Spect, self).__init__(parent)
 
@@ -918,17 +918,17 @@ class Spect(QtGui.QDialog):
 
         self.toolbar = NavigationToolbar(self.canvas, self)
 
-        gridLayout = QtGui.QGridLayout()
-        self.lineEdit = QtGui.QLineEdit()
+        gridLayout = QtWidgets.QGridLayout()
+        self.lineEdit = QtWidgets.QLineEdit()
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
         gridLayout.addWidget(self.lineEdit, 1, 2, 1, 1)
-        self.label = QtGui.QLabel('Max indices')
+        self.label = QtWidgets.QLabel('Max indices')
         self.label.setObjectName(_fromUtf8("Max indices"))
         gridLayout.addWidget(self.label, 1, 0, 1, 2)
 
-        self.buttonBox = QtGui.QDialogButtonBox()
+        self.buttonBox = QtWidgets.QDialogButtonBox()
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel | QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         gridLayout.addWidget(self.buttonBox, 2, 0, 1, 3)
         gridLayout.addWidget(self.canvas, 0, 0, 1, 3)
         gridLayout.addWidget(self.toolbar, 3, 0, 1, 3)
@@ -1046,8 +1046,8 @@ def import_data():
 
     cryst()
 
-    data_file = QtGui.QFileDialog.getOpenFileName(Index, "Open a data file", "", "*.txt")
-    data = open(data_file, 'r')
+    data_file = QtWidgets.QFileDialog.getOpenFileName(Index, "Open a data file", "", "*.txt")
+    data = open(data_file[0], 'r')
     x0 = []
 
     for line in data:
@@ -1056,7 +1056,7 @@ def import_data():
             continue
         if line.startswith("#"):
             continue
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
 
     data.close()
     for item in x0:
@@ -1066,8 +1066,8 @@ def import_data():
 def export_data():
     s = [str(x.text()) for x in ui.diff_spot_Listbox.selectedItems()]
     res = [str(ui.euler_listbox.item(i).text()) for i in range(ui.euler_listbox.count())]
-    name = QtGui.QFileDialog.getSaveFileName(Index, 'Save File')
-    fout = open(name, 'w')
+    name = QtWidgets.QFileDialog.getSaveFileName(Index, 'Save File')
+    fout = open(name[0], 'w')
     fout.write('# Diffraction data file \n')
     for item in s:
         fout.write("%s\n" % item)
@@ -1119,8 +1119,9 @@ except AttributeError:
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Index = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Diffraction")
+    Index = QtWidgets.QMainWindow()
     ui = diffractionUI.Ui_Diffraction()
     ui.setupUi(Index)
     figure = plt.figure()
@@ -1140,7 +1141,7 @@ f_calib = open(os.path.join(os.path.dirname(__file__), 'calibrations.txt'), "r")
 x_calib = []
 
 for line in f_calib:
-    x_calib.append(map(str, line.split()))
+    x_calib.append(list(map(str, line.split())))
 
 f_calib.close()
 counter = len(x_calib)
@@ -1159,7 +1160,7 @@ f_space = open(os.path.join(os.path.dirname(__file__), 'space_group.txt'), "r")
 x_space = []
 
 for line in f_space:
-    x_space.append(map(str, line.split()))
+    x_space.append(list(map(str, line.split())))
 
 list_space_group = []
 for i in range(0, len(x_space)):
@@ -1187,14 +1188,14 @@ file_struct = open(os.path.join(os.path.dirname(__file__), 'structure.txt'), "r"
 x0 = []
 
 for line in file_struct:
-    x0.append(map(str, line.split()))
+    x0.append(list(map(str, line.split())))
 
 i = 0
 file_struct.close()
 
 for item in x0:
     entry = ui.menuStructure.addAction(item[0])
-    Index.connect(entry, QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
+    entry.triggered.connect(lambda checked, item=item: structure(item))
     ui.SpaceGroup_box.addItem(x0[i][7])
     i = i + 1
 
@@ -1203,13 +1204,13 @@ f_scatt = open(os.path.join(os.path.dirname(__file__), 'scattering.txt'), "r")
 x_scatt = []
 
 for line in f_scatt:
-    x_scatt.append(map(str, line.split()))
+    x_scatt.append(list(map(str, line.split())))
 
 
 f_scatt.close()
 
 
-Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), open_image)
+ui.actionSave_figure.triggered.connect(open_image)
 
 figure.canvas.mpl_connect('button_press_event', onpress)
 figure.canvas.mpl_connect('button_release_event', onrelease)
@@ -1217,21 +1218,21 @@ figure.canvas.mpl_connect('motion_notify_event', onmove)
 press = False
 move = False
 
-Index.connect(ui.actionImport, QtCore.SIGNAL('triggered()'), import_data)
-Index.connect(ui.actionExport, QtCore.SIGNAL('triggered()'), export_data)
+ui.actionImport.triggered.connect(import_data)
+ui.actionExport.triggered.connect(export_data)
 
 ui.Button_reset.clicked.connect(reset_points)
 ui.Button_reset_all.clicked.connect(reset)
 ui.distance_button.clicked.connect(distance_theo)
 dialSpect = Spect()
 dialSpect.setWindowTitle("Spectrum")
-Index.connect(ui.actionCalculate_spectrum, QtCore.SIGNAL('triggered()'), dialSpect.exec_)
+ui.actionCalculate_spectrum.triggered.connect(dialSpect.exec_)
 ui.add_spot_button.clicked.connect(add_spot)
 ui.remove_spot_button.clicked.connect(remove_spot)
 ui.orientation_button.clicked.connect(get_orientation)
 ui.do_not_guess_checkBox.toggled.connect(guess)
 
-ui.diff_spot_Listbox.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+ui.diff_spot_Listbox.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
 ui.n_entry.setText('1')
 ui.indice_entry.setText('3')
 ui.tilt_axis_angle_entry.setText('0')

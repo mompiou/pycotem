@@ -13,7 +13,23 @@
   <property name="windowTitle">
    <string>Stereo-Proj</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>stereo-icon.png</normaloff>stereo-icon.png</iconset>
+  </property>
+  <property name="accessibleName">
+   <string>Stereoproj</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>24</width>
+    <height>24</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="accessibleName">
+    <string>Stereoproj</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0">
      <layout class="QGridLayout" name="mplvl"/>
@@ -36,117 +52,6 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>230</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Crystal Parameters</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="margin">
-           <number>5</number>
-          </property>
-          <property name="spacing">
-           <number>5</number>
-          </property>
-          <item row="10" column="6">
-           <widget class="QLabel" name="d_label_var">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="abc_label">
-            <property name="text">
-             <string>a,b,c</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="4">
-           <widget class="QLabel" name="e_label">
-            <property name="text">
-             <string>max indices</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="d_label">
-            <property name="text">
-             <string>d</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="4">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="7" column="0" colspan="6">
-           <widget class="QComboBox" name="space_group_Box"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="alphabetagamma_label">
-            <property name="text">
-             <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="4">
-           <widget class="QLineEdit" name="d_entry"/>
-          </item>
-          <item row="4" column="4">
-           <widget class="QLineEdit" name="e_entry"/>
-          </item>
-          <item row="0" column="3" colspan="3">
-           <widget class="QLineEdit" name="abc_entry"/>
-          </item>
-          <item row="10" column="2">
-           <widget class="QPushButton" name="dm_button">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0" colspan="5">
-           <widget class="QCheckBox" name="reciprocal_checkBox">
-            <property name="text">
-             <string>Reciprocal indices</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="5">
-           <widget class="QPushButton" name="dp_button">
-            <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" colspan="3">
-           <widget class="QLineEdit" name="alphabetagamma_entry"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="enabled">
@@ -162,7 +67,16 @@
           <string>Axis/Rotation</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <property name="spacing">
@@ -333,6 +247,36 @@
           <string>Layout</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_10">
+          <item row="11" column="0">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="2" colspan="2">
+           <widget class="QCheckBox" name="real_space_checkBox">
+            <property name="text">
+             <string>img/diff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="3">
+           <widget class="QLineEdit" name="tilt_angle_entry"/>
+          </item>
+          <item row="10" column="0" colspan="4">
+           <widget class="QPushButton" name="reset_view_button">
+            <property name="text">
+             <string>Update/Reset view</string>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="style_box">
             <property name="text">
@@ -340,24 +284,27 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="3">
-           <widget class="QLabel" name="size_var_label">
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="wulff_button">
             <property name="text">
-             <string>Marker size</string>
+             <string>Wulff net</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
-           <widget class="QRadioButton" name="color_trace_rouge">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="color_trace_bleu">
             <property name="text">
-             <string>red</string>
+             <string>blue</string>
             </property>
            </widget>
           </item>
-          <item row="9" column="3">
-           <widget class="QCheckBox" name="uvw_button">
+          <item row="8" column="3">
+           <widget class="QLineEdit" name="image_angle_entry"/>
+          </item>
+          <item row="7" column="0" colspan="3">
+           <widget class="QLabel" name="tilt_angle_label">
             <property name="text">
-             <string>uvw</string>
+             <string>diff α-tilt/y angle</string>
             </property>
            </widget>
           </item>
@@ -365,13 +312,6 @@
            <widget class="QRadioButton" name="color_trace_vert">
             <property name="text">
              <string>green</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2" colspan="2">
-           <widget class="QCheckBox" name="real_space_checkBox">
-            <property name="text">
-             <string>img/diff</string>
             </property>
            </widget>
           </item>
@@ -385,47 +325,10 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QCheckBox" name="wulff_button">
+          <item row="0" column="3">
+           <widget class="QRadioButton" name="color_trace_rouge">
             <property name="text">
-             <string>Wulff net</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="3">
-           <widget class="QLineEdit" name="tilt_angle_entry"/>
-          </item>
-          <item row="6" column="3">
-           <widget class="QLineEdit" name="text_size_entry"/>
-          </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="color_trace_bleu">
-            <property name="text">
-             <string>blue</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0" colspan="4">
-           <widget class="QPushButton" name="reset_view_button">
-            <property name="text">
-             <string>Update/Reset view</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="3">
-           <widget class="QLineEdit" name="image_angle_entry"/>
-          </item>
-          <item row="8" column="0" colspan="3">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>img α-tilt/y angle</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0" colspan="3">
-           <widget class="QLabel" name="tilt_angle_label">
-            <property name="text">
-             <string>diff α-tilt/y angle</string>
+             <string>red</string>
             </property>
            </widget>
           </item>
@@ -436,18 +339,29 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="0">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="8" column="0" colspan="3">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>img α-tilt/y angle</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
+           </widget>
+          </item>
+          <item row="9" column="3">
+           <widget class="QCheckBox" name="uvw_button">
+            <property name="text">
+             <string>uvw</string>
             </property>
-           </spacer>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QLineEdit" name="text_size_entry"/>
+          </item>
+          <item row="5" column="0" colspan="3">
+           <widget class="QLabel" name="size_var_label">
+            <property name="text">
+             <string>Marker size</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -596,7 +510,16 @@
           <string>Rotation</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <property name="spacing">
@@ -740,6 +663,103 @@
          </layout>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>230</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Crystal Parameters</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <item row="0" column="3" colspan="3">
+           <widget class="QLineEdit" name="abc_entry"/>
+          </item>
+          <item row="2" column="3" colspan="3">
+           <widget class="QLineEdit" name="alphabetagamma_entry"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="alphabetagamma_label">
+            <property name="text">
+             <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QLineEdit" name="e_entry"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="abc_label">
+            <property name="text">
+             <string>a,b,c</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="4">
+           <widget class="QLabel" name="e_label">
+            <property name="text">
+             <string>max indices</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="d_label">
+            <property name="text">
+             <string>d</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2" colspan="3">
+           <widget class="QLabel" name="d_label_var">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="5">
+           <widget class="QCheckBox" name="reciprocal_checkBox">
+            <property name="text">
+             <string>Reciprocal indices</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="6">
+           <widget class="QComboBox" name="space_group_Box"/>
+          </item>
+          <item row="9" column="2" colspan="4">
+           <widget class="QSlider" name="d_Slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -751,7 +771,7 @@
      <x>0</x>
      <y>0</y>
      <width>1403</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">
@@ -886,9 +906,6 @@
   <tabstop>e_entry</tabstop>
   <tabstop>reciprocal_checkBox</tabstop>
   <tabstop>space_group_Box</tabstop>
-  <tabstop>dm_button</tabstop>
-  <tabstop>d_entry</tabstop>
-  <tabstop>dp_button</tabstop>
   <tabstop>color_trace_bleu</tabstop>
   <tabstop>color_trace_vert</tabstop>
   <tabstop>color_trace_rouge</tabstop>

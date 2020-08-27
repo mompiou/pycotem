@@ -1,11 +1,12 @@
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore,QtWidgets
 import sys
 import os
+import functools
 from PIL import Image
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 import misorientationUI
@@ -186,7 +187,7 @@ def var_carre(i_c):
 
 
 def crist():
-    global i_c, axes, axesh, D, Dstar, V, G
+    global i_c, axes, axesh, D, Dstar, V, G,hexa_cryst1,hexa_cryst2,e,e2
 
     abc2 = ui.abc_entry_2.text().split(",")
     alphabetagamma2 = ui.alphabetagamma_entry_2.text().split(",")
@@ -197,9 +198,36 @@ def crist():
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     e = np.int(ui.e_entry.text())
     d2 = np.float(ui.d_label_var.text())
+    hexa_cryst1=0
+    
+    if np.float(alphabetagamma[0]) == 90 and np.float(alphabetagamma[1]) ==90 and np.float(alphabetagamma[2])==120:
+	    hexa_cryst1=1
+	    dmip1=np.float(abc[0])/2-0.0001e-10
+    else:
+	    dmip1=0
+	    
+    hexa_cryst2=0
+    if np.float(alphabetagamma2[0]) == 90 and np.float(alphabetagamma2[1]) ==90 and np.float(alphabetagamma2[2])==120:
+	    hexa_cryst2=1
+	    dmip2=np.float(abc2[0])/2-0.0001e-10
+    else:
+	    dmip2=0
 
-    axes1, axesh1, D1, Dstar1, V1, G1 = crist_axes(abc, alphabetagamma, e, d2, 1)
-    axes2, axesh2, D2, Dstar2, V2, G2 = crist_axes(abc2, alphabetagamma2, e2, d22, 2)
+    ui.d1_Slider.setMinimum(0)
+    ui.d1_Slider.setMaximum(np.amax([np.float(abc[0]),np.float(abc[1]),np.float(abc[2])])*100)
+    ui.d1_Slider.setSingleStep(100)
+    ui.d1_Slider.setValue(dmip1*100)
+    ui.d_label_var.setText(str(np.around(dmip1,decimals=3)))
+    
+    ui.d2_Slider.setMinimum(0)
+    ui.d2_Slider.setMaximum(np.amax([np.float(abc2[0]),np.float(abc2[1]),np.float(abc2[2])])*100)
+    ui.d2_Slider.setSingleStep(100)
+    ui.d2_Slider.setValue(dmip2*100)
+    
+    ui.d_label_var_2.setText(str(np.around(dmip2,decimals=3)))
+	    
+    axes1, axesh1, D1, Dstar1, V1, G1 = crist_axes(abc, alphabetagamma, e, dmip1,hexa_cryst1, 1)
+    axes2, axesh2, D2, Dstar2, V2, G2 = crist_axes(abc2, alphabetagamma2, e2, dmip2,hexa_cryst2, 2)
     if ui.crystal1_radioButton.isChecked():
         D, Dstar, V, G = D1, Dstar1, V1, G1
     if ui.crystal2_radioButton.isChecked():
@@ -225,7 +253,7 @@ def crist_mat(abc, alphabetagamma):
     return D, Dstar, V, G
 
 
-def crist_axes(abc, alphabetagamma, e, d2, i_c):
+def crist_axes(abc, alphabetagamma, e, dmip, hexa_cryst, i_c):
 
     D, Dstar, V, G = crist_mat(abc, alphabetagamma)
     a = np.float(abc[0]) * 1e-10
@@ -238,32 +266,39 @@ def crist_axes(abc, alphabetagamma, e, d2, i_c):
     axesh[:, 9] = var_carre(i_c)
     axesh[:, 7] = i_c
     axes[:, 3] = i_c
+    
     id = 0
     for i in range(-e, e + 1):
         for j in range(-e, e + 1):
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
-                    d = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
-                    if d > d2 * 0.1 * np.amax([a, b, c]):
-                        if var_uvw() == 0:
+                    if  var_uvw() == 0:                   
                             Ma = np.dot(Dstar, np.array([i, j, k], float))
                             axesh[id, 3] = 0
-                        else:
+                    else:
                             Ma = np.dot(D, np.array([i, j, k], float))
                             axesh[id, 3] = 1
-
-                        m = np.abs(reduce(lambda x, y: GCD(x, y), [i, j, k]))
-                        if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
-                            axes[id, 0:3] = np.array([i, j, k]) / m
-                        else:
-                            axes[id, 0:3] = np.array([i, j, k])
-                        axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
-                        axesh[id, 5] = 1
-                        axesh[id, 6] = 1
-                        id = id + 1
+                         
+                    m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
+                    if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
+                           axes[id, 0:3] = np.array([i, j, k]) / m
+                    else:
+                          axes[id, 0:3] = np.array([i, j, k])
+                    axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
+                    axesh[id, 5] = 1
+                    axesh[id, 6] = 1
+                    id = id + 1
 
     axesh = axesh[~np.all(axesh[:, 0:3] == 0, axis=1)]
-    axes = axes[~np.all(axes[:, 0:3] == 0, axis=1)]
+    axes = axes[~np.all(axes == 0, axis=1)]
+
+    for i in range(0, np.shape(axes)[0]):
+        axesh[i, 6] = 1
+        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))*1e10
+        if d < dmip :
+            axesh[i, 6] = 0
+        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+            axesh[i, 6] = 0
 
     return axes, axesh, D, Dstar, V, G
 
@@ -273,70 +308,44 @@ def crist_axes(abc, alphabetagamma, e, d2, i_c):
 # Reduce number of poles/directions as a function of d-spacing (plus or minus)
 #
 #######################################################
-def dist_restrict(ind):
-    global G, axes, axesh
-    if ind == 1:
-        abc = ui.abc_entry.text().split(",")
-        alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-        d2 = np.float(ui.d_label_var.text())
-    if ind == 2:
-        abc = ui.abc_entry_2.text().split(",")
-        alphabetagamma = ui.alphabetagamma_entry_2.text().split(",")
-        d2 = np.float(ui.d_label_var_2.text())
-
+def dist_restrict1():
+    global G, axes, axesh,hexa_cryst1,e
+    abc = ui.abc_entry.text().split(",")
+    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+    d2 = ui.d1_Slider.value()/100*1e-10
     D, Dstar, V, G = crist_mat(abc, alphabetagamma)
-    a = np.float(abc[0]) * 1e-10
-    b = np.float(abc[1]) * 1e-10
-    c = np.float(abc[2]) * 1e-10
-    for i in range(0, np.shape(axes)[0]):
-        if axes[i, 3] == ind:
-            d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
-            if d < d2 * 0.1 * np.amax([a, b, c]):
-                axesh[i, 6] = 0
-            else:
-                axesh[i, 6] = 1
 
+    for i in range(0, np.shape(axes)[0]):
+        if axes[i,3]==1:
+            axesh[i, 6] = 1
+            d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
+            if d < d2 :
+                axesh[i, 6] = 0
+            if (hexa_cryst1==1 and np.abs(axes[i,0]+axes[i,1])>e):
+                axesh[i, 6] = 0
+
+    ui.d_label_var.setText(str(np.around(d2*1e10,decimals=3)))
     trace()
 
+def dist_restrict2():
+    global G, axes, axesh,hexa_cryst2,e2
+    abc = ui.abc_entry_2.text().split(",")
+    alphabetagamma = ui.alphabetagamma_entry_2.text().split(",")
+    d2 = ui.d2_Slider.value()/100*1e-10
+    
+    D, Dstar, V, G = crist_mat(abc, alphabetagamma)
 
-def dm():
-    global dmip
+    for i in range(0, np.shape(axes)[0]):
+        if axes[i,3]==2:
+            axesh[i, 6] = 1
+            d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
+            if d < d2 :
+                axesh[i, 6] = 0
+            if (hexa_cryst2==1 and np.abs(axes[i,0]+axes[i,1])>e2):
+                axesh[i, 6] = 0
 
-    dmip = dmip - np.float(ui.d_entry.text())
-    ui.d_label_var.setText(str(dmip))
-    dist_restrict(1)
-
-    return dmip
-
-
-def dm2():
-    global dmip2
-
-    dmip2 = dmip2 - np.float(ui.d_entry_2.text())
-    ui.d_label_var_2.setText(str(dmip2))
-    dist_restrict(2)
-
-    return dmip2
-
-
-def dp():
-    global dmip
-
-    dmip = dmip + np.float(ui.d_entry.text())
-    ui.d_label_var.setText(str(dmip))
-    dist_restrict(1)
-
-    return dmip
-
-
-def dp2():
-    global dmip2
-
-    dmip2 = dmip2 + np.float(ui.d_entry_2.text())
-    ui.d_label_var_2.setText(str(dmip2))
-    dist_restrict(2)
-
-    return dmip2
+    ui.d_label_var_2.setText(str(np.around(d2*1e10,decimals=3)))
+    trace()
 
 ###########################################################################
 #
@@ -1231,6 +1240,7 @@ def wulff():
     a.imshow(img, interpolation="bicubic")
     a.axis('off')
     plt.tight_layout()
+    plt.subplots_adjust(top=0.99, bottom=0.01,right=0.9,left=0.1)
     a.figure.canvas.draw()
 
 
@@ -1243,7 +1253,7 @@ def text_label(A, B):
         Aa = (2 * A[0] - A[1])
         Ab = (2 * A[1] - A[0])
         Ac = 3 * A[2]
-        m = reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
+        m = functools.reduce(lambda x, y: GCD(x, y), [Aa, Ab, Ac])
         if np.abs(m) > 1e-3:
             Aa = Aa / m
             Ab = Ab / m
@@ -1312,8 +1322,8 @@ def trace():
     O = []
     tilt_axes()
     for i in range(0, axes.shape[0]):
-        axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
         if axesh[i, 6] == 1:
+            axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             if axesh[i, 7] == 1:
                 T[i, :] = np.dot(M, axeshr)
             else:
@@ -1332,7 +1342,7 @@ def trace():
         if axesh[i, 9] == 0:
             O.append(C[-1])
 
-    s0 = 1
+    s0 = axesh[:, 6]
     a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float(ui.size_var.text()), facecolors=O, linewidth=1.5)
     trace_misorientation(Qp)
     a.axis([minx, maxx, miny, maxy])
@@ -1364,8 +1374,6 @@ def princ2():
     phi_2 = np.float(phi1phiphi2_2[1])
     phi2_2 = np.float(phi1phiphi2_2[2])
 
-    dmip = 0
-
     crist()
     tilt_axes()
 
@@ -1376,12 +1384,15 @@ def princ2():
 
     for i in range(0, axes.shape[0]):
         axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
-        if axesh[i, 7] == 1:
-            T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
-        else:
-            T[i, :] = np.dot(rotation(phi1_2, phi_2, phi2_2), axeshr)
-
-        P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
+        if axesh[i, 5] != -1 and axesh[i, 6] == 1:
+            if axesh[i, 7] == 1:
+                T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
+            else:
+                T[i, :] = np.dot(rotation(phi1_2, phi_2, phi2_2), axeshr)
+                
+            P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
+            s = text_label(axes[i, :], axesh[i, :])
+            a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
         if axesh[i, 4] == 1:
             C.append('b')
         if axesh[i, 4] == 2:
@@ -1393,10 +1404,7 @@ def princ2():
         if axesh[i, 9] == 0:
             O.append(C[-1])
 
-        s = text_label(axes[i, :], axesh[i, :])
-
-        a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
-    s0 = 1
+    s0 = axesh[:, 6]
     a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float(ui.size_var.text()), facecolors=O, linewidth=1.5)
 
     minx, maxx = -2, 602
@@ -1670,9 +1678,9 @@ def trace_misorientation(B):
                     saxe = sepg + str(int((2 * D1[l, 0] - D1[l, 1]) / 3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0]) / 3)) + ',' + str(int(D1[l, 2])) + sepd
                     a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
 
-                axe1 = QtGui.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1]) / 3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0]) / 3)) + ',' + str(int(D1[l, 2])) + sepd)
-                axe2 = QtGui.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1]) / 3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0]) / 3)) + ',' + str(int(D2[l, 2])) + sepd)
-                angle = QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+                axe1 = QtWidgets.QTableWidgetItem(sepg + str(int((2 * D1[l, 0] - D1[l, 1]) / 3)) + ',' + str(int((2 * D1[l, 1] - D1[l, 0]) / 3)) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2 = QtWidgets.QTableWidgetItem(sepg + str(int((2 * D2[l, 0] - D2[l, 1]) / 3)) + ',' + str(int((2 * D2[l, 1] - D2[l, 0]) / 3)) + ',' + str(int(D2[l, 2])) + sepd)
+                angle = QtWidgets.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
 
             else:
                 if ui.axis_checkBox.isChecked():
@@ -1680,9 +1688,9 @@ def trace_misorientation(B):
 
                     a.annotate(saxe, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
 
-                axe1 = QtGui.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
-                axe2 = QtGui.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
-                angle = QtGui.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
+                axe1 = QtWidgets.QTableWidgetItem(sepg + str(int(D1[l, 0])) + ',' + str(int(D1[l, 1])) + ',' + str(int(D1[l, 2])) + sepd)
+                axe2 = QtWidgets.QTableWidgetItem(sepg + str(int(D2[l, 0])) + ',' + str(int(D2[l, 1])) + ',' + str(int(D2[l, 2])) + sepd)
+                angle = QtWidgets.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
 
             if ui.numbers_checkBox.isChecked():
                 snum = str(int(D0[l, 4]))
@@ -1718,7 +1726,7 @@ def desorientation_clear():
 # Structure
 #
 ##############################################################
-
+        
 def structure(item):
     global x0, var_hexa, d_label_var, e_entry
     item = x0[item - 1]
@@ -1727,9 +1735,7 @@ def structure(item):
     if eval(item[4]) == 90 and eval(item[5]) == 90 and eval(item[6]) == 120:
         ui.hexa_button.setChecked(True)
         ui.e_entry.setText('2')
-        ui.d_label_var.setText('3')
     else:
-        ui.d_entry.setText('1')
         ui.e_entry.setText('1')
         ui.hexa_button.setChecked(False)
 
@@ -1742,9 +1748,7 @@ def structure2(item):
     if eval(item[4]) == 90 and eval(item[5]) == 90 and eval(item[6]) == 120:
         ui.hexa_button_2.setChecked(True)
         ui.e_entry_2.setText('2')
-        ui.d_label_var_2.setText('3')
     else:
-        ui.d_entry_2.setText('1')
         ui.e_entry_2.setText('1')
         ui.hexa_button_2.setChecked(False)
 
@@ -1756,9 +1760,9 @@ def structure2(item):
 
 
 def image_save():
-    filename = QtGui.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    pixmap = QtGui.QPixmap.grabWidget(canvas)
-    pixmap.save(str(filename) + ".png")
+    filename = QtWidgets.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
+    f=str(filename[0]) + ".png"
+    canvas.print_figure(f)
 
 
 ####################
@@ -1813,8 +1817,9 @@ except AttributeError:
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Index = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Misorientation")
+    Index = QtWidgets.QMainWindow()
     ui = misorientationUI.Ui_Misorientation()
     ui.setupUi(Index)
     figure = plt.figure()
@@ -1828,7 +1833,7 @@ if __name__ == "__main__":
     file_struct = open(os.path.join(os.path.dirname(__file__), 'structure.txt'), "r")
     x0 = []
     for line in file_struct:
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
     i = 0
     file_struct.close()
     ui.structure_box.addItem(' ')
@@ -1846,12 +1851,12 @@ if __name__ == "__main__":
 
 # Ctrl+z shortcut to remove clicked pole
 
-    shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+z"), Index)
+    shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+z"), Index)
     shortcut.activated.connect(undo_click_a_pole)
 
 # Connect dialog boxes and buttons
 
-    Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), image_save)
+    ui.actionSave_figure.triggered.connect(image_save)
 
     ui.button_trace2.clicked.connect(princ2)
     ui.angle_alpha_buttonp.clicked.connect(rot_alpha_p)
@@ -1871,15 +1876,14 @@ if __name__ == "__main__":
     ui.undo_trace_plan_button.clicked.connect(undo_trace_addplan)
     ui.trace_plan_sym_button.clicked.connect(trace_plan_sym)
     ui.undo_trace_plan_sym_button.clicked.connect(undo_trace_plan_sym)
-    ui.dm_button.clicked.connect(dm)
-    ui.dp_button.clicked.connect(dp)
-    ui.dm_button_2.clicked.connect(dm2)
-    ui.dp_button_2.clicked.connect(dp2)
     ui.reset_view_button.clicked.connect(reset_view)
     figure.canvas.mpl_connect('motion_notify_event', coordinates)
     figure.canvas.mpl_connect('button_press_event', click_a_pole)
     ui.misorientation_button.clicked.connect(desorientation)
     ui.clear_misorientation_button.clicked.connect(desorientation_clear)
+    ui.d1_Slider.sliderReleased.connect(dist_restrict1)
+    ui.d2_Slider.sliderReleased.connect(dist_restrict2)
+    
 # Initialize variables
 
     dmip = 0
@@ -1913,8 +1917,6 @@ if __name__ == "__main__":
     ui.rot_g_entry.setText('5')
     ui.tilt_angle_entry.setText('0')
     ui.image_angle_entry.setText('0')
-    ui.d_entry.setText('1')
-    ui.d_entry_2.setText('1')
     a = figure.add_subplot(111)
     tilt_axes()
     wulff()

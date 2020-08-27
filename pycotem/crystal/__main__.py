@@ -1,10 +1,10 @@
 from __future__ import division
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import crystalUI
 
@@ -48,7 +48,7 @@ def calcul():
     global vec, varname, atom0, Dstar, taille, zoom, EL, Dz, dsc_cond
 
     if varname != 0:
-        f_space = open(varname, "r")
+        f_space = open(varname[0], "r")
     else:
         varname = getFileName()
         f_space = open(varname, "r")
@@ -56,7 +56,7 @@ def calcul():
     crist = []
 
     for line in f_space:
-        crist.append(map(str, line.split()))
+        crist.append(list(map(str, line.split())))
 
     f_space.close()
     vec = []
@@ -351,7 +351,7 @@ def calcul_atom(atom):
 
 def getFileName():
     global varname
-    varname = QtGui.QFileDialog.getOpenFileName(None, 'OpenFile')
+    varname = QtWidgets.QFileDialog.getOpenFileName(None, 'OpenFile')
     return varname
 
 #######################################
@@ -397,8 +397,9 @@ def structure(item):
 
 if __name__ == "__main__":
 
-    app = QtGui.QApplication(sys.argv)
-    Index = QtGui.QMainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    QtWidgets.qApp.setApplicationName("Crystal")
+    Index = QtWidgets.QMainWindow()
     ui = crystalUI.Ui_Crystal()
     ui.setupUi(Index)
     figure = plt.figure()
@@ -413,15 +414,15 @@ if __name__ == "__main__":
     file_struct = open(os.path.join(os.path.dirname(__file__), 'structure.txt'), "r")
     x0 = []
     for line in file_struct:
-        x0.append(map(str, line.split()))
+        x0.append(list(map(str, line.split())))
     i = 0
     file_struct.close()
     for item in x0:
         entry = ui.menuStructure.addAction(item[0])
-        Index.connect(entry, QtCore.SIGNAL('triggered()'), lambda item=item: structure(item))
+        entry.triggered.connect(lambda checked, item=item: structure(item))
         i = i + 1
 
-    Index.connect(ui.actionSave_figure, QtCore.SIGNAL('triggered()'), image_save)
+    ui.actionSave_figure.triggered.connect(image_save)
     varname = 0
     ui.calculate_button.clicked.connect(calcul)
     ui.draw_button.clicked.connect(trace)

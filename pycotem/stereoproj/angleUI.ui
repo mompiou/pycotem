@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>220</height>
+    <width>285</width>
+    <height>234</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,41 +19,55 @@
      <x>10</x>
      <y>10</y>
      <width>266</width>
-     <height>205</height>
+     <height>216</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0" colspan="2">
-     <widget class="QLabel" name="angle_label">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <widget class="QDialogButtonBox" name="buttonBox">
       <property name="standardButtons">
        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLineEdit" name="n1_entry"/>
+    <item row="6" column="0" colspan="2">
+     <widget class="QLabel" name="angle_label">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QLineEdit" name="n2_entry"/>
+     <widget class="QLabel" name="n2_label">
+      <property name="text">
+       <string>n2/d2</string>
+      </property>
+     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="n1_label">
       <property name="text">
-       <string>n1</string>
+       <string>n1/d1</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="n2_label">
+    <item row="4" column="0" rowspan="2">
+     <widget class="QLineEdit" name="n2_entry"/>
+    </item>
+    <item row="1" column="0" rowspan="2">
+     <widget class="QLineEdit" name="n1_entry"/>
+    </item>
+    <item row="1" column="1" rowspan="2">
+     <widget class="QCheckBox" name="uvw1_button">
       <property name="text">
-       <string>n2</string>
+       <string>uvw</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" rowspan="2">
+     <widget class="QCheckBox" name="uvw2_button">
+      <property name="text">
+       <string>uvw</string>
       </property>
      </widget>
     </item>
