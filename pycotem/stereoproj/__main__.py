@@ -20,15 +20,15 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-import stereoprojUI
-import intersectionsUI
-import angleUI
-import schmidUI
-import xyzUI
-import hkl_uvwUI
-import widthUI
-import kikuchiUI
-import listUI
+from . import stereoprojUI
+from . import intersectionsUI
+from . import angleUI
+from . import schmidUI
+from . import xyzUI
+from . import hkl_uvwUI
+from . import widthUI
+from . import kikuchiUI
+from . import listUI
 
 
 ################

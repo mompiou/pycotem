@@ -21,9 +21,4 @@ setup(
     classifiers = ['Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3',],
     include_package_data=True,
-    install_requires=[
-        'numpy',
-        'pillow',
-        'matplotlib',
-    ],
 )

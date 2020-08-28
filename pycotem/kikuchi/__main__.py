@@ -15,9 +15,9 @@ from PIL import ImageEnhance
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-import kikuchiUI
-import refineUI
-import tiltUI
+from . import kikuchiUI
+from . import refineUI
+from . import tiltUI
 
 ######################
 #

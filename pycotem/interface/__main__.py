@@ -15,9 +15,9 @@ from PIL import Image
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-import interfaceUI
-import DrawInterfaceUI
-import DrawStretchedUI
+from . import interfaceUI
+from . import DrawInterfaceUI
+from . import DrawStretchedUI
 
 ######################
 #
