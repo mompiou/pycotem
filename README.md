@@ -18,11 +18,11 @@ pycotem is a python package for working with crystal orientations in transmissio
 
 ### Prerequisites
 
-pycotem relies on ```python2.7``` with ```numpy>=1.13.3```, ```pillow>=5.3.0```, ```matplotlib>=2.1.1``` packages which can be installed with ```pip```. GUI relies on ```pyqt4```.
+pycotem relies on ```python3``` with ```numpy```, ```pillow```, ```matplotlib``` packages which can be installed with ```pip3```. GUI relies on ```pyqt5```.
 
 ### Installing and running
 
-pycotem can be installed with pip: ```pip install pycotem```
+pycotem can be installed with pip: ```pip3 install pycotem```
 Run ```python -m pycotem.xxxx``` for the different tools: ```stereoproj```, ```diffraction```, ```kikuchi```,```misorientation```,```interface``` and ```crystal```.
 
 ### Examples
