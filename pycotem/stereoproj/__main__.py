@@ -11,7 +11,7 @@
 
 from __future__ import division
 import numpy as np
-from PyQt5 import QtGui, QtCore,QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
 import functools
@@ -190,7 +190,7 @@ def var_carre():
 
 
 def crist():
-    global axes, axesh, D, Dstar, V, G, dmip,e,hexa_cryst
+    global axes, axesh, D, Dstar, V, G, dmip, e, hexa_cryst
     abc = ui.abc_entry.text().split(",")
     a = np.float(abc[0]) * 1e-10
     b = np.float(abc[1]) * 1e-10
@@ -199,24 +199,24 @@ def crist():
     alpha = np.float(alphabetagamma[0])
     beta = np.float(alphabetagamma[1])
     gamma = np.float(alphabetagamma[2])
-    hexa_cryst=0
-    if alpha == 90 and beta ==90 and gamma==120:
-	    hexa_cryst=1
-	    dmip=a/2-0.0001e-10
+    hexa_cryst = 0
+    if alpha == 90 and beta == 90 and gamma == 120:
+        hexa_cryst = 1
+        dmip = a / 2 - 0.0001e-10
     else:
-	    dmip=0
-    
+        dmip = 0
+
     e = np.int(ui.e_entry.text())
     ui.d_Slider.setMinimum(0)
-    ui.d_Slider.setMaximum(np.amax([a,b,c])*1e10*100)
+    ui.d_Slider.setMaximum(np.amax([a, b, c]) * 1e10 * 100)
     ui.d_Slider.setSingleStep(100)
-    ui.d_Slider.setValue(dmip*1e10*100)
-    
-    ui.d_label_var.setText(str(np.around(dmip*1e10,decimals=3)))
+    ui.d_Slider.setValue(dmip * 1e10 * 100)
+
+    ui.d_label_var.setText(str(np.around(dmip * 1e10, decimals=3)))
     alpha = alpha * np.pi / 180
     beta = beta * np.pi / 180
     gamma = gamma * np.pi / 180
-    
+
     V = a * b * c * np.sqrt(1 - (np.cos(alpha)**2) - (np.cos(beta))**2 - (np.cos(gamma))**2 + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma))
     D = np.array([[a, b * np.cos(gamma), c * np.cos(beta)], [0, b * np.sin(gamma), c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)], [0, 0, V / (a * b * np.sin(gamma))]])
     Dstar = np.transpose(np.linalg.inv(D))
@@ -229,18 +229,18 @@ def crist():
         for j in range(-e, e + 1):
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
-                    if  var_uvw() == 0:                   
-                            Ma = np.dot(Dstar, np.array([i, j, k], float))
-                            axesh[id, 3] = 0
+                    if var_uvw() == 0:
+                        Ma = np.dot(Dstar, np.array([i, j, k], float))
+                        axesh[id, 3] = 0
                     else:
-                            Ma = np.dot(D, np.array([i, j, k], float))
-                            axesh[id, 3] = 1
-                         
+                        Ma = np.dot(D, np.array([i, j, k], float))
+                        axesh[id, 3] = 1
+
                     m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
                     if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
-                           axes[id, :] = np.array([i, j, k]) / m
+                        axes[id, :] = np.array([i, j, k]) / m
                     else:
-                          axes[id, :] = np.array([i, j, k])
+                        axes[id, :] = np.array([i, j, k])
                     axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
                     axesh[id, 5] = 1
                     axesh[id, 6] = 1
@@ -252,11 +252,10 @@ def crist():
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
         d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
-        if d < dmip :
+        if d < dmip:
             axesh[i, 6] = 0
-        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+        if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
-           
 
     return axes, axesh, D, Dstar, V, G
 
@@ -276,8 +275,8 @@ def lattice_reciprocal():
 
 
 def crist_reciprocal():
-    global axes, axesh, naxes,G,dmip,hexa_cryst,e
-    ui.d_Slider.setValue(dmip*1e10*100)
+    global axes, axesh, naxes, G, dmip, hexa_cryst, e
+    ui.d_Slider.setValue(dmip * 1e10 * 100)
     for z in range(0, np.shape(axes)[0]):
         if z < (np.shape(axes)[0] - naxes):
             I, h, k, l = extinction(ui.space_group_Box.currentText(), axes[z, 0], axes[z, 1], axes[z, 2], np.int(ui.e_entry.text()), 0)
@@ -306,9 +305,9 @@ def crist_reciprocal():
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
         d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
-        if d < dmip :
+        if d < dmip:
             axesh[i, 6] = 0
-        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+        if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
 
     return axes, axesh, naxes
@@ -384,16 +383,16 @@ def extinction(space_group, h, k, l, lim, diff):
 #
 #######################################################
 def dist_restrict():
-    global G, axes, axesh,dmin,dmax,hexa_cryst,e
-    
-    d2 = ui.d_Slider.value()/100*1e-10
-    ui.d_label_var.setText(str(np.around(d2*1e10,decimals=3)))
+    global G, axes, axesh, dmin, dmax, hexa_cryst, e
+
+    d2 = ui.d_Slider.value() / 100 * 1e-10
+    ui.d_label_var.setText(str(np.around(d2 * 1e10, decimals=3)))
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
         d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
-        if d < d2 :
+        if d < d2:
             axesh[i, 6] = 0
-        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+        if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
 
     trace()
@@ -1472,6 +1471,7 @@ def coordinates(event):
 #
 #######################################################
 
+
 def dhkl():
     pole_entry = ui.pole_entry.text().split(",")
     i = np.float(pole_entry[0])
@@ -1648,7 +1648,6 @@ def trace():
         if axesh[i, 4] == 3:
             C.append('r')
 
-            
     if ui.reciprocal_checkBox.isChecked():
         if np.shape(axes)[0] > 0:
             s0 = axesh[:, 6] * axesh[:, 5] / np.amax(axesh[:, 5])
@@ -1657,7 +1656,6 @@ def trace():
     else:
         s0 = axesh[:, 6]
 
-    
     if var_carre() == 0:
         a.scatter(P[:, 0] + 300, P[:, 1] + 300, c=C, s=s0 * np.float(ui.size_var.text()))
     else:
@@ -1726,12 +1724,11 @@ def princ():
             s = text_label(axes[i, :], axesh[i, :])
             a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
         if axesh[i, 4] == 1:
-               C.append('g')
+            C.append('g')
         if axesh[i, 4] == 2:
-               C.append('b')
+            C.append('b')
         if axesh[i, 4] == 3:
-               C.append('r')      
-
+            C.append('r')
 
     if ui.reciprocal_checkBox.isChecked():
         if np.shape(axes)[0] > 0:
@@ -1799,24 +1796,24 @@ def princ2():
     C = []
 
     for i in range(0, axes.shape[0]):
-         if axesh[i, 5] != -1 and axesh[i, 6] == 1:
+        if axesh[i, 5] != -1 and axesh[i, 6] == 1:
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             axeshr = axeshr / np.linalg.norm(axeshr)
             s = text_label(axes[i, :], axesh[i, :])
             a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
-         if axesh[i, 4] == 1:
-               C.append('g')
-         if axesh[i, 4] == 2:
-               C.append('b')
-         if axesh[i, 4] == 3:
-               C.append('r')      
+        if axesh[i, 4] == 1:
+            C.append('g')
+        if axesh[i, 4] == 2:
+            C.append('b')
+        if axesh[i, 4] == 3:
+            C.append('r')
 
     if ui.reciprocal_checkBox.isChecked():
         s0 = axesh[:, 5] / np.amax(axesh[:, 5])
     else:
-        s0 = axesh[:,6]
+        s0 = axesh[:, 6]
     if var_carre() == 0:
         a.scatter(P[:, 0] + 300, P[:, 1] + 300, c=C, s=s0 * np.float(ui.size_var.text()))
     else:
@@ -1908,7 +1905,7 @@ def angle():
         c1c = np.dot(Dstar, c1)
     if ui_angle.uvw2_button.isChecked():
         c2c = np.dot(D, c2)
-    else:        
+    else:
         c2c = np.dot(Dstar, c2)
     the = np.arccos(np.dot(c1c, c2c) / (np.linalg.norm(c1c) * np.linalg.norm(c2c)))
     thes = str(np.around(the * 180 / np.pi, decimals=2))
@@ -2077,7 +2074,7 @@ def schmid():
 
 def image_save():
     filename = QtWidgets.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    f=str(filename[0]) + ".png"
+    f = str(filename[0]) + ".png"
     canvas.print_figure(f)
 
 
@@ -2094,25 +2091,25 @@ def center():
     A2 = np.dot(np.linalg.inv(M), np.array([1, 0, 0]))
     A3 = np.dot(np.linalg.inv(M), np.array([0, 1, 0]))
     if ui_xyz.uvw_CheckBox.isChecked():
-    	Tr=np.linalg.inv(D)
+        Tr = np.linalg.inv(D)
     else:
-    	Tr=np.linalg.inv(Dstar)
-    
+        Tr = np.linalg.inv(Dstar)
+
     C = np.dot(Tr, A)
     C2 = np.dot(Tr, A2)
     C3 = np.dot(Tr, A3)
     if var_hexa() == 1 and ui_xyz.uvw_CheckBox.isChecked():
-        C = np.array([(2 * C[0] - C[1]) / 3, (2 * C[1] - C[0]) / 3,C[2]])
-        C2 = np.array([(2 * C2[0] - C2[1]) / 3, (2 * C2[1] - C2[0]) / 3,C2[2]])
-        C3 = np.array([(2 * C3[0] - C3[1]) / 3, (2 * C3[1] - C3[0]) / 3,C3[2]])
-        
-    Yp = np.around(100*C3 / np.linalg.norm(C3),decimals=3)
-    Zp = np.around(100*C / np.linalg.norm(C),decimals=3)
-    Xp = np.around(100*C2 / np.linalg.norm(C2),decimals=3)
-    	
-    ui_xyz.X_text.setText(str(Xp[0]) + ', ' + str(Xp[1] ) + ', ' + str(Xp[2] ))
-    ui_xyz.Y_text.setText(str(Yp[0] ) + ', ' + str(Yp[1] ) + ', ' + str(Yp[2] ))
-    ui_xyz.Z_text.setText(str(Zp[0] ) + ', ' + str(Zp[1] ) + ', ' + str(Zp[2] ))
+        C = np.array([(2 * C[0] - C[1]) / 3, (2 * C[1] - C[0]) / 3, C[2]])
+        C2 = np.array([(2 * C2[0] - C2[1]) / 3, (2 * C2[1] - C2[0]) / 3, C2[2]])
+        C3 = np.array([(2 * C3[0] - C3[1]) / 3, (2 * C3[1] - C3[0]) / 3, C3[2]])
+
+    Yp = np.around(100 * C3 / np.linalg.norm(C3), decimals=3)
+    Zp = np.around(100 * C / np.linalg.norm(C), decimals=3)
+    Xp = np.around(100 * C2 / np.linalg.norm(C2), decimals=3)
+
+    ui_xyz.X_text.setText(str(Xp[0]) + ', ' + str(Xp[1]) + ', ' + str(Xp[2]))
+    ui_xyz.Y_text.setText(str(Yp[0]) + ', ' + str(Yp[1]) + ', ' + str(Yp[2]))
+    ui_xyz.Z_text.setText(str(Zp[0]) + ', ' + str(Zp[1]) + ', ' + str(Zp[2]))
     return Xp, Yp, Zp
 
 
@@ -2890,7 +2887,6 @@ if __name__ == "__main__":
     ui.abc_entry.setText('1,1,1')
     ui.alphabetagamma_entry.setText('90,90,90')
     ui.e_entry.setText('1')
-    
 
     var_lock = 0
     ui.lock_checkButton.setChecked(False)
@@ -2900,12 +2896,12 @@ if __name__ == "__main__":
 
     ui.text_size_entry.setText('12')
     mpl.rcParams['font.size'] = ui.text_size_entry.text()
-    
+
     ui.phi1phiphi2_entry.setText('0,0,0')
     ui.rg_label.setText('0.0')
     ui.angle_euler_label.setText(' ')
     ui.size_var.setText('40')
-    
+
     ui.angle_alpha_entry.setText('5')
     ui.angle_beta_entry.setText('5')
     ui.angle_z_entry.setText('5')

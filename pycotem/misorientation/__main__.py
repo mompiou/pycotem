@@ -1,6 +1,6 @@
 from __future__ import division
 import numpy as np
-from PyQt5 import QtGui, QtCore,QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
 import functools
@@ -187,47 +187,44 @@ def var_carre(i_c):
 
 
 def crist():
-    global i_c, axes, axesh, D, Dstar, V, G,hexa_cryst1,hexa_cryst2,e,e2
+    global i_c, axes, axesh, D, Dstar, V, G, hexa_cryst1, hexa_cryst2, e, e2
 
     abc2 = ui.abc_entry_2.text().split(",")
     alphabetagamma2 = ui.alphabetagamma_entry_2.text().split(",")
     e2 = np.int(ui.e_entry_2.text())
-    d22 = np.float(ui.d_label_var_2.text())
-
     abc = ui.abc_entry.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     e = np.int(ui.e_entry.text())
-    d2 = np.float(ui.d_label_var.text())
-    hexa_cryst1=0
-    
-    if np.float(alphabetagamma[0]) == 90 and np.float(alphabetagamma[1]) ==90 and np.float(alphabetagamma[2])==120:
-	    hexa_cryst1=1
-	    dmip1=np.float(abc[0])/2-0.0001e-10
+    hexa_cryst1 = 0
+
+    if np.float(alphabetagamma[0]) == 90 and np.float(alphabetagamma[1]) == 90 and np.float(alphabetagamma[2]) == 120:
+        hexa_cryst1 = 1
+        dmip1 = np.float(abc[0]) / 2 - 0.0001e-10
     else:
-	    dmip1=0
-	    
-    hexa_cryst2=0
-    if np.float(alphabetagamma2[0]) == 90 and np.float(alphabetagamma2[1]) ==90 and np.float(alphabetagamma2[2])==120:
-	    hexa_cryst2=1
-	    dmip2=np.float(abc2[0])/2-0.0001e-10
+        dmip1 = 0
+
+    hexa_cryst2 = 0
+    if np.float(alphabetagamma2[0]) == 90 and np.float(alphabetagamma2[1]) == 90 and np.float(alphabetagamma2[2]) == 120:
+        hexa_cryst2 = 1
+        dmip2 = np.float(abc2[0]) / 2 - 0.0001e-10
     else:
-	    dmip2=0
+        dmip2 = 0
 
     ui.d1_Slider.setMinimum(0)
-    ui.d1_Slider.setMaximum(np.amax([np.float(abc[0]),np.float(abc[1]),np.float(abc[2])])*100)
+    ui.d1_Slider.setMaximum(np.amax([np.float(abc[0]), np.float(abc[1]), np.float(abc[2])]) * 100)
     ui.d1_Slider.setSingleStep(100)
-    ui.d1_Slider.setValue(dmip1*100)
-    ui.d_label_var.setText(str(np.around(dmip1,decimals=3)))
-    
+    ui.d1_Slider.setValue(dmip1 * 100)
+    ui.d_label_var.setText(str(np.around(dmip1, decimals=3)))
+
     ui.d2_Slider.setMinimum(0)
-    ui.d2_Slider.setMaximum(np.amax([np.float(abc2[0]),np.float(abc2[1]),np.float(abc2[2])])*100)
+    ui.d2_Slider.setMaximum(np.amax([np.float(abc2[0]), np.float(abc2[1]), np.float(abc2[2])]) * 100)
     ui.d2_Slider.setSingleStep(100)
-    ui.d2_Slider.setValue(dmip2*100)
-    
-    ui.d_label_var_2.setText(str(np.around(dmip2,decimals=3)))
-	    
-    axes1, axesh1, D1, Dstar1, V1, G1 = crist_axes(abc, alphabetagamma, e, dmip1,hexa_cryst1, 1)
-    axes2, axesh2, D2, Dstar2, V2, G2 = crist_axes(abc2, alphabetagamma2, e2, dmip2,hexa_cryst2, 2)
+    ui.d2_Slider.setValue(dmip2 * 100)
+
+    ui.d_label_var_2.setText(str(np.around(dmip2, decimals=3)))
+
+    axes1, axesh1, D1, Dstar1, V1, G1 = crist_axes(abc, alphabetagamma, e, dmip1, hexa_cryst1, 1)
+    axes2, axesh2, D2, Dstar2, V2, G2 = crist_axes(abc2, alphabetagamma2, e2, dmip2, hexa_cryst2, 2)
     if ui.crystal1_radioButton.isChecked():
         D, Dstar, V, G = D1, Dstar1, V1, G1
     if ui.crystal2_radioButton.isChecked():
@@ -256,9 +253,6 @@ def crist_mat(abc, alphabetagamma):
 def crist_axes(abc, alphabetagamma, e, dmip, hexa_cryst, i_c):
 
     D, Dstar, V, G = crist_mat(abc, alphabetagamma)
-    a = np.float(abc[0]) * 1e-10
-    b = np.float(abc[1]) * 1e-10
-    c = np.float(abc[2]) * 1e-10
     axes = np.zeros(((2 * e + 1)**3 - 1, 4))
     axesh = np.zeros(((2 * e + 1)**3 - 1, 10))
     axesh[:, 4] = color_trace(i_c)
@@ -266,24 +260,24 @@ def crist_axes(abc, alphabetagamma, e, dmip, hexa_cryst, i_c):
     axesh[:, 9] = var_carre(i_c)
     axesh[:, 7] = i_c
     axes[:, 3] = i_c
-    
+
     id = 0
     for i in range(-e, e + 1):
         for j in range(-e, e + 1):
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
-                    if  var_uvw() == 0:                   
-                            Ma = np.dot(Dstar, np.array([i, j, k], float))
-                            axesh[id, 3] = 0
+                    if var_uvw() == 0:
+                        Ma = np.dot(Dstar, np.array([i, j, k], float))
+                        axesh[id, 3] = 0
                     else:
-                            Ma = np.dot(D, np.array([i, j, k], float))
-                            axesh[id, 3] = 1
-                         
+                        Ma = np.dot(D, np.array([i, j, k], float))
+                        axesh[id, 3] = 1
+
                     m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
                     if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
-                           axes[id, 0:3] = np.array([i, j, k]) / m
+                        axes[id, 0:3] = np.array([i, j, k]) / m
                     else:
-                          axes[id, 0:3] = np.array([i, j, k])
+                        axes[id, 0:3] = np.array([i, j, k])
                     axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
                     axesh[id, 5] = 1
                     axesh[id, 6] = 1
@@ -294,10 +288,10 @@ def crist_axes(abc, alphabetagamma, e, dmip, hexa_cryst, i_c):
 
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
-        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))*1e10
-        if d < dmip :
+        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3])))) * 1e10
+        if d < dmip:
             axesh[i, 6] = 0
-        if (hexa_cryst==1 and np.abs(axes[i,0]+axes[i,1])>e):
+        if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
 
     return axes, axesh, D, Dstar, V, G
@@ -309,42 +303,43 @@ def crist_axes(abc, alphabetagamma, e, dmip, hexa_cryst, i_c):
 #
 #######################################################
 def dist_restrict1():
-    global G, axes, axesh,hexa_cryst1,e
+    global G, axes, axesh, hexa_cryst1, e
     abc = ui.abc_entry.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    d2 = ui.d1_Slider.value()/100*1e-10
+    d2 = ui.d1_Slider.value() / 100 * 1e-10
     D, Dstar, V, G = crist_mat(abc, alphabetagamma)
 
     for i in range(0, np.shape(axes)[0]):
-        if axes[i,3]==1:
+        if axes[i, 3] == 1:
             axesh[i, 6] = 1
             d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
-            if d < d2 :
+            if d < d2:
                 axesh[i, 6] = 0
-            if (hexa_cryst1==1 and np.abs(axes[i,0]+axes[i,1])>e):
+            if (hexa_cryst1 == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
                 axesh[i, 6] = 0
 
-    ui.d_label_var.setText(str(np.around(d2*1e10,decimals=3)))
+    ui.d_label_var.setText(str(np.around(d2 * 1e10, decimals=3)))
     trace()
 
+
 def dist_restrict2():
-    global G, axes, axesh,hexa_cryst2,e2
+    global G, axes, axesh, hexa_cryst2, e2
     abc = ui.abc_entry_2.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry_2.text().split(",")
-    d2 = ui.d2_Slider.value()/100*1e-10
-    
+    d2 = ui.d2_Slider.value() / 100 * 1e-10
+
     D, Dstar, V, G = crist_mat(abc, alphabetagamma)
 
     for i in range(0, np.shape(axes)[0]):
-        if axes[i,3]==2:
+        if axes[i, 3] == 2:
             axesh[i, 6] = 1
             d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
-            if d < d2 :
+            if d < d2:
                 axesh[i, 6] = 0
-            if (hexa_cryst2==1 and np.abs(axes[i,0]+axes[i,1])>e2):
+            if (hexa_cryst2 == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e2):
                 axesh[i, 6] = 0
 
-    ui.d_label_var_2.setText(str(np.around(d2*1e10,decimals=3)))
+    ui.d_label_var_2.setText(str(np.around(d2 * 1e10, decimals=3)))
     trace()
 
 ###########################################################################
@@ -1240,7 +1235,7 @@ def wulff():
     a.imshow(img, interpolation="bicubic")
     a.axis('off')
     plt.tight_layout()
-    plt.subplots_adjust(top=0.99, bottom=0.01,right=0.9,left=0.1)
+    plt.subplots_adjust(top=0.99, bottom=0.01, right=0.9, left=0.1)
     a.figure.canvas.draw()
 
 
@@ -1389,7 +1384,7 @@ def princ2():
                 T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
             else:
                 T[i, :] = np.dot(rotation(phi1_2, phi_2, phi2_2), axeshr)
-                
+
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             s = text_label(axes[i, :], axesh[i, :])
             a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
@@ -1726,7 +1721,7 @@ def desorientation_clear():
 # Structure
 #
 ##############################################################
-        
+
 def structure(item):
     global x0, var_hexa, d_label_var, e_entry
     item = x0[item - 1]
@@ -1761,7 +1756,7 @@ def structure2(item):
 
 def image_save():
     filename = QtWidgets.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    f=str(filename[0]) + ".png"
+    f = str(filename[0]) + ".png"
     canvas.print_figure(f)
 
 
@@ -1883,7 +1878,7 @@ if __name__ == "__main__":
     ui.clear_misorientation_button.clicked.connect(desorientation_clear)
     ui.d1_Slider.sliderReleased.connect(dist_restrict1)
     ui.d2_Slider.sliderReleased.connect(dist_restrict2)
-    
+
 # Initialize variables
 
     dmip = 0

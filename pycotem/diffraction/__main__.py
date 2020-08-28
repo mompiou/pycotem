@@ -317,7 +317,7 @@ def add_spot():
     else:
         s1 = ui.ListBox_theo.currentItem().text().split('|')
         s11 = s1[1].split(',')
-        s11=[x.strip(' ') for x in s11]
+        s11 = [x.strip(' ') for x in s11]
         s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0]
     ui.diff_spot_Listbox.addItem(s)
     ss = ui.diff_spot_Listbox.count()
