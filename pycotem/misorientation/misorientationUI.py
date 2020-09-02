@@ -7,13 +7,16 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
+fn = os.path.join(os.path.dirname(__file__), "misorientation-icon.png")
+
 
 class Ui_Misorientation(object):
     def setupUi(self, Misorientation):
         Misorientation.setObjectName("Misorientation")
         Misorientation.resize(1212, 887)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("misorientation-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(fn), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Misorientation.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Misorientation)
         self.centralwidget.setObjectName("centralwidget")

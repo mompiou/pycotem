@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
+fn = os.path.join(os.path.dirname(__file__), "kikuchi-icon.png")
 
 
 class Ui_Kikuchi(object):
@@ -16,7 +18,7 @@ class Ui_Kikuchi(object):
         Kikuchi.setObjectName("Kikuchi")
         Kikuchi.resize(1213, 783)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("kikuchi-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(fn), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Kikuchi.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Kikuchi)
         self.centralwidget.setObjectName("centralwidget")

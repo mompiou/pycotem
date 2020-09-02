@@ -9,14 +9,15 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import os
+fn = os.path.join(os.path.dirname(__file__), "crystal-icon.png")
 
 class Ui_Crystal(object):
     def setupUi(self, Crystal):
         Crystal.setObjectName("Crystal")
         Crystal.resize(1222, 796)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("crystal-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(fn), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Crystal.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Crystal)
         self.centralwidget.setObjectName("centralwidget")

@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
+fn = os.path.join(os.path.dirname(__file__), "diffraction-icon.png")
 
 
 class Ui_Diffraction(object):
@@ -16,7 +18,7 @@ class Ui_Diffraction(object):
         Diffraction.setObjectName("Diffraction")
         Diffraction.resize(1200, 856)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("diffraction-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(fn), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Diffraction.setWindowIcon(icon)
         Diffraction.setIconSize(QtCore.QSize(24, 24))
         self.centralwidget = QtWidgets.QWidget(Diffraction)
