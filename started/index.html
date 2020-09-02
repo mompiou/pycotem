@@ -302,15 +302,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on-ubuntu-1804" title="On Ubuntu 18.04" class="md-nav__link">
-    On Ubuntu 18.04
+  <a href="#on-ubuntu" title="On Ubuntu" class="md-nav__link">
+    On Ubuntu
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on-macos-x-not-tested" title="On MacOS X (not tested)" class="md-nav__link">
-    On MacOS X (not tested)
+  <a href="#on-macos-x" title="On MacOS X" class="md-nav__link">
+    On MacOS X
   </a>
   
 </li>
@@ -502,15 +502,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on-ubuntu-1804" title="On Ubuntu 18.04" class="md-nav__link">
-    On Ubuntu 18.04
+  <a href="#on-ubuntu" title="On Ubuntu" class="md-nav__link">
+    On Ubuntu
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on-macos-x-not-tested" title="On MacOS X (not tested)" class="md-nav__link">
-    On MacOS X (not tested)
+  <a href="#on-macos-x" title="On MacOS X" class="md-nav__link">
+    On MacOS X
   </a>
   
 </li>
@@ -566,100 +566,62 @@
 <h2 id="from-python">From python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Consider that it is often recommended to install packages in a virtual environnement to avoid breaking dependancies for other scripts. Please refer to the document to use virtualenv.</p>
+<p>Consider that it is often recommended to install packages in a virtual environnement to avoid breaking dependancies for other scripts. Please refer to the document to use pipx/poetry/venv/pyenv.</p>
 </div>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
-<p>pycotem relies on <code>python2.7</code> with <code>numpy&gt;=1.13.3</code>, <code>pillow&gt;=5.3.0</code>, <code>matplotlib&gt;=2.1.1</code> packages which can be installed with <code>pip</code>. GUI relies on <code>pyqt4</code>.</p>
+<p>pycotem relies on <code>python3</code> since versions 2.x.x,  with <code>numpy&gt;=1.19.0</code>, <code>pillow&gt;=7.2.0</code>, <code>matplotlib&gt;=3.3.0</code>. Dependancies can be installed with <code>pip</code>. GUI relies on <code>pyqt5</code>. Earlier 1.x.x versions relies on <code>python 2.7</code> with <code>numpy&gt;=1.13.3</code>, <code>pillow&gt;=5.3.0</code>, <code>matplotlib&gt;=2.1.1</code> and <code>pyqt4</code></p>
 <h3 id="installing-and-running">Installing and running<a class="headerlink" href="#installing-and-running" title="Permanent link">&para;</a></h3>
 <h4 id="on-windows">On windows<a class="headerlink" href="#on-windows" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Install python 2.7</li>
-</ul>
-<div class="codehilite"><pre><span></span>wget https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi
-msiexec /i python-2.7.9.amd64.msi /qb
-</pre></div>
-
-<ul>
-<li>Download PyQt4 (choose amd64 and python 2.7 cp27) wheel and install (do not place the whl file in a folder with non ascii characters).</li>
-</ul>
-<div class="codehilite"><pre><span></span>pip install PyQt4-4.11.4-cp27-cp27m-win_amd64.whl
-</pre></div>
-
-<ul>
-<li>Install pycotem</li>
+<li>
+<p>Install python 3 from <a href="https://www.python.org">python.org</a></p>
+</li>
+<li>
+<p>Install pycotem and dependancies</p>
+</li>
 </ul>
 <div class="codehilite"><pre><span></span>pip install pycotem
+pip install matplotlib
+pip install pyqt5
 </pre></div>
 
 <p>Run the packages with
 <div class="codehilite"><pre><span></span>python -m pycotem.xxxx
 </pre></div>
 where <code>xxxx</code> is one of the tool <code>stereoproj</code>, <code>diffraction</code>, <code>kikuchi</code>,<code>misorientation</code>,<code>interface</code> and <code>crystal</code>.</p>
-<h4 id="on-ubuntu-1804">On Ubuntu 18.04<a class="headerlink" href="#on-ubuntu-1804" title="Permanent link">&para;</a></h4>
-<p>Python 2.7 distribution should be installed by default. </p>
+<h4 id="on-ubuntu">On Ubuntu<a class="headerlink" href="#on-ubuntu" title="Permanent link">&para;</a></h4>
 <ul>
-<li>Install <code>pip</code></li>
+<li>Install <code>pip3</code></li>
 </ul>
-<div class="codehilite"><pre><span></span>sudo apt-get install python-pip
-sudo pip install --upgrade pip
+<div class="codehilite"><pre><span></span>sudo apt-get install python3-pip
 </pre></div>
 
 <ul>
-<li>Install pycotem from <code>pip</code>:</li>
+<li>Install pycotem and dependancies</li>
 </ul>
-<div class="codehilite"><pre><span></span>pip install pycotem
+<div class="codehilite"><pre><span></span>pip3 install pycotem
+pip3 install matplotlib
 </pre></div>
 
 <ul>
-<li>Install <code>pyqt4</code>:</li>
+<li>Install <code>pyqt5</code>:</li>
 </ul>
-<div class="codehilite"><pre><span></span>sudo apt-get install python-qt4
+<div class="codehilite"><pre><span></span>sudo apt-get install python-qt5
 </pre></div>
 
 <ul>
-<li>Run the script as above.</li>
+<li>Run the script with</li>
 </ul>
-<h4 id="on-macos-x-not-tested">On MacOS X (not tested)<a class="headerlink" href="#on-macos-x-not-tested" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Install Homebrew:</li>
-</ul>
-<div class="codehilite"><pre><span></span>/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
+<div class="codehilite"><pre><span></span>python3 -m pycotem.xxx
 </pre></div>
 
-<ul>
-<li>Add the following line at the bottom of your ~/.profile file:</li>
-</ul>
-<div class="codehilite"><pre><span></span>export PATH=&quot;/usr/local/bin:/usr/local/sbin:$PATH&quot;
-</pre></div>
-
-<ul>
-<li>Install python from Homebrew:</li>
-</ul>
-<div class="codehilite"><pre><span></span>brew install python@2
-</pre></div>
-
-<ul>
-<li>and modify the PATH to the new installation:</li>
-</ul>
-<div class="codehilite"><pre><span></span>export PATH=&quot;/usr/local/opt/python@2/libexec/bin:$PATH&quot;
-</pre></div>
-
-<ul>
-<li>Install pyqt4:</li>
-</ul>
-<div class="codehilite"><pre><span></span>brew install cartr/qt4/pyqt
-</pre></div>
-
-<ul>
-<li>Install <code>pip</code>:</li>
-</ul>
-<div class="codehilite"><pre><span></span>sudo easy_install pip
-sudo pip install --upgrade pip
-</pre></div>
-
+<h4 id="on-macos-x">On MacOS X<a class="headerlink" href="#on-macos-x" title="Permanent link">&para;</a></h4>
 <ul>
 <li>
-<p>Install pycotem with <code>pip</code> as above.</p>
+<p>Install Python from <a href="https://www.python.org">python.org</a> or from Homebrew <code>brew install python3</code></p>
+</li>
+<li>
+<p>Install pycotem, matplotlib and pyqt5 with <code>pip3</code> as above.</p>
 </li>
 <li>
 <p>Run the script as above</p>
@@ -667,7 +629,7 @@ sudo pip install --upgrade pip
 </ul>
 <h3 id="updating">Updating<a class="headerlink" href="#updating" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Use <code>pip install --upgrade pycotem</code></li>
+<li>Use <code>pip3 install --upgrade pycotem</code></li>
 </ul>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>Image files and setting parameters for testing <code>diffraction</code>, <code>interface</code> and <code>kikuchi</code> can be found <a href="https://github.com/mompiou/pycotem/tree/master/test">here</a></p>
