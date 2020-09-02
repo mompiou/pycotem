@@ -20,15 +20,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-from . import stereoprojUI
-from . import intersectionsUI
-from . import angleUI
-from . import schmidUI
-from . import xyzUI
-from . import hkl_uvwUI
-from . import widthUI
-from . import kikuchiUI
-from . import listUI
+from . import stereoprojUI, intersectionsUI, angleUI, schmidUI, xyzUI, hkl_uvwUI, widthUI, kikuchiUI, listUI
 
 
 ################
@@ -2103,9 +2095,9 @@ def center():
         C2 = np.array([(2 * C2[0] - C2[1]) / 3, (2 * C2[1] - C2[0]) / 3, C2[2]])
         C3 = np.array([(2 * C3[0] - C3[1]) / 3, (2 * C3[1] - C3[0]) / 3, C3[2]])
 
-    Yp = np.around(100 * C3 / np.linalg.norm(C3), decimals=3)
-    Zp = np.around(100 * C / np.linalg.norm(C), decimals=3)
-    Xp = np.around(100 * C2 / np.linalg.norm(C2), decimals=3)
+    Yp = 100 * C3 / np.linalg.norm(C3)
+    Zp = 100 * C / np.linalg.norm(C)
+    Xp = 100 * C2 / np.linalg.norm(C2)
 
     ui_xyz.X_text.setText(str(Xp[0]) + ', ' + str(Xp[1]) + ', ' + str(Xp[2]))
     ui_xyz.Y_text.setText(str(Yp[0]) + ', ' + str(Yp[1]) + ', ' + str(Yp[2]))
