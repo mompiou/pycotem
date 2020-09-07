@@ -1095,6 +1095,10 @@ class NavigationToolbar(NavigationToolbar):
     def set_message(self, msg):
         pass
 
+
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
 ####################
 #
 # Launch
@@ -1120,6 +1124,7 @@ except AttributeError:
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+    sys.excepthook = except_hook
     QtWidgets.qApp.setApplicationName("Diffraction")
     Index = QtWidgets.QMainWindow()
     ui = diffractionUI.Ui_Diffraction()

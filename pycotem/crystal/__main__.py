@@ -395,9 +395,14 @@ def structure(item):
     ui.alphabetagamma_entry.setText(str(item[4]) + ',' + str(item[5]) + ',' + str(item[6]))
 
 
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+    sys.excepthook = except_hook
     QtWidgets.qApp.setApplicationName("Crystal")
     Index = QtWidgets.QMainWindow()
     ui = crystalUI.Ui_Crystal()

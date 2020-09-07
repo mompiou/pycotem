@@ -15,9 +15,7 @@ from PIL import ImageEnhance
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-from . import kikuchiUI
-from . import refineUI
-from . import tiltUI
+from . import kikuchiUI, refineUI, tiltUI
 
 ######################
 #
@@ -924,11 +922,15 @@ class NavigationToolbar(NavigationToolbar):
         pass
 
 
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
 ###############################################################
 #
 # Main, import Gui from KikuchiUI and refineUI
 #
 ################################################################
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -949,6 +951,7 @@ except AttributeError:
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+    sys.excepthook = except_hook
     QtWidgets.qApp.setApplicationName("Kikuchi")
     Index = QtWidgets.QMainWindow()
     ui = kikuchiUI.Ui_Kikuchi()

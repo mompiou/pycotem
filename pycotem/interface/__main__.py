@@ -15,9 +15,7 @@ from PIL import Image
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-from . import interfaceUI
-from . import DrawInterfaceUI
-from . import DrawStretchedUI
+from . import interfaceUI, DrawInterfaceUI, DrawStretchedUI
 
 ######################
 #
@@ -827,6 +825,10 @@ def export_data():
     fout.close()
 
 
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
 ######################################################
 #
 # Launch
@@ -850,6 +852,7 @@ except AttributeError:
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+    sys.excepthook = except_hook
     QtWidgets.qApp.setApplicationName("Interface")
     Interface = QtWidgets.QMainWindow()
     ui = interfaceUI.Ui_Interface()

@@ -1789,11 +1789,15 @@ class NavigationToolbar(NavigationToolbar):
         pass
 
 
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
 #############################################################
 #
 # Launch
 #
 # "
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -1813,6 +1817,7 @@ except AttributeError:
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+    sys.excepthook = except_hook
     QtWidgets.qApp.setApplicationName("Misorientation")
     Index = QtWidgets.QMainWindow()
     ui = misorientationUI.Ui_Misorientation()
