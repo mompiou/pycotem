@@ -198,7 +198,7 @@ def rep():
     crist = []
 
     for line in f_space:
-        crist.append(map(str, line.split()))
+        crist.append(list(map(str, line.split())))
 
     f_space.close()
     vec = []

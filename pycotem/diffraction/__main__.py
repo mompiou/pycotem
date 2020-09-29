@@ -183,7 +183,7 @@ def angle_check(Dis):
             g_hkl = []
 
             for i in range(0, len(s1)):
-                l = map(float, s1[i].split(','))
+                l = list(map(float, s1[i].split(',')))
                 tilt_a.append(l[0])
                 tilt_b.append(l[1])
                 tilt_z.append(l[2])
