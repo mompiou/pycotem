@@ -1,6 +1,6 @@
 from __future__ import division
 import numpy as np
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtWidgets
 import sys
 import os
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -362,9 +362,9 @@ def getFileName():
 
 
 def image_save():
-    filename = QtGui.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
-    pixmap = QtGui.QPixmap.grabWidget(canvas)
-    pixmap.save(str(filename) + ".png")
+    filename = QtWidgets.QFileDialog.getSaveFileName(Index, "Save file", "", ".png")
+    f = str(filename[0]) + ".png"
+    canvas.print_figure(f)
 
 
 ##################################################

@@ -671,6 +671,7 @@ def draw_planes_dir():
 
                 a_r = np.arctan2(T[0], T[1])
                 a_g = np.abs(np.sqrt(1 - T[2]**2) / plan[2])
+                ui_draw.measure_label.setText('Rotation, Stretch' + '\n' + str(np.around(a_r * 180 / np.pi, decimals=3)) + ',' + str(np.around(a_g, decimals=3)))
                 a_stretched = figure_stretched.add_subplot(111)
                 a_stretched.figure.clear()
                 a_stretched = figure_stretched.add_subplot(111)
@@ -682,9 +683,10 @@ def draw_planes_dir():
                 if ui_draw.scale_checkBox.isChecked():
                     scale = np.float(ui_draw.scale_entry.text())
                     a_stretched.plot([stretched_size[0] / 20, stretched_size[0] / 20 + scale / mag_conv], [stretched_size[1] / 20, stretched_size[1] / 20], 'w-', linewidth=1)
-                    a_stretched.annotate(str(scale) + 'nm', (stretched_size[0] / 20 + scale / mag_conv + 5, stretched_size[1] / 20), color="white")
+                    a_stretched.annotate(str(scale) + 'nm', (stretched_size[0] / 20 + scale / mag_conv + 5, stretched_size[1] / 20), color="white", backgroundcolor="black")
 
                 a_stretched.axis('off')
+                a_stretched.set_facecolor('m')
                 a_stretched.figure.canvas.draw()
                 Stretched.show()
 
@@ -877,10 +879,12 @@ if __name__ == "__main__":
     ui_stretched = DrawStretchedUI.Ui_Draw_Stretched()
     ui_stretched.setupUi(Stretched)
     figure_stretched = plt.figure()
+    figure_stretched.patch.set_facecolor('black')
     canvas_stretched = FigureCanvas(figure_stretched)
     ui_stretched.mplvl.addWidget(canvas_stretched)
     toolbar_stretched = NavigationToolbar(canvas_stretched, canvas_stretched)
-    toolbar_stretched.setMinimumWidth(601)
+    toolbar_stretched.setMinimumWidth(101)
+    toolbar_stretched.setStyleSheet("background-color:White;")
 
     single_tilt()
     ui.single_button.setChecked(True)
