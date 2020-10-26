@@ -111,9 +111,6 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" rowspan="2" colspan="5">
-        <widget class="QListWidget" name="ListBox_d_2"/>
-       </item>
        <item row="14" column="1">
         <widget class="QLineEdit" name="tilt_a_entry"/>
        </item>
@@ -260,6 +257,20 @@
          </property>
         </widget>
        </item>
+       <item row="9" column="0" rowspan="3" colspan="5">
+        <widget class="QListWidget" name="ListBox_d_2">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="6" colspan="4">
+        <widget class="QCheckBox" name="two_to_three_checkBox">
+         <property name="text">
+          <string>2-to-3 beams</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>abc_label</zorder>
       <zorder>indice_label</zorder>
@@ -301,6 +312,7 @@
       <zorder>precision_label</zorder>
       <zorder>Button_reset</zorder>
       <zorder>do_not_guess_checkBox</zorder>
+      <zorder>two_to_three_checkBox</zorder>
      </widget>
     </item>
    </layout>
@@ -311,7 +323,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">

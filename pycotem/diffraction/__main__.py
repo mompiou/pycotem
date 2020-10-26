@@ -148,12 +148,32 @@ def distance():
         ui.ListBox_d_2.addItem(str(np.around(d, decimals=2)) + ',' + str(np.around(bet, decimals=2)))
     return d
 
+##################
+#
+# Two beams to three beams
+#
+###################
+
+
+def two_to_three():
+    h = 6.62607004e-34
+    m0 = 9.10938356e-31
+    e = 1.60217662e-19
+    c = 299792458
+    Vt = eval(x_calib[ui.Calib_box.currentIndex()][1]) * 1e3
+    lambd = h / np.sqrt(2 * m0 * e * Vt) * 1 / np.sqrt(1 + e * Vt / (2 * m0 * c**2)) * 1e10
+    d = np.float(ui.ListBox_d_2.currentItem().text().split(',')[0])
+    epsilon = np.around(lambd / 2 / d * 180 / np.pi, decimals=3)
+
+    return epsilon
 
 #########################
 #
 # Get theoretical distance
 #
 ############################
+
+
 def angle_check(Dis):
     global G, Dstar, D
     if ui.tilt_a_entry.text() == []:
@@ -167,8 +187,11 @@ def angle_check(Dis):
 
         t_ang = np.float(ui.tilt_axis_angle_entry.text())
         R = np.dot(Rot(s_z * tz, 0, 0, 1), np.dot(Rot(s_b * tb, 1, 0, 0), Rot(s_a * ta, 0, 1, 0)))
-        ny = (-np.float(inc[1])) * np.pi / 180
-        t = np.array([-np.sin(ny), np.cos(ny), 0])
+        ny = -np.float(inc[1])
+        epsilon = 0
+        if ui.two_to_three_checkBox.isChecked():
+            epsilon = two_to_three() * np.pi / 180
+        t = np.dot(Rot(ny, 0, 0, 1), np.array([0, np.cos(epsilon), np.sin(epsilon)]))
         g_d = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
 
         if ui.diff_spot_Listbox.count() == 0:
@@ -181,6 +204,7 @@ def angle_check(Dis):
             tilt_z = []
             inclination = []
             g_hkl = []
+            epsilon = []
 
             for i in range(0, len(s1)):
                 l = list(map(float, s1[i].split(',')))
@@ -189,17 +213,19 @@ def angle_check(Dis):
                 tilt_z.append(l[2])
                 inclination.append(l[3])
                 g_hkl.append(l[4:7])
+                epsilon.append(l[8])
             inclination = np.array(inclination)
             tilt_a = np.array(tilt_a)
             tilt_b = np.array(tilt_b)
             tilt_z = np.array(tilt_z)
             g_hkl = np.array(g_hkl)
+            epsilon = np.array(epsilon) * np.pi / 180
             t_ang = np.float(ui.tilt_axis_angle_entry.text())
             for i in range(0, np.shape(tilt_a)[0]):
                 Dis = np.hstack((Dis, np.zeros((Dis.shape[0], 1))))
                 R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
-                ny = (-inclination[i]) * np.pi / 180
-                t = np.array([-np.sin(ny), np.cos(ny), 0])
+                ny = -inclination[i]
+                t = np.dot(Rot(ny, 0, 0, 1), np.array([0, np.cos(epsilon[i]), np.sin(epsilon[i])]))
                 for k in range(0, Dis.shape[0]):
                     a = np.arccos(np.dot(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)), g_d))
                     Dis[k, -1] = np.around(np.abs(angle(Dis[k, 1:4], g_hkl[i, :]) - a) * 180 / np.pi, decimals=1)
@@ -312,13 +338,17 @@ def add_spot():
     s3 = ui.tilt_a_entry.text()
     s4 = ui.tilt_b_entry.text()
     s5 = ui.tilt_z_entry.text()
+    if ui.two_to_three_checkBox.isChecked():
+        s6 = str(two_to_three())
+    else:
+        s6 = '0'
     if ui.do_not_guess_checkBox.isChecked():
-        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + '0' + ',' + '0' + ',' + '0' + ',' + s2[0]
+        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + '0' + ',' + '0' + ',' + '0' + ',' + s2[0] + ',' + s6
     else:
         s1 = ui.ListBox_theo.currentItem().text().split('|')
         s11 = s1[1].split(',')
         s11 = [x.strip(' ') for x in s11]
-        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0]
+        s = s3 + ',' + s4 + ',' + s5 + ',' + s2[1] + ',' + s11[0] + ',' + s11[1] + ',' + s11[2] + ',' + s2[0] + ',' + s6
     ui.diff_spot_Listbox.addItem(s)
     ss = ui.diff_spot_Listbox.count()
     item = ui.diff_spot_Listbox.item(ss - 1)
@@ -792,6 +822,7 @@ def get_data():
     inclination = []
     g_c = []
     d_g = []
+    epsilon = []
 
     for i in range(0, len(s)):
         l = list(map(float, s[i].split(',')))
@@ -801,6 +832,7 @@ def get_data():
         inclination.append(l[3])
         d_g.append(l[7])
         g_c.append(l[4:7])
+        epsilon.append(l[8])
 
     inclination = np.array(inclination)
     d_g = np.array(d_g)
@@ -808,14 +840,15 @@ def get_data():
     tilt_b = np.array(tilt_b)
     tilt_z = np.array(tilt_z)
     g_c = np.array(g_c)
+    epsilon = np.array(epsilon) * np.pi / 180
 
     t_ang = np.float(ui.tilt_axis_angle_entry.text())
     g_sample = np.zeros((np.shape(tilt_a)[0], 3))
 
     for i in range(0, np.shape(tilt_a)[0]):
         R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
-        ny = (-inclination[i]) * np.pi / 180
-        t = np.array([-np.sin(ny), np.cos(ny), 0])
+        ny = -inclination[i]
+        t = np.dot(Rot(ny, 0, 0, 1), np.array([0, np.cos(epsilon[i]), np.sin(epsilon[i])]))
         g_sample[i, :] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
 
     if ui.do_not_guess_checkBox.isChecked():
@@ -1061,6 +1094,9 @@ def import_data():
     data.close()
     for item in x0:
         ui.diff_spot_Listbox.addItem(item[0])
+        ss = ui.diff_spot_Listbox.count()
+        item_diff = ui.diff_spot_Listbox.item(ss - 1)
+        item_diff.setFlags(item_diff.flags() | QtCore.Qt.ItemIsEditable)
 
 
 def export_data():
