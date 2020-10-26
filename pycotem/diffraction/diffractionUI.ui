@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>856</height>
+    <height>873</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -138,13 +138,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="indice_label">
-         <property name="text">
-          <string>Max Indices</string>
-         </property>
-        </widget>
-       </item>
        <item row="14" column="5">
         <widget class="QLineEdit" name="tilt_b_entry"/>
        </item>
@@ -271,6 +264,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QLabel" name="indice_label">
+         <property name="text">
+          <string>Max Indices</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>abc_label</zorder>
       <zorder>indice_label</zorder>
@@ -393,6 +393,7 @@
   <tabstop>ListBox_d_2</tabstop>
   <tabstop>Button_reset</tabstop>
   <tabstop>Button_reset_all</tabstop>
+  <tabstop>two_to_three_checkBox</tabstop>
   <tabstop>tilt_a_entry</tabstop>
   <tabstop>alpha_signBox</tabstop>
   <tabstop>tilt_b_entry</tabstop>

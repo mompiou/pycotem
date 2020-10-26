@@ -7,13 +7,16 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
+fn = os.path.join(os.path.dirname(__file__), "diffraction-icon.png")
+
 
 class Ui_Diffraction(object):
     def setupUi(self, Diffraction):
         Diffraction.setObjectName("Diffraction")
-        Diffraction.resize(1200, 856)
+        Diffraction.resize(1200, 873)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("diffraction-icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(fn), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Diffraction.setWindowIcon(icon)
         Diffraction.setIconSize(QtCore.QSize(24, 24))
         self.centralwidget = QtWidgets.QWidget(Diffraction)
@@ -85,9 +88,6 @@ class Ui_Diffraction(object):
         self.label_4 = QtWidgets.QLabel(self.groupBox)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 24, 0, 1, 2)
-        self.indice_label = QtWidgets.QLabel(self.groupBox)
-        self.indice_label.setObjectName("indice_label")
-        self.gridLayout.addWidget(self.indice_label, 2, 0, 1, 2)
         self.tilt_b_entry = QtWidgets.QLineEdit(self.groupBox)
         self.tilt_b_entry.setObjectName("tilt_b_entry")
         self.gridLayout.addWidget(self.tilt_b_entry, 14, 5, 1, 1)
@@ -156,6 +156,9 @@ class Ui_Diffraction(object):
         self.two_to_three_checkBox = QtWidgets.QCheckBox(self.groupBox)
         self.two_to_three_checkBox.setObjectName("two_to_three_checkBox")
         self.gridLayout.addWidget(self.two_to_three_checkBox, 11, 6, 1, 4)
+        self.indice_label = QtWidgets.QLabel(self.groupBox)
+        self.indice_label.setObjectName("indice_label")
+        self.gridLayout.addWidget(self.indice_label, 2, 0, 1, 3)
         self.abc_label.raise_()
         self.indice_label.raise_()
         self.n_label.raise_()
@@ -244,7 +247,8 @@ class Ui_Diffraction(object):
         Diffraction.setTabOrder(self.tilt_axis_angle_entry, self.ListBox_d_2)
         Diffraction.setTabOrder(self.ListBox_d_2, self.Button_reset)
         Diffraction.setTabOrder(self.Button_reset, self.Button_reset_all)
-        Diffraction.setTabOrder(self.Button_reset_all, self.tilt_a_entry)
+        Diffraction.setTabOrder(self.Button_reset_all, self.two_to_three_checkBox)
+        Diffraction.setTabOrder(self.two_to_three_checkBox, self.tilt_a_entry)
         Diffraction.setTabOrder(self.tilt_a_entry, self.alpha_signBox)
         Diffraction.setTabOrder(self.alpha_signBox, self.tilt_b_entry)
         Diffraction.setTabOrder(self.tilt_b_entry, self.beta_signBox)
@@ -272,7 +276,6 @@ class Ui_Diffraction(object):
         self.Calib_label.setText(_translate("Diffraction", "Calibrations"))
         self.precision_label.setText(_translate("Diffraction", "precision"))
         self.label_4.setText(_translate("Diffraction", "<html><head/><body><p><span style=\" font-weight:600;\">Data</span></p></body></html>"))
-        self.indice_label.setText(_translate("Diffraction", "Max Indices"))
         self.Button_reset.setText(_translate("Diffraction", "Reset points"))
         self.abc_label.setText(_translate("Diffraction", "a,b,c"))
         self.alpha_label.setText(_translate("Diffraction", "<html><head/><body><p>α,β,γ</p></body></html>"))
@@ -286,6 +289,7 @@ class Ui_Diffraction(object):
         self.do_not_guess_checkBox.setText(_translate("Diffraction", "do not use g-vector guess"))
         self.orientation_button.setText(_translate("Diffraction", "Get orientation"))
         self.two_to_three_checkBox.setText(_translate("Diffraction", "2-to-3 beams"))
+        self.indice_label.setText(_translate("Diffraction", "Max Indices"))
         self.menuSave.setTitle(_translate("Diffraction", "Open"))
         self.menuStructure.setTitle(_translate("Diffraction", "Structure"))
         self.menuSpectrum.setTitle(_translate("Diffraction", "Spectrum"))
