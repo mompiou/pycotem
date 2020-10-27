@@ -673,13 +673,13 @@ Atom name2 x3 y3 z3
 
 <h2 id="diffraction-pattern-in-tem">Diffraction pattern in TEM<a class="headerlink" href="#diffraction-pattern-in-tem" title="Permanent link">&para;</a></h2>
 <p>When a plane electronic wave is scattered by a crystal under a given orientation, a spot diffraction pattern is formed in the back focal plane of the objective lens. The spots correspond to different diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>, the intensity of the pattern depending both on the crystal lattice and its orientation (see <a href="../stereoproj/#diffraction">stereoproj</a>). In <code>diffraction</code>, we only use the structure factor as a guide to identify diffraction spots.  </p>
-<p>Thus, an electron wave traveling in the direction <span><span class="MathJax_Preview">-z</span><script type="math/tex">-z</script></span> will be diffracted by an angle <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> given by the Bragg law:</p>
+<p>Thus, an electron wave traveling in the direction <span><span class="MathJax_Preview">-z</span><script type="math/tex">-z</script></span> will be diffracted by an angle <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> given by the Bragg law:</p>
 <div>
 <div class="MathJax_Preview">
-2d \sin{\theta} = n \lambda
+2d \sin{\theta_B} = n \lambda
 </div>
 <script type="math/tex; mode=display">
-2d \sin{\theta} = n \lambda
+2d \sin{\theta_B} = n \lambda
 </script>
 </div>
 <p><span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span> being the wavelength, <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> the inter-reticular spacing and <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> the diffraction order (corresponding to parallel diffraction vectors <span><span class="MathJax_Preview">n(h,k,l)</span><script type="math/tex">n(h,k,l)</script></span>).</p>
@@ -698,6 +698,15 @@ As a consequence, the pattern will depend on the acceleration voltage, through t
 <p>the rotation, by an angle <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span>, between the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis which defines the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis in the holder reference frame, and the <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> axis on the pattern. </p>
 </li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Two-beam and three-beam conditions</p>
+<p>In a two-beam condition (left picture), only one diffraction vector is strongly excited. In that case <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span> is located on a sphere of radius <span><span class="MathJax_Preview">1/\lambda</span><script type="math/tex">1/\lambda</script></span>, the Ewald sphere, corresponding to the exact Bragg condition (<span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span>, the deviation from this condition is zero). In that condition, the <a href="../kikuchi/">Kikuchi lines</a> lie at <span><span class="MathJax_Preview">(0,+\vec{g})</span><script type="math/tex">(0,+\vec{g})</script></span>. However, the diffraction planes are rotated of an angle <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> with respect to the electron beam. This angle is usually small, but depend both on the acceleration voltage (through <span><span class="MathJax_Preview">1/\lambda) and the interplanar spacing (</span><script type="math/tex">1/\lambda) and the interplanar spacing (</script></span>d$). At 200 kV, in iron austenite, <span><span class="MathJax_Preview">\theta_B \approx 0.4^\circ</span><script type="math/tex">\theta_B \approx 0.4^\circ</script></span> for the <span><span class="MathJax_Preview">(200)</span><script type="math/tex">(200)</script></span> vector.</p>
+<p>In a three-beam condition (right), the crystal is tilted by an angle <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> from the two-beam conditions. Now the Kikuchi lines, are located between the transmitted beam and the diffracted beams. Three beams <span><span class="MathJax_Preview">(0,-\vec{g},\vec{g})</span><script type="math/tex">(0,-\vec{g},\vec{g})</script></span> are equally excited and the planes are perpendicular to the electron beam. This corresponds to a situation where <span><span class="MathJax_Preview">s=-\lambda/2 \|\vec{g}\|^2</span><script type="math/tex">s=-\lambda/2 \|\vec{g}\|^2</script></span>.</p>
+<p><img alt="" src="../images/diff-corr.png" /></p>
+<p>A high accuracy of orientation thus needs the knowledge of <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span>, i.e. the position of the Kikuchi lines. Please refer to <a href="../kikuchi/">Kikuchi</a>, for such analysis. </p>
+<p>When taking a diffraction pattern, it is thus recommended to fulfill the three-beam conditions, i.e. in the middle of the extinction contours in image mode. However better imaging conditions are reached in two-beam with <span><span class="MathJax_Preview">s&gt;0</span><script type="math/tex">s>0</script></span>. </p>
+<p>Pycotem allows to correct the orientation of a diffraction vector from a two-beam condition. See below.</p>
+</div>
 <h3 id="calibration-and-operating-conditions">Calibration and operating conditions<a class="headerlink" href="#calibration-and-operating-conditions" title="Permanent link">&para;</a></h3>
 <p>The diffraction pattern needs to be carefully calibrated on the microscope used. Use a crystal with known lattice parameters and record a diffraction pattern, ideally forming rows or a zone axis with a large value of <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>. For every camera length and acceleration voltage, measure <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> in pixels corresponding to <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> in angstrom.</p>
 <p>The calibration are set in the <code>calibration.txt</code> file following the scheme:</p>
@@ -762,7 +771,7 @@ x_N & y_N & z_N
 </script>
 </div>
 <p>are the g-vectors in the sample coordinates.</p>
-<p>The coordinates <span><span class="MathJax_Preview">x_i,y_i,z_i</span><script type="math/tex">x_i,y_i,z_i</script></span> are obtained by appropriate rotation in the sample coordinates. For a double tilt holder, with no angle between the vertical direction and the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis, the coordinates of the diffraction vector <span><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> is:</p>
+<p>The coordinates <span><span class="MathJax_Preview">x_i,y_i,z_i</span><script type="math/tex">x_i,y_i,z_i</script></span> are obtained by appropriate rotation in the sample coordinates. For a double tilt holder, with no angle between the vertical direction and the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis, the coordinates of the diffraction vector <span><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> is <sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>:</p>
 <div>
 <div class="MathJax_Preview">
 \begin{pmatrix} 
@@ -817,7 +826,7 @@ G_c A=G_s
 G_c A=G_s
 </script>
 </div>
-<p>The above equation defines the crystal orientation, so that <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> should be a rotation matrix. The closest Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">1</a></sup> using singular value decomposition:</p>
+<p>The above equation defines the crystal orientation, so that <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> should be a rotation matrix. The closest Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">2</a></sup> using singular value decomposition:</p>
 <div>
 <div class="MathJax_Preview">
 U,S,V^T=svd(G_c^TG_s) \\
@@ -912,13 +921,16 @@ The angles values are explained below.</p>
 <p>Fill the tilt angles fields.  Tick the box to indicate that rotation is anti-clockwise.</p>
 </li>
 <li>
+<p>Tick the <code>2-to-3 beams</code> check box if a correction from a 2-beam to a 3-beam condition is required (see <a href="./#diffraction-pattern-in-tem">above</a>). This leads to the evaluation of the out of plane angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span>.</p>
+</li>
+<li>
 <p>Click and <code>Find diffraction spots</code></p>
 </li>
 <li>
 <p>Select both the <strong>dist, inclination</strong> field and the appropriate <strong>g vector</strong>. For the first condition, the indices of the g-vector can arbitrary be chosen. </p>
 </li>
 <li>
-<p>Press <code>Add data</code>. A line appears <code>alpha angle, beta angle, theta angle, inclination, h,k,l</code>. Data can be removed by selecting the line and by pressing <code>Remove data</code>.</p>
+<p>Press <code>Add data</code>. A line appears <code>alpha angle, beta angle, theta angle, inclination, h,k,l, epsilon angle</code>. Data can be removed by selecting the line and by pressing <code>Remove data</code>.</p>
 </li>
 <li>
 <p>Repeat the above operations for at least 2 diffraction spots. For every conditions, the angle between the proposed g-vectors and the already chosen g-vectors are indicated. Choose the <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> indices that minimize all the angles.</p>
@@ -977,9 +989,9 @@ In case of option 2, the <span><span class="MathJax_Preview">(hkl)</span><script
 <p>Using the <code>Data</code> menu, data can be imported and results exported. 
 Data sets are provided in a <code>.txt</code> file using the following scheme</p>
 <div class="codehilite"><pre><span></span># Diffraction data file 
-alpha_1,beta_1,theta_1,eta_1,h_1,k_1,l_1
+alpha_1,beta_1,theta_1,eta_1,h_1,k_1,l_1,epsilon_1
 ...
-alpha_N,beta_N,theta_N,eta_N,h_N,k_N,l_N
+alpha_N,beta_N,theta_N,eta_N,h_N,k_N,l_N,epsilon_N
 </pre></div>
 
 <p>Exporting data will write in a <code>.txt</code> file,  adding to the above datasets:</p>
@@ -996,8 +1008,11 @@ The two files can be combined in one as <code>#</code> sign will not be read dur
 <div class="footnote">
 <hr />
 <ol>
+<li id="fn:1">
+<p>if the diffraction is taking away from the three-beam condition, an extra rotation <span><span class="MathJax_Preview">R_x(\epsilon)</span><script type="math/tex">R_x(\epsilon)</script></span> applies, with <span><span class="MathJax_Preview">\epsilon = \theta_B+s/\|\vec{g}\|^2</span><script type="math/tex">\epsilon = \theta_B+s/\|\vec{g}\|^2</script></span>.&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
 <li id="fn:mackenzie">
-<p>J. Mackenzie, Acta Cryst. 1957, 10, 61.&#160;<a class="footnote-backref" href="#fnref:mackenzie" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>J. Mackenzie, Acta Cryst. 1957, 10, 61.&#160;<a class="footnote-backref" href="#fnref:mackenzie" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
