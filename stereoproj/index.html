@@ -780,15 +780,15 @@
                 
                   <h1>StereoProj</h1>
                 
-                <p><code>stereoproj</code> allows to work with stereographic projections.</p>
+                <p><strong>Stereoproj</strong> allows to work with stereographic projections.</p>
 <h2 id="stereographic-projections">Stereographic projections<a class="headerlink" href="#stereographic-projections" title="Permanent link">&para;</a></h2>
-<p>A stereographic projection is a type of projection that maps a unit sphere onto a plane. It is a conformal projection, which means it preserves the angles. Stereographic projections are often use for practical reason in crystallography to display symmetry elements. This is an essential tool for electron microscopists who want to analyze microstructures. Traditionally projections are drawn by hand with the help of a Wulff net.</p>
+<p>A stereographic projection is a type of projection that maps a unit sphere onto a plane. It is a conformal projection, which means it preserves the angles. Stereographic projections are often used for practical reason in crystallography to display symmetry elements. This is an essential tool for electron microscopists who want to analyze microstructures. Traditionally projections are drawn by hand with the help of a Wulff net.</p>
 <h3 id="construction">Construction<a class="headerlink" href="#construction" title="Permanent link">&para;</a></h3>
 <p>Let consider the south pole <span><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> of a sphere lying in a <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> coordinate system. A point <span><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> in the upper hemisphere of the sphere can be projected on <span><span class="MathJax_Preview">M'</span><script type="math/tex">M'</script></span> defined as the intersection between the line <span><span class="MathJax_Preview">MS</span><script type="math/tex">MS</script></span> and the equatorial plane, i.e the plane that cuts the sphere at <span><span class="MathJax_Preview">z=0</span><script type="math/tex">z=0</script></span>. </p>
 <p><img alt="" src="../images/stereo1.png" /></p>
 <div class="admonition info">
 <p class="admonition-title">Projection convention</p>
-<p>From a geometrical construction, points in the lower hemisphere (<span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> negative) do not appear. They can alternatively be projected on the plane from the north pole instead. Opposite 3D directions, will then have opposite coordinates in the projection planes. In <code>stereoproj</code>  we choose to discard points from the lower hemisphere.</p>
+<p>From a geometrical construction, points in the lower hemisphere (<span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> negative) do not appear. They can alternatively be projected on the plane from the north pole instead. Opposite 3D directions, will then have opposite coordinates in the projection planes. In <strong>Stereoproj</strong>,  we choose to discard points from the lower hemisphere.</p>
 </div>
 <p>From this construction, it results several important features:</p>
 <ul>
@@ -809,13 +809,13 @@
 </li>
 </ul>
 <h3 id="the-wulff-net">The Wulff net<a class="headerlink" href="#the-wulff-net" title="Permanent link">&para;</a></h3>
-<p>The Wulff net results from the projection of equally distributed planes called meridians and parallels <sup id="fnref:ang2"><a class="footnote-ref" href="#fn:ang2" rel="footnote">2</a></sup>. The first ones correspond to planes of a given tilt angle, the second corresponds to planes of a given inclination angle <sup id="fnref:ang3"><a class="footnote-ref" href="#fn:ang3" rel="footnote">3</a></sup>. In <code>stereoproj</code>, meridians and parallels can be displayed and are spaced every 2° with thicker lines every 10°.</p>
+<p>The Wulff net results from the projection of equally distributed planes called meridians and parallels <sup id="fnref:ang2"><a class="footnote-ref" href="#fn:ang2" rel="footnote">2</a></sup>. The first ones correspond to planes of a given tilt angle, the second corresponds to planes of a given inclination angle <sup id="fnref:ang3"><a class="footnote-ref" href="#fn:ang3" rel="footnote">3</a></sup>. In <strong>Stereoproj</strong>, meridians and parallels can be displayed and are spaced every 2° with thicker lines every 10°.</p>
 <p><img alt="" src="../images/stereo2.png" /></p>
 <blockquote>
-<p>Meridians and parallels forming a Wulff net. Definition of the inclination and tilt angles</p>
+<p>Meridians and parallels forming a Wulff net. Definition of the inclination and tilt angles.</p>
 </blockquote>
 <h3 id="euler-angles">Euler angles<a class="headerlink" href="#euler-angles" title="Permanent link">&para;</a></h3>
-<p>The orientation of a crystal can be set by 3 angles. Indeed given a direction, defined by two angles, the orientation can be fixed after rotating along this direction. A second standard definition of orientation is set by the Euler angles <span><span class="MathJax_Preview">(\varphi_1, \phi, \varphi_2)</span><script type="math/tex">(\varphi_1, \phi, \varphi_2)</script></span>. In crystallography, it is traditionally adopted, according to Bunge, that it corresponds to:</p>
+<p>The orientation of a crystal can be set by 3 angles. Indeed, given a direction, defined by two angles, the orientation can be fixed after rotating along this direction. A second standard definition of orientation is set by the Euler angles <span><span class="MathJax_Preview">(\varphi_1, \phi, \varphi_2)</span><script type="math/tex">(\varphi_1, \phi, \varphi_2)</script></span>. In crystallography, it is traditionally adopted, according to Bunge, that it corresponds to:</p>
 <ol>
 <li>
 <p>a rotation along the <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> of  axis <span><span class="MathJax_Preview">\varphi_1</span><script type="math/tex">\varphi_1</script></span></p>
@@ -874,7 +874,7 @@ u=R_y(\alpha)  [1,0,0]~^T
 <p>Top: rotation with fixed rotation axes, Bottom: rotation with a fixed <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> tilt and moving <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> tilt. Red and blue paths represent a switch in the tilt order.</p>
 </blockquote>
 </div>
-<p>Crystallographic feature analyses are carried out in a TEM using both diffraction and image mode. When the electrons passing through the specimen are focused in the back focal plane of the objective lens, they form a diffraction pattern which can be magnified in the projection plane where the pattern is recorded. Conversely, an image is formed in the first image plane of the objective lens, which can also be magnified in the projected lens. To switch from image to diffraction mode, the power of the objective lens has to be modified which induces an image rotation. To enlarge the pattern or the image, the effect of intermediate and projection lenses may also introduce rotations.
+<p>Crystallographic feature analyses are carried out in a TEM using both diffraction and image mode. When the electrons passing through the specimen are focused in the back focal plane of the objective lens, they form a diffraction pattern which can be magnified in the projection plane where the pattern is recorded. Conversely, an image is formed in the first image plane of the objective lens, which can also be magnified by the projection lenses. To switch from image to diffraction mode, the power of the objective lens has to be modified which induces an image rotation. To enlarge the pattern or the image, the effect of intermediate and projection lenses may also introduce rotations.
 For this reason, the holder coordinate system does not correspond to the coordinate system as viewed in the recorded image or diffraction patterns. Users need thus to determine the relation between the two.</p>
 <p><img alt="" src="../images/rotation-image-diff.png" /></p>
 <p>In image mode, the position of the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis with respect to the <span><span class="MathJax_Preview">Y</span><script type="math/tex">Y</script></span> axis, represented by an angle <span><span class="MathJax_Preview">\delta</span><script type="math/tex">\delta</script></span>, can be determined by pushing or pulling on the holder and recording the motion of features on the image.</p>
@@ -898,7 +898,7 @@ For this reason, the holder coordinate system does not correspond to the coordin
 <p><img alt="" src="../images/system.png" /></p>
 <div class="admonition info crystal metric">
 <p class="admonition-title">Info</p>
-<p>A crystal direction expressed by their Miller indices are related to Cartesian coordinates, in the crystal frame, by:</p>
+<p>A crystal direction expressed by their Miller indices are related to cartesian coordinates, in the crystal frame, by:</p>
 <div>
 <div class="MathJax_Preview"> 
 \begin{bmatrix}x\\ y \\ z \end{bmatrix}=D \begin{bmatrix}u \\ v \\ w \end{bmatrix}
@@ -977,7 +977,7 @@ Atom name2 x3 y3 z3
 <p>Example for a TiAl crystal</p>
 </blockquote>
 <h3 id="from-euler-angles">From Euler angles<a class="headerlink" href="#from-euler-angles" title="Permanent link">&para;</a></h3>
-<p>Stereographic projections can be drawn from the 3 Euler angles. The angles can be read at all time after rotation operations. Tilt and inclination angles can be read from the mouse position on  the Wulff net.</p>
+<p>Stereographic projections can be drawn from the 3 Euler angles. The angles can be read at all time after rotation operations. <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt and inclination angles can be read from the mouse position on  the Wulff net.</p>
 <p><img alt="" src="../images/euler_box.png" /></p>
 <h3 id="from-a-diffraction-vector">From a diffraction vector<a class="headerlink" href="#from-a-diffraction-vector" title="Permanent link">&para;</a></h3>
 <p>The orientation can be alternatively set the following way: </p>
@@ -1012,7 +1012,7 @@ For instance, if the <span><span class="MathJax_Preview">(1,1,1)</span><script t
 A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <p><img alt="" src="../images/plot_planes.png" /></p>
 <p>Iso-schmid factor lines can be plotted by specifying the plane in the pole/plane field and by pressing the <code>Schmid</code> button. The straining axis is here parallel to the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis. Further explanation will be given
-<a href="./#schmid-factor">here</a></p>
+<a href="./#schmid-factor">here</a>.</p>
 <p><img alt="" src="../images/iso-schmid.png" /></p>
 <p>Finally inter-reticular distances are given by entering a plane normal on the pole/plane field and by pressing <code>dhkl</code> button. The value appears in a field near the button.</p>
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
@@ -1022,13 +1022,13 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <p>Colors can be set for poles or planes plotted.  </p>
 </li>
 <li>
-<p>Open symbols can be drawn by ticking the <code>open/filled</code> box (default are filled symbols)</p>
+<p>Open symbols can be drawn by ticking the <code>open/filled</code> box (default are filled symbols).</p>
 </li>
 <li>
-<p>Wulff net can be drawn if the <code>Wulff net</code> box is ticked</p>
+<p>Wulff net can be drawn if the <code>Wulff net</code> box is ticked.</p>
 </li>
 <li>
-<p>Marker size and text size can be indicated in the corresponding fields</p>
+<p>Marker size and text size can be indicated in the corresponding fields.</p>
 </li>
 <li>
 <p><span><span class="MathJax_Preview">[uvw]</span><script type="math/tex">[uvw]</script></span> can be displayed by ticking the <code>uvw</code> box and replotting.</p>
@@ -1038,16 +1038,16 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <p>For hexagonal structure, the <code>hexa</code> box can be selected to let the 4 indices notations.</p>
 <div class="admonition info">
 <p class="admonition-title">Hexagonal structure and notation</p>
-<p>For hexagonal structure it is more convenient to represent directions or planes using a basis with 4 integer indices than using the conventional cartesian basis. This basis is composed of the 3 vectors <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> separated by 120° angles and the <span><span class="MathJax_Preview">\vec{c}</span><script type="math/tex">\vec{c}</script></span> perpendicular to the <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> vectors. Hence any directions is given by <span><span class="MathJax_Preview">[uvtw]</span><script type="math/tex">[uvtw]</script></span> with <span><span class="MathJax_Preview">t=-u-v</span><script type="math/tex">t=-u-v</script></span>. In the reciprocal space, a plane is represented by <span><span class="MathJax_Preview">(hkil)</span><script type="math/tex">(hkil)</script></span> with <span><span class="MathJax_Preview">i=-h-k</span><script type="math/tex">i=-h-k</script></span>.</p>
+<p>For hexagonal structure, it is more convenient to represent directions or planes using a basis with 4 integer indices than using the conventional cartesian basis. This basis is composed of the 3 vectors <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> separated by 120° angles and the <span><span class="MathJax_Preview">\vec{c}</span><script type="math/tex">\vec{c}</script></span> perpendicular to the <span><span class="MathJax_Preview">\vec{a}_i</span><script type="math/tex">\vec{a}_i</script></span> vectors. Hence any directions is given by <span><span class="MathJax_Preview">[uvtw]</span><script type="math/tex">[uvtw]</script></span> with <span><span class="MathJax_Preview">t=-u-v</span><script type="math/tex">t=-u-v</script></span>. In the reciprocal space, a plane is represented by <span><span class="MathJax_Preview">(hkil)</span><script type="math/tex">(hkil)</script></span> with <span><span class="MathJax_Preview">i=-h-k</span><script type="math/tex">i=-h-k</script></span>.</p>
 <p>Transforming indices from the 3 <span><span class="MathJax_Preview">(HKL)</span><script type="math/tex">(HKL)</script></span> indices to 4 (hkil) indices is straightforward for planes as <span><span class="MathJax_Preview">H=h</span><script type="math/tex">H=h</script></span>, <span><span class="MathJax_Preview">K=k</span><script type="math/tex">K=k</script></span>, <span><span class="MathJax_Preview">L=l</span><script type="math/tex">L=l</script></span>. For directions, <span><span class="MathJax_Preview">[UVW]</span><script type="math/tex">[UVW]</script></span> we have the relationships, <span><span class="MathJax_Preview">U=2u+v</span><script type="math/tex">U=2u+v</script></span>, <span><span class="MathJax_Preview">V=2v+u</span><script type="math/tex">V=2v+u</script></span> and <span><span class="MathJax_Preview">W=w</span><script type="math/tex">W=w</script></span> or <span><span class="MathJax_Preview">u=1/3(2U-V)</span><script type="math/tex">u=1/3(2U-V)</script></span>, <span><span class="MathJax_Preview">v=1/3(2V-U)</span><script type="math/tex">v=1/3(2V-U)</script></span> and <span><span class="MathJax_Preview">w=W</span><script type="math/tex">w=W</script></span>.</p>
-<p>Note that with the four indices notations, directions are perpendicular to plane normals (i.e. contain in a plane) if <span><span class="MathJax_Preview">(hkil)\cdot[uvtw]=0</span><script type="math/tex">(hkil)\cdot[uvtw]=0</script></span> as shown for instance below</p>
+<p>Note that with the four indices notations, directions are perpendicular to plane normals (i.e. contain in a plane) if <span><span class="MathJax_Preview">(hkil)\cdot[uvtw]=0</span><script type="math/tex">(hkil)\cdot[uvtw]=0</script></span> as shown for instance below.</p>
 <p>Note that for Euler angles convention, <span><span class="MathJax_Preview">\langle a \rangle</span><script type="math/tex">\langle a \rangle</script></span> is parallel to <span><span class="MathJax_Preview">x</span><script type="math/tex">x</script></span> and <span><span class="MathJax_Preview">\langle c \rangle</span><script type="math/tex">\langle c \rangle</script></span> is parallel to <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> at <span><span class="MathJax_Preview">(0,0,0)</span><script type="math/tex">(0,0,0)</script></span>.</p>
 <p><img alt="" src="../images/hexa.png" /></p>
 </div>
 <p>Except <code>uvw</code> and colors, the above features can be updated by clicking the <code>Update/Reset view</code> button.</p>
 <div class="admonition info">
 <p class="admonition-title">click a pole/directions</p>
-<p>By right clicking on the stereographic projection, poles or directions (if <code>uvw</code> is ticked) will be displayed. Make <code>Ctrl+z</code> to remove the last click</p>
+<p>By right clicking on the stereographic projection, poles or directions (if <code>uvw</code> is ticked) will be displayed. Make <code>Ctrl+z</code> to remove the last click.</p>
 </div>
 <h2 id="additional-features">Additional features<a class="headerlink" href="#additional-features" title="Permanent link">&para;</a></h2>
 <p>They are accessible from the menu bar.</p>
@@ -1059,10 +1059,10 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <h3 id="schmid-factor">Schmid factor<a class="headerlink" href="#schmid-factor" title="Permanent link">&para;</a></h3>
 <p>Schmid factors can be computed by entering both <span><span class="MathJax_Preview">\vec{b}</span><script type="math/tex">\vec{b}</script></span> (as a direction), plane normal <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> and straining axis <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span>. <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span> should be expressed in the holder coordinates before the <code>alpha-tilt/y angle</code> applies.</p>
 <p><img alt="" src="../images/SF.png" /></p>
-<p>After pressing <code>OK</code>, the Schmid factor appear below the the <span><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> field. In the box below appear all possible slip systems <code>n</code>, <code>b</code>, with their Schmid factor values <code>s</code>.</p>
+<p>After pressing <code>OK</code>, the Schmid factor appears below the the <span><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> field. In the box below appear all possible slip systems <code>n</code>, <code>b</code>, with their Schmid factor values <code>s</code>.</p>
 <div class="admonition info">
 <p class="admonition-title"> Schimd factor</p>
-<p>For a crystal strained along a tensile axis <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span> with a stress <span><span class="MathJax_Preview">\sigma</span><script type="math/tex">\sigma</script></span>, dislocation slip on plane <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with the Burgers vector <span><span class="MathJax_Preview">\vec{b}</span><script type="math/tex">\vec{b}</script></span> will appear if the resolved shear stress on the plane rises a critical value, i.e.
+<p>For a crystal strained along a tensile axis <span><span class="MathJax_Preview">\vec{T}</span><script type="math/tex">\vec{T}</script></span> with a stress <span><span class="MathJax_Preview">\sigma</span><script type="math/tex">\sigma</script></span>, dislocation slip on plane <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with the Burgers vector <span><span class="MathJax_Preview">\vec{b}</span><script type="math/tex">\vec{b}</script></span> will happen if the resolved shear stress on the plane rises a critical value, i.e.
 $$
  \tau_c=\sigma \cos {(\vec{n},\vec{T})} \cos{(\vec{b},\vec{T})}
 $$
@@ -1087,17 +1087,17 @@ Thus, the most favored slip system should be the one with the highest Schmid fac
 <p>Poles/directions can be hidden or shown by selecting the corresponding rows and by clicking on <code>Add/Remove selected</code> button. Then the signs <code>o</code> or <code>x</code> change.</p>
 <p>Planes or cones of the given poles/directions will be hidden/shown if the <code>plane</code> or <code>cone</code> box is checked. </p>
 <p>If the list is updated, then the hidden poles/directions are deleted.</p>
-<p>An easier navigation in the crystal space can be achieved by determining the tilt sequence to reach either a given two beam condition or a zone axis. The angles are indicated in the last table column when pressing the <code>Compute tilt</code> button.</p>
+<p>An easier navigation in the crystal space can be achieved by determining the tilt sequence to reach either a given two-beam condition or a zone axis. The angles are indicated in the last table column when pressing the <code>Compute tilt</code> button.</p>
 <p>If the <code>ZA</code> (zone axis) button is ticked, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt and either <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> tilt or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt needed to reach the corresponding zone axis are computed. The corresponding <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt button needs to be selected.</p>
-<p>If the <code>ZA</code> button is not selected, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> tilt angle needed to have a given pole/direction perpendicular to the electron beam (may correspond to a 2 beam condition) can be computed for a given <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angle.</p>
+<p>If the <code>ZA</code> button is not selected, the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> tilt angle needed to have a given pole/direction perpendicular to the electron beam (may correspond to a two-beam condition) can be computed for a given <span><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> or <span><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> tilt angle.</p>
 <p><img alt="" src="../images/stereo-list.png" /></p>
 <h3 id="width">Width<a class="headerlink" href="#width" title="Permanent link">&para;</a></h3>
-<p>Using <code>calculate apparent width</code> menu allows to plot the apparent width and apparent trace directions of an interface, when the sample is tilted along the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis from -40° to 40°. More precision on the method will be given in <a href="../interface/">interface</a>.</p>
+<p>Using <code>calculate apparent width</code> menu allows to plot the apparent width and apparent trace directions of an interface, when the sample is tilted along the <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt axis from -40° to 40°. More details on the method will be given in <a href="../interface/">interface</a>.</p>
 <p>First, indicate the <code>plane</code>. The foil surface may be indicated if the box right to the box is ticked. The sample <code>thickness</code> may be indicated in  nm if the box is checked . If not, the apparent width is normalized by the interface width <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. The <code>trace dir.</code> can be plotted if the box is checked with a blue overlay. Note that if several plots are made, which can be sometimes convenient, they will  be superimposed. To erase the plots, click the <code>clear</code> button.</p>
 <p><img alt="" src="../images/width.png" /></p>
 <h3 id="intersections">Intersections<a class="headerlink" href="#intersections" title="Permanent link">&para;</a></h3>
 <p>Several intersections can be calculated through the <code>calculate intersections</code> menu.
-In the different cases results will appear by pressing <code>OK</code>. Results shown correspond to poles except if the <code>directions</code> box is ticked.</p>
+In the different cases, results will appear by pressing <code>OK</code>. Results shown correspond to poles except if the <code>directions</code> box is ticked.</p>
 <ul>
 <li>
 <p>intersections between two planes <code>n1</code> and <code>n2</code>.</p>
@@ -1128,13 +1128,13 @@ In the different cases results will appear by pressing <code>OK</code>. Results 
 <p><code>Spot size</code> (arb. units) determining a scaling factor in the intensity</p>
 </li>
 <li>
-<p><code>Thckness</code> is the sample thickness in nm</p>
+<p><code>Thickness</code> is the sample thickness in nm</p>
 </li>
 <li>
 <p><code>Excitation error</code> in 1/nm</p>
 </li>
 </ul>
-<p>Click on <code>Diff calc.</code> button to compute the intensity of every reflexion (see <a href="../diffraction/">diffraction</a> for more details)</p>
+<p>Click on <code>Diff calc.</code> button to compute the intensity of every g-vector (see <a href="../diffraction/">diffraction</a> for more details)</p>
 <p>Click then on <code>OK</code> button to draw the diffraction pattern. Update the drawing by clicking <code>OK</code> if the orientation is changed.</p>
 <p>Tick the <code>label</code> box to show indices (for hexagonal crystal, 3 indices are used).</p>
 <div class="admonition info">
@@ -1159,7 +1159,7 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 </script>
 </div>
-<p>where <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> is the crystal thickness, <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> the extinction distance, which indicates how the diffracted electron wave oscillates through the crystal, and the <span><span class="MathJax_Preview">s_e= \sqrt{(s^2 + 1/\xi^2)}</span><script type="math/tex">s_e= \sqrt{(s^2 + 1/\xi^2)}</script></span> the effective excitation error.   </p>
+<p>where <span><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> is the crystal thickness, <span><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> the extinction distance, which indicates how the diffracted electron wave oscillates through the crystal, and <span><span class="MathJax_Preview">s_e= \sqrt{(s^2 + 1/\xi^2)}</span><script type="math/tex">s_e= \sqrt{(s^2 + 1/\xi^2)}</script></span> the effective excitation error.   </p>
 <p>For a given orientation, the excitation error <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> can be computed for every possible diffraction vectors, and then their corresponding intensity.</p>
 </div>
 <p><img alt="" src="../images/diffraction.png" /></p>
@@ -1183,7 +1183,7 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 <p>Tick the <code>label</code> box to show indices (for hexagonal crystal, 3 indices are used).</p>
 <div class="admonition info">
 <p class="admonition-title">Kikuchi band formation</p>
-<p>When inelastically scattered electrons are in Bragg condition, they will diffract, but because they can come from directions, they will be scattered in a cone around <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span>. As there are two diffraction directions (<span><span class="MathJax_Preview">\pm \vec{g}</span><script type="math/tex">\pm \vec{g}</script></span>), two cones will form, one being brighter and the other darker than the background. When hitting the observation screen, they will form pairs of lines which separation width is proportional to the inter-planar distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. Their projection is called gnomomic, i.e. a point of coordinate <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> will become <span><span class="MathJax_Preview">(X,Y)</span><script type="math/tex">(X,Y)</script></span> with <span><span class="MathJax_Preview">X = x/z</span><script type="math/tex">X = x/z</script></span> and <span><span class="MathJax_Preview">Y = y / z</span><script type="math/tex">Y = y / z</script></span>.</p>
+<p>When inelastically scattered electrons are in Bragg conditions, they will diffract, but because they can come from different directions, they will be scattered in a cone around <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span>. As there are two diffraction directions (<span><span class="MathJax_Preview">\pm \vec{g}</span><script type="math/tex">\pm \vec{g}</script></span>), two cones will form, one being brighter and the other darker than the background. When hitting the observation screen, they will form pairs of lines which separation width is proportional to the inter-planar distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. Their projection is called gnomomic, i.e. a point of coordinate <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> will become <span><span class="MathJax_Preview">(X,Y)</span><script type="math/tex">(X,Y)</script></span> with <span><span class="MathJax_Preview">X = x/z</span><script type="math/tex">X = x/z</script></span> and <span><span class="MathJax_Preview">Y = y / z</span><script type="math/tex">Y = y / z</script></span>.</p>
 <p>Here, to mimic the kinematical approximation, the line widths are proportional to the intensity of the corresponding diffraction vector and the intensity difference between the lines are not taken into account.</p>
 </div>
 <p><img alt="" src="../images/kikuchi.png" /></p>

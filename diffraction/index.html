@@ -616,10 +616,10 @@
                 
                   <h1>Diffraction</h1>
                 
-                <p><code>diffraction</code> allows to determine orientation from a set of diffraction patterns.</p>
+                <p><strong>Diffraction</strong> allows to determine orientation from a set of diffraction patterns.</p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>Determining orientation from diffraction patterns requires to collect and identify a set of diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>.
-When using this approach, we assume that the diffraction vector is in Bragg condition, which is fulfill at least in a two beam orientation. This often needs to tilt the specimen. Alternatively we present in <a href="../kikuchi/">Kikuchi</a> a method based on Kikuchi lines.</p>
+When using this approach, we assume that the diffraction vector is close to a Bragg condition, which is fulfill typically in a two-beam condition. This often needs to tilt the specimen. Alternatively we present in <a href="../kikuchi/">Kikuchi</a> a method based on Kikuchi lines.</p>
 <p>Consider an electronic wave scattered by a crystal plane <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> corresponding to a diffraction vector <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>. Its amplitude and phase is given by:</p>
 <div>
 <div class="MathJax_Preview">
@@ -646,7 +646,7 @@ I(\vec{q})=\Psi(\vec{q})\Psi^\ast(\vec{q})
 $$
 \sum_{j=1}^N e^{- 2i\pi (h \cdot x_j + k \cdot y_j  + l \cdot z_j)}=0
 $$
-For fcc cubic crystals, with atoms placed at <span><span class="MathJax_Preview">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</span><script type="math/tex">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity</p>
+For fcc cubic crystals, with atoms placed at <span><span class="MathJax_Preview">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</span><script type="math/tex">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity.</p>
 </div>
 <p>The atomic form factor <span><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> corresponds to the amplitude of the wave diffracting on a single atom. In the range of scattering vectors between <span><span class="MathJax_Preview">0\leq q \leq 25 \mathring{A}^{-1}</span><script type="math/tex">0\leq q \leq 25 \mathring{A}^{-1}</script></span>, the atomic form factor can be approximated by a Gaussian decomposition:</p>
 <div>
@@ -672,8 +672,8 @@ Atom name2 x3 y3 z3
 </pre></div>
 
 <h2 id="diffraction-pattern-in-tem">Diffraction pattern in TEM<a class="headerlink" href="#diffraction-pattern-in-tem" title="Permanent link">&para;</a></h2>
-<p>When a plane electronic wave is scattered by a crystal under a given orientation, a spot diffraction pattern is formed in the back focal plane of the objective lens. The spots correspond to different diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>, the intensity of the pattern depending both on the crystal lattice and its orientation (see <a href="../stereoproj/#diffraction">stereoproj</a>). In <code>diffraction</code>, we only use the structure factor as a guide to identify diffraction spots.  </p>
-<p>Thus, an electron wave traveling in the direction <span><span class="MathJax_Preview">-z</span><script type="math/tex">-z</script></span> will be diffracted by an angle <span><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> given by the Bragg law:</p>
+<p>When a plane electronic wave is scattered by a crystal under a given orientation, a spot diffraction pattern is formed in the back focal plane of the objective lens. The spots correspond to different diffraction vectors <span><span class="MathJax_Preview">\vec{q}</span><script type="math/tex">\vec{q}</script></span>, the intensity of the pattern depending both on the crystal lattice and its orientation (see <a href="../stereoproj/#diffraction">stereoproj</a>). In <strong>Diffraction</strong>, we only use the structure factor as a guide to identify diffraction spots.  </p>
+<p>Thus, an electron wave traveling in the direction <span><span class="MathJax_Preview">-z</span><script type="math/tex">-z</script></span> will be diffracted by an angle <span><span class="MathJax_Preview">2\theta_B</span><script type="math/tex">2\theta_B</script></span> given by the Bragg law:</p>
 <div>
 <div class="MathJax_Preview">
 2d \sin{\theta_B} = n \lambda
@@ -708,13 +708,13 @@ As a consequence, the pattern will depend on the acceleration voltage, through t
 <p>Pycotem allows to correct the orientation of a diffraction vector from a two-beam condition. See below.</p>
 </div>
 <h3 id="calibration-and-operating-conditions">Calibration and operating conditions<a class="headerlink" href="#calibration-and-operating-conditions" title="Permanent link">&para;</a></h3>
-<p>The diffraction pattern needs to be carefully calibrated on the microscope used. Use a crystal with known lattice parameters and record a diffraction pattern, ideally forming rows or a zone axis with a large value of <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>. For every camera length and acceleration voltage, measure <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> in pixels corresponding to <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> in angstrom.</p>
+<p>The diffraction pattern needs to be carefully calibrated on the microscope used. Use a crystal with known lattice parameters and record a diffraction pattern, ideally forming rows or a zone axis with a large value of <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span>. For every camera length and acceleration voltage, measure <span><span class="MathJax_Preview">r</span><script type="math/tex">r</script></span> in pixels corresponding to <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> in angstroms.</p>
 <p>The calibration are set in the <code>calibration.txt</code> file following the scheme:</p>
 <div class="codehilite"><pre><span></span>Microscope_name voltage camera length binning r.d
 ...
 </pre></div>
 
-<p>For <code>diffraction</code>,  only the value <span><span class="MathJax_Preview">r . d</span><script type="math/tex">r . d</script></span> is necessary, the other fields are informative.  </p>
+<p>For <strong>Diffraction</strong>,  both the value <span><span class="MathJax_Preview">r . d</span><script type="math/tex">r . d</script></span> and the acceleration voltage (in kV) are necessary, the other fields are informative.  </p>
 <h2 id="orientation-from-a-set-of-diffraction-vectors">Orientation from a set of diffraction vectors<a class="headerlink" href="#orientation-from-a-set-of-diffraction-vectors" title="Permanent link">&para;</a></h2>
 <p>If a set of diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> (see below regarding ambiguities). Given the direction <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> in the crystal <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> coordinates:</p>
 <div>
@@ -856,11 +856,11 @@ R=V U^T
 <p>The situation described on the left side of the figure below is ambiguous. In this case, the 180° rotation along <span><span class="MathJax_Preview">g_3</span><script type="math/tex">g_3</script></span> leads two different crystal orientations.
 On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along <span><span class="MathJax_Preview">(0\bar{1}1)</span><script type="math/tex">(0\bar{1}1)</script></span> is a crystal symmetry. </p>
 <p>Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. </p>
-<p>In <code>diffraction</code> ambiguous results can be detected.</p>
+<p>In <strong>Diffraction</strong> ambiguous results can be detected.</p>
 <p><img alt="" src="../images/ambiguity.png" /></p>
 </div>
 <h2 id="interface">Interface<a class="headerlink" href="#interface" title="Permanent link">&para;</a></h2>
-<p>The interface is composed of  a top bar menu, a plotting area to display diffraction pattern and a setting/results panel.</p>
+<p>The interface is composed of  a top bar menu, a plotting area to display diffraction patterns and a setting/results panel.</p>
 <p><img alt="" src="../images/diffraction-interface.png" /></p>
 <h2 id="procedure">Procedure<a class="headerlink" href="#procedure" title="Permanent link">&para;</a></h2>
 <h3 id="defining-the-crystal-structure">Defining the crystal structure<a class="headerlink" href="#defining-the-crystal-structure" title="Permanent link">&para;</a></h3>
@@ -921,7 +921,7 @@ The angles values are explained below.</p>
 <p>Fill the tilt angles fields.  Tick the box to indicate that rotation is anti-clockwise.</p>
 </li>
 <li>
-<p>Tick the <code>2-to-3 beams</code> check box if a correction from a 2-beam to a 3-beam condition is required (see <a href="./#diffraction-pattern-in-tem">above</a>). This leads to the evaluation of the out of plane angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span>.</p>
+<p>Tick the <code>2-to-3 beams</code> box if a correction from a 2-beam to a 3-beam condition is required (see <a href="./#diffraction-pattern-in-tem">above</a>). This leads to the evaluation of the out of plane angle <span><span class="MathJax_Preview">\epsilon</span><script type="math/tex">\epsilon</script></span>.</p>
 </li>
 <li>
 <p>Click and <code>Find diffraction spots</code></p>
