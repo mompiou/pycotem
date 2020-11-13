@@ -623,6 +623,10 @@ def draw_planes_dir():
 
     else:
         ui_draw.measure_label.clear()
+        sens = 1
+        if ui_draw.inv_checkBox.isChecked():
+            sens = -1
+
         if ui_draw.dir_checkBox.isChecked():
             if ui_draw.hexa_Button.isChecked():
                 na = 2 * nd[0] + nd[1]
@@ -635,8 +639,7 @@ def draw_planes_dir():
             dire = dire / np.linalg.norm(dire)
             dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
             b = np.array([0, 0, 1])
-            d_proj = (dire - np.dot(dire, b) * b) * t / np.dot(dire, s) / mag_conv
-
+            d_proj = sens * (dire - np.dot(dire, b) * b) * t / np.dot(dire, s) / mag_conv
             a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
             a.axis('off')
             if ui_draw.label_checkBox.isChecked():
@@ -650,7 +653,7 @@ def draw_planes_dir():
             plan = plan / np.linalg.norm(plan)
             plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
 
-            T = np.cross(plan, s)
+            T = sens * np.cross(plan, s)
             T = T / np.linalg.norm(T)
             w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
             xw = x - w * T[1] / np.sqrt(T[1]**2 + T[0]**2)

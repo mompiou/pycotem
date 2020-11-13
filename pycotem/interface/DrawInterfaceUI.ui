@@ -16,6 +16,13 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="0" rowspan="2">
+      <widget class="QLabel" name="plane_label">
+       <property name="text">
+        <string>Plane/Direction</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="3">
       <widget class="QCheckBox" name="surf_checkBox">
        <property name="text">
@@ -23,20 +30,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1" colspan="2">
-      <widget class="QLineEdit" name="plane_entry"/>
-     </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QCheckBox" name="label_checkBox">
        <property name="text">
         <string>label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="plane_label">
-       <property name="text">
-        <string>Plane/Direction</string>
        </property>
       </widget>
      </item>
@@ -47,7 +44,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="4">
+     <item row="7" column="0" colspan="4">
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="standardButtons">
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -61,28 +58,21 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
-      <widget class="QCheckBox" name="dir_checkBox">
-       <property name="text">
-        <string>dir.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
+     <item row="4" column="3">
       <widget class="QCheckBox" name="hexa_Button">
        <property name="text">
         <string>hexa</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QCheckBox" name="measure_checkBox">
        <property name="text">
         <string>measure</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="4">
+     <item row="6" column="0" colspan="4">
       <widget class="QLabel" name="measure_label">
        <property name="text">
         <string/>
@@ -98,22 +88,39 @@
      <item row="1" column="1" colspan="2">
       <widget class="QLineEdit" name="surface_entry"/>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QCheckBox" name="proj_image_checkBox">
        <property name="text">
         <string>proj. image</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="3">
+     <item row="5" column="3">
       <widget class="QCheckBox" name="scale_checkBox">
        <property name="text">
         <string>scale (nm)</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="5" column="2">
       <widget class="QLineEdit" name="scale_entry"/>
+     </item>
+     <item row="2" column="1" rowspan="2" colspan="2">
+      <widget class="QLineEdit" name="plane_entry"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QCheckBox" name="dir_checkBox">
+       <property name="text">
+        <string>dir.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QCheckBox" name="inv_checkBox">
+       <property name="text">
+        <string>inv</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -122,13 +129,16 @@
  <tabstops>
   <tabstop>thickness_entry</tabstop>
   <tabstop>surface_entry</tabstop>
-  <tabstop>plane_entry</tabstop>
   <tabstop>surf_checkBox</tabstop>
+  <tabstop>plane_entry</tabstop>
   <tabstop>dir_checkBox</tabstop>
+  <tabstop>inv_checkBox</tabstop>
   <tabstop>label_checkBox</tabstop>
   <tabstop>measure_checkBox</tabstop>
   <tabstop>hexa_Button</tabstop>
-  <tabstop>buttonBox</tabstop>
+  <tabstop>proj_image_checkBox</tabstop>
+  <tabstop>scale_entry</tabstop>
+  <tabstop>scale_checkBox</tabstop>
  </tabstops>
  <resources/>
  <connections/>
