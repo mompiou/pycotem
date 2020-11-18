@@ -91,7 +91,7 @@ def reset_last_point():
 
 
 def reset_points():
-    global image_diff, gclick, s, minx, maxx, miny, maxy
+    global image_diff, gclick, s, minx, maxx, miny, maxy, D_p
 
     a = figure.add_subplot(111)
     a.figure.clear()
@@ -105,7 +105,7 @@ def reset_points():
     a.figure.canvas.draw()
     s = 1
     gclick = np.zeros((1, 2))
-
+    D_p = np.zeros(9)
     return s, gclick
 
 ######################
@@ -116,7 +116,7 @@ def reset_points():
 
 
 def reset():
-    global image_diff, gclick, s, minx, maxx, miny, maxy
+    global image_diff, gclick, s, minx, maxx, miny, maxy, D_p
 
     a = figure.add_subplot(111)
     a.figure.clear()
@@ -130,6 +130,7 @@ def reset():
     miny = height
     maxy = 0
     a.axis([minx, maxx, miny, maxy])
+    D_p = np.zeros(9)
     for i in range(1, gclick.shape[0]):
         a.annotate(str(i), (gclick[i, 0], gclick[i, 1]))
     a.plot(gclick[1:, 0], gclick[1:, 1], 'b+')
@@ -543,8 +544,51 @@ def get_normal():
 ################################
 
 
+def plot_dir_planes():
+    global D_p, minx, miny, maxx, maxy, image_diff
+    a = figure.add_subplot(111)
+    a.figure.clear()
+    a = figure.add_subplot(111)
+    img = Image.open(str(image_diff[0]))
+    img = np.array(img)
+    figure.suptitle(str(image_diff[0]))
+    a.imshow(img, origin="upper")
+    a.axis([minx, maxx, miny, maxy])
+    a.axis('off')
+
+    for i in range(1, D_p.shape[0]):
+        if D_p[i, 8] == 1:
+            a.plot([D_p[i, 2], D_p[i, 2] + D_p[i, 0]], [D_p[i, 3], D_p[i, 3] - D_p[i, 1]], 'r-')
+            if ui_draw.label_checkBox.isChecked():
+                st = str(np.float(D_p[i, 5])) + ',' + str(np.float(D_p[i, 6])) + ',' + str(np.float(D_p[i, 7]))
+                a.annotate(st, (D_p[i, 2] + D_p[i, 0], D_p[i, 3] - D_p[i, 1]))
+            a.axis('off')
+
+        else:
+            xw = D_p[i, 3] - D_p[i, 2] * D_p[i, 1] / np.sqrt(D_p[i, 1]**2 + D_p[i, 0]**2)
+            yw = D_p[i, 4] - D_p[i, 2] * D_p[i, 0] / np.sqrt(D_p[i, 1]**2 + D_p[i, 0]**2)
+
+            a.plot([D_p[i, 3] - 100 * D_p[i, 0], D_p[i, 3] + 100 * D_p[i, 0]], [D_p[i, 4] + 100 * D_p[i, 1], D_p[i, 4] - 100 * D_p[i, 1]], 'b-')
+            a.plot([xw - 100 * D_p[i, 0], xw + 100 * D_p[i, 0]], [yw + 100 * D_p[i, 1], yw - 100 * D_p[i, 1]], 'g-')
+            a.plot([D_p[i, 3], xw], [D_p[i, 4], yw], 'r-')
+            a.axis('off')
+
+            if ui_draw.label_checkBox.isChecked():
+                st = str(np.float(D_p[i, 5])) + ',' + str(np.float(D_p[i, 6])) + ',' + str(np.float(D_p[i, 7]))
+                angp = np.arctan2(D_p[i, 1], D_p[i, 0]) * 180 / np.pi
+                a.annotate(st, (xw, yw), rotation=angp, ha='center', va='center')
+
+    a.figure.canvas.draw()
+
+
+def undo_plot_dir_planes():
+    global D_p
+    D_p = D_p[:-1, :]
+    plot_dir_planes()
+
+
 def draw_planes_dir():
-    global gclick, minx, miny, maxx, maxy, image_diff
+    global gclick, minx, miny, maxx, maxy, image_diff, D_p
 
     t = np.float(ui_draw.thickness_entry.text())
     s_a, s_b, s_z = tilt_axes()
@@ -640,12 +684,7 @@ def draw_planes_dir():
             dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
             b = np.array([0, 0, 1])
             d_proj = sens * (dire - np.dot(dire, b) * b) * t / np.dot(dire, s) / mag_conv
-            a.plot([x, x + d_proj[0]], [y, y - d_proj[1]], 'r-')
-            a.axis('off')
-            if ui_draw.label_checkBox.isChecked():
-                st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-                a.annotate(st, (x + d_proj[0], y - d_proj[1]))
-            a.figure.canvas.draw()
+            D_p = np.vstack((D_p, np.array([d_proj[0], d_proj[1], x, y, nd[0], nd[1], nd[2], 0, 1])))
 
         else:
             plan = np.dot(Dstar, nd)
@@ -656,19 +695,7 @@ def draw_planes_dir():
             T = sens * np.cross(plan, s)
             T = T / np.linalg.norm(T)
             w = plan[2] * t / np.sqrt((1 - np.dot(plan, s)**2) * (1 - T[2]**2)) / mag_conv
-            xw = x - w * T[1] / np.sqrt(T[1]**2 + T[0]**2)
-            yw = y - w * T[0] / np.sqrt(T[1]**2 + T[0]**2)
-
-            a.plot([x - 100 * T[0], x + 100 * T[0]], [y + 100 * T[1], y - 100 * T[1]], 'b-')
-            a.plot([xw - 100 * T[0], xw + 100 * T[0]], [yw + 100 * T[1], yw - 100 * T[1]], 'g-')
-            a.plot([x, xw], [y, yw], 'r-')
-            a.axis('off')
-
-            if ui_draw.label_checkBox.isChecked():
-                st = str(np.float(nd[0])) + ',' + str(np.float(nd[1])) + ',' + str(np.float(nd[2]))
-                angp = np.arctan2(T[1], T[0]) * 180 / np.pi
-                a.annotate(st, (xw, yw), rotation=angp)
-            a.figure.canvas.draw()
+            D_p = np.vstack((D_p, np.array([T[0], T[1], w, x, y, nd[0], nd[1], nd[2], 0])))
 
             if ui_draw.proj_image_checkBox.isChecked():
 
@@ -692,6 +719,7 @@ def draw_planes_dir():
                 a_stretched.set_facecolor('m')
                 a_stretched.figure.canvas.draw()
                 Stretched.show()
+        plot_dir_planes()
 
 
 #########################
@@ -702,7 +730,7 @@ def draw_planes_dir():
 
 
 def open_image():
-    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move
+    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move, D_p
     press = False
     move = False
     a = figure.add_subplot(111)
@@ -719,6 +747,7 @@ def open_image():
     a.figure.canvas.draw()
     s = 1
     gclick = np.zeros((1, 2))
+    D_p = np.zeros(9)
     ui.euler_Listbox.clear()
     minx = 0
     maxx = width
@@ -900,6 +929,7 @@ if __name__ == "__main__":
     ui.image_angle_entry.setText('0')
     s = 1
     gclick = np.zeros((1, 2))
+    D_p = np.zeros(9)
 
     file_struct = open(os.path.join(os.path.dirname(__file__), 'structure.txt'), "r")
 
@@ -936,9 +966,9 @@ if __name__ == "__main__":
         ui.micro_box.addItem(x_micro[i][0])
 
     f_micro.close()
-# Ctrl+z shortcut to remove clicked pole
+# Ctrl+w shortcut to remove clicked pole
 
-    shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+z"), Interface)
+    shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+w"), Interface)
     shortcut.activated.connect(reset_last_point)
 
     ui.actionSave_figure.triggered.connect(open_image)
@@ -955,6 +985,8 @@ if __name__ == "__main__":
     ui.add_condition_button.clicked.connect(add_condition)
     ui.remove_condition_button.clicked.connect(remove_condition)
     ui.normal_button.clicked.connect(get)
+    shortcut_plot = QtWidgets .QShortcut(QtGui.QKeySequence("Ctrl+w"), Draw)
+    shortcut_plot.activated.connect(undo_plot_dir_planes)
 
     Interface.show()
     sys.exit(app.exec_())
