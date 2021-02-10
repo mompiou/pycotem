@@ -710,7 +710,7 @@ value +/- in  px or nm
 <p>Errors are computed using the <em>bootstrap method</em>. Starting from the set of data <span><span class="MathJax_Preview">(\vec{b}_{ei}, \eta_i)</span><script type="math/tex">(\vec{b}_{ei}, \eta_i)</script></span> or  <span><span class="MathJax_Preview">(\vec{b}_{ei}, w_i)</span><script type="math/tex">(\vec{b}_{ei}, w_i)</script></span>, to estimate the trace direction and normal, respectively, the data sets were resampled and estimated traces and normals were determined using the equation above. The 95% confidence interval was calculated from the 92th percentile of deviation of the trace and normal. This indicates that the normal should stay in a cone centered around <span><span class="MathJax_Preview">\vec{n}</span><script type="math/tex">\vec{n}</script></span> with a deviation of <span><span class="MathJax_Preview">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</span><script type="math/tex">\Delta\theta=\widehat{(\vec{n},\vec{n}'_{0.95})}</script></span>. </p>
 <p>The same procedure is carried out also in case of the measurement of  direction which leads to <span><span class="MathJax_Preview">\Delta\theta=\widehat{(\vec{l},\vec{l}'_{0.95})}</span><script type="math/tex">\Delta\theta=\widehat{(\vec{l},\vec{l}'_{0.95})}</script></span>. </p>
 <p>Note that for some configurations, the confidence interval may be excessively large due to spurious resampling. Adding multiple data, ie. several measurements will prevent from this effect.</p>
-<p>The sample thickness can be estimated from:</p>
+<p>The sample thickness can be estimated from <sup id="fnref:thickness"><a class="footnote-ref" href="#fn:thickness" rel="footnote">1</a></sup>:</p>
 <div>
 <div class="MathJax_Preview">
 t=d\sqrt{1-(\vec{n}\cdot\vec{s})^2}=d\vec{l}\cdot\vec{s}
@@ -781,7 +781,7 @@ t=d\sqrt{1-(\vec{n}\cdot\vec{s})^2}=d\vec{l}\cdot\vec{s}
 </li>
 </ul>
 <p><img alt="" src="../images/interface-measure.png" /></p>
-<p>If the <code>proj. image</code> is checked, a stretched image is displayed. It corresponds to the image in the indicated plane. It allows to make directly measurement in this image without perspective effects. A <code>scale</code> of a given length can be added. </p>
+<p>If the <code>proj. image</code> is checked, a stretched image is displayed. It corresponds to the image in the indicated plane. It allows to make directly measurement in this image without perspective effects. A <code>scale</code> of a given length can be added.  In the <code>draw window</code> is also indicated a rotation and stretch coefficient.</p>
 <p><img alt="" src="../images/interface-stretched.png" /></p>
 <h2 id="importexport-data">Import/Export data<a class="headerlink" href="#importexport-data" title="Permanent link">&para;</a></h2>
 <p>Using the <code>Data</code> menu, data can be imported and results exported. 
@@ -827,6 +827,14 @@ w_N(or l_N), eta_N,alpha_N,beta_N,theta_N
 # t
 </pre></div>
 The two files can be combined in one as <code>#</code> sign will not be read during import.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:thickness">
+<p>i.e. given a plane apparent width <span><span class="MathJax_Preview">t=w \large| \frac{\sin(\vec{b}_e,\vec{t}) \sin(\vec{n},\vec{s})}{\cos(\vec{n},\vec{b}_e)}\large|</span><script type="math/tex">t=w \large| \frac{\sin(\vec{b}_e,\vec{t}) \sin(\vec{n},\vec{s})}{\cos(\vec{n},\vec{b}_e)}\large|</script></span> or given a projected length <span><span class="MathJax_Preview">t=l \large|\frac{\cos (\vec{l},\vec{s})}{\cos(\vec{l_p},\vec{l})} \large|</span><script type="math/tex">t=l \large|\frac{\cos (\vec{l},\vec{s})}{\cos(\vec{l_p},\vec{l})} \large|</script></span>&#160;<a class="footnote-backref" href="#fnref:thickness" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 
