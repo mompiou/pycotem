@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1403</width>
-    <height>879</height>
+    <height>884</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -771,7 +771,7 @@
      <x>0</x>
      <y>0</y>
      <width>1403</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">
@@ -828,6 +828,12 @@
     </property>
     <addaction name="actionShow_list_of_poles_directions"/>
    </widget>
+   <widget class="QMenu" name="menuIPF">
+    <property name="title">
+     <string>IPF</string>
+    </property>
+    <addaction name="actiondraw_IPF"/>
+   </widget>
    <addaction name="menuSave"/>
    <addaction name="menuStructure"/>
    <addaction name="menuAngle"/>
@@ -837,6 +843,7 @@
    <addaction name="menuWidth"/>
    <addaction name="menuIntersections"/>
    <addaction name="menuDiffraction"/>
+   <addaction name="menuIPF"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave_figure">
@@ -897,6 +904,11 @@
   <action name="actionShow_list_of_poles_directions">
    <property name="text">
     <string>show list of poles/directions</string>
+   </property>
+  </action>
+  <action name="actiondraw_IPF">
+   <property name="text">
+    <string>draw IPF</string>
    </property>
   </action>
  </widget>

@@ -20,7 +20,16 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-from . import stereoprojUI, intersectionsUI, angleUI, schmidUI, xyzUI, hkl_uvwUI, widthUI, kikuchiUI, listUI
+from . import stereoprojUI
+from . import intersectionsUI
+from . import angleUI
+from . import schmidUI
+from . import xyzUI
+from . import hkl_uvwUI
+from . import widthUI
+from . import kikuchiUI
+from . import listUI
+from . import ipfUI
 
 
 ################
@@ -771,17 +780,9 @@ def undo_pole(pole1, pole2, pole3):
 
 
 def d(pole1, pole2, pole3):
-    global M, axes, axesh, T, V, D, Dstar
-    abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
-    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float(alphabetagamma[0]) * np.pi / 180
-    beta = np.float(alphabetagamma[1]) * np.pi / 180
-    gamma = np.float(alphabetagamma[2]) * np.pi / 180
-    G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
-    ds = (np.sqrt(np.dot(np.array([pole1, pole2, pole3]), np.dot(np.linalg.inv(G), np.array([pole1, pole2, pole3])))))
+    global Dstar
+    G = np.dot(Dstar.T, Dstar)
+    ds = (np.sqrt(np.dot(np.array([pole1, pole2, pole3]), np.dot(G, np.array([pole1, pole2, pole3])))))
     return ds
 
 
@@ -1479,6 +1480,13 @@ def dhkl():
     gam = np.float(alphabetagamma[2]) * np.pi / 180
     G = np.array([[a**2, a * b * np.cos(gam), a * c * np.cos(bet)], [a * b * np.cos(gam), b**2, b * c * np.cos(alp)], [a * c * np.cos(bet), b * c * np.cos(alp), c**2]])
     d = np.around(1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k]))))), decimals=3)
+    if var_uvw() == 1:
+        if var_hexa() == 1:
+            Aa = 2 * i + j
+            Ab = 2 * j + i
+            i = Aa
+            j = Ab
+        d = np.around((np.sqrt(np.dot(np.array([i, j, k]), np.dot(G, np.array([i, j, k]))))), decimals=3)
     ui.dhkl_label.setText(str(d))
     return
 
@@ -2669,6 +2677,497 @@ def plot_kikuchi():
 
     a_k.figure.canvas.draw()
 
+############################
+#
+# IPF
+#
+#############################
+
+
+def draw_triangle():
+    global O, bords, Dstar, a_t, axes_triangle, axesh_triangle, coins, axes_plane_triangle, axesh_plane_triangle, axes_triangle_list, planes_triangle_list
+
+    axes_triangle = np.array([[0, 0, 0]])
+    axesh_triangle = np.array([[0, 0, 0, 0, 0]])
+    axes_plane_triangle = np.array([[0, 0, 0]])
+    axesh_plane_triangle = np.array([[0, 0, 0, 0, 0]])
+    axes_triangle_list = np.array([[0, 0, 0]])
+    planes_triangle_list = np.array([[0, 0, 0]])
+    ui_ipf.pole_comboBox.clear()
+    ui_ipf.plane_comboBox.clear()
+
+    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+    alp = np.float(alphabetagamma[0])
+    bet = np.float(alphabetagamma[1])
+    gam = np.float(alphabetagamma[2])
+    abc = ui.abc_entry.text().split(",")
+    a = np.float(abc[0])
+    b = np.float(abc[1])
+    c = np.float(abc[2])
+    O = np.identity(3)
+    Ds = Dstar * 1e-10
+    # 7 crystal systems
+    if a != b != c and alp == bet == 90 and gam != alp and gam != 120:  # monoclinic
+        bords = np.array([[0, 0, 1, 0, np.pi], [1, 0, 0, -np.pi, np.pi]])
+        coins = np.array([[0, 1, 0], [0, 0, 1]])
+
+    elif a != b != c and alp == bet == gam == 90:  # orthorhombic
+        coins = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        bords = np.array([[0, 0, 1, 0, np.pi / 2], [1, 0, 0, -np.pi / 2, 0], [0, 1, 0, -np.pi, -np.pi / 2]])
+
+    elif a == b != c and alp == bet == gam == 90:  # tetra
+        coins = np.array([[1, 0, 0], [1, 1, 0], [0, 0, 1]])
+        bords = np.array([[1, -1, 0, -np.pi / 2, 0], [0, 1, 0, -np.pi, -np.pi / 2], [0, 0, 1, np.pi / 4, np.pi / 2]])
+
+    elif a == b == c and alp == bet == gam == 90:  # cubic
+        coins = np.array([[1, 0, 1], [1, 1, 1], [0, 0, 1]])
+        bords = np.array([[1, -1, 0, -35.2644 * np.pi / 180, -np.pi / 2], [0, 1, 0, -np.pi / 2, -3 * np.pi / 4], [-1, 0, 1, -np.pi + 54.7356 * np.pi / 180, -np.pi / 2]])
+
+    elif a == b != c and alp == bet == 90 and gam == 120:  # hexa
+        coins = np.array([[2, -1, 0], [1, 0, 0], [0, 0, 1]])
+        bords = np.array([[0, 1, 0, -np.pi, -np.pi / 2], [1, -2, 0, -np.pi / 2, 0], [0, 0, 1, np.pi / 2, np.pi / 3]])
+        bords[:, 0:3] = np.dot(O, np.dot(Ds, bords[:, 0:3].T)).T
+
+    elif a == b == c and alp == bet == gam != 90:  # trigonal
+
+        O = np.array([[1, -1, 1], [1, 1, 1], [-2, 0, 1]])
+        O = np.dot(Ds, O)
+        O = (O / np.linalg.norm(O, axis=0)).T
+        coins = np.array([[1, 1, -2], [-1, 2, -1], [1, 1, 1]])
+        bords = np.array([[1, 0, -1, -np.pi / 2, 0], [1, 1, 1, np.pi / 6, np.pi / 2], [-1, 1, 0, -np.pi, -np.pi / 2]])
+        bords[:, 0:3] = np.dot(O, np.dot(Ds, bords[:, 0:3].T)).T
+
+    else:  # triclinic
+        coins = np.array([[0, 0, 1]])
+        bords = np.array([[0, 0, 1, -np.pi, np.pi]])
+
+    trace_triangle()
+
+
+def trace_triangle():
+    global coins, bord, axes_triangle, axesh_triangle, O, a_t, Dstar, D
+
+    a_t = figure_ipf.add_subplot(111)
+    a_t.clear()
+    a_t = figure_ipf.add_subplot(111)
+    Ds = Dstar * 1e-10
+    Dss = D * 1e10
+    co = coins
+    if var_uvw() == 1:
+        if var_hexa() == 1:
+            pole1 = 2 * coins[:, 0] + coins[:, 1]
+            pole2 = 2 * coins[:, 1] + coins[:, 0]
+            co = np.array([pole1, pole2, coins[:, 2]]).T
+
+    for i in range(0, bords.shape[0]):
+        trace_bord(bords[i, 0:3], bords[i, 3], bords[i, 4])
+
+    axesh = np.zeros((coins.shape[0], coins.shape[1] + 2))
+    P = np.zeros((coins.shape[0], 2))
+    if ui_ipf.Show_label_checkBox.isChecked():
+        for i in range(0, coins.shape[0]):
+            if var_uvw() == 0:
+                axesh[i, 0:3] = np.dot(Ds, co[i, :]) / np.linalg.norm(np.dot(Ds, co[i, :]))
+            else:
+                axesh[i, 0:3] = np.dot(Dss, co[i, :]) / np.linalg.norm(np.dot(Dss, co[i, :]))
+                axesh[i, 3] = 1
+
+            axesh[i, 0:3] = np.dot(O, axesh[i, 0:3])
+            s = text_label(co[i, :], axesh[i, :])
+            P[i, :] = proj(axesh[i, 0], axesh[i, 1], axesh[i, 2]) * 300
+            if P[i, 0] < 10:
+                a_t.annotate(s, (P[i, 0] + 300, P[i, 1] + 300), horizontalalignment='right')
+            else:
+                a_t.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+
+        a_t.scatter(P[:, 0] + 300, P[:, 1] + 300, c='black', s=5)
+
+    if axes_triangle.shape[1] > 1:
+        C = []
+        P = np.zeros((axes_triangle.shape[0], 2))
+        T = np.zeros((axes_triangle.shape))
+        for i in range(1, axes_triangle.shape[0]):
+            axeshr_triangle = np.array([axesh_triangle[i, 0], axesh_triangle[i, 1], axesh_triangle[i, 2]])
+            T[i, :] = np.dot(O, axeshr_triangle)
+            P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
+            if ui_ipf.Show_label_checkBox.isChecked():
+                s = text_label(axes_triangle[i, :], axesh_triangle[i, :])
+                a_t.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+            if axesh_triangle[i, 4] == 0:
+                C.append('b')
+            elif axesh_triangle[i, 4] == 1:
+                C.append('r')
+            else:
+                C.append('g')
+
+        a_t.scatter(P[1:, 0] + 300, P[1:, 1] + 300, c=C, s=20)
+
+    if axes_plane_triangle.shape[1] > 1:
+        for i in range(1, axes_plane_triangle.shape[0]):
+            Q = trace_plane_triangle(axes_plane_triangle[i, :])
+            if ui_ipf.Show_label_checkBox.isChecked():
+                s = text_label(axes_plane_triangle[i, :], axesh_plane_triangle[i, :])
+                r = int(Q.shape[0] / 2)
+                if Q.shape[0] > 3:
+                    ang = np.arctan2(Q[r + 1, 1] - Q[r - 1, 1], Q[r + 1, 0] - Q[r - 1, 0]) * 180 / np.pi
+                else:
+                    ang = 0
+                a_t.annotate(s, (Q[r, 0] + 300, Q[r, 1] + 300), rotation=ang, va='center', ha='right')
+            if axesh_plane_triangle[i, 4] == 0:
+                a_t.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'b-')
+            elif axesh_plane_triangle[i, 4] == 1:
+                a_t.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'r-')
+            else:
+                a_t.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'g-')
+
+    a_t.figure.canvas.draw()
+    a_t.axis("off")
+    a_t.set_aspect('equal')
+    a_t.figure.canvas.draw()
+
+
+def trace_bord(S, t1, t2):
+    global a_t
+    S[np.abs(S) < 1e-8] = 0
+    r = np.sqrt(S[0]**2 + S[1]**2 + S[2]**2)
+    A = np.zeros((2, 100))
+    Q = np.zeros((1, 2))
+    t = np.arctan2(S[1], S[0]) * 180 / np.pi
+    w = 0
+    ph = np.arccos(S[2] / r) * 180 / np.pi
+    for g in np.linspace(t1, t2, 100):
+        Aa = np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g), np.cos(g), 0])))
+        if np.sign(Aa[2]) < 0 and np.abs(Aa[2]) < 1e-8:
+            Aa = -Aa
+        A[:, w] = proj(Aa[0], Aa[1], Aa[2]) * 300
+        Q = np.vstack((Q, A[:, w]))
+        w = w + 1
+
+    Q = np.delete(Q, 0, 0)
+    Q = Q[~np.isnan(Q).any(axis=1)]
+    a_t.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'black')
+
+
+def trace_plane_triangle(S):
+    global bords, Dstar, axes_plane_triangle, axesh_plane_triangle, planes_triangle_list
+    S = S / np.linalg.norm(S)
+    S = np.dot(Dstar, S)
+    S = np.dot(O, S)
+    if S[2] < 0:
+        S = -S
+
+    n = np.cross(S, bords[:, 0:3])
+    n_p = np.zeros((n.shape[0], 2))
+    for i in range(0, n.shape[0]):
+        if np.sign(n[i, 2]) < 0:
+            n[i, :] = -n[i, :]
+        n[i, :] = n[i, :] / np.linalg.norm(n[i, :])
+        n_p[i, :] = proj(n[i, 0], n[i, 1], n[i, 2])
+
+    r = np.sqrt(S[0]**2 + S[1]**2 + S[2]**2)
+    A = np.zeros((2, 100))
+    Q = np.zeros((1, 2))
+    t = np.arctan2(S[1], S[0]) * 180 / np.pi
+    w = 0
+    ph = np.arccos(S[2] / r) * 180 / np.pi
+    for g in np.linspace(-np.pi, np.pi, 100):
+        Aa = np.dot(Rot(t, 0, 0, 1), np.dot(Rot(ph, 0, 1, 0), np.array([np.sin(g), np.cos(g), 0])))
+        if np.sign(Aa[2]) < 0 and np.abs(Aa[2]) < 1e-8:
+            Aa = -Aa
+
+        s = np.dot(bords[:, 0:3], Aa)
+        s[np.abs(s) < 1e-6] = 0
+        if (np.all(np.sign(s) >= 0)):
+            A[:, w] = proj(Aa[0], Aa[1], Aa[2]) * 300
+            Q = np.vstack((Q, A[:, w]))
+            w = w + 1
+
+    Q = np.delete(Q, 0, 0)
+    Q = Q[~np.isnan(Q).any(axis=1)]
+
+    if Q.shape[0] > 1:
+        b1 = np.linalg.norm(Q[-1:, :] - n_p * 300, axis=1)
+        b1p = np.linalg.norm(Q[-1:, :] + n_p * 300, axis=1)
+        if np.min(b1) < np.min(b1p):
+            a1 = np.argmin(b1)
+            Q = np.vstack((Q, n_p[a1, :] * 300))
+        else:
+            a1p = np.argmin(b1p)
+            Q = np.vstack((Q, -n_p[a1p, :] * 300))
+        b2 = np.linalg.norm(Q[0, :] - n_p * 300, axis=1)
+        b2p = np.linalg.norm(Q[0, :] + n_p * 300, axis=1)
+
+        if np.min(b2) < np.min(b2p):
+            a2 = np.argmin(b2)
+            Q = np.vstack((n_p[a2, :] * 300, Q))
+        else:
+            a2p = np.argmin(b2p)
+            Q = np.vstack((-n_p[a2p, :] * 300, Q))
+
+    return Q
+
+
+def pole_triangle(pole1, pole2, pole3):
+    global axes_triangle, axesh_triangle, bords, Dstar, O, axes_triangle_list, planes_triangle_list
+    if var_hexa() == 1:
+        if var_uvw() == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1 = pole1a
+            pole2 = pole2a
+
+    Gs = np.array([pole1, pole2, pole3], float)
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3 and np.abs(m) != 1:
+        pole1, pole2, pole3 = Gs / m
+
+    if var_uvw() == 1:
+        Gsh = np.dot(D, Gs) / np.linalg.norm(np.dot(D, Gs))
+    else:
+        Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+
+    S = np.dot(O, Gsh)
+    s = np.dot(bords[:, 0:3], S)
+    s[np.abs(s) < 1e-6] = 0
+
+    if np.all(np.sign(s) <= 0):
+        Gsh = -Gsh
+        pole1 = -pole1
+        pole2 = -pole2
+        pole3 = -pole3
+        s = -s
+
+    if not(np.all(np.sign(s) >= 0)):
+        return
+
+    if ui_ipf.blue_Button.isChecked():
+        c = 0
+    elif ui_ipf.red_Button.isChecked():
+        c = 1
+    else:
+        c = 2
+
+    axes_triangle = np.vstack((axes_triangle, np.array([pole1, pole2, pole3])))
+
+    if var_uvw() == 1:
+        axesh_triangle = np.vstack((axesh_triangle, np.array([Gsh[0], Gsh[1], Gsh[2], 1, c])))
+        if var_hexa() == 1:
+            axes_triangle_list = np.vstack((axes_triangle_list, np.array([(2 * pole1 - pole2) / 3, (2 * pole2 - pole1) / 3, pole3])))
+        else:
+            axes_triangle_list = np.vstack((axes_triangle_list, np.array([pole1, pole2, pole3])))
+
+    else:
+        axesh_triangle = np.vstack((axesh_triangle, np.array([Gsh[0], Gsh[1], Gsh[2], 0, c])))
+        axes_triangle_list = np.vstack((axes_triangle_list, np.array([pole1, pole2, pole3])))
+
+
+def plane_triangle(pole1, pole2, pole3):
+    global axes_plane_triangle, axesh_plane_triangle, bords, Dstar, O, planes_triangle_list, Q
+
+    Gs = np.array([pole1, pole2, pole3])
+    Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3 and np.abs(m) != 1:
+        pole1, pole2, pole3 = Gs / m
+
+    if ui_ipf.blue_Button.isChecked():
+        c = 0
+    elif ui_ipf.red_Button.isChecked():
+        c = 1
+    else:
+        c = 2
+    Q = trace_plane_triangle(Gs)
+
+    if Q.shape[0] > 1:
+        axes_plane_triangle = np.vstack((axes_plane_triangle, np.array([pole1, pole2, pole3])))
+        axesh_plane_triangle = np.vstack((axesh_plane_triangle, np.array([Gsh[0], Gsh[1], Gsh[2], 0, c])))
+        planes_triangle_list = np.vstack((planes_triangle_list, np.array([pole1, pole2, pole3])))
+
+
+def addplane_triangle():
+    pole_entry = ui_ipf.plane_comboBox.currentText().split(",")
+    pole1 = np.float(pole_entry[0])
+    pole2 = np.float(pole_entry[1])
+    pole3 = np.float(pole_entry[2])
+    plane_triangle(pole1, pole2, pole3)
+    A = unique_rows(planes_triangle_list)
+    ui_ipf.plane_comboBox.clear()
+    ui_ipf.plane_comboBox.addItem(' ')
+    for i in range(0, A.shape[0]):
+        if not(np.all(A[i, :] == 0)):
+            p = str(A[i, 0]) + ',' + str(A[i, 1]) + ',' + str(A[i, 2])
+            ui_ipf.plane_comboBox.addItem(p)
+    trace_triangle()
+
+
+def addpole_triangle():
+    global O
+    pole_entry = ui_ipf.pole_comboBox.currentText().split(",")
+    pole1 = np.float(pole_entry[0])
+    pole2 = np.float(pole_entry[1])
+    pole3 = np.float(pole_entry[2])
+
+    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+    alp = np.float(alphabetagamma[0])
+    bet = np.float(alphabetagamma[1])
+    gam = np.float(alphabetagamma[2])
+    v = d(pole1, pole2, pole3)
+    pole_triangle(pole1, pole2, pole3)
+
+    if np.abs(alp - 90) < 0.001 and np.abs(bet - 90) < 0.001 and np.abs(gam - 120) < 0.001:
+        pole_triangle(pole1, pole2, pole3)
+        pole_triangle(pole1, pole2, -pole3)
+        pole_triangle(pole2, pole1, pole3)
+        pole_triangle(pole2, pole1, -pole3)
+        pole_triangle(-pole1 - pole2, pole2, pole3)
+        pole_triangle(-pole1 - pole2, pole2, -pole3)
+        pole_triangle(pole1, -pole1 - pole2, pole3)
+        pole_triangle(pole1, -pole1 - pole2, -pole3)
+        pole_triangle(pole2, -pole1 - pole2, pole3)
+        pole_triangle(pole2, -pole1 - pole2, -pole3)
+        pole_triangle(-pole1 - pole2, pole1, pole3)
+        pole_triangle(-pole1 - pole2, pole1, -pole3)
+
+    else:
+        if np.abs(d(pole1, pole2, -pole3) - v) < 0.001:
+            pole_triangle(pole1, pole2, -pole3)
+        if np.abs(d(pole1, -pole2, pole3) - v) < 0.001:
+            pole_triangle(pole1, -pole2, pole3)
+        if np.abs(d(-pole1, pole2, pole3) - v) < 0.001:
+            pole_triangle(-pole1, pole2, pole3)
+        if np.abs(d(pole2, pole1, pole3) - v) < 0.001:
+            pole_triangle(pole2, pole1, pole3)
+        if np.abs(d(pole2, pole1, -pole3) - v) < 0.001:
+            pole_triangle(pole2, pole1, -pole3)
+        if np.abs(d(pole2, -pole1, pole3) - v) < 0.001:
+            pole_triangle(pole2, -pole1, pole3)
+        if np.abs(d(-pole2, pole1, pole3) - v) < 0.001:
+            pole_triangle(-pole2, pole1, pole3)
+        if np.abs(d(pole2, pole3, pole1) - v) < 0.001:
+            pole_triangle(pole2, pole3, pole1)
+        if np.abs(d(pole2, pole3, -pole1) - v) < 0.001:
+            pole_triangle(pole2, pole3, -pole1)
+        if np.abs(d(pole2, -pole3, pole1) - v) < 0.001:
+            pole_triangle(pole2, -pole3, pole1)
+        if np.abs(d(-pole2, pole3, pole1) - v) < 0.001:
+            pole_triangle(-pole2, pole3, pole1)
+        if np.abs(d(pole1, pole3, pole2) - v) < 0.001:
+            pole_triangle(pole1, pole3, pole2)
+        if np.abs(d(pole1, pole3, -pole2) - v) < 0.001:
+            pole_triangle(pole1, pole3, -pole2)
+        if np.abs(d(pole1, -pole3, pole2) - v) < 0.001:
+            pole_triangle(pole1, -pole3, pole2)
+        if np.abs(d(-pole1, pole3, pole2) - v) < 0.001:
+            pole_triangle(-pole1, pole3, pole2)
+        if np.abs(d(pole3, pole1, pole2) - v) < 0.001:
+            pole_triangle(pole3, pole1, pole2)
+        if np.abs(d(pole3, pole1, -pole2) - v) < 0.001:
+            pole_triangle(pole3, pole1, -pole2)
+        if np.abs(d(pole3, -pole1, pole2) - v) < 0.001:
+            pole_triangle(pole3, -pole1, pole2)
+        if np.abs(d(-pole3, pole1, pole2) - v) < 0.001:
+            pole_triangle(-pole3, pole1, pole2)
+        if np.abs(d(pole3, pole2, pole1) - v) < 0.001:
+            pole_triangle(pole3, pole2, pole1)
+        if np.abs(d(pole3, pole2, -pole1) - v) < 0.001:
+            pole_triangle(pole3, pole2, -pole1)
+        if np.abs(d(pole3, -pole2, pole1) - v) < 0.001:
+            pole_triangle(pole3, -pole2, pole1)
+        if np.abs(d(-pole3, pole2, pole1) - v) < 0.001:
+            pole_triangle(-pole3, pole2, pole1)
+    A = unique_rows(axes_triangle_list)
+    ui_ipf.pole_comboBox.clear()
+    ui_ipf.pole_comboBox.addItem(' ')
+    for i in range(1, A.shape[0]):
+        p = str(A[i, 0]) + ',' + str(A[i, 1]) + ',' + str(A[i, 2])
+        ui_ipf.pole_comboBox.addItem(p)
+
+    trace_triangle()
+
+
+def undo_pole_triangle(pole1, pole2, pole3):
+    global axes_triangle, axesh_triangle
+
+    if var_hexa() == 1:
+        if var_uvw() == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1 = pole1a
+            pole2 = pole2a
+
+    Gs = np.array([pole1, pole2, pole3], float)
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3:
+        pole1, pole2, pole3 = Gs / m
+
+    if var_uvw() == 0:
+        Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+    else:
+        Gsh = np.dot(D, Gs) / np.linalg.norm(np.dot(D, Gs))
+
+    S = np.dot(O, Gsh)
+    if S[2] < 0:
+        S = -S
+        Gsh = -Gsh
+        pole1 = -pole1
+        pole2 = -pole2
+        pole3 = -pole3
+
+    indi = np.where((np.abs(axes_triangle[:, 0] - pole1) < 1e-6) & (np.abs(axes_triangle[:, 1] - pole2) < 1e-6) & (np.abs(axes_triangle[:, 2] - pole3) < 1e-6) | (np.abs(axes_triangle[:, 0] + pole1) < 1e-6) & (np.abs(axes_triangle[:, 1] + pole2) < 1e-6) & (np.abs(axes_triangle[:, 2] + pole3) < 1e-6))
+    axes_triangle = np.delete(axes_triangle, indi, 0)
+    axesh_triangle = np.delete(axesh_triangle, indi, 0)
+
+
+def undo_plane_triangle(pole1, pole2, pole3):
+    global axes_plane_triangle, axesh_plane_triangle, planes_triangle_list
+
+    if var_hexa() == 1:
+        if var_uvw() == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1 = pole1a
+            pole2 = pole2a
+
+    Gs = np.array([pole1, pole2, pole3], float)
+    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
+    if np.abs(m) > 1e-3:
+        pole1, pole2, pole3 = Gs / m
+
+    if var_uvw() == 0:
+        Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+    else:
+        Gsh = np.dot(D, Gs) / np.linalg.norm(np.dot(D, Gs))
+
+    S = np.dot(O, Gsh)
+    if S[2] < 0:
+        S = -S
+        Gsh = -Gsh
+        pole1 = -pole1
+        pole2 = -pole2
+        pole3 = -pole3
+
+    indi = np.where((np.abs(axes_plane_triangle[:, 0] - pole1) < 1e-6) & (np.abs(axes_plane_triangle[:, 1] - pole2) < 1e-6) & (np.abs(axes_plane_triangle[:, 2] - pole3) < 1e-6) | (np.abs(axes_plane_triangle[:, 0] + pole1) < 1e-6) & (np.abs(axes_plane_triangle[:, 1] + pole2) < 1e-6) & (np.abs(axes_plane_triangle[:, 2] + pole3) < 1e-6))
+    axes_plane_triangle = np.delete(axes_plane_triangle, indi, 0)
+    axesh_plane_triangle = np.delete(axesh_plane_triangle, indi, 0)
+
+
+def undo_addpole_triangle():
+    pole_entry = ui_ipf.pole_comboBox.currentText().split(",")
+    pole1 = np.float(pole_entry[0])
+    pole2 = np.float(pole_entry[1])
+    pole3 = np.float(pole_entry[2])
+    undo_pole_triangle(pole1, pole2, pole3)
+    trace_triangle()
+
+
+def undo_addplane_triangle():
+    pole_entry = ui_ipf.plane_comboBox.currentText().split(",")
+    pole1 = np.float(pole_entry[0])
+    pole2 = np.float(pole_entry[1])
+    pole3 = np.float(pole_entry[2])
+    undo_plane_triangle(pole1, pole2, pole3)
+    trace_triangle()
 
 ##################################################
 #
@@ -2811,6 +3310,24 @@ if __name__ == "__main__":
     ui_width.mplvl.addWidget(canvas_width)
     toolbar_width = NavigationToolbar(canvas_width, canvas_width)
     toolbar_width.setMinimumWidth(601)
+
+    Ipf = QtWidgets.QDialog()
+    ui_ipf = ipfUI.Ui_IPF()
+    ui_ipf.setupUi(Ipf)
+    ui.actiondraw_IPF.triggered.connect(Ipf.show)
+    ui_ipf.draw_button.clicked.connect(draw_triangle)
+    ui_ipf.add_pole_button.clicked.connect(addpole_triangle)
+    ui_ipf.add_plane_button.clicked.connect(addplane_triangle)
+    ui_ipf.refresh_Button.clicked.connect(trace_triangle)
+    ui_ipf.remove_pole_button.clicked.connect(undo_addpole_triangle)
+    ui_ipf.remove_plane_button.clicked.connect(undo_addplane_triangle)
+    ui_ipf.blue_Button.setChecked(True)
+    ui_ipf.Show_label_checkBox.setChecked(True)
+    figure_ipf = plt.figure()
+    canvas_ipf = FigureCanvas(figure_ipf)
+    ui_ipf.mplvl.addWidget(canvas_ipf)
+    toolbar_ipf = NavigationToolbar(canvas_ipf, canvas_ipf)
+    toolbar_ipf.setMinimumWidth(601)
 
     Intersections = QtWidgets.QDialog()
     ui_inter = intersectionsUI.Ui_Intersections()

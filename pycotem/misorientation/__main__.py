@@ -1688,7 +1688,7 @@ def trace_misorientation(B):
                 angle = QtWidgets.QTableWidgetItem(str(np.around(D0[l, 3], decimals=2)))
 
             if ui.numbers_checkBox.isChecked():
-                snum = str(int(D0[l, 4]))
+                snum = str(int(D0[l, 4]) + 1)
                 a.annotate(snum, (B[l, 0] + 300, B[l, 1] + 300), size=ui.text_size_entry.text())
 
             ui.misorientation_list.setHorizontalHeaderLabels(['Axe 1', 'Axe 2', 'Angle'])
