@@ -480,6 +480,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#inverse-pole-figure" title="Inverse pole figure" class="md-nav__link">
+    Inverse pole figure
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -751,6 +758,13 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inverse-pole-figure" title="Inverse pole figure" class="md-nav__link">
+    Inverse pole figure
+  </a>
   
 </li>
         
@@ -1183,18 +1197,48 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 <p>Tick the <code>label</code> box to show indices (for hexagonal crystal, 3 indices are used).</p>
 <div class="admonition info">
 <p class="admonition-title">Kikuchi band formation</p>
-<p>When inelastically scattered electrons are in Bragg conditions, they will diffract, but because they can come from different directions, they will be scattered in a cone around <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span>. As there are two diffraction directions (<span><span class="MathJax_Preview">\pm \vec{g}</span><script type="math/tex">\pm \vec{g}</script></span>), two cones will form, one being brighter and the other darker than the background. When hitting the observation screen, they will form pairs of lines which separation width is proportional to the inter-planar distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. Their projection is called gnomomic, i.e. a point of coordinate <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> will become <span><span class="MathJax_Preview">(X,Y)</span><script type="math/tex">(X,Y)</script></span> with <span><span class="MathJax_Preview">X = x/z</span><script type="math/tex">X = x/z</script></span> and <span><span class="MathJax_Preview">Y = y / z</span><script type="math/tex">Y = y / z</script></span>.</p>
+<p>When inelastically scattered electrons are in Bragg conditions, they will diffract, but because they can come from different directions, they will be scattered in a cone around <span><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span>. As there are two diffraction directions (<span><span class="MathJax_Preview">\pm \vec{g}</span><script type="math/tex">\pm \vec{g}</script></span>), two cones will form, one being brighter and the other darker than the background. When hitting the observation screen, they will form pairs of lines which separation width is proportional to the inter-planar distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span>. Their projection is called gnomonic, i.e. a point of coordinate <span><span class="MathJax_Preview">(x,y,z)</span><script type="math/tex">(x,y,z)</script></span> will become <span><span class="MathJax_Preview">(X,Y)</span><script type="math/tex">(X,Y)</script></span> with <span><span class="MathJax_Preview">X = x/z</span><script type="math/tex">X = x/z</script></span> and <span><span class="MathJax_Preview">Y = y / z</span><script type="math/tex">Y = y / z</script></span>.</p>
 <p>Here, to mimic the kinematical approximation, the line widths are proportional to the intensity of the corresponding diffraction vector and the intensity difference between the lines are not taken into account.</p>
 </div>
 <p><img alt="" src="../images/kikuchi.png" /></p>
+<h3 id="inverse-pole-figure">Inverse pole figure<a class="headerlink" href="#inverse-pole-figure" title="Permanent link">&para;</a></h3>
+<p>At variance to pole figures, representing the crystal poles in the microscope coordinate systems, inverse pole figures (IPF) are used to represent a given direction in the crystal coordinate system. As they reflect the crystal structure, IPF are drawn in the minimal area of the stereographic projection, called the standard triangle, where all equivalent poles or crystal directions can be brought back by a point group symmetry operation of the crystal. Hence, seven different standard triangles corresponding to the seven crystal systems have to be considered. For cubic crystals for instance, the standard triangle, is defined by the <span><span class="MathJax_Preview">(010)</span><script type="math/tex">(010)</script></span>, <span><span class="MathJax_Preview">(\bar{1}01)</span><script type="math/tex">(\bar{1}01)</script></span> and <span><span class="MathJax_Preview">(\bar{1}10)</span><script type="math/tex">(\bar{1}10)</script></span> planes and the <span><span class="MathJax_Preview">[001]</span><script type="math/tex">[001]</script></span>, <span><span class="MathJax_Preview">[111]</span><script type="math/tex">[111]</script></span> and <span><span class="MathJax_Preview">[101]</span><script type="math/tex">[101]</script></span> directions as vertices. </p>
+<p>To draw IPF:</p>
+<ul>
+<li>
+<p>use the <code>IPF</code> menu and select <code>Draw IPF</code>.</p>
+</li>
+<li>
+<p>once the crystal is selected and plotted in the main window, press <code>Draw Standard Triangle</code>.</p>
+</li>
+<li>
+<p>to add directions, tick the <code>uvw</code> button in the main window. Untick to draw poles.</p>
+</li>
+<li>
+<p>Fill the pole entry and click <code>Add pole</code>. The pole/direction or an equivalent one is plotted with the selected color.</p>
+</li>
+<li>
+<p>Untick the <code>Show labels</code> button and press <code>Refresh view</code> to hide the labels. Label sizes can be changed through the <code>Text size</code> entry in the main window and updated after pressing <code>Update/Reset view</code> button and <code>Refresh view</code>.</p>
+</li>
+<li>
+<p>Pole/directions are stored in the drop down list. Select one and  click <code>Remove pole</code> to remove them. </p>
+</li>
+<li>
+<p>Given planes can be drawn using the plane drop down list and the <code>Add plane</code>, <code>Remove plane</code> buttons.</p>
+</li>
+<li>
+<p>Zoom and pan using the toolbar. <code>Refresh view</code> to reset. </p>
+</li>
+</ul>
+<p><img alt="" src="../images/ipf.png" /></p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:ang">
-<p>In the reference frame, the vector <span><span class="MathJax_Preview">(0,1,0)</span><script type="math/tex">(0,1,0)</script></span> is first rotated along <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> by an angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and then along <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> by an angle <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, the rotation axes being fixed. The definition proposed here differs from the usual spherical coordinates that refers on azimuthal and elevation angles.&#160;<a class="footnote-backref" href="#fnref:ang" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>In the reference frame, the vector <span><span class="MathJax_Preview">(0,1,0)</span><script type="math/tex">(0,1,0)</script></span> is first rotated along <span><span class="MathJax_Preview">z</span><script type="math/tex">z</script></span> by an angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and then along <span><span class="MathJax_Preview">y</span><script type="math/tex">y</script></span> by an angle <span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, the rotation axes being fixed. The definition proposed here differs from the usual spherical coordinates that refers on azimuth and elevation angles.&#160;<a class="footnote-backref" href="#fnref:ang" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:ang2">
-<p>These names usually refers in geography  to lines of given longitude and latitude connecting north and south poles. Here the lines connect east and west poles of the sphere.&#160;<a class="footnote-backref" href="#fnref:ang2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p>These names usually refer in geography  to lines of given longitude and latitude connecting north and south poles. Here the lines connect east and west poles of the sphere.&#160;<a class="footnote-backref" href="#fnref:ang2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 <li id="fn:ang3">
 <p>As meridians pass by two poles, they correspond to full circles on the sphere. Contrary parallels (except the equator) correspond to smaller circles on the sphere. Meridians result then from the intersection of planes with the sphere and parallels from the intersection of cones of given aperture.&#160;<a class="footnote-backref" href="#fnref:ang3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
