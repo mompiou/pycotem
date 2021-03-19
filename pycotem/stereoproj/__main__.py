@@ -20,16 +20,16 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-from . import stereoprojUI
-from . import intersectionsUI
-from . import angleUI
-from . import schmidUI
-from . import xyzUI
-from . import hkl_uvwUI
-from . import widthUI
-from . import kikuchiUI
-from . import listUI
-from . import ipfUI
+import stereoprojUI
+import intersectionsUI
+import angleUI
+import schmidUI
+import xyzUI
+import hkl_uvwUI
+import widthUI
+import kikuchiUI
+import listUI
+import ipfUI
 
 
 ################
@@ -2685,7 +2685,7 @@ def plot_kikuchi():
 
 
 def draw_triangle():
-    global O, bords, Dstar, a_t, axes_triangle, axesh_triangle, coins, axes_plane_triangle, axesh_plane_triangle, axes_triangle_list, planes_triangle_list
+    global O, bords, Dstar, a_t, axes_triangle, axesh_triangle, coins, axes_plane_triangle, axesh_plane_triangle, axes_triangle_list, planes_triangle_list, sym, axes_PF, axes_IPF
 
     axes_triangle = np.array([[0, 0, 0]])
     axesh_triangle = np.array([[0, 0, 0, 0, 0]])
@@ -2693,6 +2693,8 @@ def draw_triangle():
     axesh_plane_triangle = np.array([[0, 0, 0, 0, 0]])
     axes_triangle_list = np.array([[0, 0, 0]])
     planes_triangle_list = np.array([[0, 0, 0]])
+    axes_IPF = np.array([[0, 0, 0]])
+    axes_PF = np.array([[0, 0, 0]])
     ui_ipf.pole_comboBox.clear()
     ui_ipf.plane_comboBox.clear()
 
@@ -2708,25 +2710,30 @@ def draw_triangle():
     Ds = Dstar * 1e-10
     # 7 crystal systems
     if a != b != c and alp == bet == 90 and gam != alp and gam != 120:  # monoclinic
-        bords = np.array([[0, 0, 1, 0, np.pi], [1, 0, 0, -np.pi, np.pi]])
+        bords = np.array([[1, 0, 0, -np.pi, np.pi], [0, 0, 1, 0, np.pi]])
         coins = np.array([[0, 1, 0], [0, 0, 1]])
+        cs = 6
 
     elif a != b != c and alp == bet == gam == 90:  # orthorhombic
         coins = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-        bords = np.array([[0, 0, 1, 0, np.pi / 2], [1, 0, 0, -np.pi / 2, 0], [0, 1, 0, -np.pi, -np.pi / 2]])
+        bords = np.array([[0, 0, 1, 0, np.pi / 2], [0, 1, 0, -np.pi, -np.pi / 2], [1, 0, 0, -np.pi / 2, 0]])
+        cs = 5
 
     elif a == b != c and alp == bet == gam == 90:  # tetra
         coins = np.array([[1, 0, 0], [1, 1, 0], [0, 0, 1]])
-        bords = np.array([[1, -1, 0, -np.pi / 2, 0], [0, 1, 0, -np.pi, -np.pi / 2], [0, 0, 1, np.pi / 4, np.pi / 2]])
+        bords = np.array([[1, -1, 0, -np.pi / 2, 0], [0, 0, 1, np.pi / 4, np.pi / 2], [0, 1, 0, -np.pi, -np.pi / 2]])
+        cs = 3
 
     elif a == b == c and alp == bet == gam == 90:  # cubic
         coins = np.array([[1, 0, 1], [1, 1, 1], [0, 0, 1]])
-        bords = np.array([[1, -1, 0, -35.2644 * np.pi / 180, -np.pi / 2], [0, 1, 0, -np.pi / 2, -3 * np.pi / 4], [-1, 0, 1, -np.pi + 54.7356 * np.pi / 180, -np.pi / 2]])
+        bords = np.array([[1, -1, 0, -np.pi / 2, -np.arccos(2 / np.sqrt(6))], [-1, 0, 1, -np.pi + np.arccos(1 / np.sqrt(3)), -np.pi / 2], [0, 1, 0, -np.pi / 2, -3 * np.pi / 4]])
+        cs = 1
 
     elif a == b != c and alp == bet == 90 and gam == 120:  # hexa
         coins = np.array([[2, -1, 0], [1, 0, 0], [0, 0, 1]])
-        bords = np.array([[0, 1, 0, -np.pi, -np.pi / 2], [1, -2, 0, -np.pi / 2, 0], [0, 0, 1, np.pi / 2, np.pi / 3]])
+        bords = np.array([[1, -2, 0, -np.pi / 2, 0], [0, 0, 1, np.pi / 3, np.pi / 2], [0, 1, 0, -np.pi, -np.pi / 2]])
         bords[:, 0:3] = np.dot(O, np.dot(Ds, bords[:, 0:3].T)).T
+        cs = 2
 
     elif a == b == c and alp == bet == gam != 90:  # trigonal
 
@@ -2736,12 +2743,20 @@ def draw_triangle():
         coins = np.array([[1, 1, -2], [-1, 2, -1], [1, 1, 1]])
         bords = np.array([[1, 0, -1, -np.pi / 2, 0], [1, 1, 1, np.pi / 6, np.pi / 2], [-1, 1, 0, -np.pi, -np.pi / 2]])
         bords[:, 0:3] = np.dot(O, np.dot(Ds, bords[:, 0:3].T)).T
+        cs = 4
 
     else:  # triclinic
         coins = np.array([[0, 0, 1]])
         bords = np.array([[0, 0, 1, -np.pi, np.pi]])
-
+        cs = 7
+    sym = Sy(cs)
     trace_triangle()
+
+
+def refresh():
+    a_t.relim()
+    a_t.autoscale()
+    a_t.figure.canvas.draw()
 
 
 def trace_triangle():
@@ -2800,7 +2815,9 @@ def trace_triangle():
             else:
                 C.append('g')
 
-        a_t.scatter(P[1:, 0] + 300, P[1:, 1] + 300, c=C, s=20)
+        a_t.scatter(P[1:, 0] + 300, P[1:, 1] + 300, c=C, s=np.float(ui.size_var.text()))
+    if axes_IPF.shape[0] > 1:
+        a_t.scatter(axes_IPF[1:, 0] + 300, axes_IPF[1:, 1] + 300, c=color_IPF, s=np.float(ui.size_var.text()))
 
     if axes_plane_triangle.shape[1] > 1:
         for i in range(1, axes_plane_triangle.shape[0]):
@@ -2826,6 +2843,26 @@ def trace_triangle():
     a_t.figure.canvas.draw()
 
 
+def trace_PF():
+    global axes_PF
+
+    a_t = figure_ipf.add_subplot(111)
+    a_t.clear()
+    a_t = figure_ipf.add_subplot(111)
+    if ui_ipf.blue_Button.isChecked():
+        C = 'b'
+    elif ui_ipf.red_Button.isChecked():
+        C = 'r'
+    else:
+        C = 'g'
+    a_t.scatter(axes_PF[1:, 0] + 300, axes_PF[1:, 1] + 300, c=C, s=np.float(ui.size_var.text()))
+    trace_bord(np.array([0, 0, 1]), -np.pi, np.pi)
+
+    a_t.axis("off")
+    a_t.set_aspect('equal')
+    a_t.figure.canvas.draw()
+
+
 def trace_bord(S, t1, t2):
     global a_t
     S[np.abs(S) < 1e-8] = 0
@@ -2846,6 +2883,7 @@ def trace_bord(S, t1, t2):
     Q = np.delete(Q, 0, 0)
     Q = Q[~np.isnan(Q).any(axis=1)]
     a_t.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'black')
+    return Q
 
 
 def trace_plane_triangle(S):
@@ -3169,6 +3207,193 @@ def undo_addplane_triangle():
     undo_plane_triangle(pole1, pole2, pole3)
     trace_triangle()
 
+
+def import_pf_ipf():
+    global ang
+    varname = QtWidgets.QFileDialog.getOpenFileName(None, 'OpenFile')
+    orientation = os.path.join(os.path.dirname(__file__), varname[0])
+    ang = np.genfromtxt(orientation, comments="#", delimiter=',')
+    draw_triangle()
+    ui_ipf.current_checkBox.setChecked(False)
+    ui_ipf.data_label.setText(varname[0])
+
+
+def Sy(cs):
+
+    if cs == 1:
+        S1 = Rot(90, 1, 0, 0)
+        S2 = Rot(180, 1, 0, 0)
+        S3 = Rot(270, 1, 0, 0)
+        S4 = Rot(90, 0, 1, 0)
+        S5 = Rot(180, 0, 1, 0)
+        S6 = Rot(270, 0, 1, 0)
+        S7 = Rot(90, 0, 0, 1)
+        S8 = Rot(180, 0, 0, 1)
+        S9 = Rot(270, 0, 0, 1)
+        S10 = Rot(180, 1, 1, 0)
+        S11 = Rot(180, 1, 0, 1)
+        S12 = Rot(180, 0, 1, 1)
+        S13 = Rot(180, -1, 1, 0)
+        S14 = Rot(180, -1, 0, 1)
+        S15 = Rot(180, 0, -1, 1)
+        S16 = Rot(120, 1, 1, 1)
+        S17 = Rot(240, 1, 1, 1)
+        S18 = Rot(120, -1, 1, 1)
+        S19 = Rot(240, -1, 1, 1)
+        S20 = Rot(120, 1, -1, 1)
+        S21 = Rot(240, 1, -1, 1)
+        S22 = Rot(120, 1, 1, -1)
+        S23 = Rot(240, 1, 1, -1)
+        S24 = np.eye(3, 3)
+        S = np.vstack((S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20, S21, S22, S23, S24))
+
+    if cs == 2:
+        S1 = Rot(60, 0, 0, 1)
+        S2 = Rot(120, 0, 0, 1)
+        S3 = Rot(180, 0, 0, 1)
+        S4 = Rot(240, 0, 0, 1)
+        S5 = Rot(300, 0, 0, 1)
+        S6 = np.eye(3, 3)
+        S7 = Rot(180, 1, 0, 0)
+        S8 = Rot(180, 0, 1, 0)
+        S9 = Rot(180, 1 / 2, np.sqrt(3) / 2, 0)
+        S10 = Rot(180, -1 / 2, np.sqrt(3) / 2, 0)
+        S11 = Rot(180, np.sqrt(3) / 2, 1 / 2, 0)
+        S12 = Rot(180, -np.sqrt(3) / 2, 1 / 2, 0)
+        S = np.vstack((S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12))
+
+    if cs == 3:
+        S1 = Rot(90, 0, 0, 1)
+        S2 = Rot(180, 0, 0, 1)
+        S3 = Rot(270, 0, 0, 1)
+        S4 = Rot(180, 0, 1, 0)
+        S5 = Rot(180, 1, 0, 0)
+        S6 = Rot(180, 1, 1, 0)
+        S7 = Rot(180, 1, -1, 0)
+        S8 = np.eye(3, 3)
+        S = np.vstack((S1, S2, S3, S4, S5, S6, S7, S8))
+
+    if cs == 4:
+        n1 = np.dot(Dstar, [1, 1, 1])
+        n2 = np.dot(Dstar, [0, -1, 1])
+        n3 = np.dot(Dstar, [-1, 0, 1])
+        n4 = np.dot(Dstar, [1, -1, 0])
+        S1 = Rot(120, n1[0], n1[1], n1[2])
+        S2 = Rot(240, n1[0], n1[1], n1[2])
+        S3 = Rot(180, n2[0], n2[1], n2[2])
+        S4 = Rot(180, n3[0], n3[1], n3[2])
+        S5 = Rot(180, n4[0], n4[1], n4[2])
+        S6 = np.eye(3, 3)
+        S = np.vstack((S1, S2, S3, S4, S5, S6))
+
+    if cs == 5:
+        S1 = Rot(180, 0, 0, 1)
+        S2 = Rot(180, 1, 0, 0)
+        S3 = Rot(180, 0, 1, 0)
+        S4 = np.eye(3, 3)
+        S = np.vstack((S1, S2, S3, S4))
+
+    if cs == 6:
+        S1 = Rot(180, 0, 0, 1)
+        S2 = np.eye(3, 3)
+        S = np.vstack((S1, S2))
+
+    if cs == 7:
+        S = np.eye(3, 3)
+
+    return S
+
+
+def projM(R):
+    A = np.where(R[:, 2] < 0)[0]
+    R[A, :] = -R[A, :]
+    X = R[:, 0] / (1 + R[:, 2])
+    Y = R[:, 1] / (1 + R[:, 2])
+    return np.array([X, Y], float).T
+
+
+def pole_sym(pole1, pole2, pole3):
+    global T, axes, axesh, bords, sym
+    Gs = np.array([pole1, pole2, pole3])
+    Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+    S = np.dot(sym, Gsh)
+    S = np.reshape(S, (int(sym.shape[0] / 3), 3))
+    P = projM(S) * 300
+    axes = np.vstack((axes, P))
+
+
+def plot_PF():
+    global axes_PF, sym, ang
+
+    axes_PF = np.zeros((1, 2))
+    p = ui_ipf.pole_entry.text().split(",")
+    p0 = np.float(p[0])
+    p1 = np.float(p[1])
+    p2 = np.float(p[2])
+    if ui_ipf.current_checkBox.isChecked():
+        p = ui.angle_euler_label.text().split(",")
+        phi1 = np.float(p[0])
+        phi = np.float(p[1])
+        phi2 = np.float(p[2])
+        sh = np.array([[phi1, phi, phi2], [phi1, phi, phi2]])
+    else:
+        if ui_ipf.data_label.text() == '':
+            import_pf_ipf()
+        sh = ang
+
+    for i in range(0, sh.shape[0]):
+        Gs = np.array([p0, p1, p2])
+        Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
+        S = np.dot(sym, Gsh)
+        S = np.reshape(S, (int(sym.shape[0] / 3), 3))
+        S = np.dot(rotation(sh[i, 0], sh[i, 1], sh[i, 2]), S.T).T
+        P = projM(S) * 300
+        axes_PF = np.vstack((axes_PF, P))
+    trace_PF()
+
+
+def plot_IPF():
+    global axes_IPF, color_IPF, ang
+
+    axes_IPF = np.zeros((1, 2))
+    p = ui_ipf.pole_entry.text().split(",")
+    x = np.float(p[0])
+    y = np.float(p[1])
+    z = np.float(p[2])
+
+    if ui_ipf.current_checkBox.isChecked():
+        p = ui.angle_euler_label.text().split(",")
+        phi1 = np.float(p[0])
+        phi = np.float(p[1])
+        phi2 = np.float(p[2])
+        sh = np.array([[phi1, phi, phi2], [phi1, phi, phi2]])
+    else:
+        if ui_ipf.data_label.text() == '':
+            import_pf_ipf()
+        sh = ang
+
+    for i in range(0, sh.shape[0]):
+        Gs = np.array([x, y, z])
+        Gs = Gs / np.linalg.norm(Gs)
+        Gsh = np.dot(rotation(sh[i, 0], sh[i, 1], sh[i, 2]).T, Gs)
+        S = np.dot(sym, Gsh)
+        S = np.reshape(S, (int(sym.shape[0] / 3), 3))
+        S = np.dot(O, S.T).T
+        A = np.where(S[:, 2] < 0)[0]
+        S[A, :] = -S[A, :]
+        s = np.dot(bords[:, 0:3], S.T)
+        s[np.abs(s) < 1e-6] = 0
+        si = np.where(np.all(np.sign(s) >= 0, axis=0))[0]
+        P = projM(S[si, :]) * 300
+        axes_IPF = np.vstack((axes_IPF, P))
+    if ui_ipf.blue_Button.isChecked():
+        color_IPF = 'b'
+    elif ui_ipf.red_Button.isChecked():
+        color_IPF = 'r'
+    else:
+        color_IPF = 'g'
+    trace_triangle()
+
 ##################################################
 #
 # Add matplotlib toolbar to zoom and pan
@@ -3318,9 +3543,13 @@ if __name__ == "__main__":
     ui_ipf.draw_button.clicked.connect(draw_triangle)
     ui_ipf.add_pole_button.clicked.connect(addpole_triangle)
     ui_ipf.add_plane_button.clicked.connect(addplane_triangle)
-    ui_ipf.refresh_Button.clicked.connect(trace_triangle)
+    ui_ipf.refresh_Button.clicked.connect(refresh)
+    ui_ipf.Show_label_checkBox.toggled.connect(trace_triangle)
     ui_ipf.remove_pole_button.clicked.connect(undo_addpole_triangle)
     ui_ipf.remove_plane_button.clicked.connect(undo_addplane_triangle)
+    ui_ipf.import_button.clicked.connect(import_pf_ipf)
+    ui_ipf.PF_button.clicked.connect(plot_PF)
+    ui_ipf.IPF_button.clicked.connect(plot_IPF)
     ui_ipf.blue_Button.setChecked(True)
     ui_ipf.Show_label_checkBox.setChecked(True)
     figure_ipf = plt.figure()
@@ -3328,6 +3557,7 @@ if __name__ == "__main__":
     ui_ipf.mplvl.addWidget(canvas_ipf)
     toolbar_ipf = NavigationToolbar(canvas_ipf, canvas_ipf)
     toolbar_ipf.setMinimumWidth(601)
+    ui_ipf.pole_entry.setText('1,0,0')
 
     Intersections = QtWidgets.QDialog()
     ui_inter = intersectionsUI.Ui_Intersections()

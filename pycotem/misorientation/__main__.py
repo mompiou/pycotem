@@ -9,7 +9,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
-from . import misorientationUI
+import misorientationUI
 
 
 ################
@@ -1483,7 +1483,7 @@ def cryststruct():
     if gam != 90 and alp == 90 and bet == 90 and a != b and b != c:
         cs = 6
 
-    if gam != 90 and alp != 90 and bet != 90 and a != b and b != c:
+    if gam != alp != bet and a != b != c:
         cs = 7
     return cs
 
@@ -1502,7 +1502,6 @@ def Sy(g):
         S9 = Rota(270, 0, 0, 1, g)
         S10 = Rota(180, 1, 1, 0, g)
         S11 = Rota(180, 1, 0, 1, g)
-
         S12 = Rota(180, 0, 1, 1, g)
         S13 = Rota(180, -1, 1, 0, g)
         S14 = Rota(180, -1, 0, 1, g)
@@ -1545,19 +1544,17 @@ def Sy(g):
         S = np.vstack((S1, S2, S3, S4, S5, S6, S7, S8))
 
     if cs == 4:
-        S1 = Rota(60, 0, 0, 1, g)
-        S2 = Rota(120, 0, 0, 1, g)
-        S3 = Rota(180, 0, 0, 1, g)
-        S4 = Rota(240, 0, 0, 1, g)
-        S5 = Rota(300, 0, 0, 1, g)
+        n1 = np.dot(Dstar, [1, 1, 1])
+        n2 = np.dot(Dstar, [0, -1, 1])
+        n3 = np.dot(Dstar, [-1, 0, 1])
+        n4 = np.dot(Dstar, [1, -1, 0])
+        S1 = Rota(120, n1[0], n1[1], n1[2], g)
+        S2 = Rota(240, n1[0], n1[1], n1[2], g)
+        S3 = Rota(180, n2[0], n2[1], n2[2], g)
+        S4 = Rota(180, n3[0], n3[1], n3[2], g)
+        S5 = Rota(180, n4[0], n4[1], n4[2], g)
         S6 = np.eye(3, 3)
-        S7 = Rota(180, 1, 0, 0, g)
-        S8 = Rota(180, 0, 1, 0, g)
-        S9 = Rota(180, 1 / 2, np.sqrt(3) / 2, 0, g)
-        S10 = Rota(180, -1 / 2, np.sqrt(3) / 2, 0, g)
-        S11 = Rota(180, np.sqrt(3) / 2, 1 / 2, 0, g)
-        S12 = Rota(180, -np.sqrt(3) / 2, 1 / 2, 0, g)
-        S = np.vstack((S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12))
+        S = np.vstack((S1, S2, S3, S4, S5, S6))
 
     if cs == 5:
         S1 = Rota(180, 0, 0, 1, g)
@@ -1567,7 +1564,7 @@ def Sy(g):
         S = np.vstack((S1, S2, S3, S4))
 
     if cs == 6:
-        S1 = Rota(180, 0, 1, 0, g)
+        S1 = Rota(180, 0, 0, 1, g)
         S2 = np.eye(3, 3)
         S = np.vstack((S1, S2))
 
@@ -1598,10 +1595,10 @@ def desorientation():
     k = 0
     S = Sy(gA)
 
-    D0 = np.zeros((int(np.shape(S)[0] / 3), 5))
-    D1 = np.zeros((int(np.shape(S)[0] / 3), 3))
-    D2 = np.zeros((int(np.shape(S)[0] / 3), 3))
-    Qp = np.zeros((int(np.shape(S)[0] / 3), 2))
+    D0 = np.zeros((int(np.shape(S)[0] / 3) + 1, 5))
+    D1 = np.zeros((int(np.shape(S)[0] / 3) + 1, 3))
+    D2 = np.zeros((int(np.shape(S)[0] / 3) + 1, 3))
+    Qp = np.zeros((int(np.shape(S)[0] / 3) + 1, 2))
 
     for i in range(0, np.shape(S)[0], 3):
         In = np.dot(np.array([[S[i, 0], S[i + 1, 0], S[i + 2, 0]], [S[i, 1], S[i + 1, 1], S[i + 2, 1]], [S[i, 2], S[i + 1, 2], S[i + 2, 2]]]), gA)
@@ -1666,7 +1663,7 @@ def trace_misorientation(B):
     if Qp.shape[0] > 1:
         ui.misorientation_list.setRowCount(int(np.shape(S)[0] / 3))
         ui.misorientation_list.setColumnCount(3)
-        a.plot(B[:, 0] + 300, B[:, 1] + 300, 's', color='black')
+        a.plot(B[:-1, 0] + 300, B[:-1, 1] + 300, 's', color='black')
         for l in range(0, int(np.shape(S)[0] / 3)):
             if var_hexa(i_c) == 1 and var_uvw() == 1:
                 if ui.axis_checkBox.isChecked():

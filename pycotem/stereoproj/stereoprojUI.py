@@ -557,7 +557,7 @@ class Ui_StereoProj(object):
         self.menuIntersections.setTitle(_translate("StereoProj", "intersections"))
         self.menuDiffraction.setTitle(_translate("StereoProj", "diffraction"))
         self.menuList.setTitle(_translate("StereoProj", "list"))
-        self.menuIPF.setTitle(_translate("StereoProj", "IPF"))
+        self.menuIPF.setTitle(_translate("StereoProj", "PF/IPF"))
         self.actionSave_figure.setText(_translate("StereoProj", "Save figure"))
         self.actionCalculate_Schmid_factor.setText(_translate("StereoProj", "calculate Schmid factor"))
         self.actionCalculate_angle.setText(_translate("StereoProj", "Calculate angle"))
@@ -570,5 +570,5 @@ class Ui_StereoProj(object):
         self.actionHkl_uvw.setText(_translate("StereoProj", "hkl <> uvw"))
         self.actionPlot_Kikuchi_lines.setText(_translate("StereoProj", "plot Kikuchi lines or diffraction pattern"))
         self.actionShow_list_of_poles_directions.setText(_translate("StereoProj", "show list of poles/directions"))
-        self.actiondraw_IPF.setText(_translate("StereoProj", "draw IPF"))
+        self.actiondraw_IPF.setText(_translate("StereoProj", "draw PF/IPF"))
 

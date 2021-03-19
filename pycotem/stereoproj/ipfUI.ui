@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IPF</class>
+ <widget class="QDialog" name="IPF">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>707</width>
+    <height>786</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PF/IPF</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="8" column="0" colspan="5">
+    <widget class="QComboBox" name="plane_comboBox">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="5">
+    <widget class="QComboBox" name="pole_comboBox">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QRadioButton" name="red_Button">
+     <property name="text">
+      <string>Red</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QRadioButton" name="blue_Button">
+     <property name="text">
+      <string>Blue</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="6">
+    <widget class="QCheckBox" name="Show_label_checkBox">
+     <property name="text">
+      <string>Show labels</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="5">
+    <widget class="QPushButton" name="add_pole_button">
+     <property name="text">
+      <string>Add Pole</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="6">
+    <widget class="QPushButton" name="remove_pole_button">
+     <property name="text">
+      <string>Remove Pole</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="6">
+    <widget class="QPushButton" name="remove_plane_button">
+     <property name="text">
+      <string>Remove Plane</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="5">
+    <widget class="QPushButton" name="add_plane_button">
+     <property name="text">
+      <string>Add Plane</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="5">
+    <widget class="QPushButton" name="refresh_Button">
+     <property name="text">
+      <string>Update view</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="7">
+    <layout class="QGridLayout" name="mplvl"/>
+   </item>
+   <item row="11" column="2">
+    <widget class="QRadioButton" name="green_Button">
+     <property name="text">
+      <string>Green</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="5">
+    <widget class="QPushButton" name="draw_button">
+     <property name="text">
+      <string>Draw Standard Triangle</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QLineEdit" name="pole_entry"/>
+   </item>
+   <item row="10" column="2">
+    <widget class="QPushButton" name="PF_button">
+     <property name="text">
+      <string>plot PF</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="3">
+    <widget class="QPushButton" name="IPF_button">
+     <property name="text">
+      <string>plot IPF</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="4">
+    <widget class="QPushButton" name="import_button">
+     <property name="text">
+      <string>Import data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="5">
+    <widget class="QCheckBox" name="current_checkBox">
+     <property name="text">
+      <string>curr. orientation</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="4" colspan="2">
+    <widget class="QLabel" name="data_label">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>draw_button</tabstop>
+  <tabstop>refresh_Button</tabstop>
+  <tabstop>Show_label_checkBox</tabstop>
+  <tabstop>pole_comboBox</tabstop>
+  <tabstop>add_pole_button</tabstop>
+  <tabstop>remove_pole_button</tabstop>
+  <tabstop>plane_comboBox</tabstop>
+  <tabstop>add_plane_button</tabstop>
+  <tabstop>remove_plane_button</tabstop>
+  <tabstop>pole_entry</tabstop>
+  <tabstop>PF_button</tabstop>
+  <tabstop>IPF_button</tabstop>
+  <tabstop>import_button</tabstop>
+  <tabstop>blue_Button</tabstop>
+  <tabstop>red_Button</tabstop>
+  <tabstop>green_Button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
