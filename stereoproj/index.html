@@ -481,8 +481,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#inverse-pole-figure" title="Inverse pole figure" class="md-nav__link">
-    Inverse pole figure
+  <a href="#pole-and-inverse-pole-figures" title="Pole and inverse pole figures" class="md-nav__link">
+    Pole and inverse pole figures
   </a>
   
 </li>
@@ -762,8 +762,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#inverse-pole-figure" title="Inverse pole figure" class="md-nav__link">
-    Inverse pole figure
+  <a href="#pole-and-inverse-pole-figures" title="Pole and inverse pole figures" class="md-nav__link">
+    Pole and inverse pole figures
   </a>
   
 </li>
@@ -1201,16 +1201,19 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 <p>Here, to mimic the kinematical approximation, the line widths are proportional to the intensity of the corresponding diffraction vector and the intensity difference between the lines are not taken into account.</p>
 </div>
 <p><img alt="" src="../images/kikuchi.png" /></p>
-<h3 id="inverse-pole-figure">Inverse pole figure<a class="headerlink" href="#inverse-pole-figure" title="Permanent link">&para;</a></h3>
-<p>At variance to pole figures, representing the crystal poles in the microscope coordinate systems, inverse pole figures (IPF) are used to represent a given direction in the crystal coordinate system. As they reflect the crystal structure, IPF are drawn in the minimal area of the stereographic projection, called the standard triangle, where all equivalent poles or crystal directions can be brought back by a point group symmetry operation of the crystal. Hence, seven different standard triangles corresponding to the seven crystal systems have to be considered. For cubic crystals for instance, the standard triangle, is defined by the <span><span class="MathJax_Preview">(010)</span><script type="math/tex">(010)</script></span>, <span><span class="MathJax_Preview">(\bar{1}01)</span><script type="math/tex">(\bar{1}01)</script></span> and <span><span class="MathJax_Preview">(\bar{1}10)</span><script type="math/tex">(\bar{1}10)</script></span> planes and the <span><span class="MathJax_Preview">[001]</span><script type="math/tex">[001]</script></span>, <span><span class="MathJax_Preview">[111]</span><script type="math/tex">[111]</script></span> and <span><span class="MathJax_Preview">[101]</span><script type="math/tex">[101]</script></span> directions as vertices. </p>
-<p>To draw IPF:</p>
+<h3 id="pole-and-inverse-pole-figures">Pole and inverse pole figures<a class="headerlink" href="#pole-and-inverse-pole-figures" title="Permanent link">&para;</a></h3>
+<p>Pole figures (PF) represent given (equivalent) poles in the microscope coordinates. At variance, inverse pole figures (IPF) are used to represent a given direction in the crystal coordinate system. As they reflect the crystal structure, IPF are drawn in the minimal area of the stereographic projection, called the standard triangle, where all equivalent poles or crystal directions can be brought back by a point group symmetry operation of the crystal. Hence, seven different standard triangles corresponding to the seven crystal systems have to be considered. For cubic crystals for instance, the standard triangle, is defined by the <span><span class="MathJax_Preview">(010)</span><script type="math/tex">(010)</script></span>, <span><span class="MathJax_Preview">(\bar{1}01)</span><script type="math/tex">(\bar{1}01)</script></span> and <span><span class="MathJax_Preview">(\bar{1}10)</span><script type="math/tex">(\bar{1}10)</script></span> planes and the <span><span class="MathJax_Preview">[001]</span><script type="math/tex">[001]</script></span>, <span><span class="MathJax_Preview">[111]</span><script type="math/tex">[111]</script></span> and <span><span class="MathJax_Preview">[101]</span><script type="math/tex">[101]</script></span> directions as vertices. </p>
+<p>To draw PF and IPF:</p>
 <ul>
 <li>
-<p>use the <code>IPF</code> menu and select <code>Draw IPF</code>.</p>
+<p>use the <code>PF/IPF</code> menu and select <code>Draw PF/IPF</code>.</p>
 </li>
 <li>
 <p>once the crystal is selected and plotted in the main window, press <code>Draw Standard Triangle</code>.</p>
 </li>
+</ul>
+<p>For IPF:</p>
+<ul>
 <li>
 <p>to add directions, tick the <code>uvw</code> button in the main window. Untick to draw poles.</p>
 </li>
@@ -1229,8 +1232,34 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 <li>
 <p>Zoom and pan using the toolbar. <code>Refresh view</code> to reset. </p>
 </li>
+<li>
+<p>To draw pole figure given the current orientation <span><span class="MathJax_Preview">\varphi_1, \phi, \varphi_2</span><script type="math/tex">\varphi_1, \phi, \varphi_2</script></span> tick the <code>curr. orientation</code> box and click <code>plot IPF</code>. The direction (x,y,z) should be indicated in the left box. By default <code>1,0,0</code> thus indicates the x direction.</p>
+</li>
+</ul>
+<p>For PF:</p>
+<ul>
+<li>For a given orientation, tick the <code>curr. orientation</code> box and click <code>plot PF</code>. The pole {h,k,l} should be indicated in the left box. By default <code>1,0,0</code> thus indicates the {1,0,0} poles.</li>
 </ul>
 <p><img alt="" src="../images/ipf.png" /></p>
+<p>Import data to plot IPF and PF for different orientations (cloud points):</p>
+<ul>
+<li><code>Import data</code> from <code>.txt</code> file with the following scheme</li>
+</ul>
+<div class="codehilite"><pre><span></span># Any comments
+
+phi1,phi,phi2 
+...
+</pre></div>
+
+<ul>
+<li>
+<p>After import the file name appears below. Note that the <code>curr. orientation</code> should not be ticked</p>
+</li>
+<li>
+<p>plot points with <code>plotPF</code> and <code>plotIPF</code> buttons.</p>
+</li>
+</ul>
+<p><img alt="" src="../images/ipf_pf.png" /></p>
 <div class="footnote">
 <hr />
 <ol>
