@@ -516,6 +516,7 @@ def rot_alpha_p():
     tha = s_a * np.float(ui.angle_alpha_entry.text())
     t_ang = -ang_work_space()
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
+    angle_tilt_y()
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
@@ -530,6 +531,7 @@ def rot_alpha_m():
     tha = -s_a * np.float(ui.angle_alpha_entry.text())
     t_ang = -ang_work_space()
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
+    angle_tilt_y()
     M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
     trace()
     euler_label()
@@ -542,6 +544,7 @@ def rot_beta_m():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_b
     tilt_axes()
     t_ang = -ang_work_space()
+    angle_tilt_y()
     t_a_x = np.dot(Rot(t_ang, 0, 0, 1), np.array([1, 0, 0]))
 
     if var_lock == 0:
@@ -563,6 +566,7 @@ def rot_beta_p():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_b
     tilt_axes()
     t_ang = -ang_work_space()
+    angle_tilt_y()
     t_a_x = np.dot(Rot(t_ang, 0, 0, 1), np.array([1, 0, 0]))
     if var_lock == 0:
         AxeY = t_a_x
@@ -582,6 +586,7 @@ def rot_beta_p():
 def rot_z_m():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_z
     tilt_axes()
+    angle_tilt_y()
     if var_lock == 0:
         AxeZ = np.array([0, 0, 1])
     else:
@@ -600,6 +605,7 @@ def rot_z_m():
 def rot_z_p():
     global angle_beta, M, angle_alpha, angle_z, var_lock, M_lock, s_z
     tilt_axes()
+    angle_tilt_y()
     if var_lock == 0:
         AxeZ = np.array([0, 0, 1])
     else:
@@ -623,7 +629,7 @@ def rot_z_p():
 
 def rotgm():
     global g, M, Dstar, a, D
-
+    angle_tilt_y()
     thg = -np.float(ui.rot_g_entry.text())
     diff = ui.diff_entry.text().split(",")
     diff1 = np.float(diff[0])
@@ -647,7 +653,7 @@ def rotgm():
 
 def rotgp():
     global g, M, Dstar, a, D
-
+    angle_tilt_y()
     thg = np.float(ui.rot_g_entry.text())
     diff = ui.diff_entry.text().split(",")
     diff1 = np.float(diff[0])
