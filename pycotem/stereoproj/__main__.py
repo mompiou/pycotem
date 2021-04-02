@@ -94,8 +94,8 @@ def proj_gnomonic(x, y, z):
 
     else:
 
-        X = x / z
-        Y = y / z
+        X = - x / z
+        Y = - y / z
 
     return np.array([X, Y], float)
 
@@ -488,11 +488,11 @@ def euler_label():
     if np.abs(M[2, 2] - 1) < 0.0001:
         phir = 0
         phi1r = 0
-        phi2r = np.arctan2(M[1, 0], M[0, 0]) * 180 / np.pi
+        phi2r = np.arctan2(M[1, 0], M[0, 0]) * 180 / np.pi + ang_work_space()
     else:
         phir = np.arccos(M[2, 2]) * 180 / np.pi
         phi2r = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
-        phi1r = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+        phi1r = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi + ang_work_space()
 
     t = str(np.around(phi1r, decimals=1)) + str(',') + str(np.around(phir, decimals=1)) + str(',') + str(np.around(phi2r, decimals=1))
     ui.angle_euler_label.setText(t)
@@ -1497,11 +1497,23 @@ def dhkl():
 ####################################################################
 
 
-def reset_view():
-    global a
+def angle_tilt_y():
+    global y_tilt, M
+    diff_tilt = np.float(ui.tilt_angle_entry.text())
+    img_tilt = np.float(ui.image_angle_entry.text())
+    if ui.real_space_checkBox.isChecked():
+        M = np.dot(Rot(-img_tilt + y_tilt, 0, 0, 1), M)
+        y_tilt = img_tilt
+    else:
+        M = np.dot(Rot(-diff_tilt + y_tilt, 0, 0, 1), M)
+        y_tilt = diff_tilt
 
+
+def reset_view():
+    global a, y_tilt, M
     a.axis([minx, maxx, miny, maxy])
     mpl.rcParams['font.size'] = ui.text_size_entry.text()
+    angle_tilt_y
     trace()
 
 
@@ -1629,6 +1641,7 @@ def trace():
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape))
     C = []
+    angle_tilt_y()
     trace_plan2(trP)
     trace_cone2(trC)
     schmid_trace2(tr_schmid)
@@ -1672,7 +1685,7 @@ def trace():
 
 
 def princ():
-    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z
+    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt
     trP = np.zeros((1, 5))
     trC = np.zeros((1, 6))
     Stc = np.zeros((1, 3))
@@ -1680,6 +1693,10 @@ def princ():
     naxes = 0
     crist()
     tilt_axes()
+    if ui.real_space_checkBox.isChecked():
+        y_tilt = np.float(ui.tilt_angle_entry.text())
+    else:
+        y_tilt = np.float(ui.image_angle_entry.text())
     if ui.reciprocal_checkBox.isChecked():
         crist_reciprocal()
     a = figure.add_subplot(111)
@@ -1771,7 +1788,7 @@ def princ():
 
 
 def princ2():
-    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, a, axeshr, nn, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_c
+    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, a, axeshr, nn, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_c, y_tilt
 
     trP = np.zeros((1, 5))
     trC = np.zeros((1, 6))
@@ -1787,6 +1804,10 @@ def princ2():
     naxes = 0
     crist()
     tilt_axes()
+    if ui.real_space_checkBox.isChecked():
+        y_tilt = np.float(ui.image_angle_entry.text())
+    else:
+        y_tilt = np.float(ui.tilt_angle_entry.text())
     if ui.reciprocal_checkBox.isChecked():
         crist_reciprocal()
 
@@ -1798,7 +1819,7 @@ def princ2():
     for i in range(0, axes.shape[0]):
         if axesh[i, 5] != -1 and axesh[i, 6] == 1:
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
-            T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
+            T[i, :] = np.dot(rotation(phi1 - ang_work_space(), phi, phi2), axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             axeshr = axeshr / np.linalg.norm(axeshr)
             s = text_label(axes[i, :], axesh[i, :])
@@ -1833,7 +1854,7 @@ def princ2():
     ui.angle_beta_label_2.setText('0.0')
     ui.angle_z_label_2.setText('0.0')
     ui.rg_label.setText('0.0')
-    M = rotation(phi1, phi, phi2)
+    M = rotation(phi1 - ang_work_space(), phi, phi2)
     t = str(np.around(phi1, decimals=1)) + str(',') + str(np.around(phi, decimals=1)) + str(',') + str(np.around(phi2, decimals=1))
     ui.angle_euler_label.setText(t)
 
@@ -2550,7 +2571,7 @@ def diff_reciprocal():
     for i in range(-e, e + 1):
         for j in range(-e, e + 1):
             for k in range(-e, e + 1):
-                if (i, j, k) != (0, 0, 0):
+                if (i, j, k) != (0, 0, 0) and ((var_hexa() == 1 and np.abs(i + j) <= e) or var_hexa() == 0):
                     Ma = np.dot(Dstar, np.array([i, j, k], float))
                     axesh_diff[id, 0:3] = Ma / np.linalg.norm(Ma)
                     if ui_kikuchi.diff_radioButton.isChecked():
@@ -2558,12 +2579,11 @@ def diff_reciprocal():
                         axes_diff[id, :] = np.array([i, j, k])
 
                     if ui_kikuchi.kikuchi_radioButton.isChecked():
-                        m = functools.reduce(lambda x, y: GCD(x, y), [i, j, k])
+                        m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
                         if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
                             axes_diff[id, :] = np.array([i, j, k]) / m
                         else:
                             axes_diff[id, :] = np.array([i, j, k])
-                        axesh_diff[id, 3]
                     id = id + 1
 
     axesh_diff = axesh_diff[~np.all(axesh_diff[:, 0:3] == 0, axis=1)]
@@ -2614,12 +2634,17 @@ def plot_kikuchi():
     lim = np.tan(ang) / lamb * 1e-9
     m = np.max(axesh_diff[:, 3])
 
+    if ui.real_space_checkBox.isChecked():
+        M_d = np.dot(Rot(y_tilt - np.float(ui.tilt_angle_entry.text()), 0, 0, 1), M)
+    else:
+        M_d = M
+
     if ui_kikuchi.diff_radioButton.isChecked():
         smax = np.float(ui_kikuchi.error_entry.text()) * 1e9
         ang_max = np.arccos(1 - lamb * smax)
         thick = np.float(ui_kikuchi.t_entry.text()) * 1e-9
         for t in range(0, np.shape(axesh_diff)[0]):
-            T = np.dot(M, axesh_diff[t, 0:3])
+            T = np.dot(M_d, axesh_diff[t, 0:3])
             if np.abs(T[2]) < np.sin(ang_max):
                 Fg = np.sqrt(axesh_diff[t, 3]) * 1e-10
                 d = 1 / (np.sqrt(np.dot(axes_diff[t, :], np.dot(np.linalg.inv(G), axes_diff[t, :]))))
@@ -2631,7 +2656,7 @@ def plot_kikuchi():
                 I = (thick * np.pi / xi)**2 * np.sinc(se * thick)**2
                 st = str(int(axes_diff[t, 0])) + ',' + str(int(axes_diff[t, 1])) + ',' + str(int(axes_diff[t, 2]))
                 if ui_kikuchi.label_checkBox.isChecked():
-                    a_k.annotate(st, (T[0] / d * 1e-9, T[1] / d * 1e-9), color="white")
+                    a_k.annotate(st, (T[0] / d * 1e-9, T[1] / d * 1e-9), color="yellow", clip_on=True)
                 a_k.scatter(T[0] / d * 1e-9, T[1] / d * 1e-9, s=I * np.float(ui_kikuchi.spot_size_entry.text()), color="white")
                 a_k.plot(0, 0, 'w+')
                 a_k.axis('equal')
@@ -2640,7 +2665,7 @@ def plot_kikuchi():
 
     if ui_kikuchi.kikuchi_radioButton.isChecked():
         for t in range(0, np.shape(axesh_diff)[0]):
-            T = np.dot(M, axesh_diff[t, 0:3])
+            T = np.dot(M_d, axesh_diff[t, 0:3])
             if np.abs(T[2]) < np.sin(ang):
                 r = np.sqrt(T[0]**2 + T[1]**2 + T[2]**2)
                 A = np.zeros((2, 50))
@@ -2666,7 +2691,7 @@ def plot_kikuchi():
 
                 st = str(int(axes_diff[t, 0])) + ',' + str(int(axes_diff[t, 1])) + ',' + str(int(axes_diff[t, 2]))
                 if ui_kikuchi.label_checkBox.isChecked():
-                    a_k.annotate(st, (Qa[2, 0] + 300, Qa[2, 1] + 300), ha='center', va='center', rotation=th - 90, color="white")
+                    a_k.annotate(st, (Qa[2, 0] + 300.001, Qa[2, 1] + 300.001), ha='center', va='center', rotation=th - 90, color="yellow", clip_on=True)
 
                 a_k.plot(Qa[:, 0] + 300, Qa[:, 1] + 300, 'w-', linewidth=axesh_diff[t, 3] / m)
                 a_k.plot(Qb[:, 0] + 300, Qb[:, 1] + 300, 'w-', linewidth=axesh_diff[t, 3] / m)

@@ -15,7 +15,9 @@ from PIL import ImageEnhance
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-from . import kikuchiUI, refineUI, tiltUI
+from . import kikuchiUI
+from . import refineUI
+from . import tiltUI
 
 ######################
 #
@@ -587,7 +589,7 @@ def show_result():
     for z in range(0, Num - 1):
         v0[z, :] = np.array([(Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) - Ct[0], height - (B2[z + 1, 0] * (Ct[0] + B2[z + 1, 0] * (height - Ct[1]) - B2[z + 1, 1] * B2[z + 1, 0]) / (1 + B2[z + 1, 0]**2) + B2[z + 1, 1]) - Ct[1]])
         g = (1 + 0.5 * np.sign(v0[z, 1]) * B2[z + 1, 2] / np.linalg.norm(v0[z, :]))
-        v0[z, :] = v0[z, :] * g
+        v0[z, :] = -v0[z, :] * g
         v[z, :] = three_coor(v0[z, :], L)
         dp[z] = calib / 2 / np.linalg.norm(v[z, :] - three_coor(v0[z, :] / g, L))
         v[z, :] = v[z, :] / np.linalg.norm(v[z, :])
@@ -738,7 +740,7 @@ def plot_orientation():
     L = calib / lambd
     for z in range(0, g_c.shape[0]):
         g_xyz = np.dot(M, g_c[z, :])
-        vm = -L * np.array([0, 0, 1]) + L * g_xyz[2] * g_xyz
+        vm = L * np.array([0, 0, 1]) - L * g_xyz[2] * g_xyz
         br = np.arcsin(lambd / 2 / distance(K[sol, z, 1], K[sol, z, 2], K[sol, z, 3]))
         vp1 = vm + np.linalg.norm(vm) * np.tan(br) * g_xyz
         vp2 = vm - np.linalg.norm(vm) * np.tan(br) * g_xyz
