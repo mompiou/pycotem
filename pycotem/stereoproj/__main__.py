@@ -2114,9 +2114,11 @@ def image_save():
 
 def center():
     global D, Dstar, M
+    X = np.dot(Rot(-y_tilt, 0, 0, 1), np.array([1, 0, 0]))
+    Y = np.dot(Rot(-y_tilt, 0, 0, 1), np.array([0, 1, 0]))
     A = np.dot(np.linalg.inv(M), np.array([0, 0, 1]))
-    A2 = np.dot(np.linalg.inv(M), np.array([1, 0, 0]))
-    A3 = np.dot(np.linalg.inv(M), np.array([0, 1, 0]))
+    A2 = np.dot(np.linalg.inv(M), X)
+    A3 = np.dot(np.linalg.inv(M), Y)
     if ui_xyz.uvw_CheckBox.isChecked():
         Tr = np.linalg.inv(D)
     else:
@@ -2254,7 +2256,7 @@ def intersect_norm(n1, n2, d):
         n2 = np.dot(Dstarr, n2)
     else:
         l = ui_inter.checkBox_2.isChecked()
-        n2 = np.dot(np.linalg.inv(M), n2)
+        n2 = np.dot(Rot(-y_tilt, 0, 0, 1), np.dot(np.linalg.inv(M), n2))
 
     n = np.cross(n1, n2)
     if l:
