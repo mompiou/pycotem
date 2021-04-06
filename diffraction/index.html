@@ -646,7 +646,7 @@ I(\vec{q})=\Psi(\vec{q})\Psi^\ast(\vec{q})
 $$
 \sum_{j=1}^N e^{- 2i\pi (h \cdot x_j + k \cdot y_j  + l \cdot z_j)}=0
 $$
-For fcc cubic crystals, with atoms placed at <span><span class="MathJax_Preview">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</span><script type="math/tex">(x_j,y_j,z_j)= (0, 0, 0), (0.5, 0.5, 0) ,(0, 0.5, 0.5), (0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity.</p>
+For fcc cubic crystals, with atoms placed at <span><span class="MathJax_Preview">(x_j,y_j,z_j)</span><script type="math/tex">(x_j,y_j,z_j)</script></span> = <span><span class="MathJax_Preview">(0, 0, 0)</span><script type="math/tex">(0, 0, 0)</script></span>, <span><span class="MathJax_Preview">(0.5, 0.5, 0)</span><script type="math/tex">(0.5, 0.5, 0)</script></span> ,<span><span class="MathJax_Preview">(0, 0.5, 0.5)</span><script type="math/tex">(0, 0.5, 0.5)</script></span>, <span><span class="MathJax_Preview">(0.5, 0, 0.5)</span><script type="math/tex">(0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity.</p>
 </div>
 <p>The atomic form factor <span><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> corresponds to the amplitude of the wave diffracting on a single atom. In the range of scattering vectors between <span><span class="MathJax_Preview">0\leq q \leq 25 \mathring{A}^{-1}</span><script type="math/tex">0\leq q \leq 25 \mathring{A}^{-1}</script></span>, the atomic form factor can be approximated by a Gaussian decomposition:</p>
 <div>
@@ -716,10 +716,10 @@ As a consequence, the pattern will depend on the acceleration voltage, through t
 
 <p>For <strong>Diffraction</strong>,  both the value <span><span class="MathJax_Preview">r . d</span><script type="math/tex">r . d</script></span> and the acceleration voltage (in kV) are necessary, the other fields are informative.  </p>
 <h2 id="orientation-from-a-set-of-diffraction-vectors">Orientation from a set of diffraction vectors<a class="headerlink" href="#orientation-from-a-set-of-diffraction-vectors" title="Permanent link">&para;</a></h2>
-<p>If a set of diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the sample coordinates <span><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> (see below regarding ambiguities). Given the direction <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> in the crystal <span><span class="MathJax_Preview">c</span><script type="math/tex">c</script></span> coordinates:</p>
+<p>If a set of diffraction vectors are given, the orientation can be retrieved knowing the position of the vectors in the microscope coordinates <span><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> (see below regarding ambiguities). Given the direction <span><span class="MathJax_Preview">X</span><script type="math/tex">X</script></span> in the crystal <span><span class="MathJax_Preview">C</span><script type="math/tex">C</script></span> coordinates:</p>
 <div>
 <div class="MathJax_Preview">
-G_c  X = G_s  
+G_C  X = G_M  
 \begin{pmatrix} 
 1\\
 0 \\
@@ -727,7 +727,7 @@ G_c  X = G_s
 \end{pmatrix}
 </div>
 <script type="math/tex; mode=display">
-G_c  X = G_s  
+G_C  X = G_M  
 \begin{pmatrix} 
 1\\
 0 \\
@@ -738,14 +738,14 @@ G_c  X = G_s
 <p>where </p>
 <div>
 <div class="MathJax_Preview">
-G_c=D^\ast \begin{pmatrix} 
+G_C=D^\ast \begin{pmatrix} 
 h_1 &amp; k_1 &amp; l_1\\
 &amp; ... &amp; \\
 h_N &amp; k_N &amp; l_N     
 \end{pmatrix}
 </div>
 <script type="math/tex; mode=display">
-G_c=D^\ast \begin{pmatrix} 
+G_C=D^\ast \begin{pmatrix} 
 h_1 & k_1 & l_1\\
 & ... & \\
 h_N & k_N & l_N     
@@ -756,14 +756,14 @@ h_N & k_N & l_N
 <span><span class="MathJax_Preview">D^\ast</span><script type="math/tex">D^\ast</script></span> is defined <a href="../stereoproj/#setting-up-the-crystal">here</a>, and: </p>
 <div>
 <div class="MathJax_Preview"> 
-G_s=\begin{pmatrix} 
+G_M=\begin{pmatrix} 
 x_1 &amp; y_1 &amp; z_1\\
 &amp; ... &amp; \\
 x_N &amp; y_N &amp; z_N     
 \end{pmatrix}
 </div>
 <script type="math/tex; mode=display"> 
-G_s=\begin{pmatrix} 
+G_M=\begin{pmatrix} 
 x_1 & y_1 & z_1\\
 & ... & \\
 x_N & y_N & z_N     
@@ -807,33 +807,33 @@ R_x(-\beta_i) R_y(-\alpha_i) R_z(-\eta_i) \begin{pmatrix}
 <p>The equations</p>
 <div>
 <div class="MathJax_Preview">
-G_cX=G_s [1,0,0]^T \\
-G_cY=G_s [0,1,0]^T \\
-G_cZ =G_s [0,0,1]^T
+G_CX=G_M [1,0,0]^T \\
+G_CY=G_M [0,1,0]^T \\
+G_CZ =G_M [0,0,1]^T
 </div>
 <script type="math/tex; mode=display">
-G_cX=G_s [1,0,0]^T \\
-G_cY=G_s [0,1,0]^T \\
-G_cZ =G_s [0,0,1]^T
+G_CX=G_M [1,0,0]^T \\
+G_CY=G_M [0,1,0]^T \\
+G_CZ =G_M [0,0,1]^T
 </script>
 </div>
 <p>lead to:</p>
 <div>
 <div class="MathJax_Preview">
-G_c A=G_s
+G_C A=G_M
 </div>
 <script type="math/tex; mode=display">
-G_c A=G_s
+G_C A=G_M
 </script>
 </div>
 <p>The above equation defines the crystal orientation, so that <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> should be a rotation matrix. The closest Euler rotation matrix <span><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> can be found with the approach proposed by Mackenzie <sup id="fnref:mackenzie"><a class="footnote-ref" href="#fn:mackenzie" rel="footnote">2</a></sup> using singular value decomposition:</p>
 <div>
 <div class="MathJax_Preview">
-U,S,V^T=svd(G_c^TG_s) \\
+U,S,V^T=svd(G_C^TG_M) \\
 R=V U^T
 </div>
 <script type="math/tex; mode=display">
-U,S,V^T=svd(G_c^TG_s) \\
+U,S,V^T=svd(G_C^TG_M) \\
 R=V U^T
 </script>
 </div>
@@ -873,7 +873,7 @@ On the contrary, the right side of the figure is not ambiguous, as the 180° rot
 <h3 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
-<p>Open a diffraction pattern. Make sure that the file name does not contain non-ASCII character.</p>
+<p>Open a diffraction pattern. Make sure that the file name does not contain non-ASCII characters.</p>
 </li>
 <li>
 <p>Define a calibration in the <code>Calibrations</code> box</p>
@@ -899,7 +899,7 @@ On the contrary, the right side of the figure is not ambiguous, as the 180° rot
 <li>The distance <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> (A) and the inclination angle <span><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> are indicated in the <strong>Dist, Inclination</strong> box.</li>
 </ul>
 <h3 id="option-1-computer-aided-determination-of-hkl-indices">Option 1: computer-aided determination of (h,k,l) indices<a class="headerlink" href="#option-1-computer-aided-determination-of-hkl-indices" title="Permanent link">&para;</a></h3>
-<p>In most of case, the reflections indices can be determined unambiguously from their d-spacing.</p>
+<p>In most of case, the reflection indices can be determined unambiguously from their d-spacing.</p>
 <ul>
 <li>
 <p>Indicate a value in px  in the <code>precision</code> box. The g-vectors will be chosen within the uncertainty range <span><span class="MathJax_Preview">\pm</span><script type="math/tex">\pm</script></span> the precision. By default, the value is 10 px.</p>
@@ -908,7 +908,7 @@ On the contrary, the right side of the figure is not ambiguous, as the 180° rot
 <p>Select the d-spacing  in the <strong>Dist, Inclination</strong> box.</p>
 </li>
 <li>
-<p>Click on <code>Find diffraction spots</code> to identify the spot . The results appear in the <strong>g vectors</strong> box with the scheme
+<p>Click on <code>Find diffraction spots</code> to identify the spot. The results appear in the <strong>g vectors</strong> box with the scheme
 <div class="codehilite"><pre><span></span>d(A) |  h,k,l | Intensity(arb. units) | angles
 </pre></div>
 The angles values are explained below.</p>
@@ -938,7 +938,7 @@ The angles values are explained below.</p>
 </ul>
 <p><img alt="" src="../images/diff-data.png" /></p>
 <h3 id="option-2-automatic-determination">Option 2: Automatic determination<a class="headerlink" href="#option-2-automatic-determination" title="Permanent link">&para;</a></h3>
-<p>When the reflections are ambiguous from their d-spacing, consistent sets of data can be retrieved by comparing the measured angles <span><span class="MathJax_Preview">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span><span class="MathJax_Preview">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. The sets of  g-vectors are obtained if all the angles difference <span><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle equals to 3 degrees. To proceed this way:</p>
+<p>When the reflections are ambiguous from their d-spacing, consistent sets of data can be retrieved by comparing the measured angles <span><span class="MathJax_Preview">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span><span class="MathJax_Preview">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. The sets of  g-vectors are obtained if all the angle differences <span><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle equals to 3 degrees. To proceed this way:</p>
 <ul>
 <li>
 <p>Tick the <code>do not use g-vector guess</code> box.</p>
@@ -982,7 +982,7 @@ In case of option 2, the <span><span class="MathJax_Preview">(hkl)</span><script
 </script>
 </div>
 <ul>
-<li>In case of option 2, the results are sorted by ascending order of mean deviation angles and mean d-spacing.</li>
+<li>In case of option 2, the results are sorted by ascending order of mean deviation angles and mean d-spacings.</li>
 </ul>
 <p><img alt="" src="/images/diff-result.png" /></p>
 <h2 id="importexport-data">Import/Export data<a class="headerlink" href="#importexport-data" title="Permanent link">&para;</a></h2>
