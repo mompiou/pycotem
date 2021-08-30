@@ -191,35 +191,35 @@ def crist():
 
     abc2 = ui.abc_entry_2.text().split(",")
     alphabetagamma2 = ui.alphabetagamma_entry_2.text().split(",")
-    e2 = np.int(ui.e_entry_2.text())
+    e2 = np.int32(ui.e_entry_2.text())
     abc = ui.abc_entry.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    e = np.int(ui.e_entry.text())
+    e = np.int32(ui.e_entry.text())
     hexa_cryst1 = 0
 
-    if np.float(alphabetagamma[0]) == 90 and np.float(alphabetagamma[1]) == 90 and np.float(alphabetagamma[2]) == 120:
+    if np.float64(alphabetagamma[0]) == 90 and np.float64(alphabetagamma[1]) == 90 and np.float64(alphabetagamma[2]) == 120:
         hexa_cryst1 = 1
-        dmip1 = np.float(abc[0]) / 2 - 0.0001e-10
+        dmip1 = np.float64(abc[0]) / 2 - 0.0001e-10
     else:
         dmip1 = 0
 
     hexa_cryst2 = 0
-    if np.float(alphabetagamma2[0]) == 90 and np.float(alphabetagamma2[1]) == 90 and np.float(alphabetagamma2[2]) == 120:
+    if np.float64(alphabetagamma2[0]) == 90 and np.float64(alphabetagamma2[1]) == 90 and np.float64(alphabetagamma2[2]) == 120:
         hexa_cryst2 = 1
-        dmip2 = np.float(abc2[0]) / 2 - 0.0001e-10
+        dmip2 = np.float64(abc2[0]) / 2 - 0.0001e-10
     else:
         dmip2 = 0
 
     ui.d1_Slider.setMinimum(0)
-    ui.d1_Slider.setMaximum(np.amax([np.float(abc[0]), np.float(abc[1]), np.float(abc[2])]) * 100)
+    ui.d1_Slider.setMaximum(int(np.amax([np.float64(abc[0]), np.float64(abc[1]), np.float64(abc[2])]) * 100))
     ui.d1_Slider.setSingleStep(100)
     ui.d1_Slider.setValue(dmip1 * 100)
     ui.d_label_var.setText(str(np.around(dmip1, decimals=3)))
 
     ui.d2_Slider.setMinimum(0)
-    ui.d2_Slider.setMaximum(np.amax([np.float(abc2[0]), np.float(abc2[1]), np.float(abc2[2])]) * 100)
+    ui.d2_Slider.setMaximum(int(np.amax([np.float64(abc2[0]), np.float64(abc2[1]), np.float64(abc2[2])]) * 100))
     ui.d2_Slider.setSingleStep(100)
-    ui.d2_Slider.setValue(dmip2 * 100)
+    ui.d2_Slider.setValue(int(dmip2 * 100))
 
     ui.d_label_var_2.setText(str(np.around(dmip2, decimals=3)))
 
@@ -234,12 +234,12 @@ def crist():
 
 
 def crist_mat(abc, alphabetagamma):
-    a = np.float(abc[0]) * 1e-10
-    b = np.float(abc[1]) * 1e-10
-    c = np.float(abc[2]) * 1e-10
-    alpha = np.float(alphabetagamma[0])
-    beta = np.float(alphabetagamma[1])
-    gamma = np.float(alphabetagamma[2])
+    a = np.float64(abc[0]) * 1e-10
+    b = np.float64(abc[1]) * 1e-10
+    c = np.float64(abc[2]) * 1e-10
+    alpha = np.float64(alphabetagamma[0])
+    beta = np.float64(alphabetagamma[1])
+    gamma = np.float64(alphabetagamma[2])
     alpha = alpha * np.pi / 180
     beta = beta * np.pi / 180
     gamma = gamma * np.pi / 180
@@ -400,7 +400,7 @@ def rot_alpha_p():
     global angle_alpha, M, M2, a, trP, trC, s_a
     t_ang = -ang_work_space()
     i_c = crystal_check()
-    tha = s_a * np.float(ui.angle_alpha_entry.text())
+    tha = s_a * np.float64(ui.angle_alpha_entry.text())
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
     if i_c == 1:
         M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
@@ -409,7 +409,7 @@ def rot_alpha_p():
     trace()
     euler_label()
 
-    angle_alpha = angle_alpha + np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha + np.float64(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
 
 
@@ -417,7 +417,7 @@ def rot_alpha_m():
     global angle_alpha, M, M2, a, trP, trC, s_a
     t_ang = -ang_work_space()
     i_c = crystal_check()
-    tha = -s_a * np.float(ui.angle_alpha_entry.text())
+    tha = -s_a * np.float64(ui.angle_alpha_entry.text())
     t_a_y = np.dot(Rot(t_ang, 0, 0, 1), np.array([0, 1, 0]))
     if i_c == 1:
         M = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M)
@@ -425,7 +425,7 @@ def rot_alpha_m():
         M2 = np.dot(Rot(tha, t_a_y[0], t_a_y[1], t_a_y[2]), M2)
     trace()
     euler_label()
-    angle_alpha = angle_alpha - np.float(ui.angle_alpha_entry.text())
+    angle_alpha = angle_alpha - np.float64(ui.angle_alpha_entry.text())
     ui.angle_alpha_label_2.setText(str(angle_alpha))
 
 
@@ -444,14 +444,14 @@ def rot_beta_m():
         else:
             AxeY = np.dot(M2, A)
 
-    thb = -s_b * np.float(ui.angle_beta_entry.text())
+    thb = -s_b * np.float64(ui.angle_beta_entry.text())
     if i_c == 1:
         M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     else:
         M2 = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M2)
     trace()
     euler_label()
-    angle_beta = angle_beta - np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta - np.float64(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
 
 
@@ -469,14 +469,14 @@ def rot_beta_p():
         else:
             AxeY = np.dot(M2, A)
 
-    thb = s_b * np.float(ui.angle_beta_entry.text())
+    thb = s_b * np.float64(ui.angle_beta_entry.text())
     if i_c == 1:
         M = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M)
     else:
         M2 = np.dot(Rot(thb, AxeY[0], AxeY[1], AxeY[2]), M2)
     trace()
     euler_label()
-    angle_beta = angle_beta + np.float(ui.angle_beta_entry.text())
+    angle_beta = angle_beta + np.float64(ui.angle_beta_entry.text())
     ui.angle_beta_label_2.setText(str(angle_beta))
 
 
@@ -494,14 +494,14 @@ def rot_z_m():
         else:
             AxeZ = np.dot(M2, A)
 
-    thz = -s_z * np.float(ui.angle_z_entry.text())
+    thz = -s_z * np.float64(ui.angle_z_entry.text())
     if i_c == 1:
         M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     else:
         M2 = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M2)
     trace()
     euler_label()
-    angle_z = angle_z - np.float(ui.angle_z_entry.text())
+    angle_z = angle_z - np.float64(ui.angle_z_entry.text())
     ui.angle_z_label_2.setText(str(angle_z))
 
 
@@ -518,7 +518,7 @@ def rot_z_p():
         else:
             AxeZ = np.dot(M2, A)
 
-    thz = s_z * np.float(ui.angle_z_entry.text())
+    thz = s_z * np.float64(ui.angle_z_entry.text())
     if i_c == 1:
         M = np.dot(Rot(thz, AxeZ[0], AxeZ[1], AxeZ[2]), M)
     else:
@@ -526,7 +526,7 @@ def rot_z_p():
     trace()
     euler_label()
 
-    angle_z = angle_z + np.float(ui.angle_z_entry.text())
+    angle_z = angle_z + np.float64(ui.angle_z_entry.text())
     ui.angle_z_label_2.setText(str(angle_z))
 
 
@@ -540,11 +540,11 @@ def rot_z_p():
 def rotgm():
     global g, M, M2, Dstar, a, D
     i_c = crystal_check()
-    thg = -np.float(ui.rot_g_entry.text())
+    thg = -np.float64(ui.rot_g_entry.text())
     diff = ui.pole_entry.text().split(",")
-    diff1 = np.float(diff[0])
-    diff2 = np.float(diff[1])
-    diff3 = np.float(diff[2])
+    diff1 = np.float64(diff[0])
+    diff2 = np.float64(diff[1])
+    diff3 = np.float64(diff[2])
     A = np.array([diff1, diff2, diff3])
     if var_uvw() == 1:
         if var_hexa(i_c) == 1:
@@ -561,7 +561,7 @@ def rotgm():
 
     trace()
     euler_label()
-    g = g - np.float(ui.rot_g_entry.text())
+    g = g - np.float64(ui.rot_g_entry.text())
     ui.rg_label.setText(str(g))
     return g, M, M2
 
@@ -569,11 +569,11 @@ def rotgm():
 def rotgp():
     global g, M, M2, Dstar, D
     i_c = crystal_check()
-    thg = np.float(ui.rot_g_entry.text())
+    thg = np.float64(ui.rot_g_entry.text())
     diff = ui.pole_entry.text().split(",")
-    diff1 = np.float(diff[0])
-    diff2 = np.float(diff[1])
-    diff3 = np.float(diff[2])
+    diff1 = np.float64(diff[0])
+    diff2 = np.float64(diff[1])
+    diff3 = np.float64(diff[2])
     A = np.array([diff1, diff2, diff3])
     if var_uvw() == 1:
         if var_hexa(i_c) == 1:
@@ -589,7 +589,7 @@ def rotgp():
         M2 = np.dot(Rot(thg, Ap[0], Ap[1], Ap[2]), M2)
     trace()
     euler_label()
-    g = g + np.float(ui.rot_g_entry.text())
+    g = g + np.float64(ui.rot_g_entry.text())
     ui.rg_label.setText(str(g))
     return g, M
 
@@ -687,9 +687,9 @@ def addpole_sym():
     global M, M2, axes, axesh, T, V, D, Dstar, G
     i_c = crystal_check()
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     v = d(pole1, pole2, pole3)
     pole(pole1, pole2, pole3)
 
@@ -761,9 +761,9 @@ def undo_sym():
     global M, M2, axes, axesh, T, V, D, Dstar, G
     i_c = crystal_check()
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     v = d(pole1, pole2, pole3)
     undo_pole(pole1, pole2, pole3)
     if var_hexa(i_c) == 1:
@@ -833,9 +833,9 @@ def undo_sym():
 def addpole():
 
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     pole(pole1, pole2, pole3)
     trace()
 
@@ -843,9 +843,9 @@ def addpole():
 def undo_addpole():
     global M, M2, axes, axesh, T, V, D, Dstar, trP
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     undo_pole(pole1, pole2, pole3)
     trace()
 
@@ -876,9 +876,9 @@ def trace_addplan():
     global M, M2, axes, axesh, T, V, D, Dstar, trP
 
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
 
     trace_plan(pole1, pole2, pole3)
     trace()
@@ -888,9 +888,9 @@ def undo_trace_addplan():
     global M, M2, axes, axesh, T, V, D, Dstar, trP
 
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
 
     undo_trace_plan(pole1, pole2, pole3)
     trace()
@@ -910,9 +910,9 @@ def trace_plan_sym():
     global M, M2, axes, axesh, T, V, D, Dstar, G
     i_c = crystal_check()
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     v = d(pole1, pole2, pole3)
     trace_plan(pole1, pole2, pole3)
 
@@ -984,9 +984,9 @@ def undo_trace_plan_sym():
     global M, M2, axes, axesh, T, V, D, Dstar, G
     i_c = crystal_check()
     pole_entry = ui.pole_entry.text().split(",")
-    pole1 = np.float(pole_entry[0])
-    pole2 = np.float(pole_entry[1])
-    pole3 = np.float(pole_entry[2])
+    pole1 = np.float64(pole_entry[0])
+    pole2 = np.float64(pole_entry[1])
+    pole3 = np.float64(pole_entry[2])
     v = d(pole1, pole2, pole3)
 
     undo_trace_plan(pole1, pole2, pole3)
@@ -1307,9 +1307,7 @@ def trace():
     global T, x, y, z, axes, axesh, M, M2, trP, a, trC, s_a, s_b, s_z, Qp, D1, D0, S
     minx, maxx = a.get_xlim()
     miny, maxy = a.get_ylim()
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape[0], 3))
     trace_plan2(trP)
@@ -1338,7 +1336,7 @@ def trace():
             O.append(C[-1])
 
     s0 = axesh[:, 6]
-    a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float(ui.size_var.text()), facecolors=O, linewidth=1.5)
+    a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float64(ui.size_var.text()), facecolors=O, linewidth=1.5)
     trace_misorientation(Qp)
     a.axis([minx, maxx, miny, maxy])
     wulff()
@@ -1351,23 +1349,22 @@ def trace():
 # "
 
 def princ2():
-    global T, angle_alpha, angle_beta, angle_z, M, M2, Dstar, D, g, M0, trP, a, axeshr, minx, maxx, miny, maxy, trC, Stc, dmip, tr_schmid, s_a, s_b, s_c, axes, axesh, D, Dstar, V, G, Qp
+    global T, angle_alpha, angle_beta, angle_z, M, M2, Dstar, D, g, M0, trP, a, axeshr, minx, maxx, miny, maxy, trC, Stc, dmip, tr_schmid, s_a, s_b, s_c, axes, axesh, D, Dstar, V, G, Qp, a
 
+    a.clear()
     trP = np.zeros((1, 6))
     Stc = np.zeros((1, 3))
     Qp = np.zeros((1, 2))
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+
     phi1phiphi2 = ui.phi1phiphi2_entry.text().split(",")
-    phi1 = np.float(phi1phiphi2[0])
-    phi = np.float(phi1phiphi2[1])
-    phi2 = np.float(phi1phiphi2[2])
+    phi1 = np.float64(phi1phiphi2[0])
+    phi = np.float64(phi1phiphi2[1])
+    phi2 = np.float64(phi1phiphi2[2])
 
     phi1phiphi2_2 = ui.phi1phiphi2_2_entry.text().split(",")
-    phi1_2 = np.float(phi1phiphi2_2[0])
-    phi_2 = np.float(phi1phiphi2_2[1])
-    phi2_2 = np.float(phi1phiphi2_2[2])
+    phi1_2 = np.float64(phi1phiphi2_2[0])
+    phi_2 = np.float64(phi1phiphi2_2[1])
+    phi2_2 = np.float64(phi1phiphi2_2[2])
 
     crist()
     tilt_axes()
@@ -1400,7 +1397,7 @@ def princ2():
             O.append(C[-1])
 
     s0 = axesh[:, 6]
-    a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float(ui.size_var.text()), facecolors=O, linewidth=1.5)
+    a.scatter(P[:, 0] + 300, P[:, 1] + 300, edgecolors=C, s=s0 * np.float64(ui.size_var.text()), facecolors=O, linewidth=1.5)
 
     minx, maxx = -2, 602
     miny, maxy = -2, 602
@@ -1458,12 +1455,12 @@ def cryststruct():
         alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     else:
         return
-    a = np.float(abc[0]) * 1e-10
-    b = np.float(abc[1]) * 1e-10
-    c = np.float(abc[2]) * 1e-10
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
+    a = np.float64(abc[0]) * 1e-10
+    b = np.float64(abc[1]) * 1e-10
+    c = np.float64(abc[2]) * 1e-10
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
 
     if gam == 90 and alp == 90 and bet == 90 and a == b and b == c:
         cs = 1
@@ -1765,9 +1762,9 @@ def image_save():
 
 def ang_work_space():
     if ui.real_space_checkBox.isChecked():
-        t_ang = np.float(ui.image_angle_entry.text())
+        t_ang = np.float64(ui.image_angle_entry.text())
     else:
-        t_ang = np.float(ui.tilt_angle_entry.text())
+        t_ang = np.float64(ui.tilt_angle_entry.text())
     return t_ang
 
 ##################################################

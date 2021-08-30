@@ -47,9 +47,6 @@ def onrelease(event):
 def click(event):
     global gclick, s, minx, maxx, miny, maxy
 
-    a = figure.add_subplot(111)
-    minx, maxx = a.get_xlim()
-    miny, maxy = a.get_ylim()
     x = event.xdata
     y = event.ydata
     a.annotate(str(s), (x, y))
@@ -69,10 +66,9 @@ def click(event):
 ############################
 def reset_last_point():
     global image_diff, gclick, s, minx, maxx, miny, maxy
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    minx, maxx = a.get_xlim()
+    miny, maxy = a.get_ylim()
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -92,10 +88,9 @@ def reset_last_point():
 
 def reset_points():
     global image_diff, gclick, s, minx, maxx, miny, maxy, D_p
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    minx, maxx = a.get_xlim()
+    miny, maxy = a.get_ylim()
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -117,10 +112,7 @@ def reset_points():
 
 def reset():
     global image_diff, gclick, s, minx, maxx, miny, maxy, D_p
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -241,13 +233,13 @@ def rotation(phi1, phi, phi2):
 def cryst():
 
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float(alphabetagamma[0]) * np.pi / 180
-    beta = np.float(alphabetagamma[1]) * np.pi / 180
-    gamma = np.float(alphabetagamma[2]) * np.pi / 180
+    alpha = np.float64(alphabetagamma[0]) * np.pi / 180
+    beta = np.float64(alphabetagamma[1]) * np.pi / 180
+    gamma = np.float64(alphabetagamma[2]) * np.pi / 180
     V = a * b * c * np.sqrt(1 - (np.cos(alpha)**2) - (np.cos(beta))**2 - (np.cos(gamma))**2 + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma))
     D = np.array([[a, b * np.cos(gamma), c * np.cos(beta)], [0, b * np.sin(gamma), c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)], [0, 0, V / (a * b * np.sin(gamma))]])
     M = np.transpose(D)
@@ -373,7 +365,7 @@ def get_direction():
 
         L = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
-        t_ang = np.float(ui.image_angle_entry.text())
+        t_ang = np.float64(ui.image_angle_entry.text())
 
         for i in range(0, tilt_a.shape[0]):
             R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
@@ -416,9 +408,9 @@ def get_direction():
 
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
-            phi1 = np.float(euler[0])
-            phi = np.float(euler[1])
-            phi2 = np.float(euler[2])
+            phi1 = np.float64(euler[0])
+            phi = np.float64(euler[1])
+            phi2 = np.float64(euler[2])
             M = cryst()
             T_cc = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), T / np.linalg.norm(T)).T
             T_cc = np.dot(M, T_cc.T)
@@ -467,7 +459,7 @@ def get_normal():
         B = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
 
-        t_ang = np.float(ui.image_angle_entry.text())
+        t_ang = np.float64(ui.image_angle_entry.text())
 
         for i in range(0, tilt_a.shape[0]):
             R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
@@ -508,9 +500,9 @@ def get_normal():
         # in crystal coordinate
         if ui.crystal_checkBox.isChecked():
             euler = ui.euler_entry.text().split(",")
-            phi1 = np.float(euler[0])
-            phi = np.float(euler[1])
-            phi2 = np.float(euler[2])
+            phi1 = np.float64(euler[0])
+            phi = np.float64(euler[1])
+            phi2 = np.float64(euler[2])
             M = cryst()
             n_cc = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), n / np.linalg.norm(n)).T
             T_cc = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), T / np.linalg.norm(T)).T
@@ -546,9 +538,7 @@ def get_normal():
 
 def plot_dir_planes():
     global D_p, minx, miny, maxx, maxy, image_diff
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -560,7 +550,7 @@ def plot_dir_planes():
         if D_p[i, 8] == 1:
             a.plot([D_p[i, 2], D_p[i, 2] + D_p[i, 0]], [D_p[i, 3], D_p[i, 3] - D_p[i, 1]], 'r-')
             if ui_draw.label_checkBox.isChecked():
-                st = str(np.float(D_p[i, 5])) + ',' + str(np.float(D_p[i, 6])) + ',' + str(np.float(D_p[i, 7]))
+                st = str(np.float64(D_p[i, 5])) + ',' + str(np.float64(D_p[i, 6])) + ',' + str(np.float64(D_p[i, 7]))
                 a.annotate(st, (D_p[i, 2] + D_p[i, 0], D_p[i, 3] - D_p[i, 1]))
             a.axis('off')
 
@@ -574,7 +564,7 @@ def plot_dir_planes():
             a.axis('off')
 
             if ui_draw.label_checkBox.isChecked():
-                st = str(np.float(D_p[i, 5])) + ',' + str(np.float(D_p[i, 6])) + ',' + str(np.float(D_p[i, 7]))
+                st = str(np.float64(D_p[i, 5])) + ',' + str(np.float64(D_p[i, 6])) + ',' + str(np.float64(D_p[i, 7]))
                 angp = np.arctan2(D_p[i, 1], D_p[i, 0]) * 180 / np.pi
                 a.annotate(st, (xw, yw), rotation=angp, ha='center', va='center')
 
@@ -590,12 +580,12 @@ def undo_plot_dir_planes():
 def draw_planes_dir():
     global gclick, minx, miny, maxx, maxy, image_diff, D_p
 
-    t = np.float(ui_draw.thickness_entry.text())
+    t = np.float64(ui_draw.thickness_entry.text())
     s_a, s_b, s_z = tilt_axes()
-    t_ang = np.float(ui.image_angle_entry.text())
-    tilt_x = -s_b * np.float(ui.tilt_x_entry.text())
-    tilt_y = -s_a * np.float(ui.tilt_y_entry.text())
-    tilt_z = -s_z * np.float(ui.tilt_z_entry.text())
+    t_ang = np.float64(ui.image_angle_entry.text())
+    tilt_x = -s_b * np.float64(ui.tilt_x_entry.text())
+    tilt_y = -s_a * np.float64(ui.tilt_y_entry.text())
+    tilt_z = -s_z * np.float64(ui.tilt_z_entry.text())
 
     ii = 0
     while ii < len(x_micro):
@@ -606,12 +596,12 @@ def draw_planes_dir():
         ii = ii + 1
 
     nd = ui_draw.plane_entry.text().split(",")
-    nd = np.array([np.float(nd[0]), np.float(nd[1]), np.float(nd[2])])
+    nd = np.array([np.float64(nd[0]), np.float64(nd[1]), np.float64(nd[2])])
     if ui.crystal_checkBox.isChecked():
         euler = ui.euler_entry.text().split(",")
-        phi1 = np.float(euler[0])
-        phi = np.float(euler[1])
-        phi2 = np.float(euler[2])
+        phi1 = np.float64(euler[0])
+        phi = np.float64(euler[1])
+        phi2 = np.float64(euler[2])
     else:
         phi1 = 0
         phi = 0
@@ -621,13 +611,10 @@ def draw_planes_dir():
     Dstar = np.transpose(np.linalg.inv(D))
     x = gclick[-1, 0]
     y = gclick[-1, 1]
-    a = figure.add_subplot(111)
-    minx, maxx = a.get_xlim()
-    miny, maxy = a.get_ylim()
 
     if ui_draw.surf_checkBox.isChecked():
         s = ui_draw.surface_entry.text().split(",")
-        s = np.array([np.float(s[0]), np.float(s[1]), np.float(s[2])])
+        s = np.array([np.float64(s[0]), np.float64(s[1]), np.float64(s[2])])
         s = np.dot(Dstar, s)
         s = np.dot(rotation(phi1, phi, phi2), s)
         s = s / np.linalg.norm(s)
@@ -711,7 +698,7 @@ def draw_planes_dir():
                 im_stretched = im_rotate.resize(stretched_size)
                 a_stretched.imshow(im_stretched, origin='upper')
                 if ui_draw.scale_checkBox.isChecked():
-                    scale = np.float(ui_draw.scale_entry.text())
+                    scale = np.float64(ui_draw.scale_entry.text())
                     a_stretched.plot([stretched_size[0] / 20, stretched_size[0] / 20 + scale / mag_conv], [stretched_size[1] / 20, stretched_size[1] / 20], 'w-', linewidth=1)
                     a_stretched.annotate(str(scale) + 'nm', (stretched_size[0] / 20 + scale / mag_conv + 5, stretched_size[1] / 20), color="white", backgroundcolor="black")
 
@@ -730,7 +717,7 @@ def draw_planes_dir():
 
 
 def open_image():
-    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move, D_p
+    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move, D_p, a
     press = False
     move = False
     a = figure.add_subplot(111)

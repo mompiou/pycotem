@@ -51,7 +51,7 @@ def calcul():
         f_space = open(varname[0], "r")
     else:
         varname = getFileName()
-        f_space = open(varname, "r")
+        f_space = open(varname[0], "r")
 
     crist = []
 
@@ -75,7 +75,7 @@ def calcul():
 
     if ui.dsc_box.isChecked() is False:
         atom0 = np.array(atom0, float)
-        maxi = np.int(atom0[np.shape(atom0)[0] - 1, 0])
+        maxi = int(atom0[np.shape(atom0)[0] - 1, 0])
         for h in range(1, maxi + 1):
             Ca = calcul_atom(atom0[atom0[:, 0] == h])
 
@@ -97,11 +97,10 @@ def calcul():
 
 
 def trace():
-    global vec, varname, atom0, Dstar, taille, zoom, EL, Dz
+    global vec, varname, atom0, Dstar, taille, zoom, EL, Dz, fi
 
-    fi = figure.add_subplot(111)
-    fi.figure.clear()
-    fi = figure.add_subplot(111)
+    fi.clear()
+
     sim = int(ui.markers_entry.text())
     if ui.dsc_box.isChecked() is False:
         if ui.square_box.isChecked() is False:
@@ -122,7 +121,7 @@ def trace():
                 fi.annotate(vector, (EL[q, 0], EL[q, 1]))
 
     if ui.dsc_box.isChecked():
-        theta = float(ui.angle_entry.text())
+        theta = np.float64(ui.angle_entry.text())
         theta = theta * np.pi / 180
         ELr = np.dot(EL[:, 0:3], Rot(theta, 0, 0, 1))
         M = unique(EL[:, 3])
@@ -133,10 +132,10 @@ def trace():
         Ma = []
         m = ('o', 's', '^', '*', 'h')
         abc = ui.abc_entry.text().split(",")
-        a = np.float(abc[0])
-        b = np.float(abc[1])
-        c = np.float(abc[2])
-        ee = np.float(ui.precision_entry.text())
+        a = np.float64(abc[0])
+        b = np.float64(abc[1])
+        c = np.float64(abc[2])
+        ee = np.float64(ui.precision_entry.text())
         if ui.coincidence_box.isChecked():
             coi = np.array([0])
             ep = 0.01 * ee * np.max([a, b, c])
@@ -185,9 +184,9 @@ def trace():
 
 def rep():
     global varname, vec, E, C, Dz, atom0
-    fi = figure.add_subplot(111)
-    fi.figure.clear()
-    fi = figure.add_subplot(111, projection='3d')
+
+    fi.clear()
+
     sim = int(ui.markers_entry.text())
     if varname != 0:
         f_space = open(varname, "r")
@@ -212,7 +211,7 @@ def rep():
     vec = np.array(vec, float)
     atom0 = np.array(atom0, float)
 
-    maxi = np.int(atom0[np.shape(atom0)[0] - 1, 0])
+    maxi = int(atom0[np.shape(atom0)[0] - 1, 0])
 
     for h in range(1, maxi + 1):
 
@@ -227,13 +226,13 @@ def rep():
 def calcul_rep(atom):
     global Dstar, varname, C, D0, Dz, planN, plan, vec, c
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float(alphabetagamma[0])
-    beta = np.float(alphabetagamma[1])
-    gamma = np.float(alphabetagamma[2])
+    alpha = np.float64(alphabetagamma[0])
+    beta = np.float64(alphabetagamma[1])
+    gamma = np.float64(alphabetagamma[2])
     alp = alpha * np.pi / 180
     bet = beta * np.pi / 180
     gam = gamma * np.pi / 180
@@ -243,9 +242,9 @@ def calcul_rep(atom):
     Dstar = np.transpose(np.linalg.inv(D))
 
     n = ui.size_entry.text().split(",")
-    na_rep = np.int(n[0])
-    nb_rep = np.int(n[1])
-    nc_rep = np.int(n[2])
+    na_rep = int(n[0])
+    nb_rep = int(n[1])
+    nc_rep = int(n[2])
 
     A = np.zeros((np.shape(atom)[0], np.shape(atom)[1] - 1))
     w = 0
@@ -270,13 +269,13 @@ def calcul_atom(atom):
     global Dstar, varname, C, D0, planN, plan, vec, atom_pos
 
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float(alphabetagamma[0])
-    beta = np.float(alphabetagamma[1])
-    gamma = np.float(alphabetagamma[2])
+    alpha = np.float64(alphabetagamma[0])
+    beta = np.float64(alphabetagamma[1])
+    gamma = np.float64(alphabetagamma[2])
     alp = alpha * np.pi / 180
     bet = beta * np.pi / 180
     gam = gamma * np.pi / 180
@@ -286,9 +285,9 @@ def calcul_atom(atom):
     Dstar = np.transpose(np.linalg.inv(D))
 
     n = ui.size_entry.text().split(",")
-    na = np.int(n[0])
-    nb = np.int(n[1])
-    nc = np.int(n[2])
+    na = int(n[0])
+    nb = int(n[1])
+    nc = int(n[2])
 
     if ui.dsc_box.isChecked() is False:
         A = np.zeros((np.shape(atom)[0], np.shape(atom)[1] - 1))
@@ -310,9 +309,9 @@ def calcul_atom(atom):
                 for k in range(-nc, nc + 1):
                     atom_pos = np.vstack((atom_pos, i * a * vec[0, :] + j * b * vec[1, :] + k * c * vec[2, :]))
     pl = ui.plane_entry.text().split(",")
-    h = np.float(pl[0])
-    k = np.float(pl[1])
-    l = np.float(pl[2])
+    h = np.float64(pl[0])
+    k = np.float64(pl[1])
+    l = np.float64(pl[2])
 
     plan = np.array([h, k, l])
     planN = np.dot(Dstar, plan)
@@ -328,8 +327,8 @@ def calcul_atom(atom):
 
     Le = unique(np.abs(L))
     lay = ui.layers_entry.text().split(",")
-    cc = np.int(lay[0])
-    dd = np.int(lay[1])
+    cc = int(lay[0])
+    dd = int(lay[1])
 
     for y in range(cc, dd):
         for i in range(0, np.shape(atom_pos)[0]):
@@ -408,6 +407,8 @@ if __name__ == "__main__":
     ui = crystalUI.Ui_Crystal()
     ui.setupUi(Index)
     figure = plt.figure()
+    fi = figure.add_subplot(111)
+    fi.axis("off")
     canvas = FigureCanvas(figure)
     ui.mplvl.addWidget(canvas)
     toolbar = NavigationToolbar(canvas, canvas)

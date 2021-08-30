@@ -54,10 +54,6 @@ def onrelease(event):
 
 def click(event):
     global gclick, s, minx, maxx, miny, maxy
-
-    a = figure.add_subplot(111)
-    minx, maxx = a.get_xlim()
-    miny, maxy = a.get_ylim()
     x = event.xdata
     y = event.ydata
     a.annotate(str(s), (x, y))
@@ -78,9 +74,9 @@ def click(event):
 
 def reset_points():
     global image_diff, gclick, minx, maxx, miny, maxy, s
-
+    minx, maxx = a.get_xlim()
+    miny, maxy = a.get_ylim()
     brightness()
-    a = figure.add_subplot(111)
     a.axis([minx, maxx, miny, maxy])
     a.axis('off')
     a.figure.canvas.draw()
@@ -92,10 +88,7 @@ def reset_points():
 
 def reset():
     global image_diff, gclick, s, minx, maxx, miny, maxy
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -130,14 +123,14 @@ def remove_center():
 def listb():
     global Dist, Ang, G, Dstar
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
-    e = np.int(ui.indice_entry.text())
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
+    e = np.int32(ui.indice_entry.text())
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -182,13 +175,13 @@ def listb():
 
 def distance(i, j, k):
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -261,12 +254,10 @@ def addcenter():
 
 
 def open_image():
-    global width, height, s, gclick, mean_ih, image_diff, B2, press, move, minx, maxx, miny, maxy
+    global width, height, s, gclick, mean_ih, image_diff, B2, press, move, minx, maxx, miny, maxy, a
     press = False
     move = False
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     image_diff = QtWidgets.QFileDialog.getOpenFileName(Index, "Open image file", "", "*.png *.jpg *.bmp *.tiff *.tif *.jpeg")
     img = Image.open(str(image_diff[0]))
     ih = img.convert('L').histogram()
@@ -359,8 +350,8 @@ def testangle2(tab):
             T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
 
             for jj in T1[0]:
-                T = [list(list2[ii].astype(np.int)),
-                     list(list2[jj].astype(np.int))]
+                T = [list(list2[ii].astype(np.int32)),
+                     list(list2[jj].astype(np.int32))]
                 liste_possibles.append(T)
 
         if eps < 3:
@@ -384,9 +375,9 @@ def testangle3(tab):
             for jj in T1[0]:
                 for kk in T2[0]:
                     if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps:
-                        T = [list(list2[ii].astype(np.int)),
-                             list(list2[jj].astype(np.int)),
-                             list(list2[kk].astype(np.int))]
+                        T = [list(list2[ii].astype(np.int32)),
+                             list(list2[jj].astype(np.int32)),
+                             list(list2[kk].astype(np.int32))]
                         liste_possibles.append(T)
 
         if eps < 3:
@@ -412,10 +403,10 @@ def testangle4(tab):
                     for pp in T3[0]:
                         if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
                                 and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps:
-                            T = [list(list2[ii].astype(np.int)),
-                                 list(list2[jj].astype(np.int)),
-                                 list(list2[kk].astype(np.int)),
-                                 list(list2[pp].astype(np.int))]
+                            T = [list(list2[ii].astype(np.int32)),
+                                 list(list2[jj].astype(np.int32)),
+                                 list(list2[kk].astype(np.int32)),
+                                 list(list2[pp].astype(np.int32))]
                             liste_possibles.append(T)
 
         if eps < 3:
@@ -444,11 +435,11 @@ def testangle5(tab):
                             if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
                                     and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
                                     and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps:
-                                T = [list(list2[ii].astype(np.int)),
-                                     list(list2[jj].astype(np.int)),
-                                     list(list2[kk].astype(np.int)),
-                                     list(list2[pp].astype(np.int)),
-                                     list(list2[hh].astype(np.int))]
+                                T = [list(list2[ii].astype(np.int32)),
+                                     list(list2[jj].astype(np.int32)),
+                                     list(list2[kk].astype(np.int32)),
+                                     list(list2[pp].astype(np.int32)),
+                                     list(list2[hh].astype(np.int32))]
                                 liste_possibles.append(T)
 
         if eps < 3:
@@ -481,12 +472,12 @@ def testangle6(tab):
                                         and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps \
                                         and np.abs(Tab[ll, jj] - tab[1, 5]) <= eps and np.abs(Tab[kk, ll] - tab[2, 5]) <= eps \
                                         and np.abs(Tab[ll, pp] - tab[3, 5]) <= eps and np.abs(Tab[hh, ll] - tab[4, 5]) <= eps:
-                                    T = [list(list2[ii].astype(np.int)),
-                                         list(list2[jj].astype(np.int)),
-                                         list(list2[kk].astype(np.int)),
-                                         list(list2[pp].astype(np.int)),
-                                         list(list2[hh].astype(np.int)),
-                                         list(list2[ll].astype(np.int))]
+                                    T = [list(list2[ii].astype(np.int32)),
+                                         list(list2[jj].astype(np.int32)),
+                                         list(list2[kk].astype(np.int32)),
+                                         list(list2[pp].astype(np.int32)),
+                                         list(list2[hh].astype(np.int32)),
+                                         list(list2[ll].astype(np.int32))]
                                     liste_possibles.append(T)
 
         if eps < 3:
@@ -508,13 +499,13 @@ def testangle6(tab):
 def Uniqueness(A):
     l = np.shape(A)[0]
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -541,10 +532,10 @@ def tilt_axes():
 
 def rot_tilt_angle():
     tilt_axes()
-    tilt_a = np.float(ui_Tilt.tilt_a_entry.text())
-    tilt_b = np.float(ui_Tilt.tilt_b_entry.text())
-    tilt_z = np.float(ui_Tilt.tilt_z_entry.text())
-    t_ang = np.float(ui_Tilt.t_ang_entry.text())
+    tilt_a = np.float64(ui_Tilt.tilt_a_entry.text())
+    tilt_b = np.float64(ui_Tilt.tilt_b_entry.text())
+    tilt_z = np.float64(ui_Tilt.tilt_z_entry.text())
+    t_ang = np.float64(ui_Tilt.t_ang_entry.text())
     R = np.dot(Rot(s_z * tilt_z, 0, 0, 1), np.dot(Rot(s_b * tilt_b, 1, 0, 0), np.dot(Rot(s_a * tilt_a, 0, 1, 0), Rot(t_ang, 0, 0, 1))))
     return R
 
@@ -569,8 +560,8 @@ def show_result():
         ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][4]))
     if ui_Refine.V_entry.text() == '':
         ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1]))
-    calib = np.float(ui_Refine.L_entry.text())
-    Vt = np.float(ui_Refine.V_entry.text()) * 1e3
+    calib = np.float64(ui_Refine.L_entry.text())
+    Vt = np.float64(ui_Refine.V_entry.text()) * 1e3
 
     h = 6.62607004e-34
     m0 = 9.10938356e-31
@@ -580,7 +571,7 @@ def show_result():
 
     L = calib / lambd
     list2, Tab = listb()
-    eps = np.float(ui.tol_entry.text())
+    eps = np.float64(ui.tol_entry.text())
     P0 = range(len(list2))
     Num = np.shape(B2)[0]
     v = np.zeros((Num - 1, 3))
@@ -621,60 +612,60 @@ def show_result():
 
     K = np.asarray(K)
     U = np.zeros((np.shape(K)[0], Num - 1))
+    if K.shape[0] > 0:
+        for t in range(0, np.shape(K)[0]):
+            U[t, :] = Uniqueness(K[t, :, 1:4])
 
-    for t in range(0, np.shape(K)[0]):
-        U[t, :] = Uniqueness(K[t, :, 1:4])
+        K = K[np.unique(U, return_index=True, axis=0)[1], :, :]
+        euler = np.zeros((K.shape[0], 5))
+        for sol in range(0, K.shape[0]):
+            g_c = K[sol, :, 1:4]
+            g_c = np.dot(Dstar, g_c.T)
+            n_c = np.linalg.norm(g_c.T, axis=1)
+            g_c = (g_c / n_c).T
+            g_sample = v
+            if np.abs(np.linalg.det(np.dot(g_c.T, g_sample))) < 1e-7:
+                g_cc = np.cross(g_c[0, :], g_c[1, :])
+                g_sc = np.cross(g_sample[0, :], g_sample[1, :])
+                g_sc = g_sc / np.linalg.norm(g_sc)
+                g_cc = g_cc / np.linalg.norm(g_cc)
+                g_c = np.vstack((g_c, g_cc))
+                g_sample = np.vstack((g_sample, g_sc))
+            if np.linalg.det(np.dot(g_c.T, g_sample)) < 0:
+                g_c = -g_c
 
-    K = K[np.unique(U, return_index=True, axis=0)[1], :, :]
-    euler = np.zeros((K.shape[0], 5))
-    for sol in range(0, K.shape[0]):
-        g_c = K[sol, :, 1:4]
-        g_c = np.dot(Dstar, g_c.T)
-        n_c = np.linalg.norm(g_c.T, axis=1)
-        g_c = (g_c / n_c).T
-        g_sample = v
-        if np.abs(np.linalg.det(np.dot(g_c.T, g_sample))) < 1e-7:
-            g_cc = np.cross(g_c[0, :], g_c[1, :])
-            g_sc = np.cross(g_sample[0, :], g_sample[1, :])
-            g_sc = g_sc / np.linalg.norm(g_sc)
-            g_cc = g_cc / np.linalg.norm(g_cc)
-            g_c = np.vstack((g_c, g_cc))
-            g_sample = np.vstack((g_sample, g_sc))
-        if np.linalg.det(np.dot(g_c.T, g_sample)) < 0:
-            g_c = -g_c
+            U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
+            M = np.dot(V.T, U.T)
 
-        U, S, V = np.linalg.svd(np.dot(g_c.T, g_sample))
-        M = np.dot(V.T, U.T)
+            phi = np.arccos(M[2, 2]) * 180 / np.pi
+            phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
+            phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
 
-        phi = np.arccos(M[2, 2]) * 180 / np.pi
-        phi_2 = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
-        phi_1 = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
+            t = 0
+            d_dev = 0
+            for r in range(0, Num - 1):
+                ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
+                d_dev = d_dev + n_c[r] * 100 * np.abs(1 / n_c[r] - dp[r])
+                t = t + np.abs(np.arccos(ang_dev))
+            t = t / g_sample.shape[0] * 180 / np.pi
+            d_dev = d_dev / g_sample.shape[0]
+            euler[sol, :] = np.array([np.around(phi_1, decimals=3), np.around(phi, decimals=3), np.around(phi_2, decimals=3), np.around(t, decimals=3), np.around(d_dev, decimals=3)], dtype=object)
 
-        t = 0
-        d_dev = 0
-        for r in range(0, Num - 1):
-            ang_dev = np.clip(np.dot(np.dot(M, g_c[r, :]), g_sample[r, :]), -1, 1)
-            d_dev = d_dev + n_c[r] * 100 * np.abs(1 / n_c[r] - dp[r])
-            t = t + np.abs(np.arccos(ang_dev))
-        t = t / g_sample.shape[0] * 180 / np.pi
-        d_dev = d_dev / g_sample.shape[0]
-        euler[sol, :] = np.array([np.around(phi_1, decimals=3), np.around(phi, decimals=3), np.around(phi_2, decimals=3), np.around(t, decimals=3), np.around(d_dev, decimals=3)])
-
-    so = np.lexsort((euler[:, 4], euler[:, 3]))
-    K = K[so, :, :]
-    euler = euler[so]
-    ui.ListBox_theo.clear()
-    for h in range(0, euler.shape[0]):
-        M_tilt = np.dot(rot_tilt_angle(), rotation(euler[h, 0], euler[h, 1], euler[h, 2]))
-        phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi, decimals=3)
-        phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi, decimals=3)
-        phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi, decimals=3)
-        ss = 'g:'
-        for hh in range(0, Num - 1):
-            ss = ss + ' ' + str(K[h, hh, 1:4])
-        ui.ListBox_theo.addItem(ss)
-        ui.ListBox_theo.addItem(str(phi_1_tilt) + ',' + str(phi_tilt) + ',' + str(phi_2_tilt))
-        ui.ListBox_theo.addItem(str(euler[h, 3]) + ',' + str(euler[h, 4]))
+        so = np.lexsort((euler[:, 4], euler[:, 3]))
+        K = K[so, :, :]
+        euler = euler[so]
+        ui.ListBox_theo.clear()
+        for h in range(0, euler.shape[0]):
+            M_tilt = np.dot(rot_tilt_angle(), rotation(euler[h, 0], euler[h, 1], euler[h, 2]))
+            phi_tilt = np.around(np.arccos(M_tilt[2, 2]) * 180 / np.pi, decimals=3)
+            phi_2_tilt = np.around(np.arctan2(M_tilt[2, 0], M_tilt[2, 1]) * 180 / np.pi, decimals=3)
+            phi_1_tilt = np.around(np.arctan2(M_tilt[0, 2], -M_tilt[1, 2]) * 180 / np.pi, decimals=3)
+            ss = 'g:'
+            for hh in range(0, Num - 1):
+                ss = ss + ' ' + str(K[h, hh, 1:4])
+            ui.ListBox_theo.addItem(ss)
+            ui.ListBox_theo.addItem(str(phi_1_tilt) + ',' + str(phi_tilt) + ',' + str(phi_2_tilt))
+            ui.ListBox_theo.addItem(str(euler[h, 3]) + ',' + str(euler[h, 4]))
 
     return K, euler
 
@@ -690,7 +681,6 @@ def plot_bands():
 
     Num = np.shape(B2)[0]
     brightness()
-    a = figure.add_subplot(111)
 
     for z in range(0, Num - 1):
 
@@ -706,7 +696,6 @@ def plot_bands():
         a.plot([Ct[0], Ct[0] + v0[0]], [Ct[1], Ct[1] + v0[1]], 'g-')
         a.annotate(str(z), (Ct[0] + v0[0], Ct[1] + v0[1]))
 
-    a.axis([0, width, height, 0])
     a.axis('off')
     a.figure.canvas.draw()
 
@@ -732,7 +721,7 @@ def plot_orientation():
     global B2, K, v0, Ct, pOB, width, height, image_diff, L, Dstar, sol, M, calib, lambd
 
     brightness()
-    a = figure.add_subplot(111)
+    a = plt.gca()
     g_c = K[sol, :, 1:4]
     g_c = np.dot(Dstar, g_c.T)
     n_c = np.linalg.norm(g_c.T, axis=1)
@@ -749,14 +738,14 @@ def plot_orientation():
         a.annotate(str(z), (Ct[0] - vp1[0], Ct[1] + vp1[1]))
         a.plot([-vp1[0] + Ct[0] - 1000 * vp1[1], -vp1[0] + Ct[0] + 1000 * vp1[1]], [vp1[1] + Ct[1] - 1000 * vp1[0], vp1[1] + Ct[1] + 1000 * vp1[0]], 'r-')
         a.plot([-vp2[0] + Ct[0] - 1000 * vp2[1], -vp2[0] + Ct[0] + 1000 * vp2[1]], [vp2[1] + Ct[1] - 1000 * vp2[0], vp2[1] + Ct[1] + 1000 * vp2[0]], 'r-')
-        a.axis([0, width, height, 0])
+
         a.axis('off')
         a.figure.canvas.draw()
 
 
 def Rxm():
     global M, angx
-    tx = -np.float(ui_Refine.Rx_entry.text())
+    tx = -np.float64(ui_Refine.Rx_entry.text())
     M = np.dot(Rot(tx, 1, 0, 0), M)
     angx = angx + tx
     update_orientation()
@@ -765,7 +754,7 @@ def Rxm():
 
 def Rxp():
     global M, angx
-    tx = np.float(ui_Refine.Rx_entry.text())
+    tx = np.float64(ui_Refine.Rx_entry.text())
     M = np.dot(Rot(tx, 1, 0, 0), M)
     angx = angx + tx
     update_orientation()
@@ -774,7 +763,7 @@ def Rxp():
 
 def Rym():
     global angy, M
-    ty = -np.float(ui_Refine.Ry_entry.text())
+    ty = -np.float64(ui_Refine.Ry_entry.text())
     M = np.dot(Rot(ty, 0, 1, 0), M)
     angy = angy + ty
     update_orientation()
@@ -783,7 +772,7 @@ def Rym():
 
 def Ryp():
     global angy, M
-    ty = np.float(ui_Refine.Ry_entry.text())
+    ty = np.float64(ui_Refine.Ry_entry.text())
     M = np.dot(Rot(ty, 0, 1, 0), M)
     angy = angy + ty
     update_orientation()
@@ -792,7 +781,7 @@ def Ryp():
 
 def Rzm():
     global angz, M
-    tz = np.float(ui_Refine.Rz_entry.text())
+    tz = np.float64(ui_Refine.Rz_entry.text())
     M = np.dot(Rot(tz, 0, 0, 1), M)
     angz = angz + tz
     update_orientation()
@@ -801,7 +790,7 @@ def Rzm():
 
 def Rzp():
     global angz, M
-    tz = -np.float(ui_Refine.Rz_entry.text())
+    tz = -np.float64(ui_Refine.Rz_entry.text())
     M = np.dot(Rot(tz, 0, 0, 1), M)
     angz = angz + tz
     update_orientation()
@@ -814,8 +803,8 @@ def update_L():
         ui_Refine.L_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][4]))
     if ui_Refine.V_entry.text() == '':
         ui_Refine.V_entry.setText(str(x_calib[ui.Calib_box.currentIndex()][1]))
-    calib = np.float(ui_Refine.L_entry.text())
-    Vt = np.float(ui_Refine.V_entry.text()) * 1e3
+    calib = np.float64(ui_Refine.L_entry.text())
+    Vt = np.float64(ui_Refine.V_entry.text()) * 1e3
     show_result()
     plot_orientation_init()
 
@@ -823,8 +812,8 @@ def update_L():
 def update_orientation():
     global calib, Vt, M, angx, angy, angz
 
-    calib = np.float(ui_Refine.L_entry.text())
-    Vt = np.float(ui_Refine.V_entry.text())
+    calib = np.float64(ui_Refine.L_entry.text())
+    Vt = np.float64(ui_Refine.V_entry.text())
     ui_Refine.tx_label.setText(str(np.around(angx, decimals=2)))
     ui_Refine.ty_label.setText(str(np.around(angy, decimals=2)))
     ui_Refine.tz_label.setText(str(np.around(angz, decimals=2)))
@@ -874,18 +863,17 @@ def extinction(space_group, h, k, l):
 
 
 def brightness():
-
+    a.clear()
     img = Image.open(str(image_diff[0]))
     ui.brightness_slider.setMinimum(10)
-    ui.brightness_slider.setMaximum(25500 / mean_ih)
+    ui.brightness_slider.setMaximum(int(25500 / mean_ih))
 
     bv = ui.brightness_slider.value()
+    if img.mode == 'P':
+        img = img.convert('L')
     enhancer = ImageEnhance.Brightness(img)
     img = enhancer.enhance(bv / 100)
 
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
     figure.suptitle(str(image_diff[0]))
     a.imshow(img, origin='upper')
     a.axis([0, width, height, 0])
@@ -960,6 +948,8 @@ if __name__ == "__main__":
     ui.setupUi(Index)
     figure = plt.figure(facecolor='white', figsize=[2, 2], dpi=100)
     canvas = FigureCanvas(figure)
+    a = figure.add_subplot(111)
+    a.axis("off")
     ui.mplvl.addWidget(canvas)
     toolbar = NavigationToolbar(canvas, canvas)
     toolbar.setMinimumWidth(601)

@@ -50,9 +50,6 @@ def click(event):
 
 def plot_click():
     global gclick, minx, maxx, miny, maxy
-    a = figure.add_subplot(111)
-    minx, maxx = a.get_xlim()
-    miny, maxy = a.get_ylim()
 
     for i in range(1, gclick.shape[0]):
         a.annotate(str(i), (gclick[i, 0], gclick[i, 1]))
@@ -69,10 +66,9 @@ def plot_click():
 
 def reset_points():
     global image_diff, gclick, s, minx, maxx, miny, maxy
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    minx, maxx = a.get_xlim()
+    miny, maxy = a.get_ylim()
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -95,10 +91,7 @@ def reset_points():
 
 def reset():
     global width, height, gclick, s, image_diff
-
-    a = figure.add_subplot(111)
-    a.figure.clear()
-    a = figure.add_subplot(111)
+    a.clear()
     img = Image.open(str(image_diff[0]))
     img = np.array(img)
     figure.suptitle(str(image_diff[0]))
@@ -130,7 +123,7 @@ def distance():
         y = gclick[1, 1]
         x1 = gclick[i, 0]
         y1 = gclick[i, 1]
-        n = np.int(ui.n_entry.text())
+        n = int(ui.n_entry.text())
         d = np.sqrt((x1 - x)**2 + (y1 - y)**2) / n
 
         i = 0
@@ -142,9 +135,9 @@ def distance():
             else:
                 bet = np.arccos((y1 - y) / (n * d)) * 180 / np.pi
 
-        d = eval(x_calib[ui.Calib_box.currentIndex()][4]) / d
+            d = eval(x_calib[ui.Calib_box.currentIndex()][4]) / d
 
-    if np.isinf(d) == 0:
+    if np.isinf(d) == 0 and d > 0:
         ui.ListBox_d_2.addItem(str(np.around(d, decimals=2)) + ',' + str(np.around(bet, decimals=2)))
     return d
 
@@ -162,7 +155,7 @@ def two_to_three():
     c = 299792458
     Vt = eval(x_calib[ui.Calib_box.currentIndex()][1]) * 1e3
     lambd = h / np.sqrt(2 * m0 * e * Vt) * 1 / np.sqrt(1 + e * Vt / (2 * m0 * c**2)) * 1e10
-    d = np.float(ui.ListBox_d_2.currentItem().text().split(',')[0])
+    d = np.float64(ui.ListBox_d_2.currentItem().text().split(',')[0])
     epsilon = np.around(lambd / 2 / d * 180 / np.pi, decimals=3)
 
     return epsilon
@@ -180,14 +173,14 @@ def angle_check(Dis):
         return
     else:
         s_a, s_b, s_z = tilt_axes()
-        ta = np.float(ui.tilt_a_entry.text())
-        tb = np.float(ui.tilt_b_entry.text())
-        tz = np.float(ui.tilt_z_entry.text())
+        ta = np.float64(ui.tilt_a_entry.text())
+        tb = np.float64(ui.tilt_b_entry.text())
+        tz = np.float64(ui.tilt_z_entry.text())
         inc = ui.ListBox_d_2.currentItem().text().split(',')
 
-        t_ang = np.float(ui.tilt_axis_angle_entry.text())
+        t_ang = np.float64(ui.tilt_axis_angle_entry.text())
         R = np.dot(Rot(s_z * tz, 0, 0, 1), np.dot(Rot(s_b * tb, 1, 0, 0), Rot(s_a * ta, 0, 1, 0)))
-        ny = -np.float(inc[1])
+        ny = -np.float64(inc[1])
         epsilon = 0
         if ui.two_to_three_checkBox.isChecked():
             epsilon = two_to_three() * np.pi / 180
@@ -207,7 +200,7 @@ def angle_check(Dis):
             epsilon = []
 
             for i in range(0, len(s1)):
-                l = list(map(float, s1[i].split(',')))
+                l = list(map(np.float64, s1[i].split(',')))
                 tilt_a.append(l[0])
                 tilt_b.append(l[1])
                 tilt_z.append(l[2])
@@ -220,7 +213,7 @@ def angle_check(Dis):
             tilt_z = np.array(tilt_z)
             g_hkl = np.array(g_hkl)
             epsilon = np.array(epsilon) * np.pi / 180
-            t_ang = np.float(ui.tilt_axis_angle_entry.text())
+            t_ang = np.float64(ui.tilt_axis_angle_entry.text())
             for i in range(0, np.shape(tilt_a)[0]):
                 Dis = np.hstack((Dis, np.zeros((Dis.shape[0], 1))))
                 R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
@@ -236,13 +229,13 @@ def angle_check(Dis):
 def cryst():
     global D, Dstar, G
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float(alphabetagamma[0])
-    beta = np.float(alphabetagamma[1])
-    gamma = np.float(alphabetagamma[2])
+    alpha = np.float64(alphabetagamma[0])
+    beta = np.float64(alphabetagamma[1])
+    gamma = np.float64(alphabetagamma[2])
     alpha = alpha * np.pi / 180
     beta = beta * np.pi / 180
     gamma = gamma * np.pi / 180
@@ -256,7 +249,7 @@ def cryst():
 def distance_theo():
     global d, G, Dstar, D
     cryst()
-    e = np.int(ui.indice_entry.text())
+    e = int(ui.indice_entry.text())
     Dist = np.zeros(((2 * e + 1)**3 - 1, 5))
 
     ui.ListBox_theo.clear()
@@ -267,7 +260,7 @@ def distance_theo():
                 if (i, j, k) != (0, 0, 0):
                     di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
 
-                    if di < (d / (1 - d * np.float(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))) and di > (d / (1 + d * np.float(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))):
+                    if di < (d / (1 - d * np.float64(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))) and di > (d / (1 + d * np.float64(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))):
                         I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
                         Dist[w, :] = np.array([np.around(di, decimals=3), int(i), int(j), int(k), I])
                         w = w + 1
@@ -280,14 +273,14 @@ def distance_theo():
 def listb():
     global Dist, Ang, G, Dstar
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
-    e = np.int(ui.indice_entry.text())
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
+    e = int(ui.indice_entry.text())
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -376,10 +369,10 @@ def Rot(th, a, b, c):
     aa = a / np.linalg.norm([a, b, c])
     bb = b / np.linalg.norm([a, b, c])
     cc = c / np.linalg.norm([a, b, c])
-    c1 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], float)
+    c1 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], np.float64)
     c2 = np.array([[aa**2, aa * bb, aa * cc], [bb * aa, bb**2, bb * cc], [cc * aa,
-                                                                          cc * bb, cc**2]], float)
-    c3 = np.array([[0, -cc, bb], [cc, 0, -aa], [-bb, aa, 0]], float)
+                                                                          cc * bb, cc**2]], np.float64)
+    c3 = np.array([[0, -cc, bb], [cc, 0, -aa], [-bb, aa, 0]], np.float64)
     R = np.cos(th) * c1 + (1 - np.cos(th)) * c2 + np.sin(th) * c3
 
     return R
@@ -394,7 +387,7 @@ def rotation(phi1, phi, phi2):
                    np.sin(phi2), np.sin(phi) * np.sin(phi1)], [np.cos(phi2) * np.sin(phi1)
                                                                + np.cos(phi) * np.cos(phi1) * np.sin(phi2), np.cos(phi) * np.cos(phi1)
                                                                * np.cos(phi2) - np.sin(phi1) * np.sin(phi2), -np.cos(phi1) * np.sin(phi)],
-                  [np.sin(phi) * np.sin(phi2), np.cos(phi2) * np.sin(phi), np.cos(phi)]], float)
+                  [np.sin(phi) * np.sin(phi2), np.cos(phi2) * np.sin(phi), np.cos(phi)]], np.float64)
     return R
 
 
@@ -416,12 +409,12 @@ def cryststruct():
     global cs
     abc = ui.abc_entry.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
 
     if gam == 90 and alp == 90 and bet == 90 and a == b and b == c:
         cs = 1
@@ -611,8 +604,8 @@ def testangle2(tab):
             T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
 
             for jj in T1[0]:
-                T = [list(list2[ii].astype(np.int)),
-                     list(list2[jj].astype(np.int))]
+                T = [list(list2[ii].astype(int)),
+                     list(list2[jj].astype(int))]
                 liste_possibles.append(T)
 
         if eps < 3:
@@ -636,9 +629,9 @@ def testangle3(tab):
             for jj in T1[0]:
                 for kk in T2[0]:
                     if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps:
-                        T = [list(list2[ii].astype(np.int)),
-                             list(list2[jj].astype(np.int)),
-                             list(list2[kk].astype(np.int))]
+                        T = [list(list2[ii].astype(int)),
+                             list(list2[jj].astype(int)),
+                             list(list2[kk].astype(int))]
                         liste_possibles.append(T)
 
         if eps < 3:
@@ -664,10 +657,10 @@ def testangle4(tab):
                     for pp in T3[0]:
                         if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
                                 and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps:
-                            T = [list(list2[ii].astype(np.int)),
-                                 list(list2[jj].astype(np.int)),
-                                 list(list2[kk].astype(np.int)),
-                                 list(list2[pp].astype(np.int))]
+                            T = [list(list2[ii].astype(int)),
+                                 list(list2[jj].astype(int)),
+                                 list(list2[kk].astype(int)),
+                                 list(list2[pp].astype(int))]
                             liste_possibles.append(T)
 
         if eps < 3:
@@ -696,11 +689,11 @@ def testangle5(tab):
                             if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
                                     and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
                                     and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps:
-                                T = [list(list2[ii].astype(np.int)),
-                                     list(list2[jj].astype(np.int)),
-                                     list(list2[kk].astype(np.int)),
-                                     list(list2[pp].astype(np.int)),
-                                     list(list2[hh].astype(np.int))]
+                                T = [list(list2[ii].astype(int)),
+                                     list(list2[jj].astype(int)),
+                                     list(list2[kk].astype(int)),
+                                     list(list2[pp].astype(int)),
+                                     list(list2[hh].astype(int))]
                                 liste_possibles.append(T)
 
         if eps < 3:
@@ -733,12 +726,12 @@ def testangle6(tab):
                                         and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps \
                                         and np.abs(Tab[ll, jj] - tab[1, 5]) <= eps and np.abs(Tab[kk, ll] - tab[2, 5]) <= eps \
                                         and np.abs(Tab[ll, pp] - tab[3, 5]) <= eps and np.abs(Tab[hh, ll] - tab[4, 5]) <= eps:
-                                    T = [list(list2[ii].astype(np.int)),
-                                         list(list2[jj].astype(np.int)),
-                                         list(list2[kk].astype(np.int)),
-                                         list(list2[pp].astype(np.int)),
-                                         list(list2[hh].astype(np.int)),
-                                         list(list2[ll].astype(np.int))]
+                                    T = [list(list2[ii].astype(int)),
+                                         list(list2[jj].astype(int)),
+                                         list(list2[kk].astype(int)),
+                                         list(list2[pp].astype(int)),
+                                         list(list2[hh].astype(int)),
+                                         list(list2[ll].astype(int))]
                                     liste_possibles.append(T)
 
         if eps < 3:
@@ -754,13 +747,13 @@ def testangle6(tab):
 def Uniqueness(A):
     l = np.shape(A)[0]
     abc = ui.abc_entry.text().split(",")
-    a = np.float(abc[0])
-    b = np.float(abc[1])
-    c = np.float(abc[2])
+    a = np.float64(abc[0])
+    b = np.float64(abc[1])
+    c = np.float64(abc[2])
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alp = np.float(alphabetagamma[0])
-    bet = np.float(alphabetagamma[1])
-    gam = np.float(alphabetagamma[2])
+    alp = np.float64(alphabetagamma[0])
+    bet = np.float64(alphabetagamma[1])
+    gam = np.float64(alphabetagamma[2])
     alp = alp * np.pi / 180
     bet = bet * np.pi / 180
     gam = gam * np.pi / 180
@@ -825,7 +818,7 @@ def get_data():
     epsilon = []
 
     for i in range(0, len(s)):
-        l = list(map(float, s[i].split(',')))
+        l = list(map(np.float64, s[i].split(',')))
         tilt_a.append(l[0])
         tilt_b.append(l[1])
         tilt_z.append(l[2])
@@ -842,7 +835,7 @@ def get_data():
     g_c = np.array(g_c)
     epsilon = np.array(epsilon) * np.pi / 180
 
-    t_ang = np.float(ui.tilt_axis_angle_entry.text())
+    t_ang = np.float64(ui.tilt_axis_angle_entry.text())
     g_sample = np.zeros((np.shape(tilt_a)[0], 3))
 
     for i in range(0, np.shape(tilt_a)[0]):
@@ -900,7 +893,7 @@ def get_orientation():
 
 
 def open_image():
-    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move
+    global width, height, image_diff, s, gclick, minx, maxx, miny, maxy, press, move, a
     press = False
     move = False
     a = figure.add_subplot(111)
@@ -973,17 +966,19 @@ class Spect(QtWidgets.QDialog):
 
     def spectre(self):
         global x_space
-        a2 = self.figure.add_subplot(111)
+
+        a2 = self.figure.gca()
         a2.clear()
+
         abc = ui.abc_entry.text().split(",")
-        a = np.float(abc[0])
-        b = np.float(abc[1])
-        c = np.float(abc[2])
+        a = np.float64(abc[0])
+        b = np.float64(abc[1])
+        c = np.float64(abc[2])
         alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-        alpha = np.float(alphabetagamma[0])
-        beta = np.float(alphabetagamma[1])
-        gamma = np.float(alphabetagamma[2])
-        e = np.int(self.lineEdit.text())
+        alpha = np.float64(alphabetagamma[0])
+        beta = np.float64(alphabetagamma[1])
+        gamma = np.float64(alphabetagamma[2])
+        e = int(self.lineEdit.text())
         alp = alpha * np.pi / 180
         bet = beta * np.pi / 180
         gam = gamma * np.pi / 180
@@ -1028,7 +1023,7 @@ class Spect(QtWidgets.QDialog):
 
                 F = F + f * np.exp(2j * np.pi * (eval(x_space[ii][1]) * di[dc, 1] + eval(x_space[ii][2]) * di[dc, 2] + eval(x_space[ii][3]) * di[dc, 3]))
 
-            ff = float(np.real(F * np.conj(F)))
+            ff = np.float64(np.real(F * np.conj(F)))
             bar_width = 1 / np.shape(di)[0]
             if ff > 0.0000001:
                 ann = str(int(di[dc, 1])) + str(int(di[dc, 2])) + str(int(di[dc, 3]))
@@ -1064,7 +1059,7 @@ def extinction(space_group, h, k, l):
                 f = eval(x_scatt[z][1]) * np.exp(-eval(x_scatt[z][2]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][3]) * np.exp(-eval(x_scatt[z][4]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][5]) * np.exp(-eval(x_scatt[z][6]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][7]) * np.exp(-eval(x_scatt[z][8]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][9])
         F = F + f * np.exp(2j * np.pi * (eval(x_space[s + 1][1]) * h + eval(x_space[s + 1][2]) * k + eval(x_space[s + 1][3]) * l))
         s = s + 1
-    I = np.around(float(np.real(F * np.conj(F))), decimals=2)
+    I = np.around(np.float64(np.real(F * np.conj(F))), decimals=2)
     return I
 
 
