@@ -14,8 +14,14 @@
    <string>Tilt conditions</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="8">
-    <widget class="QCheckBox" name="theta_signBox">
+   <item row="1" column="7">
+    <widget class="QLineEdit" name="tilt_z_entry"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="tilt_a_entry"/>
+   </item>
+   <item row="1" column="5">
+    <widget class="QCheckBox" name="beta_signBox">
      <property name="text">
       <string/>
      </property>
@@ -35,26 +41,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="5">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Diffraction-α tilt angle</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="7">
-    <widget class="QLineEdit" name="tilt_z_entry"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="tilt_a_entry"/>
-   </item>
-   <item row="1" column="5">
-    <widget class="QCheckBox" name="beta_signBox">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="alpha_label_2">
      <property name="text">
@@ -65,10 +51,24 @@
    <item row="1" column="4">
     <widget class="QLineEdit" name="tilt_b_entry"/>
    </item>
+   <item row="1" column="8">
+    <widget class="QCheckBox" name="theta_signBox">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="6">
     <widget class="QLabel" name="z_label">
      <property name="text">
       <string>θ (°)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="5">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Diffraction-α tilt angle</string>
      </property>
     </widget>
    </item>
@@ -77,6 +77,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tilt_a_entry</tabstop>
+  <tabstop>alpha_signBox</tabstop>
+  <tabstop>tilt_b_entry</tabstop>
+  <tabstop>beta_signBox</tabstop>
+  <tabstop>tilt_z_entry</tabstop>
+  <tabstop>theta_signBox</tabstop>
+  <tabstop>t_ang_entry</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

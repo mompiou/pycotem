@@ -536,7 +536,7 @@ def rot_tilt_angle():
     tilt_b = np.float64(ui_Tilt.tilt_b_entry.text())
     tilt_z = np.float64(ui_Tilt.tilt_z_entry.text())
     t_ang = np.float64(ui_Tilt.t_ang_entry.text())
-    R = np.dot(Rot(s_z * tilt_z, 0, 0, 1), np.dot(Rot(s_b * tilt_b, 1, 0, 0), np.dot(Rot(s_a * tilt_a, 0, 1, 0), Rot(t_ang, 0, 0, 1))))
+    R = np.dot(Rot(s_a * tilt_a, 0, 1, 0), np.dot(Rot(s_b * tilt_b, 1, 0, 0), np.dot(Rot(s_z * tilt_z, 0, 0, 1), Rot(t_ang, 0, 0, 1))))
     return R
 
 ##############################################################################

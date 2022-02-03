@@ -1445,14 +1445,10 @@ def coordinates(event):
         X0 = 2 * x / (1 + x**2 + y**2)
         Y0 = 2 * y / (1 + x**2 + y**2)
         Z0 = (-1 + x**2 + y**2) / (1 + x**2 + y**2)
-        Rxyz = np.dot(Rot(t_ang * 180 / np.pi, 0, 0, 1), [X0, Y0, Z0])
-        X = Rxyz[0]
-        Y = Rxyz[1]
-        Z = Rxyz[2]
-        lat = np.arctan2(np.sqrt(X**2 + Z**2), Y) * 180 / np.pi
-        if X < 0:
+        lat = np.arctan2(np.sqrt(X0**2 + Z0**2), Y0) * 180 / np.pi
+        if X0 < 0:
             lat = -lat
-        longi = -np.arctan2(Z, X) * 180 / np.pi
+        longi = -np.arctan2(Z0, X0) * 180 / np.pi
         if ui.alpha_signBox.isChecked():
             longi = -longi
         if np.abs(longi) > 90:
@@ -1689,7 +1685,7 @@ def trace():
 
 
 def princ():
-    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt
+    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt, var_lock, M_lock
     trP = np.zeros((1, 5))
     trC = np.zeros((1, 6))
     Stc = np.zeros((1, 3))
@@ -1698,9 +1694,9 @@ def princ():
     crist()
     tilt_axes()
     if ui.real_space_checkBox.isChecked():
-        y_tilt = np.float64(ui.tilt_angle_entry.text())
-    else:
         y_tilt = np.float64(ui.image_angle_entry.text())
+    else:
+        y_tilt = np.float64(ui.tilt_angle_entry.text())
     if ui.reciprocal_checkBox.isChecked():
         crist_reciprocal()
     a.clear()
@@ -1728,7 +1724,7 @@ def princ():
         normal = np.array([-d[2], 0, d[0]])
         ang = np.arccos(np.dot(d, np.array([0, 1, 0])) / np.linalg.norm(d))
 
-    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
+    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-diff_ang - inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
 
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape))
@@ -1780,6 +1776,8 @@ def princ():
     M = R
     M0 = R
     euler_label()
+    ui.lock_checkButton.setChecked(True)
+    lock()
     return T, angle_alpha, angle_beta, angle_z, g, M, M0
 
 # "
@@ -1790,7 +1788,7 @@ def princ():
 
 
 def princ2():
-    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, a, axeshr, nn, minx, maxx, miny, maxy, a, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_c, y_tilt
+    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, a, axeshr, nn, minx, maxx, miny, maxy, a, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_c, y_tilt, var_lock, M_lock
 
     trP = np.zeros((1, 5))
     trC = np.zeros((1, 6))
@@ -1855,6 +1853,8 @@ def princ2():
     ui.angle_z_label_2.setText('0.0')
     ui.rg_label.setText('0.0')
     M = rotation(phi1 - ang_work_space(), phi, phi2)
+    ui.lock_checkButton.setChecked(True)
+    lock()
     t = str(np.around(phi1, decimals=1)) + str(',') + str(np.around(phi, decimals=1)) + str(',') + str(np.around(phi2, decimals=1))
     ui.angle_euler_label.setText(t)
 
@@ -2194,7 +2194,7 @@ def plot_width():
     T = T / np.linalg.norm(T)
 
     for t in range(-40, 41, 2):
-        Mi = np.dot(Rot(t, 0, 1, 0), np.dot(Rot(t_ang, 0, 0, 1), M))
+        Mi = np.dot(Rot(-t_ang, 0, 0, 1), np.dot(Rot(t, 0, 1, 0), np.dot(M, Rot(t_ang, 0, 0, 1))))
         Bi = np.dot(np.linalg.inv(Mi), np.array([0, 0, 1]))
         Bi = np.dot(Dstar, Bi)
         Bi = Bi / np.linalg.norm(Bi)
@@ -2255,7 +2255,7 @@ def intersect_norm(n1, n2, d):
         n2 = np.dot(Dstarr, n2)
     else:
         l = ui_inter.checkBox_2.isChecked()
-        n2 = np.dot(Rot(-y_tilt, 0, 0, 1), np.dot(np.linalg.inv(M), n2))
+        n2 = np.dot(Rot(-y_tilt, 0, 0, 1), np.dot(np.linalg.inv(M), np.dot(Rot(y_tilt, 0, 0, 1), n2)))
 
     n = np.cross(n1, n2)
     if l:
@@ -3662,8 +3662,7 @@ if __name__ == "__main__":
     ui.alphabetagamma_entry.setText('90,90,90')
     ui.e_entry.setText('1')
 
-    var_lock = 0
-    ui.lock_checkButton.setChecked(False)
+    ui.lock_checkButton.setChecked(True)
     ui.color_trace_bleu.setChecked(True)
     ui.wulff_button.setChecked(True)
     ui.wulff_button.setChecked(True)

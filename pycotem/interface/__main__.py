@@ -365,7 +365,7 @@ def get_direction():
 
         L = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
-        t_ang = np.float64(ui.image_angle_entry.text())
+        t_ang = - np.float64(ui.image_angle_entry.text())
 
         for i in range(0, tilt_a.shape[0]):
             R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
@@ -459,7 +459,7 @@ def get_normal():
         B = np.zeros((3, np.shape(tilt_a)[0]))
         BxTp = np.zeros((3, np.shape(tilt_a)[0]))
 
-        t_ang = np.float64(ui.image_angle_entry.text())
+        t_ang = - np.float64(ui.image_angle_entry.text())
 
         for i in range(0, tilt_a.shape[0]):
             R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
@@ -547,11 +547,11 @@ def plot_dir_planes():
     a.axis('off')
 
     for i in range(1, D_p.shape[0]):
+        st = str(np.float64(D_p[i, 5])) + ',' + str(np.float64(D_p[i, 6])) + ',' + str(np.float64(D_p[i, 7]))
         if D_p[i, 8] == 1:
-            a.plot([D_p[i, 2], D_p[i, 2] + D_p[i, 0]], [D_p[i, 3], D_p[i, 3] - D_p[i, 1]], 'r-')
+            a.plot([D_p[i, 3], D_p[i, 3] + D_p[i, 0]], [D_p[i, 4], D_p[i, 4] - D_p[i, 1]], 'r-')
             if ui_draw.label_checkBox.isChecked():
-                st = str(np.float64(D_p[i, 5])) + ',' + str(np.float64(D_p[i, 6])) + ',' + str(np.float64(D_p[i, 7]))
-                a.annotate(st, (D_p[i, 2] + D_p[i, 0], D_p[i, 3] - D_p[i, 1]))
+                a.annotate(st, (D_p[i, 3] + D_p[i, 0], D_p[i, 4] - D_p[i, 1]))
             a.axis('off')
 
         else:
@@ -564,7 +564,6 @@ def plot_dir_planes():
             a.axis('off')
 
             if ui_draw.label_checkBox.isChecked():
-                st = str(np.float64(D_p[i, 5])) + ',' + str(np.float64(D_p[i, 6])) + ',' + str(np.float64(D_p[i, 7]))
                 angp = np.arctan2(D_p[i, 1], D_p[i, 0]) * 180 / np.pi
                 a.annotate(st, (xw, yw), rotation=angp, ha='center', va='center')
 
@@ -582,7 +581,7 @@ def draw_planes_dir():
 
     t = np.float64(ui_draw.thickness_entry.text())
     s_a, s_b, s_z = tilt_axes()
-    t_ang = np.float64(ui.image_angle_entry.text())
+    t_ang = - np.float64(ui.image_angle_entry.text())
     tilt_x = -s_b * np.float64(ui.tilt_x_entry.text())
     tilt_y = -s_a * np.float64(ui.tilt_y_entry.text())
     tilt_z = -s_z * np.float64(ui.tilt_z_entry.text())
@@ -621,7 +620,7 @@ def draw_planes_dir():
     else:
         s = np.array([0, 0, 1])
 
-    s = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), s))))
+    s = np.dot(Rot(t_ang, 0, 0, 1), np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), s))))
 
     if ui_draw.measure_checkBox.isChecked():
         x0 = gclick[-2, 0]
@@ -631,7 +630,7 @@ def draw_planes_dir():
         vn = np.array([-y1 + y0, -x1 + x0, 0])
         leng = np.linalg.norm(vn)
         vn = vn / leng
-        v_plan = np.dot(Rot(-tilt_z, 0, 0, 1), np.dot(Rot(-tilt_x, 1, 0, 0), np.dot(Rot(-tilt_y, 0, 1, 0), np.dot(Rot(t_ang, 0, 0, 1), vn))))
+        v_plan = np.dot(Rot(t_ang, 0, 0, 1), np.dot(Rot(-tilt_z, 0, 0, 1), np.dot(Rot(-tilt_x, 1, 0, 0), np.dot(Rot(-tilt_y, 0, 1, 0), vn))))
         v_plan = np.dot(np.linalg.inv(rotation(phi1, phi, phi2)), v_plan)
         nd = np.dot(Dstar, nd)
         intersec = np.cross(nd, v_plan)
@@ -642,7 +641,7 @@ def draw_planes_dir():
         dire = intersec
         dire = np.dot(rotation(phi1, phi, phi2), dire)
         dire = dire / np.linalg.norm(dire)
-        dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
+        dire = np.dot(Rot(t_ang, 0, 0, 1), np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), dire))))
         b = np.array([0, 0, 1])
         d_proj = (dire - np.dot(dire, b) * b) * t / np.dot(dire, s)
         dr = np.abs(leng * mag_conv * t / np.dot(dire, s) / np.linalg.norm(d_proj))
@@ -668,16 +667,16 @@ def draw_planes_dir():
             dire = np.dot(D, nd)
             dire = np.dot(rotation(phi1, phi, phi2), dire)
             dire = dire / np.linalg.norm(dire)
-            dire = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), dire))))
+            dire = np.dot(Rot(t_ang, 0, 0, 1), np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), dire))))
             b = np.array([0, 0, 1])
             d_proj = sens * (dire - np.dot(dire, b) * b) * t / np.dot(dire, s) / mag_conv
-            D_p = np.vstack((D_p, np.array([d_proj[0], d_proj[1], x, y, nd[0], nd[1], nd[2], 0, 1])))
+            D_p = np.vstack((D_p, np.array([d_proj[0], d_proj[1], 0, x, y, nd[0], nd[1], nd[2], 1])))
 
         else:
             plan = np.dot(Dstar, nd)
             plan = np.dot(rotation(phi1, phi, phi2), plan)
             plan = plan / np.linalg.norm(plan)
-            plan = np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), np.dot(Rot(t_ang, 0, 0, 1), plan))))
+            plan = np.dot(Rot(t_ang, 0, 0, 1), np.dot(Rot(tilt_y, 0, 1, 0), np.dot(Rot(tilt_x, 1, 0, 0), np.dot(Rot(tilt_z, 0, 0, 1), plan))))
 
             T = sens * np.cross(plan, s)
             T = T / np.linalg.norm(T)
@@ -890,6 +889,7 @@ if __name__ == "__main__":
     ui.actionDirections_planes.triggered.connect(Draw.show)
     ui_draw.buttonBox.rejected.connect(Draw.close)
     ui_draw.buttonBox.accepted.connect(draw_planes_dir)
+    ui_draw.thickness_entry.setText('1')
 
     ui.actionImport.triggered.connect(import_data)
     ui.actionExport.triggered.connect(export_data)

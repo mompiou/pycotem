@@ -1378,9 +1378,9 @@ def princ2():
         axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
         if axesh[i, 5] != -1 and axesh[i, 6] == 1:
             if axesh[i, 7] == 1:
-                T[i, :] = np.dot(rotation(phi1, phi, phi2), axeshr)
+                T[i, :] = np.dot(rotation(phi1 - ang_work_space(), phi, phi2), axeshr)
             else:
-                T[i, :] = np.dot(rotation(phi1_2, phi_2, phi2_2), axeshr)
+                T[i, :] = np.dot(rotation(phi1_2 - ang_work_space(), phi_2, phi2_2), axeshr)
 
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             s = text_label(axes[i, :], axesh[i, :])
@@ -1413,8 +1413,8 @@ def princ2():
     ui.angle_z_label_2.setText('0.0')
     ui.angle_beta_label_2.setText('0.0')
     ui.angle_z_label_2.setText('0.0')
-    M = rotation(phi1, phi, phi2)
-    M2 = rotation(phi1_2, phi_2, phi2_2)
+    M = rotation(phi1 - ang_work_space(), phi, phi2)
+    M2 = rotation(phi1_2 - ang_work_space(), phi_2, phi2_2)
     t = str(np.around(phi1, decimals=1)) + str(',') + str(np.around(phi, decimals=1)) + str(',') + str(np.around(phi2, decimals=1))
     t2 = str(np.around(phi1_2, decimals=1)) + str(',') + str(np.around(phi_2, decimals=1)) + str(',') + str(np.around(phi2_2, decimals=1))
     ui.angle_euler_label.setText(t)
