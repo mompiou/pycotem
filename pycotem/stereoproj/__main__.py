@@ -1436,7 +1436,6 @@ def undo_click_a_pole():
 
 
 def coordinates(event):
-    t_ang = ang_work_space() * np.pi / 180
     if event.xdata and event.ydata:
         x = event.xdata
         y = event.ydata
@@ -1685,7 +1684,7 @@ def trace():
 
 
 def princ():
-    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt, var_lock, M_lock
+    global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt, var_lock, M_lock, var_hexa
     trP = np.zeros((1, 5))
     trC = np.zeros((1, 6))
     Stc = np.zeros((1, 3))
@@ -1714,9 +1713,11 @@ def princ():
     d0 = np.array([diff1, diff2, diff3])
     if var_uvw() == 0:
         d = np.dot(Dstar, d0)
-
-    else:
-        d = np.dot(Dstar, d0)
+    if var_uvw() == 1 or ui.ZA_checkBox.isChecked():
+        if var_hexa() == 1:
+            d0[0] = 2 * diff1 + diff2
+            d0[1] = 2 * diff2 + diff1
+        d = np.dot(D, d0)
     if diff2 == 0 and diff1 == 0:
         normal = np.array([1, 0, 0])
         ang = np.pi / 2
@@ -1724,7 +1725,11 @@ def princ():
         normal = np.array([-d[2], 0, d[0]])
         ang = np.arccos(np.dot(d, np.array([0, 1, 0])) / np.linalg.norm(d))
 
-    R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-diff_ang - inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
+    if ui.ZA_checkBox.isChecked():
+        inclinaison = - inclinaison
+        R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(- diff_ang - inclinaison, 0, 0, 1), np.dot(Rot(90, 1, 0, 0), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2])))))))
+    else:
+        R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-diff_ang - inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
 
     P = np.zeros((axes.shape[0], 2))
     T = np.zeros((axes.shape))
@@ -3661,7 +3666,7 @@ if __name__ == "__main__":
     ui.abc_entry.setText('1,1,1')
     ui.alphabetagamma_entry.setText('90,90,90')
     ui.e_entry.setText('1')
-
+    M = 0
     ui.lock_checkButton.setChecked(True)
     ui.color_trace_bleu.setChecked(True)
     ui.wulff_button.setChecked(True)

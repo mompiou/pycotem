@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1403</width>
-    <height>884</height>
+    <height>932</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,6 +162,13 @@
           </item>
           <item row="4" column="2" colspan="2">
            <widget class="QLineEdit" name="inclinaison_entry"/>
+          </item>
+          <item row="5" column="2">
+           <widget class="QCheckBox" name="ZA_checkBox">
+            <property name="text">
+             <string>ZA</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -771,7 +778,7 @@
      <x>0</x>
      <y>0</y>
      <width>1403</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSave">
