@@ -365,6 +365,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#from-a-zone-axis" class="md-nav__link">
+    From a zone axis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#from-a-diffraction-vector" class="md-nav__link">
     From a diffraction vector
   </a>
@@ -659,6 +666,13 @@
           <li class="md-nav__item">
   <a href="#from-euler-angles" class="md-nav__link">
     From Euler angles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-a-zone-axis" class="md-nav__link">
+    From a zone axis
   </a>
   
 </li>
@@ -997,6 +1011,26 @@ Atom name2 x3 y3 z3
 <h3 id="from-euler-angles">From Euler angles<a class="headerlink" href="#from-euler-angles" title="Permanent link">&para;</a></h3>
 <p>Stereographic projections can be drawn from the 3 Euler angles. The angles can be read at all time after rotation operations. <span class="arithmatex"><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>-tilt and inclination angles can be read from the mouse position on  the Wulff net.</p>
 <p><img alt="" src="../images/euler_box.png" /></p>
+<h3 id="from-a-zone-axis">From a zone axis<a class="headerlink" href="#from-a-zone-axis" title="Permanent link">&para;</a></h3>
+<p>If a zone axis can be assigned, the orientation can be retrieved in the following way:</p>
+<ol>
+<li>
+<p>determine <span class="arithmatex"><span class="MathJax_Preview">\langle u, v, w\rangle</span><script type="math/tex">\langle u, v, w\rangle</script></span> indices of the zone axis <sup id="fnref:za"><a class="footnote-ref" href="#fn:za">6</a></sup> and identify one diffraction vector (see <a href="../diffraction/">diffraction</a>)</p>
+</li>
+<li>
+<p>set first tilt angles <span class="arithmatex"><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span class="arithmatex"><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span class="arithmatex"><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> (comma separated) to 0,0,0 and inclination <span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> to 0</p>
+</li>
+<li>
+<p>tick the <code>ZA</code> box</p>
+</li>
+<li>
+<p>plot and then rotate around <code>z</code> (or <code>Rotation along g</code>) in order to bring the diffraction vector at the correct inclination in the projection reference frame. Note this angle.</p>
+</li>
+<li>
+<p>set <span class="arithmatex"><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, <span class="arithmatex"><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span>, <span class="arithmatex"><span class="MathJax_Preview">\theta</span><script type="math/tex">\theta</script></span> to the values where the zone axis was recorded. Indicate <span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> with the retrieved value.</p>
+</li>
+</ol>
+<p><img alt="" src="../images/rot-g.png" /></p>
 <h3 id="from-a-diffraction-vector">From a diffraction vector<a class="headerlink" href="#from-a-diffraction-vector" title="Permanent link">&para;</a></h3>
 <p>The orientation can be alternatively set the following way: </p>
 <ol>
@@ -1280,6 +1314,9 @@ phi1,phi,phi2
 </li>
 <li id="fn:1">
 <p>We consider active rotations and rotation matrix acting by pre-multiplying column vectors.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:za">
+<p>be aware that zone axis indices are given in the direct space.&#160;<a class="footnote-backref" href="#fnref:za" title="Jump back to footnote 6 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
