@@ -1,5 +1,8 @@
 # pycotem
 
+![PyPI](https://img.shields.io/pypi/v/pycotem?style=plastic)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pycotem?style=plastic)
+
 pycotem is a python package for working with crystal orientations in transmission electron microscopy. It provides 6 GUI tools to:
 
 - determine orientation from diffraction patterns: ```diffraction```

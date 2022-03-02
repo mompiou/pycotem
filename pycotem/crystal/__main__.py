@@ -45,8 +45,8 @@ def unique(a):
 
 
 def calcul():
-    global vec, varname, atom0, Dstar, taille, zoom, EL, Dz, dsc_cond
-
+    global vec, varname, atom0, Dstar, taille, zoom, EL, Dz, dsc_cond, V, T, coi, Ma, Ma0, Ma1, Ma2, ELr, theta
+    ui.v_listBox.clear()
     if varname != 0:
         f_space = open(varname[0], "r")
     else:
@@ -72,7 +72,7 @@ def calcul():
     EL = np.array([0, 0, 0, 0, 0])
     H = np.array([[0]])
     Dz = np.array([0, 0, 0])
-
+    V = np.zeros((1, 10))
     if ui.dsc_box.isChecked() is False:
         atom0 = np.array(atom0, float)
         maxi = int(atom0[np.shape(atom0)[0] - 1, 0])
@@ -94,43 +94,15 @@ def calcul():
     EL = np.append(E, H, axis=1)
     EL = np.delete(EL, (0), axis=0)
     Dz = np.delete(Dz, (0), axis=0)
-
-
-def trace():
-    global vec, varname, atom0, Dstar, taille, zoom, EL, Dz, fi
-
-    fi.clear()
-
-    sim = int(ui.markers_entry.text())
-    if ui.dsc_box.isChecked() is False:
-        if ui.square_box.isChecked() is False:
-            fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='o')
-        else:
-            fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='s')
-
-        if ui.atoms_box.isChecked():
-            for k in range(0, np.shape(EL)[0]):
-                fi.annotate(str(int(EL[k, 4])), (EL[k, 0], EL[k, 1]))
-
-        if ui.labels_box.isChecked():
-            for q in range(0, np.shape(EL)[0]):
-                at = Dz[q, :]
-                at = np.dot(at, Dstar)
-
-                vector = str(np.around(at[0], decimals=3)) + ',' + str(np.around(at[1], decimals=3)) + ',' + str(np.around(at[2], decimals=3))
-                fi.annotate(vector, (EL[q, 0], EL[q, 1]))
-
     if ui.dsc_box.isChecked():
         theta = np.float64(ui.angle_entry.text())
         theta = theta * np.pi / 180
         ELr = np.dot(EL[:, 0:3], Rot(theta, 0, 0, 1))
         M = unique(EL[:, 3])
-
         Ma0 = []
         Ma1 = []
         Ma2 = []
-        Ma = []
-        m = ('o', 's', '^', '*', 'h')
+        m = (0, 1, 2, 3, 4)
         abc = ui.abc_entry.text().split(",")
         a = np.float64(abc[0])
         b = np.float64(abc[1])
@@ -147,126 +119,176 @@ def trace():
         for t in range(0, np.shape(M)[0]):
             for i in range(0, np.shape(EL[:, 3])[0]):
                 if EL[i, 3] == M[t]:
-
                     if t > np.size(m) - 1:
-                        Ma0.append('o')
-                        Ma1.append('o')
-
+                        Ma0.append(0)
+                        Ma1.append(0)
                     else:
                         Ma0.append(m[t])
                         Ma1.append(m[t])
                     if ui.layers_box.isChecked():
-                        Ma2.append(str(t))
-        else:
-            Ma.append('D')
+                        Ma2.append(t)
+        Ma1 = np.array(Ma1)
+        Ma2 = np.array(Ma2)
+        Ma0 = np.array(Ma0)
 
-        for y in range(0, np.shape(EL[:, 3])[0]):
-            fi.scatter(ELr[y, 0], ELr[y, 1], s=sim, marker=Ma0[y], color='white', edgecolor='black')
-            fi.scatter(EL[y, 0], EL[y, 1], s=sim, marker=Ma1[y], color='black', edgecolor='black')
-            if ui.layers_box.isChecked():
-                fi.text(EL[y, 0], EL[y, 1], Ma2[y])
-                fi.text(ELr[y, 0], ELr[y, 1], Ma2[y])
-        if ui.coincidence_box.isChecked():
-            for z in coi:
-                fi.scatter(EL[z, 0], EL[z, 1], s=sim * 1.5, marker=Ma0[z], color='blue', edgecolor='black')
+
+def draw():
+    global fi
+    minx = np.min(EL[:, 0])
+    maxx = np.max(EL[:, 0])
+    miny = np.min(EL[:, 1])
+    maxy = np.max(EL[:, 1])
+    fi.axis([minx, maxx, miny, maxy])
+    trace()
+
+
+def trace():
+    global vec, varname, atom0, Dstar, D, taille, zoom, EL, Dz, fi, V, hexa, plan, planN
+    minx, maxx = fi.get_xlim()
+    miny, maxy = fi.get_ylim()
+    fi.clear()
+    sim = int(ui.markers_entry.text())
+    if ui.dsc_box.isChecked() is False:
+        if ui.square_box.isChecked() is False:
+            fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='o')
+        else:
+            fi.scatter(EL[:, 0], EL[:, 1], s=sim, c=EL[:, 3], marker='s')
+
+        if ui.atoms_box.isChecked():
+            for k in range(0, np.shape(EL)[0]):
+                fi.annotate(str(int(EL[k, 4])), (EL[k, 0], EL[k, 1]))
 
         if ui.labels_box.isChecked():
             for q in range(0, np.shape(EL)[0]):
                 at = Dz[q, :]
                 at = np.dot(at, Dstar)
+                if hexa == 1:
+                    i1 = (2 * at[0] - at[1]) / 3
+                    i2 = (2 * at[1] - at[0]) / 3
+                    i3 = at[2]
+                else:
+                    i1, i2, i3 = at[0], at[1], at[2]
 
-                vector = str(np.around(at[0], decimals=1)) + ',' + str(np.around(at[1], decimals=1)) + ',' + str(np.around(at[2], decimals=1))
+                vector = str(np.around(i1, decimals=3)) + ',' + str(np.around(i2, decimals=3)) + ',' + str(np.around(i3, decimals=3))
                 fi.annotate(vector, (EL[q, 0], EL[q, 1]))
-    fi.axis('off')
-    fi.axis('equal')
-    fi.figure.canvas.draw()
+    m = ['o', 's', '^', '*', 'h']
+    if ui.dsc_box.isChecked():
+        for i in range(0, 5):
+            fi.scatter(ELr[Ma0 == i, 0], ELr[Ma0 == i, 1], s=sim, marker=m[i], color='white', edgecolor='black')
+            fi.scatter(EL[Ma1 == i, 0], EL[Ma1 == i, 1], s=sim, marker=m[i], color='black', edgecolor='black')
+        if ui.coincidence_box.isChecked():
+            for z in coi:
+                fi.scatter(EL[z, 0], EL[z, 1], s=sim * 1.5, marker=m[Ma0[z]], color='blue', edgecolor='black')
+
+        if ui.layers_box.isChecked():
+            for y in range(0, EL.shape[0]):
+                fi.text(EL[y, 0], EL[y, 1], Ma2[y])
+                fi.text(ELr[y, 0], ELr[y, 1], Ma2[y])
+
+        if ui.labels_box.isChecked():
+            for q in range(0, np.shape(EL)[0]):
+                at = Dz[q, :]
+                at = np.dot(at, Dstar)
+                if hexa == 1:
+                    i1 = (2 * at[0] - at[1]) / 3
+                    i2 = (2 * at[1] - at[0]) / 3
+                    i3 = at[2]
+                else:
+                    i1, i2, i3 = at[0], at[1], at[2]
+                vector = str(np.around(i1, decimals=3)) + ',' + str(np.around(i2, decimals=3)) + ',' + str(np.around(i3, decimals=3))
+                if ui.G2_checkBox.isChecked():
+                    fi.annotate(vector, (ELr[q, 0], ELr[q, 1]))
+                else:
+                    fi.annotate(vector, (EL[q, 0], EL[q, 1]))
+
+    if V.shape[0] > 0:
+        for i in range(1, V.shape[0]):
+            if V[i, 8] == 1:
+                v = np.dot(Dstar, V[i, 0:3])
+                v = v / np.linalg.norm(v) / V[i, 3]
+            else:
+                v = np.dot(D, V[i, 0:3]) / V[i, 3]
+            t = np.dot(D, V[i, 5:8])
+            L = np.dot(v, planN)
+            Lt = np.dot(t, planN)
+            vec_p = v - L * planN
+            vec_t = t - Lt * planN
+            if V[i, 4] == 2:
+                proj = np.dot(Rot(-theta, 0, 0, 1), coord_ortho(vec_p, plan))
+                proj_t = np.dot(Rot(-theta, 0, 0, 1), coord_ortho(vec_t, plan))
+                c = 'red'
+            else:
+                proj = coord_ortho(vec_p, plan)
+                proj_t = coord_ortho(vec_t, plan)
+                c = 'blue'
+
+            fi.arrow(proj_t[0], proj_t[1], proj[0], proj[1], width=0.01, head_width=0.03, head_length=0.03, length_includes_head=True, color=c)
+            if ui.label_checkBox.isChecked():
+                if hexa == 1 and V[i, 8] == 0:
+                    sa = '[' + str((2 * V[i, 0] - V[i, 1]) / 3) + ',' + str((2 * V[i, 1] - V[i, 0]) / 3) + ',' + str(V[i, 2]) + ']' + '_' + str(int(V[i, 4]))
+                else:
+                    if V[i, 8] == 0:
+                        sa = '[' + str(V[i, 0]) + ',' + str(V[i, 1]) + ',' + str(V[i, 2]) + ']' + '_' + str(int(V[i, 4]))
+                    else:
+                        sa = '(' + str(V[i, 0]) + ',' + str(V[i, 1]) + ',' + str(V[i, 2]) + ')' + '_' + str(int(V[i, 4]))
+                fi.annotate(sa, (proj[0] + proj_t[0], proj[1] + proj_t[1]), color=c)
+        fi.axis('off')
+        fi.axis('equal')
+        fi.axis([minx, maxx, miny, maxy])
+        fi.figure.canvas.draw()
 
 
-def rep():
-    global varname, vec, E, C, Dz, atom0
-
-    fi.clear()
-
-    sim = int(ui.markers_entry.text())
-    if varname != 0:
-        f_space = open(varname, "r")
+def add_vec():
+    global V, hexa
+    if ui.G2_draw_checkBox.isChecked() and ui.dsc_box.isChecked():
+        g = 2
     else:
-        varname = getFileName()
-        f_space = open(varname, "r")
-
-    crist = []
-
-    for line in f_space:
-        crist.append(list(map(str, line.split())))
-
-    f_space.close()
-    vec = []
-    atom0 = []
-    for i in range(0, np.size(crist)):
-        if np.size(crist[i]) == 3:
-            vec.append(crist[i])
+        g = 1
+    v0 = np.float64(ui.v_entry.text().split(","))
+    t0 = np.float64(ui.t_entry.text().split(","))
+    den_v = np.float64(ui.v_denom_entry.text())
+    if ui.normal_checkBox.isChecked() is False:
+        if hexa == 1:
+            i1 = 2 * v0[0] + v0[1]
+            i2 = 2 * v0[1] + v0[0]
+            i3 = v0[2]
+            t1 = 2 * t0[0] + t0[1]
+            t2 = 2 * t0[1] + t0[0]
+            t3 = t0[2]
         else:
-            atom0.append(crist[i])
+            i1, i2, i3 = v0[0], v0[1], v0[2]
+            t1, t2, t3 = t0[0], t0[1], t0[2]
+        v = np.dot(D, np.array([i1, i2, i3])) / den_v
+        L = np.around(np.dot(v, planN), decimals=3)
+        V = np.vstack((V, np.array([i1, i2, i3, den_v, g, t1, t2, t3, 0, L])))
+        lp, rp = '[', ']'
+    else:
+        v = np.dot(Dstar, v0) / den_v
+        L = np.around(np.dot(v, planN), decimals=3)
+        V = np.vstack((V, np.array([v0[0], v0[1], v0[2], den_v, g, t0[0], t0[1], t0[2], 1, L])))
+        lp, rp = '(', ')'
 
-    vec = np.array(vec, float)
-    atom0 = np.array(atom0, float)
-
-    maxi = int(atom0[np.shape(atom0)[0] - 1, 0])
-
-    for h in range(1, maxi + 1):
-
-        E = calcul_rep(atom0[atom0[:, 0] == h])
-
-        fi.scatter(E[:, 0], E[:, 1], E[:, 2], s=sim, c=str(h / maxi))
-
-    fi.axis('off')
-    fi.figure.canvas.draw()
+    s = str('1/' + str(int(den_v)) + lp + str(v0[0]) + ',' + str(v0[1]) + ',' + str(v0[2]) + rp + str(g) + '   ' + lp + str(t0[0]) + ',' + str(t0[1]) + ',' + str(t0[2]) + rp + ',' + str(L))
+    ui.v_listBox.addItem(s)
+    cur = ui.v_listBox.currentRow()
+    ui.v_listBox.setCurrentRow(cur + 1)
+    trace()
 
 
-def calcul_rep(atom):
-    global Dstar, varname, C, D0, Dz, planN, plan, vec, c
-    abc = ui.abc_entry.text().split(",")
-    a = np.float64(abc[0])
-    b = np.float64(abc[1])
-    c = np.float64(abc[2])
-    alphabetagamma = ui.alphabetagamma_entry.text().split(",")
-    alpha = np.float64(alphabetagamma[0])
-    beta = np.float64(alphabetagamma[1])
-    gamma = np.float64(alphabetagamma[2])
-    alp = alpha * np.pi / 180
-    bet = beta * np.pi / 180
-    gam = gamma * np.pi / 180
-
-    V = a * b * c * np.sqrt(1 - (np.cos(alp)**2) - (np.cos(bet))**2 - (np.cos(gam))**2 + 2 * b * c * np.cos(alp) * np.cos(bet) * np.cos(gam))
-    D = np.array([[a, b * np.cos(gam), c * np.cos(bet)], [0, b * np.sin(gam), c * (np.cos(alp) - np.cos(bet) * np.cos(gam)) / np.sin(gam)], [0, 0, V / (a * b * np.sin(gam))]])
-    Dstar = np.transpose(np.linalg.inv(D))
-
-    n = ui.size_entry.text().split(",")
-    na_rep = int(n[0])
-    nb_rep = int(n[1])
-    nc_rep = int(n[2])
-
-    A = np.zeros((np.shape(atom)[0], np.shape(atom)[1] - 1))
-    w = 0
-
-    for v in range(0, np.shape(atom)[0]):
-
-        A[w, :] = np.dot(D, np.array([atom[v, 1], atom[v, 2], atom[v, 3]]))
-        w = w + 1
-
-    atom_pos = np.array(A[0, :])
-    for f in range(0, np.shape(A)[0]):
-        for i in range(-na_rep, na_rep + 1):
-            for j in range(-nb_rep, nb_rep + 1):
-                for k in range(-nc_rep, nc_rep + 1):
-
-                    atom_pos = np.vstack((atom_pos, A[f, :] + i * a * vec[0, :] + j * b * vec[1, :] + k * c * vec[2, :]))
-
-    return atom_pos
+def remove_vec():
+    global V
+    if ui.v_listBox.currentRow() == -1:
+        cr = 1
+    else:
+        cr = ui.v_listBox.currentRow() + 1
+    if V.shape[0] > 1:
+        V = np.delete(V, cr, axis=0)
+        ui.v_listBox.takeItem(cr - 1)
+    trace()
 
 
 def calcul_atom(atom):
-    global Dstar, varname, C, D0, planN, plan, vec, atom_pos
+    global Dstar, D, varname, C, D0, planN, plan, vec, atom_pos, hexa
 
     abc = ui.abc_entry.text().split(",")
     a = np.float64(abc[0])
@@ -279,6 +301,10 @@ def calcul_atom(atom):
     alp = alpha * np.pi / 180
     bet = beta * np.pi / 180
     gam = gamma * np.pi / 180
+    if a == b != c and alpha == beta == 90 and gamma == 120:
+        hexa = 1
+    else:
+        hexa = 0
 
     V = a * b * c * np.sqrt(1 - (np.cos(alp)**2) - (np.cos(bet))**2 - (np.cos(gam))**2 + 2 * b * c * np.cos(alp) * np.cos(bet) * np.cos(gam))
     D = np.array([[a, b * np.cos(gam), c * np.cos(bet)], [0, b * np.sin(gam), c * (np.cos(alp) - np.cos(bet) * np.cos(gam)) / np.sin(gam)], [0, 0, V / (a * b * np.sin(gam))]])
@@ -388,7 +414,7 @@ class NavigationToolbar(NavigationToolbar):
 
 
 def structure(item):
-    global x0, var_hexa, d_label_var, e_entry
+    global x0, d_label_var, e_entry
 
     ui.abc_entry.setText(str(item[1]) + ',' + str(item[2]) + ',' + str(item[3]))
     ui.alphabetagamma_entry.setText(str(item[4]) + ',' + str(item[5]) + ',' + str(item[6]))
@@ -431,8 +457,10 @@ if __name__ == "__main__":
     ui.actionSave_figure.triggered.connect(image_save)
     varname = 0
     ui.calculate_button.clicked.connect(calcul)
-    ui.draw_button.clicked.connect(trace)
+    ui.draw_button.clicked.connect(draw)
     ui.changeStruct_button.clicked.connect(getFileName)
+    ui.add_v_Button.clicked.connect(add_vec)
+    ui.remove_v_Button.clicked.connect(remove_vec)
     ui.abc_entry.setText('1,1,1')
     ui.alphabetagamma_entry.setText('90,90,90')
     ui.plane_entry.setText('1,1,1')
@@ -440,5 +468,6 @@ if __name__ == "__main__":
     ui.layers_entry.setText('0,2')
     ui.markers_entry.setText('30')
     ui.precision_entry.setText('5')
+    ui.t_entry.setText('0,0,0')
     Index.show()
     sys.exit(app.exec_())
