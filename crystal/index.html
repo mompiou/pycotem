@@ -373,6 +373,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#draw-vectors" class="md-nav__link">
+    Draw vectors
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -469,6 +476,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#draw-vectors" class="md-nav__link">
+    Draw vectors
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -553,16 +567,48 @@ vkx vky vkz
 <p>Recalculate (press <code>Calculate</code>) and then <code>Draw</code></p>
 </li>
 <li>
-<p>Tick the <code>coincidence</code> box to highlight coincident site positions. The precision by which is defined coincidence  can be tuned in the <code>precision</code> field. It is expressed in % of the largest lattice parameter.</p>
+<p>Tick the <code>coincidence</code> box to highlight coincident site positions (need to <code>Calculate</code> again). The precision by which is defined coincidence  can be tuned in the <code>precision</code> field. It is expressed in % of the largest lattice parameter.</p>
 </li>
 <li>
 <p>Tick the <code>layers</code> button to show the layer number on the dichromatic pattern. From layers 0 to 5, markers are circles, squares, triangles, stars and hexagons, respectively. After they are all circles. </p>
+</li>
+<li>
+<p>Tick the <code>G2 positions</code> to draw atom position in the rotated crystal.</p>
 </li>
 </ul>
 <p><img alt="" src="../images/dichromatic.png" /></p>
 <blockquote>
 <p>Example of a dichromatic pattern in a <span class="arithmatex"><span class="MathJax_Preview">(1,1,1)</span><script type="math/tex">(1,1,1)</script></span> plane with a misorientation angle of 38.21°, in Al.</p>
 </blockquote>
+<h2 id="draw-vectors">Draw vectors<a class="headerlink" href="#draw-vectors" title="Permanent link">&para;</a></h2>
+<p>Vectors can be plotted in direct or in reciprocal (plane normals) spaces either in a grain or in a dichromatic pattern.</p>
+<ul>
+<li>
+<p>Fill the <code>v</code> field with both a fractionnal constant and crystal indices.</p>
+</li>
+<li>
+<p>Press <code>+</code> button to add the vector to the list. Zoomed pattern are not reset when vectors are added. Press <code>Draw</code> to reset view. </p>
+</li>
+<li>
+<p>Vectors in the list appear as: <code>1/k [u,v,w]_i [t1,t2,t3], z</code>, <code>z</code> is the scalar product with the projected plane direction, i.e. indicate the out of figure coordinate.</p>
+</li>
+<li>
+<p>Shift a vector by changing the origin to the position <code>t</code> (default is [0,0,0]). <code>t</code> should be indicated in the directed space of the grain which can be easily found by plotting atom positions.</p>
+</li>
+<li>
+<p>Select a vector and remove it by pressing the <code>-</code> button. By default, the last vector enter is selected. </p>
+</li>
+<li>
+<p>When <code>normal</code> box is ticked the <code>v</code> vectors is treated as a plane normal. As it is much shorter the fractionnal value can be set less than 1.</p>
+</li>
+<li>
+<p>Tick <code>G2</code> to draw vectors in the second rotated crystal.</p>
+</li>
+<li>
+<p>Tick <code>label</code> to show labels associated to directions <code>[....]_1,2</code> or plane normals <code>(...)_1,2</code></p>
+</li>
+</ul>
+<p><img alt="" src="../images/crystal-vectors.png" /></p>
 
               
             </article>
