@@ -899,7 +899,7 @@ def undo_trace_addplan():
 def undo_trace_plan(pole1, pole2, pole3):
     global M, M2, axes, axesh, T, V, D, Dstar, trP, tr_schmid
     i_c = crystal_check()
-    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 3] == i_c))
+    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 5] == i_c)| (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 5] == i_c))
 
     trP = np.delete(trP, ind, 0)
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
@@ -1062,7 +1062,14 @@ def trace_plan2(B):
         pole2 = B[h, 1]
         pole3 = B[h, 2]
         Gs = np.array([pole1, pole2, pole3], float)
-
+        if B[h,4] == 1:
+            abc = ui.abc_entry.text().split(",")
+            alphabetagamma = ui.alphabetagamma_entry.text().split(",")
+        else:
+            abc = ui.abc_entry_2.text().split(",")
+            alphabetagamma = ui.alphabetagamma_entry_2.text().split(",")
+        D, Dstar, V, G = crist_mat(abc, alphabetagamma)
+    
         if B[h, 3] == 0:
             Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
         else:
