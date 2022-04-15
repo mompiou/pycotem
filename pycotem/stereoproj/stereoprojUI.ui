@@ -6,16 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1403</width>
-    <height>932</height>
+    <width>1404</width>
+    <height>920</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>920</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Stereo-Proj</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>stereo-icon.png</normaloff>stereo-icon.png</iconset>
+    <normaloff>../../../../../../../.designer/backup/stereo-icon.png</normaloff>../../../../../../../.designer/backup/stereo-icon.png</iconset>
   </property>
   <property name="accessibleName">
    <string>Stereoproj</string>
@@ -32,7 +44,20 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0">
-     <layout class="QGridLayout" name="mplvl"/>
+     <layout class="QGridLayout" name="mplvl">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="horizontalSpacing">
+       <number>6</number>
+      </property>
+     </layout>
     </item>
     <item row="0" column="1">
      <widget class="QGroupBox" name="groupBox_6">
@@ -52,6 +77,75 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Euler Angles</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="4" column="0" colspan="3">
+           <widget class="QLabel" name="lab_coord">
+            <property name="text">
+             <string>Tilt, Inclination</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="3">
+           <widget class="QLabel" name="angle_euler_label">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="QPushButton" name="button_trace2">
+            <property name="text">
+             <string>PLOT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QLineEdit" name="phi1phiphi2_entry"/>
+          </item>
+          <item row="5" column="0" colspan="3">
+           <widget class="QLabel" name="coord_label">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QLabel" name="lab_euler2">
+            <property name="text">
+             <string>φ 1 , Φ , φ2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="enabled">
@@ -82,63 +176,6 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <item row="9" column="0">
-           <widget class="QPushButton" name="rot_gm_button">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="1">
-           <spacer name="verticalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="1" colspan="3">
-           <widget class="QLineEdit" name="diff_entry"/>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="diff_label">
-            <property name="text">
-             <string>g-vector</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QLineEdit" name="rot_g_entry"/>
-          </item>
-          <item row="8" column="0" colspan="3">
-           <widget class="QLabel" name="rot_diff_label">
-            <property name="text">
-             <string>Rotation along g</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QPushButton" name="button_trace">
-            <property name="text">
-             <string>PLOT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="2">
-           <widget class="QPushButton" name="rot_gp_button">
-            <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="3">
-           <widget class="QLineEdit" name="tilt_entry"/>
-          </item>
           <item row="10" column="1">
            <widget class="QLabel" name="rg_label">
             <property name="text">
@@ -153,6 +190,13 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="diff_label">
+            <property name="text">
+             <string>g-vector</string>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="0" colspan="2">
            <widget class="QLabel" name="inclination_label">
             <property name="text">
@@ -160,8 +204,32 @@
             </property>
            </widget>
           </item>
+          <item row="8" column="0" colspan="3">
+           <widget class="QLabel" name="rot_diff_label">
+            <property name="text">
+             <string>Rotation along g</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="2">
+           <widget class="QPushButton" name="rot_gp_button">
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="3">
+           <widget class="QLineEdit" name="tilt_entry"/>
+          </item>
           <item row="4" column="2" colspan="2">
            <widget class="QLineEdit" name="inclinaison_entry"/>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QPushButton" name="button_trace">
+            <property name="text">
+             <string>PLOT</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="2">
            <widget class="QCheckBox" name="ZA_checkBox">
@@ -170,64 +238,21 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Euler Angles</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="5" column="0" colspan="3">
-           <widget class="QLabel" name="coord_label">
+          <item row="9" column="1">
+           <widget class="QLineEdit" name="rot_g_entry"/>
+          </item>
+          <item row="9" column="0">
+           <widget class="QPushButton" name="rot_gm_button">
             <property name="text">
-             <string/>
+             <string>-</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="QLabel" name="lab_euler2">
-            <property name="text">
-             <string>φ 1 , Φ , φ2</string>
-            </property>
-           </widget>
+          <item row="0" column="1" colspan="3">
+           <widget class="QLineEdit" name="diff_entry"/>
           </item>
-          <item row="1" column="0" colspan="3">
-           <widget class="QPushButton" name="button_trace2">
-            <property name="text">
-             <string>PLOT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="3">
-           <widget class="QLabel" name="lab_coord">
-            <property name="text">
-             <string>Tilt, Inclination</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="3">
-           <widget class="QLineEdit" name="phi1phiphi2_entry"/>
-          </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QLabel" name="angle_euler_label">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <spacer name="verticalSpacer_6">
+          <item row="11" column="1">
+           <spacer name="verticalSpacer_5">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -238,137 +263,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="maximumSize">
-          <size>
-           <width>230</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Layout</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_10">
-          <item row="14" column="3">
-           <widget class="QCheckBox" name="uvw_button">
-            <property name="text">
-             <string>uvw</string>
-            </property>
-           </widget>
-          </item>
-          <item row="14" column="0">
-           <widget class="QCheckBox" name="hexa_button">
-            <property name="text">
-             <string>hexa</string>
-            </property>
-           </widget>
-          </item>
-          <item row="17" column="0">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="color_trace_bleu">
-            <property name="text">
-             <string>blue</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QRadioButton" name="color_trace_vert">
-            <property name="text">
-             <string>green</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="3">
-           <widget class="QLineEdit" name="size_var"/>
-          </item>
-          <item row="7" column="0" colspan="2">
-           <widget class="QLabel" name="text_size_label">
-            <property name="text">
-             <string>Text size</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QRadioButton" name="color_trace_rouge">
-            <property name="text">
-             <string>red</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="3">
-           <widget class="QLineEdit" name="text_size_entry"/>
-          </item>
-          <item row="6" column="0" colspan="3">
-           <widget class="QLabel" name="size_var_label">
-            <property name="text">
-             <string>Marker size</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="0" colspan="3">
-           <widget class="QLabel" name="tilt_angle_label">
-            <property name="text">
-             <string>diff α-tilt/y angle</string>
-            </property>
-           </widget>
-          </item>
-          <item row="13" column="0" colspan="3">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>img α-tilt/y angle</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="3">
-           <widget class="QLineEdit" name="tilt_angle_entry"/>
-          </item>
-          <item row="13" column="3">
-           <widget class="QLineEdit" name="image_angle_entry"/>
-          </item>
-          <item row="15" column="0" colspan="4">
-           <widget class="QPushButton" name="reset_view_button">
-            <property name="text">
-             <string>Update/Reset view</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0" colspan="2">
-           <widget class="QCheckBox" name="real_space_checkBox">
-            <property name="text">
-             <string>img/diff</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QCheckBox" name="style_box">
-            <property name="text">
-             <string>open/filled</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2" colspan="2">
-           <widget class="QCheckBox" name="wulff_button">
-            <property name="text">
-             <string>Wulff net</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -385,45 +279,7 @@
           <string>Pole/Plane</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="4" column="0" colspan="3">
-           <widget class="QPushButton" name="trace_plan_sym_button">
-            <property name="text">
-             <string>Sym Plane</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="QPushButton" name="sym_button">
-            <property name="text">
-             <string>Symmetry</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="3">
-           <widget class="QPushButton" name="undo_trace_cone_button">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QPushButton" name="trace_plan_button">
-            <property name="text">
-             <string> Plane</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="3">
-           <widget class="QPushButton" name="undo_trace_plan_sym_button">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QLineEdit" name="inclination_entry"/>
-          </item>
-          <item row="6" column="0" colspan="2">
+          <item row="7" column="0" colspan="2">
            <widget class="QPushButton" name="trace_cone_button">
             <property name="text">
              <string>Cone</string>
@@ -431,66 +287,143 @@
            </widget>
           </item>
           <item row="5" column="3">
-           <widget class="QPushButton" name="undo_trace_schmid">
+           <widget class="QPushButton" name="undo_trace_plan_sym_button">
             <property name="text">
              <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QPushButton" name="norm_button">
-            <property name="text">
-             <string>dhkl</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0" colspan="4">
            <widget class="QLineEdit" name="pole_entry"/>
           </item>
-          <item row="3" column="3">
-           <widget class="QPushButton" name="undo_trace_plan_button">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
+          <item row="2" column="3">
            <widget class="QPushButton" name="undo_addpole_button">
             <property name="text">
              <string>-</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="3">
-           <widget class="QPushButton" name="addpole_button">
+          <item row="4" column="3">
+           <widget class="QPushButton" name="undo_trace_plan_button">
             <property name="text">
-             <string>Add</string>
+             <string>-</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="2" colspan="2">
+          <item row="6" column="3">
+           <widget class="QPushButton" name="undo_trace_schmid">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2" colspan="2">
            <widget class="QLabel" name="dhkl_label">
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QPushButton" name="undo_sym_button">
+          <item row="8" column="0" colspan="3">
+           <widget class="QCheckBox" name="simple_checkBox">
             <property name="text">
-             <string>-</string>
+             <string>simple label</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="3">
+          <item row="7" column="2">
+           <widget class="QLineEdit" name="inclination_entry"/>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QPushButton" name="addpole_button">
+            <property name="text">
+             <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0" colspan="3">
            <widget class="QPushButton" name="trace_schmid_button">
             <property name="text">
              <string>Schmid</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="2">
-           <spacer name="verticalSpacer_4">
+          <item row="3" column="3">
+           <widget class="QPushButton" name="undo_sym_button">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QPushButton" name="norm_button">
+            <property name="text">
+             <string>dhkl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="3">
+           <widget class="QPushButton" name="sym_button">
+            <property name="text">
+             <string>Symmetry</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="3">
+           <widget class="QLineEdit" name="simple_entry"/>
+          </item>
+          <item row="7" column="3">
+           <widget class="QPushButton" name="undo_trace_cone_button">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="3">
+           <widget class="QPushButton" name="trace_plan_button">
+            <property name="text">
+             <string> Plane</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="3">
+           <widget class="QPushButton" name="trace_plan_sym_button">
+            <property name="text">
+             <string>Sym Plane</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="maximumSize">
+          <size>
+           <width>230</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Layout</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="0" column="1" colspan="2">
+           <widget class="QRadioButton" name="color_trace_vert">
+            <property name="text">
+             <string>green</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="color_trace_bleu">
+            <property name="text">
+             <string>blue</string>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="0">
+           <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -501,6 +434,105 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="14" column="0" colspan="3">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>img α-tilt/y angle</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="0" colspan="4">
+           <widget class="QPushButton" name="reset_view_button">
+            <property name="text">
+             <string>Update/Reset view</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="2">
+           <widget class="QCheckBox" name="wulff_button">
+            <property name="text">
+             <string>Wulff net</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="3">
+           <widget class="QLineEdit" name="text_size_entry"/>
+          </item>
+          <item row="15" column="0">
+           <widget class="QCheckBox" name="hexa_button">
+            <property name="text">
+             <string>hexa</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QRadioButton" name="color_trace_rouge">
+            <property name="text">
+             <string>red</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="3">
+           <widget class="QLabel" name="size_var_label">
+            <property name="text">
+             <string>Marker size</string>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="3">
+           <widget class="QCheckBox" name="uvw_button">
+            <property name="text">
+             <string>uvw</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="2">
+           <widget class="QLabel" name="text_size_label">
+            <property name="text">
+             <string>Text size</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="3">
+           <widget class="QLineEdit" name="tilt_angle_entry"/>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="annotate_checkBox">
+            <property name="text">
+             <string>labels</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="3">
+           <widget class="QLineEdit" name="size_var"/>
+          </item>
+          <item row="9" column="0" colspan="2">
+           <widget class="QCheckBox" name="real_space_checkBox">
+            <property name="text">
+             <string>img/diff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLineEdit" name="labels_entry"/>
+          </item>
+          <item row="14" column="3">
+           <widget class="QLineEdit" name="image_angle_entry"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="style_box">
+            <property name="text">
+             <string>open/filled</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="0" colspan="3">
+           <widget class="QLabel" name="tilt_angle_label">
+            <property name="text">
+             <string>diff α-tilt/y angle</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -703,64 +735,64 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <item row="0" column="3" colspan="3">
-           <widget class="QLineEdit" name="abc_entry"/>
-          </item>
-          <item row="2" column="3" colspan="3">
-           <widget class="QLineEdit" name="alphabetagamma_entry"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="alphabetagamma_label">
-            <property name="text">
-             <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="4">
+          <item row="4" column="2" colspan="4">
            <widget class="QLineEdit" name="e_entry"/>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="abc_label">
-            <property name="text">
-             <string>a,b,c</string>
-            </property>
-           </widget>
+          <item row="0" column="2" colspan="4">
+           <widget class="QLineEdit" name="abc_entry"/>
           </item>
-          <item row="4" column="0" colspan="4">
-           <widget class="QLabel" name="e_label">
-            <property name="text">
-             <string>max indices</string>
-            </property>
-           </widget>
+          <item row="10" column="0" colspan="6">
+           <widget class="QComboBox" name="space_group_Box"/>
           </item>
-          <item row="9" column="0">
+          <item row="12" column="0">
            <widget class="QLabel" name="d_label">
             <property name="text">
              <string>d</string>
             </property>
            </widget>
           </item>
-          <item row="10" column="2" colspan="3">
-           <widget class="QLabel" name="d_label_var">
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="abc_label">
             <property name="text">
-             <string/>
+             <string>a,b,c</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="5">
+          <item row="2" column="0" colspan="2">
+           <widget class="QLabel" name="alphabetagamma_label">
+            <property name="text">
+             <string>&lt;p&gt;&amp;alpha;, &amp;beta;, &amp;gamma;&lt;/p&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QLabel" name="e_label">
+            <property name="text">
+             <string>Max indices</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="4">
+           <widget class="QLineEdit" name="alphabetagamma_entry"/>
+          </item>
+          <item row="12" column="1" colspan="5">
+           <widget class="QSlider" name="d_Slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="6">
            <widget class="QCheckBox" name="reciprocal_checkBox">
             <property name="text">
              <string>Reciprocal indices</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="0" colspan="6">
-           <widget class="QComboBox" name="space_group_Box"/>
-          </item>
-          <item row="9" column="2" colspan="4">
-           <widget class="QSlider" name="d_Slider">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item row="13" column="1" colspan="5">
+           <widget class="QLabel" name="d_label_var">
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
@@ -777,7 +809,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1403</width>
+     <width>1404</width>
      <height>25</height>
     </rect>
    </property>
@@ -852,7 +884,6 @@
    <addaction name="menuDiffraction"/>
    <addaction name="menuIPF"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave_figure">
    <property name="text">
     <string>Save figure</string>
@@ -926,26 +957,6 @@
   <tabstop>reciprocal_checkBox</tabstop>
   <tabstop>space_group_Box</tabstop>
   <tabstop>d_Slider</tabstop>
-  <tabstop>color_trace_bleu</tabstop>
-  <tabstop>color_trace_vert</tabstop>
-  <tabstop>color_trace_rouge</tabstop>
-  <tabstop>style_box</tabstop>
-  <tabstop>wulff_button</tabstop>
-  <tabstop>size_var</tabstop>
-  <tabstop>text_size_entry</tabstop>
-  <tabstop>real_space_checkBox</tabstop>
-  <tabstop>tilt_angle_entry</tabstop>
-  <tabstop>image_angle_entry</tabstop>
-  <tabstop>hexa_button</tabstop>
-  <tabstop>uvw_button</tabstop>
-  <tabstop>reset_view_button</tabstop>
-  <tabstop>diff_entry</tabstop>
-  <tabstop>tilt_entry</tabstop>
-  <tabstop>inclinaison_entry</tabstop>
-  <tabstop>button_trace</tabstop>
-  <tabstop>rot_gm_button</tabstop>
-  <tabstop>rot_g_entry</tabstop>
-  <tabstop>rot_gp_button</tabstop>
   <tabstop>lock_checkButton</tabstop>
   <tabstop>angle_alpha_buttonm</tabstop>
   <tabstop>angle_alpha_entry</tabstop>
@@ -960,6 +971,21 @@
   <tabstop>angle_z_buttonp</tabstop>
   <tabstop>theta_signBox</tabstop>
   <tabstop>reset_angle_button</tabstop>
+  <tabstop>color_trace_bleu</tabstop>
+  <tabstop>color_trace_vert</tabstop>
+  <tabstop>color_trace_rouge</tabstop>
+  <tabstop>style_box</tabstop>
+  <tabstop>wulff_button</tabstop>
+  <tabstop>annotate_checkBox</tabstop>
+  <tabstop>labels_entry</tabstop>
+  <tabstop>size_var</tabstop>
+  <tabstop>text_size_entry</tabstop>
+  <tabstop>real_space_checkBox</tabstop>
+  <tabstop>tilt_angle_entry</tabstop>
+  <tabstop>image_angle_entry</tabstop>
+  <tabstop>hexa_button</tabstop>
+  <tabstop>uvw_button</tabstop>
+  <tabstop>reset_view_button</tabstop>
   <tabstop>pole_entry</tabstop>
   <tabstop>addpole_button</tabstop>
   <tabstop>undo_addpole_button</tabstop>
@@ -974,7 +1000,17 @@
   <tabstop>trace_cone_button</tabstop>
   <tabstop>inclination_entry</tabstop>
   <tabstop>undo_trace_cone_button</tabstop>
+  <tabstop>simple_checkBox</tabstop>
+  <tabstop>simple_entry</tabstop>
   <tabstop>norm_button</tabstop>
+  <tabstop>diff_entry</tabstop>
+  <tabstop>tilt_entry</tabstop>
+  <tabstop>inclinaison_entry</tabstop>
+  <tabstop>button_trace</tabstop>
+  <tabstop>ZA_checkBox</tabstop>
+  <tabstop>rot_gm_button</tabstop>
+  <tabstop>rot_g_entry</tabstop>
+  <tabstop>rot_gp_button</tabstop>
   <tabstop>phi1phiphi2_entry</tabstop>
   <tabstop>button_trace2</tabstop>
  </tabstops>

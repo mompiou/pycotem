@@ -20,6 +20,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
 import matplotlib as mpl
+import itertools
 from . import stereoprojUI
 from . import intersectionsUI
 from . import angleUI
@@ -191,7 +192,7 @@ def var_carre():
 
 
 def crist():
-    global axes, axesh, D, Dstar, V, G, dmip, e, hexa_cryst
+    global axes, axesh, D, Dstar, V, G, dmip, e, hexa_cryst, arr
     abc = ui.abc_entry.text().split(",")
     a = np.float64(abc[0]) * 1e-10
     b = np.float64(abc[1]) * 1e-10
@@ -222,8 +223,8 @@ def crist():
     D = np.array([[a, b * np.cos(gamma), c * np.cos(beta)], [0, b * np.sin(gamma), c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)], [0, 0, V / (a * b * np.sin(gamma))]])
     Dstar = np.transpose(np.linalg.inv(D))
     G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
-    axes = np.zeros(((2 * e + 1)**3 - 1, 3))
-    axesh = np.zeros(((2 * e + 1)**3 - 1, 7))
+    axes = np.zeros(((2 * e + 1)**3 - 1, 6))
+    axesh = np.zeros(((2 * e + 1)**3 - 1, 8))
     axesh[:, 4] = color_trace()
     id = 0
     for i in range(-e, e + 1):
@@ -239,26 +240,44 @@ def crist():
 
                     m = np.abs(functools.reduce(lambda x, y: GCD(x, y), [i, j, k]))
                     if (np.around(i / m) == i / m) & (np.around(j / m) == j / m) & (np.around(k / m) == k / m):
-                        axes[id, :] = np.array([i, j, k]) / m
+                        axes[id, 0:3] = np.array([i, j, k]) / m
                     else:
-                        axes[id, :] = np.array([i, j, k])
+                        axes[id, 0:3] = np.array([i, j, k])
                     axesh[id, 0:3] = Ma / np.linalg.norm(Ma)
                     axesh[id, 5] = 1
                     axesh[id, 6] = 1
                     id = id + 1
 
     axesh = axesh[~np.all(axesh[:, 0:3] == 0, axis=1)]
+    if ui.annotate_checkBox.isChecked() is False:
+        axesh[:, 7] = 0
+    else:
+        if len(ui.labels_entry.text()) == 0:
+            if e < 4:
+                axesh[:, 7] = 1
+            else:
+                axesh[:, 7] = 0
+        elif len(ui.labels_entry.text()) > 0:
+            list_label = int(ui.labels_entry.text())
+            z = np.where(np.all(np.abs(axes) <= list_label, axis=1))
+            axesh[z[0], 7] = 1
+
     axes = axes[~np.all(axes == 0, axis=1)]
 
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
-        d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
+        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
         if d < dmip:
             axesh[i, 6] = 0
         if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
-
-    return axes, axesh, D, Dstar, V, G
+    n = 20
+    a = np.array(range(-n, n + 1))
+    coords = [a, a, a]
+    it = itertools.product(*coords)
+    arr = np.array(list(it))
+    arr = arr[~np.all(arr == 0, axis=1)]
+    return axes, axesh, D, Dstar, V, G, arr
 
 ###############################################
 #
@@ -291,7 +310,7 @@ def crist_reciprocal():
                 axesh[z, 3] = 1
             axesh[z, 5] = I
             axesh[z, 6] = 1
-            axes[z, :] = np.array([h, k, l])
+            axes[z, 0:3] = np.array([h, k, l])
         else:
             axesh[z, 0:3] = np.array([0, 0, 0])
             if var_uvw() == 0:
@@ -300,16 +319,30 @@ def crist_reciprocal():
                 axesh[z, 3] = 1
             axesh[z, 5] = 1
             axesh[z, 6] = 1
-            axes[z, :] = np.array([0, 0, 0])
+            axes[z, 0:3] = np.array([0, 0, 0])
     axesh = axesh[~np.all(axesh[:, 0:3] == 0, axis=1)]
     axes = axes[~np.all(axes == 0, axis=1)]
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
-        d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
+        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
         if d < dmip:
             axesh[i, 6] = 0
         if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
+    if ui.annotate_checkBox.isChecked() is False:
+        axesh[:, 7] = 0
+    else:
+        if len(ui.labels_entry.text()) == 0:
+            if e < 4:
+                axesh[:, 7] = 1
+            else:
+                axesh[:, 7] = 0
+                ui.annotate_checkBox.setChecked(False)
+        elif len(ui.labels_entry.text()) > 0:
+            axesh[:, 7] = 0
+            list_label = int(ui.labels_entry.text())
+            z = np.where(np.all(np.abs(axes) <= list_label, axis=1))
+            axesh[z[0], 7] = 1
 
     return axes, axesh, naxes
 
@@ -390,7 +423,7 @@ def dist_restrict():
     ui.d_label_var.setText(str(np.around(d2 * 1e10, decimals=3)))
     for i in range(0, np.shape(axes)[0]):
         axesh[i, 6] = 1
-        d = 1 / (np.sqrt(np.dot(axes[i, :], np.dot(np.linalg.inv(G), axes[i, :]))))
+        d = 1 / (np.sqrt(np.dot(axes[i, 0:3], np.dot(np.linalg.inv(G), axes[i, 0:3]))))
         if d < d2:
             axesh[i, 6] = 0
         if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
@@ -681,15 +714,37 @@ def rotgp():
 #
 ####################################################################
 
+def simple_label(vec_exp, ang):
+    global arr
+    if var_uvw() == 0:
+        A = np.dot(Dstar, arr.T).T
+        vec_exp = np.dot(Dstar, vec_exp)
+    else:
+        A = np.dot(D, arr.T).T
+        vec_exp = np.dot(D, vec_exp)
+    nA = np.linalg.norm(A, axis=1)
+    sc = np.dot(A, vec_exp)
+    theta = np.arccos(sc / nA / np.linalg.norm(vec_exp)) * 180 / np.pi
+    theta[theta > ang] = 180
+    y = np.argwhere(np.abs(theta) < 180)
+    x = np.argmin(nA[y])
+    pole1, pole2, pole3 = arr[y[x], 0][0], arr[y[x], 1][0], arr[y[x], 2][0]
+    return pole1, pole2, pole3
+
+
 def pole(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, naxes
-
+    pole1i, pole2i, pole3i = pole1, pole2, pole3
     if var_hexa() == 1:
         if var_uvw() == 1:
             pole1a = 2 * pole1 + pole2
             pole2a = 2 * pole2 + pole1
             pole1 = pole1a
             pole2 = pole2a
+
+    if ui.simple_checkBox.isChecked():
+        err = np.float64(ui.simple_entry.text())
+        pole1, pole2, pole3 = simple_label([pole1, pole2, pole3], err)
 
     Gs = np.array([pole1, pole2, pole3], float)
     m = functools.reduce(lambda x, y: GCD(x, y), Gs)
@@ -715,27 +770,26 @@ def pole(pole1, pole2, pole3):
         I, h, k, l = extinction(ui.space_group_Box.currentText(), pole1, pole2, pole3, 100000, 0)
 
         if I > 0:
-            axes = np.vstack((axes, np.array([h, k, l])))
-            axes = np.vstack((axes, np.array([-h, -k, -l])))
+            axes = np.vstack((axes, np.array([h, k, l, pole1i, pole2i, pole3i])))
+            axes = np.vstack((axes, np.array([-h, -k, -l, -pole1i, -pole2i, -pole3i])))
             if var_uvw() == 0:
-                axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 0, color_trace(), I, 1])))
-                axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 0, color_trace(), I, 1])))
+                axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 0, color_trace(), I, 1, 1])))
+                axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 0, color_trace(), I, 1, 1])))
             else:
-                axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 1, color_trace(), I, 1])))
-                axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(), I, 1])))
+                axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 1, color_trace(), I, 1, 1])))
+                axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(), I, 1, 1])))
 
     else:
-        axes = np.vstack((axes, np.array([pole1, pole2, pole3])))
-        axes = np.vstack((axes, np.array([-pole1, -pole2, -pole3])))
+        axes = np.vstack((axes, np.array([pole1, pole2, pole3, pole1i, pole2i, pole3i])))
+        axes = np.vstack((axes, np.array([-pole1, -pole2, -pole3, -pole1i, -pole2i, -pole3i])))
         if var_uvw() == 0:
-            axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 0, color_trace(), 0, 1])))
-            axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 0, color_trace(), 0, 1])))
+            axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 0, color_trace(), 0, 1, 1])))
+            axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 0, color_trace(), 0, 1, 1])))
         else:
-            axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 1, color_trace(), 0, 1])))
-            axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(), 0, 1])))
+            axesh = np.vstack((axesh, np.array([Gsh[0], Gsh[1], Gsh[2], 1, color_trace(), 0, 1, 1])))
+            axesh = np.vstack((axesh, np.array([-Gsh[0], -Gsh[1], -Gsh[2], 1, color_trace(), 0, 1, 1])))
 
     naxes = naxes + 2
-
     return axes, axesh, T, naxes
 
 
@@ -750,9 +804,6 @@ def undo_pole(pole1, pole2, pole3):
             pole2 = pole2a
 
     Gs = np.array([pole1, pole2, pole3], float)
-    m = functools.reduce(lambda x, y: GCD(x, y), Gs)
-    if np.abs(m) > 1e-3:
-        pole1, pole2, pole3 = Gs / m
 
     if var_uvw() == 0:
         Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
@@ -767,16 +818,7 @@ def undo_pole(pole1, pole2, pole3):
         pole2 = -pole2
         pole3 = -pole3
 
-    if ui.reciprocal_checkBox.isChecked():
-        I, h, k, l = extinction(ui.space_group_Box.currentText(), pole1, pole2, pole3, 100000, 0)
-        if I > 0:
-            pole1 = h
-            pole2 = k
-            pole3 = l
-            ind = np.where((np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6))
-
-    else:
-        ind = np.where((np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6))
+    ind = np.where((np.abs(axes[:, 3] - pole1) < 1e-6) & (np.abs(axes[:, 4] - pole2) < 1e-6) & (np.abs(axes[:, 5] - pole3) < 1e-6) | (np.abs(axes[:, 3] + pole1) < 1e-6) & (np.abs(axes[:, 4] + pole2) < 1e-6) & (np.abs(axes[:, 5] + pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6) | (np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6))
 
     axes = np.delete(axes, ind, 0)
     T = np.delete(T, ind, 0)
@@ -798,15 +840,10 @@ def addpole_sym():
     pole1 = np.float64(pole_entry[0])
     pole2 = np.float64(pole_entry[1])
     pole3 = np.float64(pole_entry[2])
-    abc = ui.abc_entry.text().split(",")
-    a = np.float64(abc[0]) * 1e-10
-    b = np.float64(abc[1]) * 1e-10
-    c = np.float64(abc[2]) * 1e-10
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     alpha = np.float64(alphabetagamma[0]) * np.pi / 180
     beta = np.float64(alphabetagamma[1]) * np.pi / 180
     gamma = np.float64(alphabetagamma[2]) * np.pi / 180
-    G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
     v = d(pole1, pole2, pole3)
 
     pole(pole1, pole2, pole3)
@@ -880,15 +917,10 @@ def undo_sym():
     pole1 = np.float64(pole_entry[0])
     pole2 = np.float64(pole_entry[1])
     pole3 = np.float64(pole_entry[2])
-    abc = ui.abc_entry.text().split(",")
-    a = np.float64(abc[0]) * 1e-10
-    b = np.float64(abc[1]) * 1e-10
-    c = np.float64(abc[2]) * 1e-10
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     alpha = np.float64(alphabetagamma[0]) * np.pi / 180
     beta = np.float64(alphabetagamma[1]) * np.pi / 180
     gamma = np.float64(alphabetagamma[2]) * np.pi / 180
-    G = np.array([[a**2, a * b * np.cos(gamma), a * c * np.cos(beta)], [a * b * np.cos(gamma), b**2, b * c * np.cos(alpha)], [a * c * np.cos(beta), b * c * np.cos(alpha), c**2]])
     v = d(pole1, pole2, pole3)
 
     undo_pole(pole1, pole2, pole3)
@@ -984,7 +1016,7 @@ def undo_addpole():
 
 def trace_plan(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trP, trC
-
+    pole1i, pole2i, pole3i = pole1, pole2, pole3
     pole_i = 0
     pole_c = color_trace()
 
@@ -996,14 +1028,18 @@ def trace_plan(pole1, pole2, pole3):
             pole1 = pole1a
             pole2 = pole2a
 
-    trP = np.vstack((trP, np.array([pole1, pole2, pole3, pole_i, pole_c])))
+    if ui.simple_checkBox.isChecked():
+        err = np.float64(ui.simple_entry.text())
+        pole1, pole2, pole3 = simple_label([pole1, pole2, pole3], err)
+
+    trP = np.vstack((trP, np.array([pole1, pole2, pole3, pole1i, pole2i, pole3i, pole_i, pole_c])))
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
 
 
 def trace_cone(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, trC
-
+    pole1i, pole2i, pole3i = pole1, pole2, pole3
     pole_i = 0
     pole_c = color_trace()
     inc = np.float64(ui.inclination_entry.text())
@@ -1014,7 +1050,11 @@ def trace_cone(pole1, pole2, pole3):
             pole2a = 2 * pole2 + pole1
             pole1 = pole1a
             pole2 = pole2a
-    trC = np.vstack((trC, np.array([pole1, pole2, pole3, pole_i, pole_c, inc])))
+    if ui.simple_checkBox.isChecked():
+        err = np.float64(ui.simple_entry.text())
+        pole1, pole2, pole3 = simple_label([pole1, pole2, pole3], err)
+
+    trC = np.vstack((trC, np.array([pole1, pole2, pole3, pole1i, pole2i, pole3i, pole_i, pole_c, inc])))
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
     trC = np.unique(b).view(trC.dtype).reshape(-1, trC.shape[1])
 
@@ -1077,7 +1117,7 @@ def undo_trace_plan(pole1, pole2, pole3):
         pole1 = pole1a
         pole2 = pole2a
 
-    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 3] == var_uvw()) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 3] == var_uvw()))
+    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 6] == var_uvw()) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 6] == var_uvw()) | (trP[:, 3] == pole1) & (trP[:, 4] == pole2) & (trP[:, 5] == pole3) & (trP[:, 6] == var_uvw()) | (trP[:, 3] == -pole1) & (trP[:, 4] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 5] == var_uvw()))
 
     trP = np.delete(trP, ind, 0)
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
@@ -1093,7 +1133,7 @@ def undo_trace_cone(pole1, pole2, pole3):
         pole1 = pole1a
         pole2 = pole2a
 
-    ind = np.where((trC[:, 0] == pole1) & (trC[:, 1] == pole2) & (trC[:, 2] == pole3) & (trC[:, 3] == var_uvw()) | (trC[:, 0] == -pole1) & (trC[:, 1] == -pole2) & (trC[:, 2] == -pole3) & (trC[:, 3] == var_uvw()))
+    ind = np.where((trC[:, 0] == pole1) & (trC[:, 1] == pole2) & (trC[:, 2] == pole3) & (trC[:, 6] == var_uvw()) | (trC[:, 0] == -pole1) & (trC[:, 1] == -pole2) & (trC[:, 2] == -pole3) & (trC[:, 6] == var_uvw()) | (trC[:, 3] == pole1) & (trC[:, 4] == pole2) & (trC[:, 5] == pole3) & (trC[:, 6] == var_uvw()) | (trC[:, 3] == -pole1) & (trC[:, 4] == -pole2) & (trC[:, 2] == -pole3) & (trC[:, 5] == var_uvw()))
     trC = np.delete(trC, ind, 0)
     b = np.ascontiguousarray(trC).view(np.dtype((np.void, trC.dtype.itemsize * trC.shape[1])))
 
@@ -1273,7 +1313,7 @@ def trace_plan2(B):
         pole3 = B[h, 2]
         Gs = np.array([pole1, pole2, pole3], float)
 
-        if B[h, 3] == 0:
+        if B[h, 6] == 0:
             Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
         else:
             Gsh = np.dot(D, Gs) / np.linalg.norm(np.dot(D, Gs))
@@ -1303,11 +1343,11 @@ def trace_plan2(B):
         Q = np.delete(Q, 0, 0)
         Q = Q[~np.isnan(Q).any(axis=1)]
 
-        if B[h, 4] == 1:
+        if B[h, 7] == 1:
             a.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'g')
-        if B[h, 4] == 2:
+        if B[h, 7] == 2:
             a.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'b')
-        if B[h, 4] == 3:
+        if B[h, 7] == 3:
             a.plot(Q[:, 0] + 300, Q[:, 1] + 300, 'r')
 
 
@@ -1318,14 +1358,13 @@ def trace_cone2(B):
         pole1 = B[h, 0]
         pole2 = B[h, 1]
         pole3 = B[h, 2]
-        i = B[h, 5]
+        i = B[h, 8]
         Gs = np.array([pole1, pole2, pole3], float)
-        if B[h, 3] == 0:
+        if B[h, 6] == 0:
             Gsh = np.dot(Dstar, Gs) / np.linalg.norm(np.dot(Dstar, Gs))
         else:
             Gsh = np.dot(D, Gs) / np.linalg.norm(np.dot(D, Gs))
         S = np.dot(M, Gsh)
-
         if S[2] < 0:
             S = -S
             Gsh = -Gsh
@@ -1374,12 +1413,12 @@ def trace_cone2(B):
         wp = np.append(wp, Q.shape[0])
 
         for tt in range(0, np.shape(wp)[0] - 1):
-            if B[h, 4] == 1:
+            if B[h, 7] == 1:
                 a.plot(Q[int(wp[tt]):int(wp[tt + 1]), 0] + 300, Q[int(wp[tt]):int(wp[tt + 1]), 1] + 300, 'g')
-            if B[h, 4] == 2:
+            if B[h, 7] == 2:
                 a.plot(Q[int(wp[tt]):int(wp[tt + 1]), 0] + 300, Q[int(wp[tt]):int(wp[tt + 1]), 1] + 300, 'b')
 
-            if B[h, 4] == 3:
+            if B[h, 7] == 3:
                 a.plot(Q[int(wp[tt]):int(wp[tt + 1]), 0] + 300, Q[int(wp[tt]):int(wp[tt + 1]), 1] + 300, 'r')
 
 ####################################################################
@@ -1638,11 +1677,13 @@ def trace():
     miny, maxy = a.get_ylim()
     a.clear()
     P = np.zeros((axes.shape[0], 2))
-    T = np.zeros((axes.shape))
+    T = np.zeros((axes.shape[0], 3))
     C = []
     angle_tilt_y()
-    trace_plan2(trP)
-    trace_cone2(trC)
+    if trP.shape[0] > 1:
+        trace_plan2(trP)
+    if trC.shape[0] > 1:
+        trace_cone2(trC)
     schmid_trace2(tr_schmid)
     tilt_axes()
 
@@ -1651,8 +1692,9 @@ def trace():
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             T[i, :] = np.dot(M, axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
-            s = text_label(axes[i, :], axesh[i, :])
-            a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+            if axesh[i, 7] == 1:
+                s = text_label(axes[i, :], axesh[i, :])
+                a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
         if axesh[i, 4] == 1:
             C.append('g')
         if axesh[i, 4] == 2:
@@ -1685,8 +1727,8 @@ def trace():
 
 def princ():
     global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, axeshr, nn, a, minx, maxx, miny, maxy, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_z, y_tilt, var_lock, M_lock, var_hexa
-    trP = np.zeros((1, 5))
-    trC = np.zeros((1, 6))
+    trP = np.zeros((1, 8))
+    trC = np.zeros((1, 9))
     Stc = np.zeros((1, 3))
     tr_schmid = np.zeros((1, 3))
     naxes = 0
@@ -1732,7 +1774,7 @@ def princ():
         R = np.dot(Rot(diff_ang, 0, 0, 1), np.dot(Rot(-s_z * tilt_z, 0, 0, 1), np.dot(Rot(-s_b * tilt_b, 1, 0, 0), np.dot(Rot(-s_a * tilt_a, 0, 1, 0), np.dot(Rot(-diff_ang - inclinaison, 0, 0, 1), Rot(ang * 180 / np.pi, normal[0], normal[1], normal[2]))))))
 
     P = np.zeros((axes.shape[0], 2))
-    T = np.zeros((axes.shape))
+    T = np.zeros((axes.shape[0], 3))
     nn = axes.shape[0]
     C = []
     for i in range(0, axes.shape[0]):
@@ -1741,8 +1783,9 @@ def princ():
             T[i, :] = np.dot(R, axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             axeshr = axeshr / np.linalg.norm(axeshr)
-            s = text_label(axes[i, :], axesh[i, :])
-            a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+            if axesh[i, 7] == 1:
+                s = text_label(axes[i, :], axesh[i, :])
+                a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
         if axesh[i, 4] == 1:
             C.append('g')
         if axesh[i, 4] == 2:
@@ -1795,8 +1838,8 @@ def princ():
 def princ2():
     global T, angle_alpha, angle_beta, angle_z, M, Dstar, D, g, M0, trP, a, axeshr, nn, minx, maxx, miny, maxy, a, trC, Stc, naxes, dmip, tr_schmid, s_a, s_b, s_c, y_tilt, var_lock, M_lock
 
-    trP = np.zeros((1, 5))
-    trC = np.zeros((1, 6))
+    trP = np.zeros((1, 8))
+    trC = np.zeros((1, 9))
     Stc = np.zeros((1, 3))
     tr_schmid = np.zeros((1, 3))
     a.clear()
@@ -1815,25 +1858,24 @@ def princ2():
         crist_reciprocal()
 
     P = np.zeros((axes.shape[0], 2))
-    T = np.zeros((axes.shape))
+    T = np.zeros((axes.shape[0], 3))
     nn = axes.shape[0]
     C = []
-
     for i in range(0, axes.shape[0]):
         if axesh[i, 5] != -1 and axesh[i, 6] == 1:
             axeshr = np.array([axesh[i, 0], axesh[i, 1], axesh[i, 2]])
             T[i, :] = np.dot(rotation(phi1 - ang_work_space(), phi, phi2), axeshr)
             P[i, :] = proj(T[i, 0], T[i, 1], T[i, 2]) * 300
             axeshr = axeshr / np.linalg.norm(axeshr)
-            s = text_label(axes[i, :], axesh[i, :])
-            a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
+            if axesh[i, 7] == 1:
+                s = text_label(axes[i, :], axesh[i, :])
+                a.annotate(s, (P[i, 0] + 300, P[i, 1] + 300))
         if axesh[i, 4] == 1:
             C.append('g')
         if axesh[i, 4] == 2:
             C.append('b')
         if axesh[i, 4] == 3:
             C.append('r')
-
     if ui.reciprocal_checkBox.isChecked():
         s0 = axesh[:, 5] / np.amax(axesh[:, 5])
     else:
@@ -2384,8 +2426,7 @@ def list_pole(A):
     axes_list = np.zeros((A.shape[0], 4))
 
     for i in range(0, A.shape[0]):
-
-        if A[i, 3] == 0:
+        if A[i, 6] == 0:
             Gsh = np.dot(Dstar, A[i, 0:3]) / np.linalg.norm(np.dot(Dstar, A[i, 0:3]))
         else:
             Gsh = np.dot(D, A[i, 0:3]) / np.linalg.norm(np.dot(D, A[i, 0:3]))
@@ -2393,7 +2434,7 @@ def list_pole(A):
         S = np.dot(M, Gsh)
 
         if S[2] >= -1e-7:
-            if A[i, 3] == 1:
+            if A[i, 6] == 1:
                 axes_list[i, 3] = 1
                 if var_hexa() == 1:
                     i01 = (2 * A[i, 0] - A[i, 1]) / 3
@@ -2423,9 +2464,9 @@ def get_list():
     axes_l = np.vstack((axes.T, axesh[:, 3])).T
     axes_list = list_pole(axes_l)
     trPc = np.vstack((trP, -trP))
-    plan_list = list_pole(trPc[:, 0:4])
+    plan_list = list_pole(trPc[:, 0:7])
     trCc = np.vstack((trC, -trC))
-    cone_list = list_pole(trCc[:, 0:4])
+    cone_list = list_pole(trCc[:, 0:7])
     axes_list = np.vstack((axes_list, plan_list, cone_list))
     u, r = np.unique(axes_list[:, 0:3], axis=0, return_index=True)
     axes_list = axes_list[r, :]
@@ -2455,7 +2496,7 @@ def get_list():
 
 def add_remove_list():
     global M, axesh, axes
-
+    ui.simple_checkBox.setChecked(False)
     indexes = ui_list.list_table.selectionModel().selectedRows()
     for index in sorted(indexes):
         inn = ui_list.list_table.item(index.row(), 0).text().split(",")
@@ -3688,6 +3729,8 @@ if __name__ == "__main__":
     ui.tilt_angle_entry.setText('0')
     ui.image_angle_entry.setText('0')
     ui.rot_g_entry.setText('5')
+    ui.annotate_checkBox.setChecked(True)
+    ui.simple_entry.setText('1')
     a = figure.add_subplot(111)
     a_w = figure_width.add_subplot(111)
     tilt_axes()
