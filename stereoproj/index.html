@@ -379,8 +379,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#plotting-poleplanes" class="md-nav__link">
-    Plotting pole/planes
+  <a href="#plotting-polesplanescones" class="md-nav__link">
+    Plotting poles/planes/cones
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simple-labels" class="md-nav__link">
+    Simple labels
   </a>
   
 </li>
@@ -685,8 +692,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#plotting-poleplanes" class="md-nav__link">
-    Plotting pole/planes
+  <a href="#plotting-polesplanescones" class="md-nav__link">
+    Plotting poles/planes/cones
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simple-labels" class="md-nav__link">
+    Simple labels
   </a>
   
 </li>
@@ -1059,7 +1073,7 @@ For instance, if the <span class="arithmatex"><span class="MathJax_Preview">(1,1
 </div>
 <p><img alt="" src="../images/double-tilt-rot.png" /></p>
 </div>
-<h3 id="plotting-poleplanes">Plotting pole/planes<a class="headerlink" href="#plotting-poleplanes" title="Permanent link">&para;</a></h3>
+<h3 id="plotting-polesplanescones">Plotting poles/planes/cones<a class="headerlink" href="#plotting-polesplanescones" title="Permanent link">&para;</a></h3>
 <p>Poles (or directions) can be additionally plotted. <code>Add</code> a pole or all the symmetric ones by pressing <code>Symmetry</code> after entering the indices comma separated. A <code>Plane</code> or all their symmetric,<code>Sym Plane</code> can be drawn.
 A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <p><img alt="" src="../images/plot_planes.png" /></p>
@@ -1067,6 +1081,9 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <a href="./#schmid-factor">here</a>.</p>
 <p><img alt="" src="../images/iso-schmid.png" /></p>
 <p>Finally inter-reticular distances are given by entering a plane normal on the pole/plane field and by pressing <code>dhkl</code> button. The value appears in a field near the button.</p>
+<h3 id="simple-labels">Simple labels<a class="headerlink" href="#simple-labels" title="Permanent link">&para;</a></h3>
+<p>Simplified labels (up to 20 as max. indices) can be drawn if the <code>simple label</code> box is ticked. By default, simple labels are searched within an angular range of 1 degree, but it can be changed in filling the simple label field.</p>
+<p><img alt="" src="../images/simple.png" /></p>
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
 <p>Several layout options have been already discussed. Additional ones are presented here. </p>
 <ul>
@@ -1087,6 +1104,10 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 </li>
 </ul>
 <p><img alt="" src="../images/layout.png" /></p>
+<ul>
+<li>By default, indices are plotted up to <code>max indices</code> = 3 if the <code>labels</code> box is ticked and the labels field is left empty. This limitation avoids slow plotting. To draw a large number of poles/directions with a limited number of indices, simply indicate the maximum plotting indices, in the labels field (example is shown below for <code>max indices</code> = 6 and <code>labels</code> = 1)</li>
+</ul>
+<p><img alt="" src="../images/indices.png" /></p>
 <p>For hexagonal structure, the <code>hexa</code> box can be selected to let the 4 indices notations.</p>
 <div class="admonition info">
 <p class="admonition-title">Hexagonal structure and notation</p>
