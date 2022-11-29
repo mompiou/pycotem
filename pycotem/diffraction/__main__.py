@@ -189,6 +189,7 @@ def angle_check(Dis):
 
         if ui.diff_spot_Listbox.count() == 0:
             Dis = np.hstack((Dis, np.zeros((Dis.shape[0], 1))))
+            Dis = Dis[np.argsort(np.abs(Dis[:, 0] - float(ui.ListBox_d_2.currentItem().text().split(',')[0])))]
             return Dis
         else:
             s1 = [ui.diff_spot_Listbox.item(i).text() for i in range(ui.diff_spot_Listbox.count())]
@@ -264,6 +265,7 @@ def distance_theo():
                         I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
                         Dist[w, :] = np.array([np.around(di, decimals=3), int(i), int(j), int(k), I])
                         w = w + 1
+
     Dist = angle_check(Dist[:w, :])
     for k in range(0, Dist.shape[0]):
         ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4]) + '  |  ' + ', '.join(map(str, Dist[k, 5:])))
@@ -305,16 +307,15 @@ def listb():
     Dist = Dist[::-1]
 
     lenD = np.shape(Dist)[0]
-    Ang = np.zeros((lenD, lenD))
+    Ang = np.zeros((lenD, lenD, 3))
 
     for i in range(lenD):
-        T = np.zeros(lenD)
         for j in range(lenD):
             c1c = np.dot(Dstar, Dist[i, 1:4])
             c2c = np.dot(Dstar, Dist[j, 1:4])
-            T[j] = np.around(np.arccos(np.dot(c1c, c2c) / (np.linalg.norm(c1c) * np.linalg.norm(c2c))) * 180 / np.pi, decimals=3)
-
-        Ang[i, :] = T
+            Ang[i, j, 0] = np.around(np.arccos(np.dot(c1c, c2c) / (np.linalg.norm(c1c) * np.linalg.norm(c2c))) * 180 / np.pi, decimals=3)
+            Ang[i, j, 1] = Dist[i, 0]
+            Ang[i, j, 2] = Dist[j, 0]
 
     return Dist, Ang
 
@@ -585,8 +586,8 @@ def guess():
         ui.label_2.setEnabled(False)
         ui.ListBox_theo.setEnabled(False)
         ui.distance_button.setEnabled(False)
-        ui.precision_entry.setEnabled(False)
-        ui.precision_label.setEnabled(False)
+        ui.precision_entry.setEnabled(True)
+        ui.precision_label.setEnabled(True)
     else:
         ui.label_2.setEnabled(True)
         ui.ListBox_theo.setEnabled(True)
@@ -595,14 +596,12 @@ def guess():
         ui.precision_label.setEnabled(True)
 
 
-def testangle2(tab):
-    global P0, Tab, eps
+def testangle2(tab, d_g, eps, e):
+    global P0, Tab
     liste_possibles = []
     while liste_possibles == []:
         for ii in P0:
-
-            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
-
+            T1 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 1]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[1]) / d_g[1]) < e))
             for jj in T1[0]:
                 T = [list(list2[ii].astype(int)),
                      list(list2[jj].astype(int))]
@@ -618,17 +617,16 @@ def testangle2(tab):
     return liste_possibles
 
 
-def testangle3(tab):
-    global P0, Tab, eps
+def testangle3(tab, d_g, eps, e):
+    global P0, Tab
     liste_possibles = []
     while liste_possibles == []:
         for ii in P0:
-
-            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
-            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
+            T1 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 1]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[1]) / d_g[1]) < e))
+            T2 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 2]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[2]) / d_g[2]) < e))
             for jj in T1[0]:
                 for kk in T2[0]:
-                    if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps:
+                    if np.abs(Tab[kk, jj, 0] - tab[1, 2]) <= eps:
                         T = [list(list2[ii].astype(int)),
                              list(list2[jj].astype(int)),
                              list(list2[kk].astype(int))]
@@ -644,19 +642,19 @@ def testangle3(tab):
     return liste_possibles
 
 
-def testangle4(tab):
-    global P0, Tab, eps
+def testangle4(tab, d_g, eps, e):
+    global P0, Tab
     liste_possibles = []
     while liste_possibles == []:
         for ii in P0:
-            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
-            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
-            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
+            T1 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 1]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[1]) / d_g[1]) < e))
+            T2 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 2]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[2]) / d_g[2]) < e))
+            T3 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 3]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[3]) / d_g[3]) < e))
             for jj in T1[0]:
                 for kk in T2[0]:
                     for pp in T3[0]:
-                        if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
-                                and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps:
+                        if np.abs(Tab[kk, jj, 0] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj, 0] - tab[1, 3]) <= eps \
+                                and np.abs(Tab[kk, pp, 0] - tab[2, 3]) <= eps:
                             T = [list(list2[ii].astype(int)),
                                  list(list2[jj].astype(int)),
                                  list(list2[kk].astype(int)),
@@ -673,22 +671,22 @@ def testangle4(tab):
     return liste_possibles
 
 
-def testangle5(tab):
-    global P0, Tab, eps
+def testangle5(tab, d_g, eps, e):
+    global P0, Tab
     liste_possibles = []
     while liste_possibles == []:
         for ii in P0:
-            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
-            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
-            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
-            T4 = np.where(np.abs(Tab[ii, :] - tab[0, 4]) <= eps)
+            T1 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 1]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[1]) / d_g[1]) < e))
+            T2 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 2]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[2]) / d_g[2]) < e))
+            T3 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 3]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[3]) / d_g[3]) < e))
+            T4 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 4]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[4]) / d_g[4]) < e))
             for jj in T1[0]:
                 for kk in T2[0]:
                     for pp in T3[0]:
                         for hh in T4[0]:
-                            if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
-                                    and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
-                                    and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps:
+                            if np.abs(Tab[kk, jj, 0] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj, 0] - tab[1, 3]) <= eps \
+                                    and np.abs(Tab[kk, pp, 0] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj, 0] - tab[1, 4]) <= eps \
+                                    and np.abs(Tab[hh, kk, 0] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp, 0] - tab[3, 4]) <= eps:
                                 T = [list(list2[ii].astype(int)),
                                      list(list2[jj].astype(int)),
                                      list(list2[kk].astype(int)),
@@ -706,26 +704,26 @@ def testangle5(tab):
     return liste_possibles
 
 
-def testangle6(tab):
-    global P0, Tab, eps
+def testangle6(tab, d_g, eps, e):
+    global P0, Tab
     liste_possibles = []
     while liste_possibles == []:
         for ii in P0:
-            T1 = np.where(np.abs(Tab[ii, :] - tab[0, 1]) <= eps)
-            T2 = np.where(np.abs(Tab[ii, :] - tab[0, 2]) <= eps)
-            T3 = np.where(np.abs(Tab[ii, :] - tab[0, 3]) <= eps)
-            T4 = np.where(np.abs(Tab[ii, :] - tab[0, 4]) <= eps)
-            T5 = np.where(np.abs(Tab[ii, :] - tab[0, 5]) <= eps)
+            T1 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 1]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[1]) / d_g[1]) < e))
+            T2 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 2]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[2]) / d_g[2]) < e))
+            T3 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 3]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[3]) / d_g[3]) < e))
+            T4 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 4]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[4]) / d_g[4]) < e))
+            T5 = np.where((np.abs(Tab[ii, :, 0] - tab[0, 5]) <= eps) & (np.abs((Tab[ii, :, 1] - d_g[0]) / d_g[0]) < e) & (np.abs((Tab[ii, :, 2] - d_g[5]) / d_g[5]) < e))
             for jj in T1[0]:
                 for kk in T2[0]:
                     for pp in T3[0]:
                         for hh in T4[0]:
                             for ll in T5[0]:
-                                if np.abs(Tab[kk, jj] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj] - tab[1, 3]) <= eps \
-                                        and np.abs(Tab[kk, pp] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj] - tab[1, 4]) <= eps \
-                                        and np.abs(Tab[hh, kk] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp] - tab[3, 4]) <= eps \
-                                        and np.abs(Tab[ll, jj] - tab[1, 5]) <= eps and np.abs(Tab[kk, ll] - tab[2, 5]) <= eps \
-                                        and np.abs(Tab[ll, pp] - tab[3, 5]) <= eps and np.abs(Tab[hh, ll] - tab[4, 5]) <= eps:
+                                if np.abs(Tab[kk, jj, 0] - tab[1, 2]) <= eps and np.abs(Tab[pp, jj, 0] - tab[1, 3]) <= eps \
+                                        and np.abs(Tab[kk, pp, 0] - tab[2, 3]) <= eps and np.abs(Tab[hh, jj, 0] - tab[1, 4]) <= eps \
+                                        and np.abs(Tab[hh, kk, 0] - tab[2, 4]) <= eps and np.abs(Tab[hh, pp, 0] - tab[3, 4]) <= eps \
+                                        and np.abs(Tab[ll, jj, 0] - tab[1, 5]) <= eps and np.abs(Tab[kk, ll, 0] - tab[2, 5]) <= eps \
+                                        and np.abs(Tab[ll, pp, 0] - tab[3, 5]) <= eps and np.abs(Tab[hh, ll, 0] - tab[4, 5]) <= eps:
                                     T = [list(list2[ii].astype(int)),
                                          list(list2[jj].astype(int)),
                                          list(list2[kk].astype(int)),
@@ -766,11 +764,12 @@ def Uniqueness(A):
     return d
 
 
-def do_not_guess(g_s):
+def do_not_guess(g_s, d_g):
     global eps, P0, Tab, list2
 
     list2, Tab = listb()
-    eps = 1
+    eps = 10
+    e = np.float64(ui.precision_entry.text()) / 100
     P0 = range(len(list2))
     N = g_s.shape[0]
     tab = np.zeros((N, N))
@@ -780,17 +779,17 @@ def do_not_guess(g_s):
 
     n = np.shape(tab)[0]
     if n == 2:
-        K = testangle2(tab)
+        K = testangle2(tab, d_g, eps, e)
     elif n == 3:
-        K = testangle3(tab)
+        K = testangle3(tab, d_g, eps, e)
     elif n == 4:
-        K = testangle4(tab)
+        K = testangle4(tab, d_g, eps, e)
     elif n == 5:
-        K = testangle5(tab)
+        K = testangle5(tab, d_g, eps, e)
     elif n == 6:
-        K = testangle6(tab)
+        K = testangle6(tab, d_g, eps, e)
     else:
-        ui.ListBox_theo.addItem('Number of bands should be less than 7')
+        ui.ListBox_theo.addItem('Number of diffraction vectors should be less than 7')
         return
 
     K = np.asarray(K)
@@ -845,7 +844,7 @@ def get_data():
         g_sample[i, :] = np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t))
 
     if ui.do_not_guess_checkBox.isChecked():
-        g_c = do_not_guess(g_sample)
+        g_c = do_not_guess(g_sample, d_g)
 
     return g_c, g_sample, d_g
 
