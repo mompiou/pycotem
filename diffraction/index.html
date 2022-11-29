@@ -940,10 +940,13 @@ The angles values are explained below.</p>
 </ul>
 <p><img alt="" src="../images/diff-data.png" /></p>
 <h3 id="option-2-automatic-determination">Option 2: Automatic determination<a class="headerlink" href="#option-2-automatic-determination" title="Permanent link">&para;</a></h3>
-<p>When the reflections are ambiguous from their d-spacing, consistent sets of data can be retrieved by comparing the measured angles <span class="arithmatex"><span class="MathJax_Preview">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span class="arithmatex"><span class="MathJax_Preview">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. The sets of  g-vectors are obtained if all the angle differences <span class="arithmatex"><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle equals to 3 degrees. To proceed this way:</p>
+<p>When the reflections are ambiguous from their d-spacing, consistent sets of data can be retrieved by comparing the measured angles <span class="arithmatex"><span class="MathJax_Preview">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</span><script type="math/tex">\theta_{ij}=\angle{(\vec{g}_i,\vec{g}_j)}</script></span> with a lookup table compiling the angles <span class="arithmatex"><span class="MathJax_Preview">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</span><script type="math/tex">\theta'_{ij}=\angle{((h_i,k_i,l_i),(h_j,k_j,l_j))}</script></span>. The sets of  g-vectors are obtained if all the angle differences <span class="arithmatex"><span class="MathJax_Preview">\left|\theta_{ij}-\theta'_{ij}\right|</span><script type="math/tex">\left|\theta_{ij}-\theta'_{ij}\right|</script></span> is less than a tolerance angle equals to 10 degrees and if the relative interplanar distance differences <span class="arithmatex"><span class="MathJax_Preview">\frac{\left|d_{hkl}-d'_{hkl}\right|}{d_{hkl}}</span><script type="math/tex">\frac{\left|d_{hkl}-d'_{hkl}\right|}{d_{hkl}}</script></span> are less than a precision indicated in the <code>precision</code> field. To proceed this way:</p>
 <ul>
 <li>
 <p>Tick the <code>do not use g-vector guess</code> box.</p>
+</li>
+<li>
+<p>Choose a precision in % (default is 10%)</p>
 </li>
 <li>
 <p>Add the spot as above. The indices will appear as <code>0,0,0</code>.</p>
