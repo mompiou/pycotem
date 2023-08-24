@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#executables" class="md-skip">
+        <a href="#executables-windows" class="md-skip">
           Skip to content
         </a>
       
@@ -250,18 +250,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#executables" class="md-nav__link">
-    Executables
+  <a href="#executables-windows" class="md-nav__link">
+    Executables (Windows)
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-python" class="md-nav__link">
-    From python
+  <a href="#from-python-windows-macos-linux" class="md-nav__link">
+    From Python (Windows, macOS, Linux)
   </a>
   
-    <nav class="md-nav" aria-label="From python">
+    <nav class="md-nav" aria-label="From Python (Windows, macOS, Linux)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -275,33 +275,6 @@
   <a href="#installing-and-running" class="md-nav__link">
     Installing and running
   </a>
-  
-    <nav class="md-nav" aria-label="Installing and running">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#on-windows" class="md-nav__link">
-    On windows
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#on-ubuntu" class="md-nav__link">
-    On Ubuntu
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#on-macos-x" class="md-nav__link">
-    On MacOS X
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -477,18 +450,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#executables" class="md-nav__link">
-    Executables
+  <a href="#executables-windows" class="md-nav__link">
+    Executables (Windows)
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-python" class="md-nav__link">
-    From python
+  <a href="#from-python-windows-macos-linux" class="md-nav__link">
+    From Python (Windows, macOS, Linux)
   </a>
   
-    <nav class="md-nav" aria-label="From python">
+    <nav class="md-nav" aria-label="From Python (Windows, macOS, Linux)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -502,33 +475,6 @@
   <a href="#installing-and-running" class="md-nav__link">
     Installing and running
   </a>
-  
-    <nav class="md-nav" aria-label="Installing and running">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#on-windows" class="md-nav__link">
-    On windows
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#on-ubuntu" class="md-nav__link">
-    On Ubuntu
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#on-macos-x" class="md-nav__link">
-    On MacOS X
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -566,25 +512,25 @@
 
   <h1>Getting started</h1>
 
-<h2 id="executables">Executables<a class="headerlink" href="#executables" title="Permanent link">&para;</a></h2>
-<p>Latest windows executables can be downloaded <a href="https://github.com/mompiou/pycotem/releases/download/2.10.2/pycotem-2-10-2-win.zip">here</a></p>
+<h2 id="executables-windows">Executables (Windows)<a class="headerlink" href="#executables-windows" title="Permanent link">&para;</a></h2>
+<p>Latest Windows executables can be downloaded <a href="https://github.com/mompiou/pycotem/releases/download/2.10.2/pycotem-2-10-2-win.zip">here</a></p>
 <p>Unpack the folder and launch the <code>.exe</code> files for the different tools <code>stereoproj</code>, <code>diffraction</code>, <code>kikuchi</code>,<code>misorientation</code>,<code>interface</code> and <code>crystal</code>.</p>
-<h2 id="from-python">From python<a class="headerlink" href="#from-python" title="Permanent link">&para;</a></h2>
+<h2 id="from-python-windows-macos-linux">From Python (Windows, macOS, Linux)<a class="headerlink" href="#from-python-windows-macos-linux" title="Permanent link">&para;</a></h2>
+<p>Pycotem is a collection of  Python scripts and thus can be ran directly from the source code. Python may already be installed on your OS (type <code>python</code> on your command prompt/terminal). If not, please refer to the <a href="python.org">python website</a> for installing and downloading. Popular distributions as <a href="https://www.anaconda.com/">Anaconda</a> can be an option. Pycotem is part of the python package index (PyPi) and thus can be installed using the package installer for Python (pip), which should be installed with the Python distribution.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Consider that it is often recommended to install packages in a virtual environnement to avoid breaking dependancies for other scripts. Please refer to the document to use pipx/poetry/venv/pyenv.</p>
+<p>Consider that it is often recommended to install packages in a virtual environnement to avoid breaking dependancies for other scripts. Please refer to the specific documentation, for instance regarding the <code>virtualenv</code> package.</p>
 </div>
 <h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
-<p>pycotem relies on <code>python3</code> since versions 2.x.x,  with <code>numpy&gt;=1.19.0</code>, <code>pillow&gt;=7.2.0</code>, <code>matplotlib&gt;=3.3.0</code>. Dependancies can be installed with <code>pip</code>. GUI relies on <code>pyqt5</code>. Earlier 1.x.x versions relies on <code>python 2.7</code> with <code>numpy&gt;=1.13.3</code>, <code>pillow&gt;=5.3.0</code>, <code>matplotlib&gt;=2.1.1</code> and <code>pyqt4</code></p>
+<p>Pycotem relies on Python 3 using numpy, pillow and matplotlib.  GUI relies on pyqt5. </p>
+<div class="admonition info">
+<p class="admonition-title">Configurations successfully tested</p>
+<p>python = 3.9.5, numpy = 1.21.4, matplotlib = 3.5.0, pillow = 7.0.0, pyqt = 5.14.1</p>
+<p>python = 3.10.2, numpy = 1.25.2, matplotlib = 3.7.2, pillow = 10.0.0, pyqt = 5.19.9</p>
+</div>
 <h3 id="installing-and-running">Installing and running<a class="headerlink" href="#installing-and-running" title="Permanent link">&para;</a></h3>
-<h4 id="on-windows">On windows<a class="headerlink" href="#on-windows" title="Permanent link">&para;</a></h4>
 <ul>
-<li>
-<p>Install python 3 from <a href="https://www.python.org">python.org</a></p>
-</li>
-<li>
-<p>Install pycotem and dependancies</p>
-</li>
+<li>pycotem and dependancies can be installed using the <code>pip</code> commands: </li>
 </ul>
 <div class="highlight"><pre><span></span><code>pip install pycotem
 pip install matplotlib
@@ -594,50 +540,9 @@ pip install pyqt5
 <div class="highlight"><pre><span></span><code>python -m pycotem.xxxx
 </code></pre></div>
 where <code>xxxx</code> is one of the tool <code>stereoproj</code>, <code>diffraction</code>, <code>kikuchi</code>,<code>misorientation</code>,<code>interface</code> and <code>crystal</code>.</p>
-<h4 id="on-ubuntu">On Ubuntu<a class="headerlink" href="#on-ubuntu" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Install <code>pip</code></li>
-</ul>
-<div class="highlight"><pre><span></span><code>sudo apt-get install python3-pip
-</code></pre></div>
-<ul>
-<li>Install pycotem and dependancies</li>
-</ul>
-<div class="highlight"><pre><span></span><code>pip3 install pycotem
-pip3 install matplotlib
-</code></pre></div>
-<ul>
-<li>Install <code>pyqt5</code>:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>sudo apt-get install python-qt5
-</code></pre></div>
-<ul>
-<li>Run the script with</li>
-</ul>
-<div class="highlight"><pre><span></span><code>python3 -m pycotem.xxx
-</code></pre></div>
-<h4 id="on-macos-x">On MacOS X<a class="headerlink" href="#on-macos-x" title="Permanent link">&para;</a></h4>
-<ul>
-<li>
-<p>Python3 should be pre-installed with <code>pip</code>. Check by opening a terminal and run <code>python3 --version</code></p>
-</li>
-<li>
-<p>If not, install it from <a href="https://www.python.org">python.org</a> or from Homebrew <code>brew install python3</code></p>
-</li>
-<li>
-<p>Install pycotem, matplotlib and pyqt5 with <code>pip3</code> as above.</p>
-</li>
-</ul>
-<div class="highlight"><pre><span></span><code>pip3 install pycotem
-pip3 install matplotlib
-pip3 install pyqt5
-</code></pre></div>
-<ul>
-<li>Run the script: <code>python3 -m pycotem.xxxx</code></li>
-</ul>
 <h3 id="updating">Updating<a class="headerlink" href="#updating" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Use <code>pip3 install --upgrade pycotem</code></li>
+<li>Use <code>pip install --upgrade pycotem</code></li>
 </ul>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>Image files and setting parameters for testing <code>diffraction</code>, <code>interface</code> and <code>kikuchi</code> can be found <a href="https://github.com/mompiou/pycotem/tree/master/test">here</a></p>
