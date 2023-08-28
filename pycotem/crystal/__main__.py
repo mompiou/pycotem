@@ -61,7 +61,7 @@ def calcul():
     f_space.close()
     vec = []
     atom0 = []
-    for i in range(0, np.size(crist)):
+    for i in range(0, len(crist)):
         if np.size(crist[i]) == 3:
             vec.append(crist[i])
         else:

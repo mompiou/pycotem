@@ -296,7 +296,7 @@ def lattice_reciprocal():
 
 def crist_reciprocal():
     global axes, axesh, naxes, G, dmip, hexa_cryst, e
-    ui.d_Slider.setValue(dmip * 1e10 * 100)
+    ui.d_Slider.setValue(int(dmip * 1e10 * 100))
     for z in range(0, np.shape(axes)[0]):
         if z < (np.shape(axes)[0] - naxes):
             I, h, k, l = extinction(ui.space_group_Box.currentText(), axes[z, 0], axes[z, 1], axes[z, 2], int(ui.e_entry.text()), 0)
