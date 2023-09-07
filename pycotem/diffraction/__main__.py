@@ -3,7 +3,8 @@ import numpy as np
 from PyQt5 import QtGui, QtCore, QtWidgets
 import sys
 import os
-from itertools import combinations
+from itertools import combinations, product
+import functools
 from PIL import Image
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -220,9 +221,11 @@ def angle_check(Dis):
                 R = np.dot(Rot(s_z * tilt_z[i], 0, 0, 1), np.dot(Rot(s_b * tilt_b[i], 1, 0, 0), Rot(s_a * tilt_a[i], 0, 1, 0)))
                 ny = -inclination[i]
                 t = np.dot(Rot(ny, 0, 0, 1), np.array([0, np.cos(epsilon[i]), np.sin(epsilon[i])]))
+                theta1 = np.arccos(np.dot(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)), g_d))
                 for k in range(0, Dis.shape[0]):
-                    a = np.arccos(np.dot(np.dot(R, np.dot(Rot(t_ang, 0, 0, 1), t)), g_d))
-                    Dis[k, -1] = np.around(np.abs(angle(Dis[k, 1:4], g_hkl[i, :]) - a) * 180 / np.pi, decimals=1)
+                    theta2 = angle(Dis[k, 1:4], g_hkl[i, :])
+                    dif = np.abs(theta1 - theta2)
+                    Dis[k, -1] = np.around(dif * 180 / np.pi, decimals=1)
     Dis = Dis[np.argsort(Dis[:, -1])]
     return Dis
 
@@ -255,20 +258,31 @@ def distance_theo():
 
     ui.ListBox_theo.clear()
     w = 0
-    for i in range(e + 1, -e, -1):
-        for j in range(e + 1, -e, -1):
-            for k in range(e + 1, -e, -1):
+    for i in range(e, -e - 1, -1):
+        for j in range(e, -e - 1, -1):
+            for k in range(e, -e - 1, -1):
                 if (i, j, k) != (0, 0, 0):
                     di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
 
                     if di < (d / (1 - d * np.float64(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))) and di > (d / (1 + d * np.float64(ui.precision_entry.text()) / eval(x_calib[ui.Calib_box.currentIndex()][4]))):
-                        I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
+                        I, _ = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
                         Dist[w, :] = np.array([np.around(di, decimals=3), int(i), int(j), int(k), I])
                         w = w + 1
-
     Dist = angle_check(Dist[:w, :])
     for k in range(0, Dist.shape[0]):
-        ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4]) + '  |  ' + ', '.join(map(str, Dist[k, 5:])))
+        m = ' '
+        if (Dist[k, 1:4] % 2 == 0).all():
+            _, Ip = extinction(ui.SpaceGroup_box.currentText(), int(Dist[k, 1] / 2), int(Dist[k, 2] / 2), int(Dist[k, 3] / 2))
+            _, I0 = extinction(ui.SpaceGroup_box.currentText(), Dist[k, 1], Dist[k, 2], Dist[k, 3])
+            if np.abs(I0 - Ip) < 0.1:
+                m = '(m)'
+        if (Dist[k, 1:4] % 3 == 0).all():
+            _, Ii = extinction(ui.SpaceGroup_box.currentText(), int(Dist[k, 1] / 3), int(Dist[k, 2] / 3), int(Dist[k, 3] / 3))
+            _, I0 = extinction(ui.SpaceGroup_box.currentText(), Dist[k, 1], Dist[k, 2], Dist[k, 3])
+            if np.abs(I0 - Ii) < 0.1:
+                m = '(m)'
+
+        ui.ListBox_theo.addItem(str(Dist[k, 0]) + '  |  ' + str(int(Dist[k, 1])) + ',' + str(int(Dist[k, 2])) + ',' + str(int(Dist[k, 3])) + '  |  ' + str(Dist[k, 4]) + ' ' + m + ' ' + '  |  ' + ', '.join(map(str, Dist[k, 5:])))
     return
 
 
@@ -297,7 +311,7 @@ def listb():
             for k in range(-e, e + 1):
                 if (i, j, k) != (0, 0, 0):
                     di = 1 / (np.sqrt(np.dot(np.array([i, j, k]), np.dot(np.linalg.inv(G), np.array([i, j, k])))))
-                    I = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
+                    I, _ = extinction(ui.SpaceGroup_box.currentText(), i, j, k)
                     if I != 0:
                         Dist[w, :] = np.array([np.around(di, decimals=3), i, j, k, I])
                         w = w + 1
@@ -407,7 +421,7 @@ def angle(p1, p2):
 
 
 def cryststruct():
-    global cs
+    global cs, arr
     abc = ui.abc_entry.text().split(",")
     alphabetagamma = ui.alphabetagamma_entry.text().split(",")
     a = np.float64(abc[0])
@@ -437,6 +451,12 @@ def cryststruct():
 
     if gam != 90 and alp != 90 and bet != 90 and a != b and b != c:
         cs = 7
+    n = 20
+    a = np.array(range(-n, n + 1))
+    coords = [a, a, a]
+    it = product(*coords)
+    arr = np.array(list(it))
+    arr = arr[~np.all(arr == 0, axis=1)]
     return cs
 
 
@@ -446,7 +466,7 @@ def Sy():
         S = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0], [1, 0, 1], [0, 1, 1], [0, -1, 1], [-1, 1, 0], [-1, 0, 1]])
 
     if cs == 2:
-        S = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0], [1 / 2, np.sqrt(3) / 2, 0], [-1 / 2, np.sqrt(3) / 2, 0], [np.sqrt(3) / 2, 1 / 2, 0], [np.sqrt(3) / 2, 1 / 2, 0], [-np.sqrt(3) / 2, 1 / 2, 0]])
+        S = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0], [1 / 2, np.sqrt(3) / 2, 0], [-1 / 2, np.sqrt(3) / 2, 0], [np.sqrt(3) / 2, 1 / 2, 0], [-np.sqrt(3) / 2, 1 / 2, 0]])
 
     if cs == 3:
         S = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 1, 0], [1, -1, 0]])
@@ -463,7 +483,7 @@ def Sy():
     if cs == 7:
         S = np.array([[0, 0, 0]])
 
-    S = np.dot(np.linalg.inv(Dstar), np.dot(D, S.T)).T
+    S = np.dot(np.linalg.inv(Dstar), S.T).T
 
     return S
 
@@ -486,6 +506,56 @@ def check_ambiguity(g2):
     return aa
 
 
+def distp(pole):
+    global Dstar
+    G = np.dot(Dstar.T, Dstar)
+    ds = (np.sqrt(np.dot(pole, np.dot(G, pole))))
+    return ds
+
+
+def simple_label(vec_exp, ang):
+    global arr, Dstar
+    A = np.dot(Dstar, arr.T).T
+    vec_exp = np.dot(Dstar, vec_exp)
+    nA = np.linalg.norm(A, axis=1)
+    sc = np.dot(A, vec_exp)
+    theta = np.arccos(sc / nA / np.linalg.norm(vec_exp)) * 180 / np.pi
+    theta[theta > ang] = 180
+    y = np.argwhere(np.abs(theta) < 180)
+    x = np.argmin(nA[y])
+    pole1, pole2, pole3 = arr[y[x], 0][0], arr[y[x], 1][0], arr[y[x], 2][0]
+    return pole1, pole2, pole3
+
+
+def GCD(a, b, rtol=1e-05, atol=1e-08):
+    t = min(abs(a), abs(b))
+    while abs(b) > rtol * t + atol:
+        a, b = b, a % b
+    return a
+
+
+def reduced(pole):
+    m = functools.reduce(lambda x, y: GCD(x, y), pole)
+    if np.abs(m) > 1e-3 and np.abs(m) != 1:
+        return pole / m
+    else:
+        return pole
+
+
+def equivalent_pole(poleA, poleB):
+    global Dstar
+    poleA = simple_label(poleA, 3)
+    poleB = simple_label(poleB, 3)
+    poleA = reduced(poleA)
+    poleB = reduced(poleB)
+    vA = distp(poleA)
+    vB = distp(poleB)
+    if np.abs(vA - vB) < 0.001:
+        return True
+    else:
+        return False
+
+
 def euler_determine(g_c, g_sample, d):
     global Dstar, cs
     cryststruct()
@@ -499,37 +569,38 @@ def euler_determine(g_c, g_sample, d):
         g_c = np.vstack((g_c, g_cross / np.linalg.norm(g_cross)))
         g_sample_cross = np.cross(g_sample[0, :], g_sample[1, :])
         g_sample = np.vstack((g_sample, g_sample_cross / np.linalg.norm(g_sample_cross)))
-        aa = check_ambiguity(g_cross)
+        aa = check_ambiguity(np.dot(np.linalg.inv(Dstar), g_cross))
 
-    if np.linalg.matrix_rank(g_c) < 3:
+    elif np.linalg.matrix_rank(g_c) < 3:
         g_cross = np.cross(g_c[0, :], g_c[1, :])
         g_c = np.vstack((g_c, g_cross / np.linalg.norm(g_cross)))
         g_sample_cross = np.cross(g_sample[0, :], g_sample[1, :])
         g_sample = np.vstack((g_sample, g_sample_cross / np.linalg.norm(g_sample_cross)))
-        aa = check_ambiguity(g_cross)
+        aa = check_ambiguity(np.dot(np.linalg.inv(Dstar), g_cross))
 
     else:
-        if g_c.shape[0] == 3:
-            c = list(combinations(range(g_c.shape[0]), 2))
-            for i in range(len(c)):
-                a = list(set(list(range(g_c.shape[0]))) - set(list(c[i])))
-                ne = np.linalg.norm(np.dot(g_c[c[i], :], g_c[a, :].T))
-                if ne < 1e-8:
-                    aa = check_ambiguity(g_c[a, :])
-                    if aa == 1:
-                        g_sample_cross = g_sample[a, :][0]
+        c = list(combinations(range(g_c.shape[0]), 2))
+        dc = 0
+        for i in range(0, len(c)):
+            g_cross = np.cross(g_c[c[i][0], :], g_c[c[i][1], :])
 
-        else:
-            c = list(combinations(range(g_c.shape[0]), 3))
-            for i in range(len(c)):
-                de = np.linalg.det(g_c[c[i], :])
-                a = list(set(list(range(g_c.shape[0]))) - set(list(c[i])))
-                if np.abs(de) < 1e-8:
-                    ne = np.linalg.norm(np.dot(g_c[c[i], :], g_c[a, :].T))
-                    if ne < 1e-8:
-                        aa = check_ambiguity(g_c[a, :])
-                        if aa == 1:
-                            g_sample_cross = g_sample[a, :][0]
+            if np.linalg.norm(g_cross) < 1e-1:
+                continue
+            g_sample_cross = np.cross(g_sample[c[i][0], :], g_sample[c[i][1], :])
+            dc = check_ambiguity(np.dot(np.linalg.inv(Dstar), g_cross))
+            if dc == 1:
+                Mc = np.dot(Rot(180, g_cross[0], g_cross[1], g_cross[2]), (n_c * g_c.T))
+                cc = []
+                for i in range(0, Mc.shape[1]):
+                    Mch = np.dot(np.linalg.inv(Dstar), Mc[:, i])
+                    gch = np.dot(np.linalg.inv(Dstar), (n_c * g_c.T).T[i, :])
+                    if equivalent_pole(Mch, gch) is False:
+                        cc = np.append(cc, 0)
+                    else:
+                        cc = np.append(cc, 1)
+                if np.min(cc) == 1:
+                    aa = 1
+                    break
 
     if np.linalg.det(np.dot(g_c.T, g_sample)) < 0:
         g_c = -g_c
@@ -549,11 +620,11 @@ def euler_determine(g_c, g_sample, d):
     t2 = t2 / g_sample.shape[0]
 
     if aa == 1:
-        M = np.dot(Rot(180, g_sample_cross[0], g_sample_cross[1], g_sample_cross[2]), M)
+        Ap = np.dot(M, g_cross) / np.linalg.norm(np.dot(M, g_cross))
+        M = np.dot(Rot(180, Ap[0], Ap[1], Ap[2]), M)
         phip = np.arccos(M[2, 2]) * 180 / np.pi
         phi_2p = np.arctan2(M[2, 0], M[2, 1]) * 180 / np.pi
         phi_1p = np.arctan2(M[0, 2], -M[1, 2]) * 180 / np.pi
-
     else:
         phip, phi_1p, phi_2p = 0, 0, 0
 
@@ -994,6 +1065,8 @@ class Spect(QtWidgets.QDialog):
 
         while len(x_space[rr]) == 4:
             rr = rr + 1
+            if rr == len(x_space):
+                break
 
         for h in range(-e, e + 1):
             for k in range(-e, e + 1):
@@ -1043,8 +1116,9 @@ class Spect(QtWidgets.QDialog):
 def extinction(space_group, h, k, l):
     global x_space, G
     F = 0
+    F2 = 0
     s = 0
-    q = 2 * np.pi / (np.sqrt(np.dot(np.array([h, k, l]), np.dot(np.linalg.inv(G), np.array([h, k, l])))))
+    q = 2 * np.pi * (np.sqrt(np.dot(np.array([h, k, l]), np.dot(np.linalg.inv(G), np.array([h, k, l])))))
 
     for i in range(0, len(x_space)):
         if space_group == x_space[i][0]:
@@ -1056,10 +1130,14 @@ def extinction(space_group, h, k, l):
         for z in range(0, len(x_scatt)):
             if f == x_scatt[z][0]:
                 f = eval(x_scatt[z][1]) * np.exp(-eval(x_scatt[z][2]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][3]) * np.exp(-eval(x_scatt[z][4]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][5]) * np.exp(-eval(x_scatt[z][6]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][7]) * np.exp(-eval(x_scatt[z][8]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][9])
-        F = F + f * np.exp(2j * np.pi * (eval(x_space[s + 1][1]) * h + eval(x_space[s + 1][2]) * k + eval(x_space[s + 1][3]) * l))
+                f0 = eval(x_scatt[z][1]) + eval(x_scatt[z][3]) + eval(x_scatt[z][5]) + eval(x_scatt[z][7]) + eval(x_scatt[z][9])
+                exp_t = np.exp(2j * np.pi * (eval(x_space[s + 1][1]) * h + eval(x_space[s + 1][2]) * k + eval(x_space[s + 1][3]) * l))
+        F = F + f * exp_t
+        F2 = F2 + f0 * exp_t
         s = s + 1
     I = np.around(np.float64(np.real(F * np.conj(F))), decimals=2)
-    return I
+    I2 = np.around(np.float64(np.real(F2 * np.conj(F2))), decimals=2)
+    return I, I2
 
 
 def import_data():
@@ -1269,7 +1347,7 @@ ui.do_not_guess_checkBox.toggled.connect(guess)
 
 ui.diff_spot_Listbox.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
 ui.n_entry.setText('1')
-ui.indice_entry.setText('3')
+ui.indice_entry.setText('4')
 ui.tilt_axis_angle_entry.setText('0')
 ui.tilt_a_entry.setText('0')
 ui.tilt_b_entry.setText('0')
