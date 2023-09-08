@@ -855,10 +855,11 @@ R=V U^T
 </div>
 <div class="admonition info">
 <p class="admonition-title">180° ambiguity</p>
-<p>When the inputs g-vectors are coplanar, the retrieved orientation may suffer the 180° ambiguity. </p>
+<p>When the inputs g-vectors are, for instance, coplanar, the retrieved orientation may suffer the 180° ambiguity. </p>
 <p>The situation described on the left side of the figure below is ambiguous. In this case, the 180° rotation along <span class="arithmatex"><span class="MathJax_Preview">g_3</span><script type="math/tex">g_3</script></span> leads two different crystal orientations.
 On the contrary, the right side of the figure is not ambiguous, as the 180° rotation along <span class="arithmatex"><span class="MathJax_Preview">(0\bar{1}1)</span><script type="math/tex">(0\bar{1}1)</script></span> is a crystal symmetry. </p>
-<p>Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. </p>
+<p>Same ambiguities can arise when indexing zone axes that present a 180° rotational symmetry which does not exist in the crystal. 
+Finally, in addition, if two orientations differs from a rotation of given axis, a set of diffraction vectors located on equivalent invariant rotation axes by crystal symmetry (see <a href="../misorientation/">misorientation</a>) will hence give rise to ambiguity. </p>
 <p>In <strong>Diffraction</strong> ambiguous results can be detected.</p>
 <p><img alt="" src="../images/ambiguity.png" /></p>
 </div>
@@ -911,9 +912,9 @@ On the contrary, the right side of the figure is not ambiguous, as the 180° rot
 </li>
 <li>
 <p>Click on <code>Find diffraction spots</code> to identify the spot. The results appear in the <strong>g vectors</strong> box with the scheme
-<div class="highlight"><pre><span></span><code>d(A) |  h,k,l | Intensity(arb. units) | angles
+<div class="highlight"><pre><span></span><code>d(A) |  h,k,l  (m) | Intensity(arb. units) | angles
 </code></pre></div>
-The angles values are explained below.</p>
+The angles values are explained below. The <code>(m)</code> indice will appear if <span class="arithmatex"><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> is a multiple of an equivalent one, i.e. is <span class="arithmatex"><span class="MathJax_Preview">(2h_0,2k_0,2l_0)</span><script type="math/tex">(2h_0,2k_0,2l_0)</script></span> or <span class="arithmatex"><span class="MathJax_Preview">(3h_0,3k_0,3l_0)</span><script type="math/tex">(3h_0,3k_0,3l_0)</script></span> of same intensity.</p>
 </li>
 </ul>
 <p>The data <span class="arithmatex"><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span>, the inclination angle <span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span> and the tilt angles, can be used to plot <a href="../stereoproj/#from-a-diffraction-vector">stereographic projection from a diffraction vector</a></p>
