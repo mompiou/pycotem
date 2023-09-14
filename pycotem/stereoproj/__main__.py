@@ -2677,7 +2677,7 @@ def set_kikuchi_cond():
 def plot_kikuchi():
     global M, G, V, axesh_diff, axes_diff
 
-    a_k = plt.gca()
+    a_k = figure_kikuchi.gca()
     a_k.clear()
 
     E = np.float64(ui_kikuchi.E_entry.text())
