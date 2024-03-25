@@ -432,25 +432,25 @@ def cryststruct():
     gam = np.float64(alphabetagamma[2])
 
     if gam == 90 and alp == 90 and bet == 90 and a == b and b == c:
-        cs = 1
+        cs = 1  # cubic
 
     if gam == 120 and alp == 90 and bet == 90:
-        cs = 2
+        cs = 2  # hexagonal
 
     if gam == 90 and alp == 90 and bet == 90 and a == b and b != c:
-        cs = 3
+        cs = 3  # tetragonal
 
     if alp != 90 and a == b and b == c:
-        cs = 4
+        cs = 4  # rhombo
 
     if gam == 90 and alp == 90 and bet == 90 and a != b and b != c:
-        cs = 5
+        cs = 5  # orthorhombic
 
     if gam != 90 and alp == 90 and bet == 90 and a != b and b != c:
-        cs = 6
+        cs = 6  # monoclinic
 
     if gam != 90 and alp != 90 and bet != 90 and a != b and b != c:
-        cs = 7
+        cs = 7  # triclinic (if one angle is 90, set it to 90+epsilon)
     n = 20
     a = np.array(range(-n, n + 1))
     coords = [a, a, a]
@@ -516,14 +516,17 @@ def distp(pole):
 def simple_label(vec_exp, ang):
     global arr, Dstar
     A = np.dot(Dstar, arr.T).T
-    vec_exp = np.dot(Dstar, vec_exp)
+    vec_exp0 = np.dot(Dstar, vec_exp)
     nA = np.linalg.norm(A, axis=1)
-    sc = np.dot(A, vec_exp)
-    theta = np.arccos(sc / nA / np.linalg.norm(vec_exp)) * 180 / np.pi
+    sc = np.dot(A, vec_exp0)
+    theta = np.arccos(sc / nA / np.linalg.norm(vec_exp0)) * 180 / np.pi
     theta[theta > ang] = 180
     y = np.argwhere(np.abs(theta) < 180)
-    x = np.argmin(nA[y])
-    pole1, pole2, pole3 = arr[y[x], 0][0], arr[y[x], 1][0], arr[y[x], 2][0]
+    if y.size == 0:
+        pole1, pole2, pole3 = vec_exp[0], vec_exp[1], vec_exp[2]
+    else:
+        x = np.argmin(nA[y])
+        pole1, pole2, pole3 = arr[y[x], 0][0], arr[y[x], 1][0], arr[y[x], 2][0]
     return pole1, pole2, pole3
 
 

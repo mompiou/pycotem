@@ -106,7 +106,7 @@ class Ui_Kikuchi(object):
         self.t_label.setText(_translate("Kikuchi", "Thickness (nm)"))
         self.E_label.setText(_translate("Kikuchi", "E (kV)"))
         self.angle_label.setText(_translate("Kikuchi", "Aperture angle"))
-        self.spot_size_label.setText(_translate("Kikuchi", "Spot size"))
+        self.spot_size_label.setText(_translate("Kikuchi", "Brightness change (%)"))
         self.label_checkBox.setText(_translate("Kikuchi", "labels"))
         self.indices_label.setText(_translate("Kikuchi", "Max indices"))
         self.Diff_button.setText(_translate("Kikuchi", "Diff calc."))

@@ -271,7 +271,7 @@ def crist():
             axesh[i, 6] = 0
         if (hexa_cryst == 1 and np.abs(axes[i, 0] + axes[i, 1]) > e):
             axesh[i, 6] = 0
-    n = 20
+    n = int(ui.search_entry.text())
     a = np.array(range(-n, n + 1))
     coords = [a, a, a]
     it = itertools.product(*coords)
@@ -390,14 +390,12 @@ def extinction(space_group, h, k, l, lim, diff):
             q = 2 * np.pi * np.sqrt(np.dot(np.array([h0, k0, l0]), np.dot(np.linalg.inv(G), np.array([h0, k0, l0])))) * 1e-10
             f = str(x_space[s + 1][0])
             for z in range(0, len(x_scatt)):
-
                 if f == x_scatt[z][0]:
                     f = eval(x_scatt[z][1]) * np.exp(-eval(x_scatt[z][2]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][3]) * np.exp(-eval(x_scatt[z][4]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][5]) * np.exp(-eval(x_scatt[z][6]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][7]) * np.exp(-eval(x_scatt[z][8]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][9])
 
             F = F + f * np.exp(2j * np.pi * (eval(x_space[s + 1][1]) * h0 + eval(x_space[s + 1][2]) * k0 + eval(x_space[s + 1][3]) * l0))
             s = s + 1
-
-        I = np.around(float(np.real(F * np.conj(F))), decimals=2)
+        I = np.around(np.float64(np.real(F * np.conj(F))), decimals=2)
         if diff == 0:
             if I > 0:
                 break
@@ -407,7 +405,6 @@ def extinction(space_group, h, k, l, lim, diff):
                 l0 = 2 * l0
         else:
             break
-
     return I, h0, k0, l0
 
 
@@ -734,13 +731,13 @@ def simple_label(vec_exp, ang):
 
 def pole(pole1, pole2, pole3):
     global M, axes, axesh, T, V, D, Dstar, naxes
-    pole1i, pole2i, pole3i = pole1, pole2, pole3
     if var_hexa() == 1:
         if var_uvw() == 1:
             pole1a = 2 * pole1 + pole2
             pole2a = 2 * pole2 + pole1
             pole1 = pole1a
             pole2 = pole2a
+    pole1i, pole2i, pole3i = pole1, pole2, pole3
 
     if ui.simple_checkBox.isChecked():
         err = np.float64(ui.simple_entry.text())
@@ -748,7 +745,7 @@ def pole(pole1, pole2, pole3):
 
     Gs = np.array([pole1, pole2, pole3], float)
     m = functools.reduce(lambda x, y: GCD(x, y), Gs)
-    if np.abs(m) > 1e-3 and np.abs(m) != 1:
+    if np.abs(m) > 1e-2 and np.abs(m) != 1:
         pole1, pole2, pole3 = Gs / m
 
     if var_uvw() == 0:
@@ -802,7 +799,6 @@ def undo_pole(pole1, pole2, pole3):
             pole2a = 2 * pole2 + pole1
             pole1 = pole1a
             pole2 = pole2a
-
     Gs = np.array([pole1, pole2, pole3], float)
 
     if var_uvw() == 0:
@@ -817,9 +813,7 @@ def undo_pole(pole1, pole2, pole3):
         pole1 = -pole1
         pole2 = -pole2
         pole3 = -pole3
-
-    ind = np.where((np.abs(axes[:, 3] - pole1) < 1e-6) & (np.abs(axes[:, 4] - pole2) < 1e-6) & (np.abs(axes[:, 5] - pole3) < 1e-6) | (np.abs(axes[:, 3] + pole1) < 1e-6) & (np.abs(axes[:, 4] + pole2) < 1e-6) & (np.abs(axes[:, 5] + pole3) < 1e-6) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6) | (np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6))
-
+    ind = np.where((np.abs(axes[:, 3] - pole1) < 1e-6) & (np.abs(axes[:, 4] - pole2) < 1e-6) & (np.abs(axes[:, 5] - pole3) < 1e-6) & (axesh[:, 3] == var_uvw()) | (np.abs(axes[:, 3] + pole1) < 1e-6) & (np.abs(axes[:, 4] + pole2) < 1e-6) & (np.abs(axes[:, 5] + pole3) < 1e-6) & (axesh[:, 3] == var_uvw()) | (np.abs(axes[:, 0] + pole1) < 1e-6) & (np.abs(axes[:, 1] + pole2) < 1e-6) & (np.abs(axes[:, 2] + pole3) < 1e-6) & (axesh[:, 3] == var_uvw()) | (np.abs(axes[:, 0] - pole1) < 1e-6) & (np.abs(axes[:, 1] - pole2) < 1e-6) & (np.abs(axes[:, 2] - pole3) < 1e-6) & (axesh[:, 3] == var_uvw()))
     axes = np.delete(axes, ind, 0)
     T = np.delete(T, ind, 0)
     axesh = np.delete(axesh, ind, 0)
@@ -1068,7 +1062,6 @@ def trace_addplan():
     pole3 = np.float64(pole_entry[2])
 
     trace_plan(pole1, pole2, pole3)
-    trace_plan2
     trace()
 
 
@@ -1447,9 +1440,9 @@ def click_a_pole(event):
 
         A = np.dot(np.linalg.inv(M), np.array([X, Y, Z]))
         if var_uvw() == 0:
-            A = np.dot(np.linalg.inv(Dstar), A) * 1e10 * 100
+            A = np.dot(np.linalg.inv(Dstar), A) * 1e10 * 1000
         else:
-            A = np.dot(np.linalg.inv(D), A) * 1e-10 * 100
+            A = np.dot(np.linalg.inv(D), A) * 1e-10 * 1000
             if var_hexa() == 1:
                 Aa = (2 * A[0] - A[1]) / 3
                 Ab = (2 * A[1] - A[0]) / 3
@@ -1463,8 +1456,9 @@ def click_a_pole(event):
 
 def undo_click_a_pole():
     global Stc
-    undo_pole(Stc[-1, 0], Stc[-1, 1], Stc[-1, 2])
-    Stc = Stc[:-1, :]
+    if Stc.shape[0] > 1:
+        undo_pole(Stc[-1, 0], Stc[-1, 1], Stc[-1, 2])
+        Stc = Stc[:-1, :]
     trace()
 
 ####################################################################
@@ -2194,7 +2188,7 @@ def to_uvw():
         n2a = (2 * direction[1] - direction[0]) / 3
         direction[0] = na
         direction[1] = n2a
-    ui_hkl_uvw.uvw_label.setText(str(np.round(100 * direction[0], decimals=3)) + ', ' + str(np.round(100 * direction[1], decimals=3)) + ', ' + str(np.round(100 * direction[2], decimals=3)))
+    ui_hkl_uvw.uvw_label.setText(str(np.round(1000 * direction[0], decimals=3)) + ', ' + str(np.round(1000 * direction[1], decimals=3)) + ', ' + str(np.round(1000 * direction[2], decimals=3)))
 
 
 def to_hkl():
@@ -2323,7 +2317,7 @@ def intersect_norm(n1, n2, d):
         n[1] = n[1] / m
         n[2] = n[2] / m
     else:
-        n = np.round(100 * n, decimals=3)
+        n = np.round(100 * n, decimals=5)
 
     return n
 
@@ -2334,7 +2328,7 @@ def intersections_plans():
     n2_plan = ui_inter.n2_entry.text().split(",")
     n2 = np.array([np.float64(n2_plan[0]), np.float64(n2_plan[1]), np.float64(n2_plan[2])])
     n = intersect_norm(n1, n2, 0)
-    ui_inter.n1n2_label.setText(str(np.round(n[0], decimals=3)) + ', ' + str(np.round(n[1], decimals=3)) + ', ' + str(np.round(n[2], decimals=3)))
+    ui_inter.n1n2_label.setText(str(np.round(n[0], decimals=5)) + ', ' + str(np.round(n[1], decimals=5)) + ', ' + str(np.round(n[2], decimals=5)))
 
 
 def intersection_dir_proj():
@@ -2344,7 +2338,7 @@ def intersection_dir_proj():
     angle = np.float64(ui_inter.angle_proj_entry.text()) * np.pi / 180
     norm_xyz = np.array([np.cos(angle), -np.sin(angle), 0])
     n_intersect = intersect_norm(n, norm_xyz, 1)
-    ui_inter.n_proj_label.setText(str(np.round(n_intersect[0], decimals=3)) + ', ' + str(np.round(n_intersect[1], decimals=3)) + ', ' + str(np.round(n_intersect[2], decimals=3)))
+    ui_inter.n_proj_label.setText(str(np.round(n_intersect[0], decimals=5)) + ', ' + str(np.round(n_intersect[1], decimals=5)) + ', ' + str(np.round(n_intersect[2], decimals=5)))
 
 
 def intersect_cone(c, n, r):
@@ -2410,7 +2404,7 @@ def intersection_cone():
     else:
         r2 = np.round(100 * r2, decimals=1)
 
-    ui_inter.cone_plane_label.setText(str(np.round(r1[0], decimals=3)) + ',' + str(np.round(r1[1], decimals=3)) + ',' + str(np.round(r1[2], decimals=3)) + '\n' + str(np.round(r2[0], decimals=3)) + ',' + str(np.round(r2[1], decimals=3)) + ',' + str(np.round(r2[2], decimals=3)))
+    ui_inter.cone_plane_label.setText(str(np.round(r1[0], decimals=5)) + ',' + str(np.round(r1[1], decimals=5)) + ',' + str(np.round(r1[2], decimals=5)) + '\n' + str(np.round(r2[0], decimals=5)) + ',' + str(np.round(r2[1], decimals=5)) + ',' + str(np.round(r2[2], decimals=5)))
 
 ##################################
 #
@@ -2659,11 +2653,11 @@ def diff_reciprocal():
 
 
 def set_diff_cond():
-    ui_kikuchi.t_entry.setText('100')
+    ui_kikuchi.t_entry.setText('1')
     ui_kikuchi.indices_entry.setText('5')
     ui_kikuchi.angle_entry.setText('3')
-    ui_kikuchi.spot_size_entry.setText('100')
-    ui_kikuchi.error_entry.setText('1')
+    ui_kikuchi.spot_size_entry.setText('0')
+    ui_kikuchi.error_entry.setText('0.1')
 
 
 def set_kikuchi_cond():
@@ -2696,6 +2690,7 @@ def plot_kikuchi():
         smax = np.float64(ui_kikuchi.error_entry.text()) * 1e9
         ang_max = np.arccos(1 - lamb * smax)
         thick = np.float64(ui_kikuchi.t_entry.text()) * 1e-9
+        Ta = np.zeros((np.shape(axesh_diff)[0], 7))
         for t in range(0, np.shape(axesh_diff)[0]):
             T = np.dot(M_d, axesh_diff[t, 0:3])
             if np.abs(T[2]) < np.sin(ang_max):
@@ -2706,15 +2701,31 @@ def plot_kikuchi():
                 s = np.linalg.norm(S)
                 xi = np.pi * V * np.cos(tb * np.pi / 180) / lamb / Fg
                 se = np.sqrt(s**2 + 1 / xi**2)
-                I = (thick * np.pi / xi)**2 * np.sinc(se * thick)**2
+                Im = (np.pi / xi)**2 * np.sin(np.pi * thick * se)**2 / (np.pi * se)**2
+                xip = 10 * xi
+                xip0 = 10 * xi
+                X = np.pi * thick / xi * np.sqrt(1 + xi**2 * s**2) + 1j * np.pi * thick / (xip * np.sqrt(1 + xi**2 * s**2))
+                phi_g = np.exp(-np.pi * thick / xip0) * 1j * np.sin(X) / np.sqrt(1 + xi**2 * s**2)
+                I = np.float64(np.real(phi_g * np.conj(phi_g)))
+                Ta[t, 0] = T[0] / d * 1e-9
+                Ta[t, 1] = T[1] / d * 1e-9
+                Ta[t, 2] = I
+                Ta[t, 3] = int(axes_diff[t, 0])
+                Ta[t, 4] = int(axes_diff[t, 1])
+                Ta[t, 5] = int(axes_diff[t, 2])
+                Ta[t, 6] = Im
                 st = str(int(axes_diff[t, 0])) + ',' + str(int(axes_diff[t, 1])) + ',' + str(int(axes_diff[t, 2]))
                 if ui_kikuchi.label_checkBox.isChecked():
                     a_k.annotate(st, (T[0] / d * 1e-9, T[1] / d * 1e-9), color="yellow", clip_on=True)
-                a_k.scatter(T[0] / d * 1e-9, T[1] / d * 1e-9, s=I * np.float64(ui_kikuchi.spot_size_entry.text()), color="white")
-                a_k.plot(0, 0, 'w+')
-                a_k.axis('equal')
-                a_k.axis([-lim, lim, -lim, lim])
-                a_k.axis('off')
+        col = Ta[:, 2]  # *(255-np.float64(ui_kikuchi.spot_size_entry.text()))/(np.max(Ta[:,6])-np.min(Ta[:,6]))+255
+        col = Ta[:, 2] + 0.01 * np.float64(ui_kikuchi.spot_size_entry.text()) * (np.max(Ta[:, 6]) - np.min(Ta[:, 6]))
+        a_k.scatter(Ta[:, 0], Ta[:, 1], s=100, c=col, cmap='gray', vmin=np.min(Ta[:, 6]), vmax=np.max(Ta[:, 6]))
+        Cc = Ta[Ta[:, 2] != 0][:, 2:]
+        Cc[:, 0] = Cc[:, 0] / np.max(Cc[:, 0])
+        a_k.plot(0, 0, 'w+')
+        a_k.axis('equal')
+        a_k.axis([-lim, lim, -lim, lim])
+        a_k.axis('off')
 
     if ui_kikuchi.kikuchi_radioButton.isChecked():
         for t in range(0, np.shape(axesh_diff)[0]):
@@ -3729,6 +3740,7 @@ if __name__ == "__main__":
     ui.tilt_angle_entry.setText('0')
     ui.image_angle_entry.setText('0')
     ui.rot_g_entry.setText('5')
+    ui.search_entry.setText('20')
     ui.annotate_checkBox.setChecked(True)
     ui.simple_entry.setText('1')
     a = figure.add_subplot(111)

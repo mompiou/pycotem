@@ -668,7 +668,7 @@ def undo_pole(pole1, pole2, pole3):
         pole2 = -pole2
         pole3 = -pole3
 
-    ind = np.where((axes[:, 0] == pole1) & (axes[:, 1] == pole2) & (axes[:, 2] == pole3) & (axes[:, 3] == i_c) | (axes[:, 0] == -pole1) & (axes[:, 1] == -pole2) & (axes[:, 2] == -pole3) & (axes[:, 3] == i_c))
+    ind = np.where((axes[:, 0] == pole1) & (axes[:, 1] == pole2) & (axes[:, 2] == pole3) & (axes[:, 3] == i_c) & (axesh[:, 3] == var_uvw()) | (axes[:, 0] == -pole1) & (axes[:, 1] == -pole2) & (axes[:, 2] == -pole3) & (axes[:, 3] == i_c) & (axesh[:, 3] == var_uvw()))
     axes = np.delete(axes, ind, 0)
     T = np.delete(T, ind, 0)
     axesh = np.delete(axesh, ind, 0)
@@ -862,11 +862,14 @@ def trace_plan(pole1, pole2, pole3):
     pole_i = 0
     pole_c = color_trace(i_c)
 
-    if var_hexa(i_c) == 1:
-        if var_uvw() == 1:
-            pole1 = 2 * pole1 + pole2
-            pole2 = 2 * pole2 + pole1
-            pole_i = 1
+    if var_uvw() == 1:
+        pole_i = 1
+        if var_hexa(i_c) == 1:
+            pole1a = 2 * pole1 + pole2
+            pole2a = 2 * pole2 + pole1
+            pole1 = pole1a
+            pole2 = pole2a
+
     trP = np.vstack((trP, np.array([pole1, pole2, pole3, pole_i, pole_c, i_c])))
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
     trP = np.unique(b).view(trP.dtype).reshape(-1, trP.shape[1])
@@ -899,7 +902,13 @@ def undo_trace_addplan():
 def undo_trace_plan(pole1, pole2, pole3):
     global M, M2, axes, axesh, T, V, D, Dstar, trP, tr_schmid
     i_c = crystal_check()
-    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 5] == i_c) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 5] == i_c))
+    if var_uvw() == 1 & var_hexa(i_c) == 1:
+        pole1a = 2 * pole1 + pole2
+        pole2a = 2 * pole2 + pole1
+        pole1 = pole1a
+        pole2 = pole2a
+
+    ind = np.where((trP[:, 0] == pole1) & (trP[:, 1] == pole2) & (trP[:, 2] == pole3) & (trP[:, 3] == var_uvw()) & (trP[:, 5] == i_c) | (trP[:, 0] == -pole1) & (trP[:, 1] == -pole2) & (trP[:, 2] == -pole3) & (trP[:, 3] == var_uvw()) & (trP[:, 5] == i_c))
 
     trP = np.delete(trP, ind, 0)
     b = np.ascontiguousarray(trP).view(np.dtype((np.void, trP.dtype.itemsize * trP.shape[1])))
