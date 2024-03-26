@@ -1004,7 +1004,7 @@ G^\ast=D^\ast~^T D^\ast
 </script>
 </div>
 </div>
-<p>Change the number of pole/direction drawn by increasing or decreasing the value of <code>d</code> and/or by changing the <code>maximum indices</code>.</p>
+<p>Change the number of pole/direction drawn by increasing or decreasing the value of <code>d</code> and/or by changing the <code>maximum indices</code> first value (see simple-labels for the second value below).</p>
 <p><img alt="" src="../images/stereo-crystal.png" /></p>
 <p>Crystal structure can be imported from the <code>structure</code> menu. This menu can be populated by adding structures in the <code>structure.txt</code> files following the template:</p>
 <div class="highlight"><pre><span></span><code>Name a(A) b(A) c(A) alpha beta gamma space group
@@ -1082,7 +1082,7 @@ A <code>Cone</code> can be drawn by specifying its aperture angle.</p>
 <p><img alt="" src="../images/iso-schmid.png" /></p>
 <p>Finally inter-reticular distances are given by entering a plane normal on the pole/plane field and by pressing <code>dhkl</code> button. The value appears in a field near the button.</p>
 <h3 id="simple-labels">Simple labels<a class="headerlink" href="#simple-labels" title="Permanent link">&para;</a></h3>
-<p>Simplified labels (up to 20 as max. indices) can be drawn if the <code>simple label</code> box is ticked. By default, simple labels are searched within an angular range of 1 degree, but it can be changed in filling the simple label field.</p>
+<p>Simplified labels can be drawn if the <code>simple label</code> box is ticked. By default, simple labels are searched within an angular range of 1 degree, but it can be changed in filling the simple label field. The maximum indices for the search depend on the second values of the <code>max indices</code> value. By default, it is set to 20 but can be increased (need to replot). Keep in mind that large values will slow down plotting and searching.</p>
 <p><img alt="" src="../images/simple.png" /></p>
 <h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
 <p>Several layout options have been already discussed. Additional ones are presented here. </p>
@@ -1198,7 +1198,7 @@ In the different cases, results will appear by pressing <code>OK</code>. Results
 <p><code>Max indices</code> determining the extension of the reciprocal space calculated</p>
 </li>
 <li>
-<p><code>Spot size</code> (arb. units) determining a scaling factor in the intensity</p>
+<p><code>Brightness change</code> (in %) offsetting image intensity. Allow the visualization of low intensity spots</p>
 </li>
 <li>
 <p><code>Thickness</code> is the sample thickness in nm</p>
@@ -1223,7 +1223,7 @@ $$
 where <span class="arithmatex"><span class="MathJax_Preview">\theta_B</span><script type="math/tex">\theta_B</script></span> is the Bragg angle and <span class="arithmatex"><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> the interplanar distance defined by the <span class="arithmatex"><span class="MathJax_Preview">\vec{g}</span><script type="math/tex">\vec{g}</script></span> vector. </p>
 <p>When the crystal is tilted away from the Bragg condition, diffraction ceases but not abruptly. To determine the decrease of the intensity, we need to define the vector <span class="arithmatex"><span class="MathJax_Preview">\vec{s}</span><script type="math/tex">\vec{s}</script></span> which norm is called the excitation error, as shown below.</p>
 <p><img alt="" src="../images/bragg.png" /></p>
-<p>Kinematical calculations show that:</p>
+<p>Two beam calculations show that:</p>
 <div class="arithmatex">
 <div class="MathJax_Preview">
 I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
@@ -1234,6 +1234,8 @@ I = \frac{\pi^2}{\xi^2}\frac{\sin^2{(\pi s_e t)}}{( \pi s_e )^2}
 </div>
 <p>where <span class="arithmatex"><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> is the crystal thickness, <span class="arithmatex"><span class="MathJax_Preview">\xi</span><script type="math/tex">\xi</script></span> the extinction distance, which indicates how the diffracted electron wave oscillates through the crystal, and <span class="arithmatex"><span class="MathJax_Preview">s_e= \sqrt{(s^2 + 1/\xi^2)}</span><script type="math/tex">s_e= \sqrt{(s^2 + 1/\xi^2)}</script></span> the effective excitation error.   </p>
 <p>For a given orientation, the excitation error <span class="arithmatex"><span class="MathJax_Preview">s</span><script type="math/tex">s</script></span> can be computed for every possible diffraction vectors, and then their corresponding intensity.</p>
+<p>Absorption was in addition taken into account. It implies taking a second extinction distance <span class="arithmatex"><span class="MathJax_Preview">\xi'_g</span><script type="math/tex">\xi'_g</script></span> defined from the imaginary part of the crystal potential. Here <span class="arithmatex"><span class="MathJax_Preview">\xi'_g</span><script type="math/tex">\xi'_g</script></span> is fixed chosen as <span class="arithmatex"><span class="MathJax_Preview">\xi'_g/\xi_g</span><script type="math/tex">\xi'_g/\xi_g</script></span> = 10.</p>
+<p>Note that all the above approximations are not intended to reproduce the correct intensities for multiple beam as in zone axes but provide a first guess.</p>
 </div>
 <p><img alt="" src="../images/diffraction.png" /></p>
 <h4 id="kikuchi-lines">Kikuchi lines<a class="headerlink" href="#kikuchi-lines" title="Permanent link">&para;</a></h4>
