@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-8.0.3">
     
     
       
@@ -104,39 +104,6 @@
     </div>
     
     
-    
-      <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-        </button>
-      </nav>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
     
     
       <div class="md-header__source">
@@ -654,16 +621,16 @@ $$
 $$
 For fcc cubic crystals, with atoms placed at <span class="arithmatex"><span class="MathJax_Preview">(x_j,y_j,z_j)</span><script type="math/tex">(x_j,y_j,z_j)</script></span> = <span class="arithmatex"><span class="MathJax_Preview">(0, 0, 0)</span><script type="math/tex">(0, 0, 0)</script></span>, <span class="arithmatex"><span class="MathJax_Preview">(0.5, 0.5, 0)</span><script type="math/tex">(0.5, 0.5, 0)</script></span> ,<span class="arithmatex"><span class="MathJax_Preview">(0, 0.5, 0.5)</span><script type="math/tex">(0, 0.5, 0.5)</script></span>, <span class="arithmatex"><span class="MathJax_Preview">(0.5, 0, 0.5)</span><script type="math/tex">(0.5, 0, 0.5)</script></span>, this condition is fulfilled when <span class="arithmatex"><span class="MathJax_Preview">(h,k,l)</span><script type="math/tex">(h,k,l)</script></span> are of different parity.</p>
 </div>
-<p>The atomic form factor <span class="arithmatex"><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> corresponds to the amplitude of the wave diffracting on a single atom. In the range of scattering vectors between <span class="arithmatex"><span class="MathJax_Preview">0\leq q \leq 25 \mathring{A}^{-1}</span><script type="math/tex">0\leq q \leq 25 \mathring{A}^{-1}</script></span>, the atomic form factor can be approximated by a Gaussian decomposition:</p>
+<p>The atomic form factor <span class="arithmatex"><span class="MathJax_Preview">f_j</span><script type="math/tex">f_j</script></span> corresponds to the amplitude of the wave diffracting on a single atom. The atomic form factor can be approximated by a Gaussian decomposition:</p>
 <div class="arithmatex">
 <div class="MathJax_Preview">
-f(q)=\sum _{i=1}^{4}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)+c 
+f(q)=\sum _{i=1}^{5}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)
 </div>
 <script type="math/tex; mode=display">
-f(q)=\sum _{i=1}^{4}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)+c 
+f(q)=\sum _{i=1}^{5}a_{i}\exp \left(-b_{i}\left({\frac {q}{4\pi }}\right)^{2}\right)
 </script>
 </div>
-<p>where the values of <span class="arithmatex"><span class="MathJax_Preview">a_i</span><script type="math/tex">a_i</script></span>, <span class="arithmatex"><span class="MathJax_Preview">b_i</span><script type="math/tex">b_i</script></span>, and <span class="arithmatex"><span class="MathJax_Preview">c_i</span><script type="math/tex">c_i</script></span> can be found for every atoms for instance <a href="http://lampx.tugraz.at/~hadley/ss1/crystaldiffraction/atomicformfactors/formfactors.php">here</a> </p>
+<p>where the values of <span class="arithmatex"><span class="MathJax_Preview">a_i</span><script type="math/tex">a_i</script></span>, <span class="arithmatex"><span class="MathJax_Preview">b_i</span><script type="math/tex">b_i</script></span> can be found for every atoms in the International Table s for Crystallography Volume C p. 259.</p>
 <p>The position and the name of atoms are defined in the <code>space_group.txt</code> file following the scheme:</p>
 <div class="highlight"><pre><span></span><code>Name
 Atom name1 x1 y1 z1
@@ -672,7 +639,7 @@ Atom name1 x2 y2 z2
 Atom name2 x3 y3 z3
 </code></pre></div>
 <p>The atomic factor is defined in the <code>scattering.txt</code> file according to the scheme:</p>
-<div class="highlight"><pre><span></span><code>Atom name1 a1 b1 a2 b2 a3 b3 a4 b4 c
+<div class="highlight"><pre><span></span><code>Atom name1 a1 a2 a3 a4 a5 b1 b2 3 b4 b5
 ...
 </code></pre></div>
 <h2 id="diffraction-pattern-in-tem">Diffraction pattern in TEM<a class="headerlink" href="#diffraction-pattern-in-tem" title="Permanent link">&para;</a></h2>
@@ -1090,7 +1057,7 @@ The two files can be combined in one as <code>#</code> sign will not be read dur
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.01824240.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.01824240.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.e0abf5b0.min.js"></script>
