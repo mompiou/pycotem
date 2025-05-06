@@ -391,7 +391,7 @@ def extinction(space_group, h, k, l, lim, diff):
             f = str(x_space[s + 1][0])
             for z in range(0, len(x_scatt)):
                 if f == x_scatt[z][0]:
-                    f = eval(x_scatt[z][1]) * np.exp(-eval(x_scatt[z][2]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][3]) * np.exp(-eval(x_scatt[z][4]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][5]) * np.exp(-eval(x_scatt[z][6]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][7]) * np.exp(-eval(x_scatt[z][8]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][9])
+                    f = eval(x_scatt[z][1]) * np.exp(-eval(x_scatt[z][6]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][2]) * np.exp(-eval(x_scatt[z][7]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][3]) * np.exp(-eval(x_scatt[z][8]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][4]) * np.exp(-eval(x_scatt[z][9]) * (q / 4 / np.pi)**2) + eval(x_scatt[z][5]) * np.exp(-eval(x_scatt[z][10]) * (q / 4 / np.pi)**2)
 
             F = F + f * np.exp(2j * np.pi * (eval(x_space[s + 1][1]) * h0 + eval(x_space[s + 1][2]) * k0 + eval(x_space[s + 1][3]) * l0))
             s = s + 1
@@ -3062,7 +3062,7 @@ def pole_triangle(pole1, pole2, pole3):
         pole3 = -pole3
         s = -s
 
-    if not(np.all(np.sign(s) >= 0)):
+    if not (np.all(np.sign(s) >= 0)):
         return
 
     if ui_ipf.blue_Button.isChecked():
@@ -3120,7 +3120,7 @@ def addplane_triangle():
     ui_ipf.plane_comboBox.clear()
     ui_ipf.plane_comboBox.addItem(' ')
     for i in range(0, A.shape[0]):
-        if not(np.all(A[i, :] == 0)):
+        if not (np.all(A[i, :] == 0)):
             p = str(A[i, 0]) + ',' + str(A[i, 1]) + ',' + str(A[i, 2])
             ui_ipf.plane_comboBox.addItem(p)
     trace_triangle()
@@ -3731,6 +3731,10 @@ if __name__ == "__main__":
     ui.rg_label.setText('0.0')
     ui.angle_euler_label.setText(' ')
     ui.size_var.setText('40')
+
+    ui.tilt_entry.setText('0,0,0')
+    ui.inclinaison_entry.setText('0')
+    ui.diff_entry.setText('1,0,0')
 
     ui.angle_alpha_entry.setText('5')
     ui.angle_beta_entry.setText('5')
